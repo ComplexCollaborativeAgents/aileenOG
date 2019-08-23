@@ -1,0 +1,15 @@
+##!
+# @file
+#
+# @created smohan 20190822
+
+sp {propose*wait
+   (state <s>    ^attribute state
+                 ^choices none
+                -^name <any>
+                -^operator.name wait)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name wait)
+   }
+

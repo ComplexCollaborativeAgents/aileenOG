@@ -1,0 +1,17 @@
+{
+  "Soar": {
+    "path":"/home/smohan/soar/soar9.6/bin/",
+    "sleep-time": 0.0001
+  },
+  "SoarAgent": {
+    "file": "agent/load.soar",
+    "name": "aileen"
+  },
+  "RunParams": {
+    "run_mode": "debug"
+  },
+  "Servers":{
+    "input_port": 30000,
+    "input_host": "localhost"
+  }
+}
