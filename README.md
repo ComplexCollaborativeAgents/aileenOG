@@ -22,14 +22,8 @@ Grounded language learning agent based on Soar cognitive architecture
    
 ## Usage
 * Run [aileen_world](https://gitlab-external.parc.com/aileen/aileen-world)
- 
-* Activate the conda environment
-  
-      `conda activate aileen`
-      
-* Run aileen
-
-      `python aileen.py`
+* Activate the conda environment `conda activate aileen`
+* Run aileen `python aileen.py`
  
  
 This should startup a window that lets us inspect the state of Soar kernel.
