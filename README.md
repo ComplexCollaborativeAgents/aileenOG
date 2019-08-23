@@ -12,7 +12,7 @@ A simple xmlrpc python server to receive requests from the agent client and upda
 * Clone this repository
   `git clone git@gitlab-external.parc.com:aileen/aileen-world.git`
 * Configure a Python2 conda environment
-   `conda create -name aileen_env python=2.7`
+   `conda create --name aileen_env python=2.7`
 * Install relevant python packages
     `conda install coloredlogs`
     
