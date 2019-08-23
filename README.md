@@ -20,12 +20,13 @@ A simple xmlrpc python server to receive requests from the agent client and upda
 * Activate the conda environment
     `conda activate aileen_env`
 * Configure the following environment variables
-    * `PYTHONPATH` to include `/usr/local/webots/lib/python2.7` if you have the standard install
-    * `LD_LIBRARY_PATH` to include `/usr/local/webots/lib`
+    * `WEBOTS_HOME` to your installation path /usr/local/webots recommended
+    * `PYTHONPATH` to include `$WEBOTS_HOME/lib/python2.7` if you have the standard install
+    * `LD_LIBRARY_PATH` to include `$WEBOTS_HOME/lib`
 * Start webots on a terminal or from the GUI shell 
     `webots`
 * Click on `File > Open World` and navigate to `aileen_world/worlds/aileen_world.wbt`. This should start the example world in webots. You can pause and play the world using control buttons in the webots application.
-* On a separate terminal window, run aileen_world. Note, that the server will not run properly until the webots simulation is actually 'playing'
+* On a separate terminal window, run aileen_world. Note, that the server will not run properly until the webots simulation is actually 'playing'. You will see a message stating taht the aileen world server is starting.
     `python world.py`
 
 
