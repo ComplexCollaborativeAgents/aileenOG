@@ -4,10 +4,7 @@ import xmlrpclib
 from log_config import logging
 from soar_interface import soar_agent
 from soar_interface.soar_agent import update
-from controller import Supervisor
-from threading import Thread
 
-TIME_STEP = 32 # SM: add this to the config file
 
 CONFIG_FILE = "config.json"
 with open(CONFIG_FILE) as config_file:

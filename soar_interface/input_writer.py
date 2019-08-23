@@ -11,16 +11,36 @@ class input_writer(object):
         self.timestamp = 0
 
         self._world_link = self._input_link.CreateIdWME("world")
+        self._objects_link = self._world_link.CreateIdWME("objects")
         self._interaction_link = self._input_link.CreateIdWME("interaction")
 
 
     def generate_input(self):
         time.sleep(self._config['Soar']['sleep-time'])
-        objects = None
         try:
-            objects = self._world_server.get_all()
+            objects_dict = self._world_server.get_all()
         except:
             logging.error("[input_writer] :: received bad response from world server")
-        if objects is not None:
-            logging.debug("[input_writer] :: received objects {}".format(objects))
-        pass
+            return
+
+        logging.debug("[input_writer] :: received objects {}".format(objects_dict))
+        objects = objects_dict['objects']
+
+        self.delete_all_children(self._objects_link)
+
+        for w_object in objects:
+            object_id = self._objects_link.CreateIdWME("object")
+            object_id.CreateIntWME('id', w_object['id']),
+            position_id = object_id.CreateIdWME('position')
+            position_id.CreateFloatWME('x', w_object['position'][0])
+            position_id.CreateFloatWME('y', w_object['position'][1])
+            position_id.CreateFloatWME('z', w_object['position'][2])
+            pass
+
+    def delete_all_children(self, id):
+        index = 0
+        if id.GetNumberChildren is not None:
+            for i in range(0, id.GetNumberChildren()):
+                child = id.GetChild(index)  # remove the 0th child several times, Soar kernel readjusts the list after an item is deletd
+                if child is not None:
+                    child.DestroyWME()
