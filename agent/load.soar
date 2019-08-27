@@ -1,2 +1,4 @@
 
 source "wait.soar"
+
+source "test-actions.soar"

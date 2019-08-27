@@ -14,11 +14,13 @@ with open(CONFIG_FILE) as config_file:
         logging.fatal("[aileen] :: Invalid json at %s; error = %s" % (CONFIG_FILE, e))
         sys.exit()
 
+
 def create_connection_with_aileen_world():
     url = 'http://{}:{}'.format(config['Servers']['input_host'], config['Servers']['input_port'])
     server = xmlrpclib.ServerProxy(url)
     logging.info("[aileen] :: created a connection with the world server at: {}".format(url))
     return server
+
 
 if __name__ == '__main__':
     world_server = create_connection_with_aileen_world()

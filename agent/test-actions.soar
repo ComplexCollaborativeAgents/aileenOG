@@ -1,0 +1,28 @@
+##!
+# @file
+#
+# @created smohan 20190823
+
+## propose pick-up for a randomly selected object
+
+sp {action*propose*pick-up
+    (state <s> ^superstate nil
+               ^io.input-link.world.objects.object <o>)
+    (<o> ^id <id>)
+-->
+    (<s>    ^operator <op> + =)
+    (<op>   ^name pick-up
+            ^id <id>)
+    }
+
+sp {action*apply*pick-up
+    (state <s>    ^superstate nil
+                  ^operator <op>
+                  ^io.output-link <ol>)
+    (<op>    ^name pick-up
+             ^id <id>)
+-->
+    (<ol>    ^action <c>)
+    (<c>    ^name pick-up
+            ^id <id>)
+    }

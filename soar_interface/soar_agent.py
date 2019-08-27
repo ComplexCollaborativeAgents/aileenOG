@@ -21,7 +21,7 @@ with open(CONFIG_FILE) as config_file:
     except ValueError, e:
         logging.fatal("[soar_client] :: Cannot find local soar installation")
 
-import output_reader
+import outputreader
 import input_writer
 
 class soar_agent(object):
@@ -44,7 +44,7 @@ class soar_agent(object):
         self._input_link = self._agent.GetInputLink()
         self._output_link = self._agent.GetOutputLink()
         self._input_writer = input_writer.input_writer(self, self._config, self._world_server)
-        self._output_reader = output_reader.output_reader(self, self._config)
+        self._output_reader = outputreader.OutputReader(self, self._config, self._world_server)
 
 
     def create_kernel(self):
@@ -130,6 +130,9 @@ class soar_agent(object):
             self.execute_command("stop")
             self._is_running = False
             self.stop_requested = False
+
+    def get_number_of_commands(self):
+        return self._agent.GetNumberCommands()
 
 
 def update(mid, this_agent, agent, message):
