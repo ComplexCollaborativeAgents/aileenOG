@@ -1,8 +1,7 @@
 from controller import Supervisor
-from controller import Node
-from controller import Field
 from log_config import logging
 from threading import Thread
+from action_executor import ActionExecutor
 
 TIME_STEP = 32
 
@@ -12,6 +11,9 @@ class AileenSupervisor:
     def __init__(self):
         self._supervisor = Supervisor()
         logging.info("[aileen_supervisor] :: started supervisor control of the world")
+
+        self._action_executor = ActionExecutor(self._supervisor)
+        logging.debug("[aileen_supervisor] :: enabled action simulation")
 
         self._camera = self._supervisor.getCamera('camera')
         self._camera.enable(TIME_STEP)
@@ -49,9 +51,13 @@ class AileenSupervisor:
                                 'id': object_node.getId(),
                                 'position': object_node.getPosition(),
                                 'orientation': object_node.getOrientation(),
-                                'bounding_object': object_node.getField('boundingObject').getSFNode().getTypeName()
-                            }
+                                'bounding_object': object_node.getField('boundingObject').getSFNode().getTypeName()}
                 objects.append(object_dict)
 
         output_dict = {'objects': objects}
         return output_dict
+
+    def apply_action(self, action):
+        logging.debug("[aileen_supervisor] :: processing apply_action from client for action {}".format(action['action']))
+        acknowledgement = self._action_executor.process_action_command(action['action'])
+        return True
