@@ -7,9 +7,9 @@
 
 sp {action*propose*pick-up
     (state <s> ^superstate nil
-               ^io.input-link.world.objects.object <o>)
-    (<o> ^id <id>
-         -^held true)
+               ^io.input-link.world.objects.object <o>
+               -^held <any>)
+    (<o> ^id <id>)
 -->
     (<s>    ^operator <op> + =)
     (<op>   ^name pick-up
@@ -26,4 +26,42 @@ sp {action*apply*pick-up
     (<ol>    ^action <c>)
     (<c>    ^name pick-up
             ^id <id>)
+    }
+
+sp {elaborate*held*object
+    (state <s> ^io.input-link.world.objects.object <o>)
+    (<o> ^held true)
+-->
+    (<s> ^held <o>)
+    }
+
+sp {delete*output*commands*when*complete
+    :o-support
+    (state <s>    ^io.output-link <ol>)
+    (<ol>    ^<command> <c>)
+    (<c>    ^status complete)
+-->
+    (<ol>    ^<command> <c> -)
+}
+
+sp {action*propose*place
+    (state <s>    ^superstate nil
+                  ^io.input-link.world.objects.object <o> 
+                  ^held <o>)
+-->
+    (<s>    ^operator <op> + =)
+    (<op>   ^name place
+            ^location proxy)
+    }
+
+sp {action*apply*place
+    (state <s>    ^superstate nil
+                  ^operator <op>
+                  ^io.output-link <ol>)
+    (<op>    ^name place
+             ^location <loc>)
+-->
+    (<ol>    ^action <act>)
+    (<act>    ^name place
+              ^location <loc>)
     }

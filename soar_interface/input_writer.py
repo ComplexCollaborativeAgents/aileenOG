@@ -1,5 +1,7 @@
 import time
 from log_config import logging
+import xmlrpclib
+
 
 class input_writer(object):
     def __init__(self, soar_agent, config, world_server):
@@ -14,13 +16,15 @@ class input_writer(object):
         self._objects_link = self._world_link.CreateIdWME("objects")
         self._interaction_link = self._input_link.CreateIdWME("interaction")
 
-
     def generate_input(self):
         time.sleep(self._config['Soar']['sleep-time'])
         try:
             objects_dict = self._world_server.get_all()
-        except:
-            logging.error("[input_writer] :: received bad response from world server")
+        except xmlrpclib.ProtocolError as err:
+            logging.error("[output_reader] :: protocol error {}".format(err.errmsg))
+            return
+        except xmlrpclib.Fault as fault:
+            logging.error("[output_reader] :: fault code {}; fault string{}".format(fault.faultCode, fault.faultString))
             return
 
         logging.info("[input_writer] :: received objects from server {}".format(objects_dict))

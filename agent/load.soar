@@ -2,3 +2,7 @@
 source "wait.soar"
 
 source "test-actions.soar"
+
+source "primitive-actions/load.soar"
+
+source "elaborations/load.soar"

@@ -25,10 +25,8 @@ class OutputReader(object):
                 action_dict['name'] = child.GetValueAsString()
             if child.GetAttribute() == 'id':
                 action_dict['id'] = child.GetValueAsString()
-
-        if action_dict['name'] is None or action_dict['id'] is None:
-            logging.error("[output_reader] :: received malformed action output {}".format(action_dict))
-            return
+            if child.GetAttribute() == 'location':
+                action_dict['location'] = child.GetValueAsString()
 
         logging.info("[output_reader] :: soar agent output {}".format(action_dict))
 
