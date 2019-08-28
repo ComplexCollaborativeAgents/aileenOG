@@ -23,7 +23,7 @@ class input_writer(object):
             logging.error("[input_writer] :: received bad response from world server")
             return
 
-        logging.debug("[input_writer] :: received objects {}".format(objects_dict))
+        logging.info("[input_writer] :: received objects from server {}".format(objects_dict))
         objects = objects_dict['objects']
 
         self.delete_all_children(self._objects_link)
@@ -35,6 +35,7 @@ class input_writer(object):
             position_id.CreateFloatWME('x', w_object['position'][0])
             position_id.CreateFloatWME('y', w_object['position'][1])
             position_id.CreateFloatWME('z', w_object['position'][2])
+            object_id.CreateStringWME('held', w_object['held'])
             pass
 
     def delete_all_children(self, id):

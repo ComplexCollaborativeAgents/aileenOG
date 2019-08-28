@@ -8,7 +8,8 @@
 sp {action*propose*pick-up
     (state <s> ^superstate nil
                ^io.input-link.world.objects.object <o>)
-    (<o> ^id <id>)
+    (<o> ^id <id>
+         -^held true)
 -->
     (<s>    ^operator <op> + =)
     (<op>   ^name pick-up
