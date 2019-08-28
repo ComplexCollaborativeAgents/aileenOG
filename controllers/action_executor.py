@@ -1,8 +1,7 @@
 from controller import Node
 from log_config import logging
+import constants
 
-ROBOT_PLATE_LOCATION = [-0.1, 0.2, 0]
-TIME_STEP = 32
 
 class ActionExecutor:
     def __init__(self, supervisor):
@@ -17,20 +16,14 @@ class ActionExecutor:
             return self.place_object(0)
 
     def pick_up_object(self, object_id):
-        logging.debug("[action_executor] :: picking up object id {}".format(object_id))
         node = self._supervisor.getFromId(int(object_id))
-        logging.debug("[action_executor} :: node's current position is")
+        logging.debug("[action_executor] :: picking up object id {}".format(object_id))
         translation = node.getField('translation')
-        translation.setSFVec3f(ROBOT_PLATE_LOCATION)
-        self._held_node = node
-        self._supervisor.step(TIME_STEP)
-        return True
+        translation.setSFVec3f(constants.ROBOT_PLATE_LOCATION)
+        logging.debug("[action_executor] :: object {} moved to {}".format(object_id,node.getPosition()))
+        self._supervisor.step(constants.TIME_STEP)
+        return True, node
 
     def place_object(self, location_vector):
         translation = self._held_node.getField('translation')
         translation.setSFVec3f(location_vector)
-        self._held_node = None
-
-    def dummy(self):
-        logging.debug("[action_executor] :: dummy function here")
-        return

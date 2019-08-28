@@ -2,8 +2,7 @@ from controller import Supervisor
 from log_config import logging
 from threading import Thread
 from action_executor import ActionExecutor
-
-TIME_STEP = 32
+import constants
 
 
 class AileenSupervisor:
@@ -13,13 +12,14 @@ class AileenSupervisor:
         logging.info("[aileen_supervisor] :: started supervisor control of the world")
 
         self._action_executor = ActionExecutor(self._supervisor)
-        logging.debug("[aileen_supervisor] :: enabled action simulation")
+        logging.info("[aileen_supervisor] :: enabled action simulation")
+        self._held_node = None
 
         self._camera = self._supervisor.getCamera('camera')
-        self._camera.enable(TIME_STEP)
-        self._camera.recognitionEnable(TIME_STEP)
+        self._camera.enable(constants.TIME_STEP)
+        self._camera.recognitionEnable(constants.TIME_STEP)
         logging.info("[aileen_supervisor] :: enabled camera")
-        self._supervisor.step(TIME_STEP)
+        self._supervisor.step(constants.TIME_STEP)
 
         self._world_thread = None
 
@@ -29,7 +29,7 @@ class AileenSupervisor:
         logging.info("[aileen_supervisor] :: started world thread")
 
     def run_world_loop(self):
-        while self._supervisor.step(TIME_STEP) != -1:
+        while self._supervisor.step(constants.TIME_STEP) != -1:
             print("here")
             pass
 
@@ -41,7 +41,7 @@ class AileenSupervisor:
         logging.debug("[aileen_supervisor] :: world contains {} nodes".format(num_children))
         objects = []
 
-        for i in range(0,num_children):
+        for i in range(0, num_children):
             object_node = children.getMFNode(i)
             object_name = object_node.getTypeName()
             if 'Solid' in object_name:
@@ -52,12 +52,20 @@ class AileenSupervisor:
                                 'position': object_node.getPosition(),
                                 'orientation': object_node.getOrientation(),
                                 'bounding_object': object_node.getField('boundingObject').getSFNode().getTypeName()}
+                if object_node == self._held_node:
+                    object_dict['held'] = 'true'
+                else:
+                    object_dict['held'] = 'false'
                 objects.append(object_dict)
 
         output_dict = {'objects': objects}
         return output_dict
 
     def apply_action(self, action):
-        logging.debug("[aileen_supervisor] :: processing apply_action from client for action {}".format(action['action']))
-        acknowledgement = self._action_executor.process_action_command(action['action'])
-        return True
+        logging.debug("[aileen_supervisor] :: processing apply_action from client for action {}".format(action))
+        if action is None:
+            logging.error("[aileen_supervisor] :: received an empty action description. not doing anything")
+            return False
+        acknowledgement, self._held_node = self._action_executor.process_action_command(action)
+        logging.info("[aileen_supervisor] :: held node is {}".format(self._held_node.getId()))
+        return acknowledgement
