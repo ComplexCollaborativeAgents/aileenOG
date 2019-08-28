@@ -42,4 +42,4 @@ This should startup the SoarJavaDebugger window that lets us inspect the state o
 * My setup is throwing a lot of warnings. They are coming from SoarJavaDebugger that seems to be built for GTK-2. Adding the following environment variable should be useful in cutting down the warnings.
 `export SWT_GTK3=0`
 
-* If you want PyCharm terminal to show color coded logs, you can check the box for 'emulate terminal output'.
+* If you want PyCharm terminal to show color coded logs, you can check the box for `emulate terminal output`.
