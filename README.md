@@ -37,3 +37,6 @@ A simple xmlrpc python server to receive requests from the agent client and upda
    * Configure the following environment variable in `Run configurations`
         * `PYTHONPATH` to include `/usr/local/webots/lib/python2.7` if you have the standard install
         * `LD_LIBRARY_PATH` to include `/usr/local/webots/lib`
+
+## Misc
+* If you want PyCharm terminal to show color coded logs, you can check the box for `emulate terminal output`.
