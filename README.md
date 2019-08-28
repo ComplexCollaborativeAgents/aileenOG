@@ -39,4 +39,4 @@ A simple xmlrpc python server to receive requests from the agent client and upda
         * `LD_LIBRARY_PATH` to include `/usr/local/webots/lib`
 
 ## Misc
-* If you want PyCharm terminal to show color coded logs, you can check the box for `emulate terminal output`.
+* If you want PyCharm terminal to show color coded logs, you can check the box for `emulate terminal output` in the `Run configurations` dialog.
