@@ -5,14 +5,15 @@ from action_executor import ActionExecutor
 import constants
 
 
-class AileenSupervisor:
+class AileenSupervisor():
 
     def __init__(self):
         self._supervisor = Supervisor()
         logging.info("[aileen_supervisor] :: started supervisor control of the world")
 
-        self._action_executor = ActionExecutor(self._supervisor)
+        self._action_executor = ActionExecutor(self._supervisor, self)
         logging.info("[aileen_supervisor] :: enabled action simulation")
+
         self._held_node = None
 
         self._camera = self._supervisor.getCamera('camera')
@@ -23,6 +24,8 @@ class AileenSupervisor:
 
         self._world_thread = None
 
+
+
     def run_in_background(self):
         self._world_thread = Thread(target=self.run_world_loop)
         self._world_thread.start()
@@ -30,8 +33,18 @@ class AileenSupervisor:
 
     def run_world_loop(self):
         while self._supervisor.step(constants.TIME_STEP) != -1:
-            print("here")
             pass
+
+    def set_held_node(self, node):
+        print("here")
+        self._held_node = node
+        logging.info("[action_supervisor] :: held object is {}".format(self._held_node.getId()))
+
+    def get_held_node(self):
+        return self._held_node
+
+    def dummy(self):
+        logging.debug("[aileen_supervisor] :: dummy function called")
 
     def get_all(self):
         logging.debug("[aileen_supervisor] :: processing get_all from client")
@@ -59,6 +72,7 @@ class AileenSupervisor:
                 objects.append(object_dict)
 
         output_dict = {'objects': objects}
+        self._supervisor.step(constants.TIME_STEP)
         return output_dict
 
     def apply_action(self, action):
@@ -66,6 +80,5 @@ class AileenSupervisor:
         if action is None:
             logging.error("[aileen_supervisor] :: received an empty action description. not doing anything")
             return False
-        acknowledgement, self._held_node = self._action_executor.process_action_command(action)
-        logging.info("[aileen_supervisor] :: held node is {}".format(self._held_node.getId()))
+        acknowledgement = self._action_executor.process_action_command(action)
         return acknowledgement
