@@ -30,7 +30,7 @@ class AileenWorldServer:
         self._host = socket.gethostbyname("0.0.0.0")
         logging.info("[aileen_world_server] :: hostname: " + self._host)
 
-        self._server = SimpleXMLRPCServer((self._host, self._port),requestHandler=RequestHandler)
+        self._server = SimpleXMLRPCServer((self._host, self._port), requestHandler=RequestHandler)
 
         self._server.register_introspection_functions()
 
@@ -44,9 +44,6 @@ class AileenWorldServer:
             logging.info("[aileen_world_server] :: received apply-action for {}".format(action))
             return aileen_supervisor.apply_action(action)
 
-        def dummy():
-            logging.info("[aileen_world_server] :: server ending.")
-
         self._server.register_function(get_all, 'get_all')
         self._server.register_function(apply_action, 'apply_action')
 
@@ -56,7 +53,7 @@ class AileenWorldServer:
             print self._server.handle_request()
 
     def update_world_in_background(self):
-        while self._aileen_supervisor._supervisor.step(constants.TIME_STEP) != -1:
+        while self._aileen_supervisor.step(constants.TIME_STEP) != -1:
             time.sleep(0.001)
             pass
 
