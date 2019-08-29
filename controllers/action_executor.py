@@ -22,7 +22,7 @@ class ActionExecutor:
         translation = node.getField('translation')
         translation.setSFVec3f(constants.ROBOT_PLATE_LOCATION)
         logging.debug("[action_executor] :: object {} moved to {}".format(object_id, node.getPosition()))
-        self._supervisor.step(constants.TIME_STEP)
+        #self._supervisor.step(constants.TIME_STEP)
         self._aileensupervisor.set_held_node(node)
 
         return True
@@ -37,5 +37,5 @@ class ActionExecutor:
             translation = node.getField('translation')
             translation.setSFVec3f(location)
 
-        self._supervisor.step(constants.TIME_STEP)
+        #self._supervisor.step(constants.TIME_STEP)
         self._aileensupervisor.set_held_node(None)

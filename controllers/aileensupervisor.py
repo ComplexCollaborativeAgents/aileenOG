@@ -72,7 +72,7 @@ class AileenSupervisor():
                 objects.append(object_dict)
 
         output_dict = {'objects': objects}
-        self._supervisor.step(constants.TIME_STEP)
+        #self._supervisor.step(constants.TIME_STEP)
         return output_dict
 
     def apply_action(self, action):
