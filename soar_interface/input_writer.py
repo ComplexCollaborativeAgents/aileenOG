@@ -55,4 +55,21 @@ class input_writer(object):
                     child.DestroyWME()
 
     def create_qsrs(objects):
-        return None
+        # Ignore y position as everything is on the table (use z instead)
+        # Need to figure out how to send back the bounding boxes. Currently assuming .1
+        qsrlib = QSRlib() # We don't need a new object each time
+        world = World_Trace()
+        for obj in objects:
+            world.add_object_state_series([Object_State(name=str(obj['id']),timestamp=0,
+                                                        x=obj['position'][0],
+                                                        y=obj['position'][2],
+                                                        xsize=0.1,ysize=0.1)])
+        qsrlib_request_message = QSRlib_Request_Message(["rcc8","cardir"], world)
+        qsrlib_response_message = qsrlib.request_qsrs(req_msg=qsrlib_request_message)
+        res_str = ""
+        for t in qsrlib_response_message.qsrs.get_sorted_timestamps():
+            for k, v in zip(qsrlib_response_message.qsrs.trace[t].qsrs.keys(),
+                            qsrlib_response_message.qsrs.trace[t].qsrs.values()):
+                res_str += str(k) + ":" + str(v.qsr) + "; "
+        logging.info("[input_writer] :: qsrs computed {}".format(res_str))
+        return qsrlib_response_message
