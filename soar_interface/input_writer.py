@@ -2,6 +2,8 @@ import time
 from log_config import logging
 import xmlrpclib
 
+from qsrlib.qsrlib import QSRlib, QSRlib_Request_Message
+from qsrlib_io.world_trace import Object_State, World_Trace
 
 class input_writer(object):
     def __init__(self, soar_agent, config, world_server):
@@ -32,6 +34,8 @@ class input_writer(object):
 
         self.delete_all_children(self._objects_link)
 
+        qsrs = create_qsr(objects)
+
         for w_object in objects:
             object_id = self._objects_link.CreateIdWME("object")
             object_id.CreateIntWME('id', w_object['id']),
@@ -49,3 +53,6 @@ class input_writer(object):
                 child = id.GetChild(index)  # remove the 0th child several times, Soar kernel readjusts the list after an item is deletd
                 if child is not None:
                     child.DestroyWME()
+
+    def create_qsrs(objects):
+        return None

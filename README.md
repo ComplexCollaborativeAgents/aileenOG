@@ -14,11 +14,16 @@ Grounded language learning agent based on Soar cognitive architecture
    `git clone git@gitlab-external.parc.com:aileen/aileen-world.git`
 * Edit the `Soar`  `path` element in `config.json` to point to your `/local/soar/installation/bin/linux64`
 * Ignore changes to config.json by the command `git update-index --assume-unchanged config.json`
+* Add qsrlib to the python path [replace with your own path, I don't understand why this is not something one does programmatically]
+      `export PYTHONPATH=$PYTHONPATH:~/code/AILEEN/aileen-agent/strands_qsr_lib/qsr_lib/src/`
+      
 * Configure a Python2 conda environment
 
        `conda create --name aileen python=2.7`
 
-       `conda install coloredlogs`
+       `conda install coloredlogs pyyaml yaml`
+
+       `conda install -c marufr python-graph`
     
    
 ## Usage
