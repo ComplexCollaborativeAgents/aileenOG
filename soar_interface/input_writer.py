@@ -33,8 +33,7 @@ class input_writer(object):
         objects = objects_dict['objects']
 
         self.delete_all_children(self._objects_link)
-
-        qsrs = create_qsr(objects)
+        qsrs = self.create_qsrs(objects)
 
         for w_object in objects:
             object_id = self._objects_link.CreateIdWME("object")
@@ -54,7 +53,7 @@ class input_writer(object):
                 if child is not None:
                     child.DestroyWME()
 
-    def create_qsrs(objects):
+    def create_qsrs(self, objects):
         # Ignore y position as everything is on the table (use z instead)
         # Need to figure out how to send back the bounding boxes. Currently assuming .1
         qsrlib = QSRlib() # We don't need a new object each time
