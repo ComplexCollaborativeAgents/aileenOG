@@ -1,10 +1,11 @@
 import sys
+sys.path.append("strands_qsr_lib/qsr_lib/src") # Add QSR Lib Submodule to path
+print(sys.path)
 import json
 import xmlrpclib
 from log_config import logging
 from soar_interface import soar_agent
 from soar_interface.soar_agent import update
-
 
 CONFIG_FILE = "config.json"
 with open(CONFIG_FILE) as config_file:
@@ -24,7 +25,6 @@ def create_connection_with_aileen_world():
 
 if __name__ == '__main__':
     world_server = create_connection_with_aileen_world()
-
     aileen_agent = soar_agent.soar_agent(config, world_server)
     logging.info("[aileen] :: Created aileen agent")
     aileen_agent.register_output_callback(update, aileen_agent)
