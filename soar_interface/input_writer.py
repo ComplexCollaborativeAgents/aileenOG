@@ -54,16 +54,24 @@ class input_writer(object):
                     child.DestroyWME()
 
     def create_qsrs(self, objects):
-        # Ignore y position as everything is on the table (use z instead)
-        # Need to figure out how to send back the bounding boxes. Currently assuming .1
+        '''
+- Ignore y position as everything is on the table (use z instead)
+- While qsrlib allows includes a parameter for orientation/rotation, it is not clear it is used. It is being ignored for now.
+
+Saving sample input from aileen world for later testing.
+        objects = {'objects': [{'orientation': [1.0, -5.75539615965681e-17, 3.38996313371214e-17, 5.75539615965681e-17, 1.0, 2.98427949019241e-17, -3.38996313371214e-17, -2.98427949019241e-17, 1.0], 'bounding_object': 'Box', 'held': 'false', 'bounding_box': [0.721, 0.3998037998119487, -0.249, 0.8210000000000001, 0.49980379981194867, -0.14900000000000002], 'position': [0.771, 0.4498037998119487, -0.199], 'id': 397}, {'orientation': [1.0, 4.8853319907279786e-17, -4.193655877514327e-17, -4.8853319907279786e-17, 1.0, -1.80524117148876e-16, 4.193655877514327e-17, 1.80524117148876e-16, 1.0], 'bounding_object': 'Cylinder', 'held': 'false', 'bounding_box': [0.369851, 0.39992295234206066, 0.067742, 0.46985099999999996, 0.49992295234206063, 0.167742], 'position': [0.419851, 0.44992295234206064, 0.117742], 'id': 403}]}
+        '''
         qsrlib = QSRlib() # We don't need a new object each time
         world = World_Trace()
         for obj in objects:
-            world.add_object_state_series([Object_State(name=str(obj['id']),timestamp=0,
-                                                        x=obj['position'][0],
-                                                        y=obj['position'][2],
-                                                        xsize=0.1,ysize=0.1)])
-        qsrlib_request_message = QSRlib_Request_Message(["rcc8","cardir"], world)
+            world.add_object_state_series(
+                [Object_State(name=str(obj['id']),timestamp=0,
+                              x=obj['position'][0],
+                              y=obj['position'][2],
+                              xsize=obj['bounding_box'][3]-obj['bounding_box'][0],
+                              ysize=obj['bounding_box'][5]-obj['bounding_box'][2]
+                )])
+        qsrlib_request_message = QSRlib_Request_Message(["rcc8","ra"], world)
         qsrlib_response_message = qsrlib.request_qsrs(req_msg=qsrlib_request_message)
         res_str = ""
         for t in qsrlib_response_message.qsrs.get_sorted_timestamps():

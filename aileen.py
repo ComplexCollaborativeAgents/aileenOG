@@ -1,6 +1,5 @@
 import sys
 sys.path.append("strands_qsr_lib/qsr_lib/src") # Add QSR Lib Submodule to path
-print(sys.path)
 import json
 import xmlrpclib
 from log_config import logging
