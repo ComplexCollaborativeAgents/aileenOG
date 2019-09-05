@@ -30,6 +30,7 @@ class soar_agent(object):
         self._world_server = world_server
         self.setup_soar_agent()
         self.init_state_maintenance_data_structures()
+        self.execute_command("svs --enable")
 
     def init_state_maintenance_data_structures(self):
         self.stop_requested = False
@@ -48,10 +49,12 @@ class soar_agent(object):
 
 
     def create_kernel(self):
-        kernel = sml.Kernel.CreateKernelInNewThread(random.randint(40000, 60000))
+        soar_kernel_port = random.randint(40000, 60000)
+        kernel = sml.Kernel.CreateKernelInNewThread(soar_kernel_port)
         if not kernel or kernel.HadError():
             logging.error("[soar_agent] :: Error creating kernel: " + kernel.GetLastErrorDescription())
             exit(1)
+        logging.info("[soar_agent] :: created a soar kernel listening to port {}".format(soar_kernel_port))
         return kernel
 
     def create_agent(self, agent_name):
@@ -101,7 +104,7 @@ class soar_agent(object):
 
     def execute_command(self, command):
         time.sleep(self._config['Soar']['sleep-time'])
-        self._agent.ExecuteCommandLine(command);
+        self._agent.ExecuteCommandLine(command)
 
     def set_time(self, week, day):
         self._input_writer.set_time = {'week': week, 'day': day}

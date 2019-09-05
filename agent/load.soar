@@ -6,3 +6,5 @@ source "test-actions.soar"
 source "primitive-actions/load.soar"
 
 source "elaborations/load.soar"
+
+source "_soar_parameters.soar"

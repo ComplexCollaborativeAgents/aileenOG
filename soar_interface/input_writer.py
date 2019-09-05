@@ -1,6 +1,8 @@
 import time
 from log_config import logging
 import xmlrpclib
+from svs_helper import SVSHelper
+from soar_agent import sml
 
 
 class input_writer(object):
@@ -18,6 +20,31 @@ class input_writer(object):
 
     def generate_input(self):
         time.sleep(self._config['Soar']['sleep-time'])
+
+        objects = self.request_server_for_objects_info()
+        if objects is not None:
+            self.add_objects_to_working_memory(objects)
+            self.add_objects_to_svs(objects)
+
+    def add_objects_to_svs(self, objects):
+        logging.debug("[input_writer] :: writing objects to SVS")
+        for w_object in objects:
+            object_id = "object{}".format(w_object['id'])
+            svs_command = SVSHelper.get_svs_command_for_add_box(object_id, position=w_object['position'])
+            self._soar_agent._agent.SendSVSInput(svs_command)
+
+    def add_objects_to_working_memory(self, objects):
+        self.delete_all_children(self._objects_link)
+        for w_object in objects:
+            object_id = self._objects_link.CreateIdWME("object")
+            object_id.CreateIntWME('id', w_object['id']),
+            position_id = object_id.CreateIdWME('position')
+            position_id.CreateFloatWME('x', w_object['position'][0])
+            position_id.CreateFloatWME('y', w_object['position'][1])
+            position_id.CreateFloatWME('z', w_object['position'][2])
+            object_id.CreateStringWME('held', w_object['held'])
+
+    def request_server_for_objects_info(self):
         try:
             objects_dict = self._world_server.get_all()
         except xmlrpclib.ProtocolError as err:
@@ -27,20 +54,10 @@ class input_writer(object):
             logging.error("[output_reader] :: fault code {}; fault string{}".format(fault.faultCode, fault.faultString))
             return
 
-        logging.info("[input_writer] :: received objects from server {}".format(objects_dict))
+        logging.debug("[input_writer] :: received objects from server {}".format(objects_dict))
         objects = objects_dict['objects']
+        return objects
 
-        self.delete_all_children(self._objects_link)
-
-        for w_object in objects:
-            object_id = self._objects_link.CreateIdWME("object")
-            object_id.CreateIntWME('id', w_object['id']),
-            position_id = object_id.CreateIdWME('position')
-            position_id.CreateFloatWME('x', w_object['position'][0])
-            position_id.CreateFloatWME('y', w_object['position'][1])
-            position_id.CreateFloatWME('z', w_object['position'][2])
-            object_id.CreateStringWME('held', w_object['held'])
-            pass
 
     def delete_all_children(self, id):
         index = 0
