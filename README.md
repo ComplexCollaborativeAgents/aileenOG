@@ -12,16 +12,18 @@ Grounded language learning agent based on Soar cognitive architecture
 * Download Soar9.6 from [here](https://soar.eecs.umich.edu/Downloads) and extract the files to a preferred location on the local file system.
 * Clone this repository  
    `git clone git@gitlab-external.parc.com:aileen/aileen-world.git`
+* Pull in code from submodule
+   `git submodule update --init`
 * Edit the `Soar`  `path` element in `config.json` to point to your `/local/soar/installation/bin/linux64`
 * Ignore changes to config.json by the command `git update-index --assume-unchanged config.json`
-      
+   
 * Configure a Python2 conda environment
 
        `conda create --name aileen python=2.7`
 
-       `conda install coloredlogs pyyaml yaml`
+       `conda install coloredlogs numpy pyyaml yaml`
 
-       `conda install -c marufr python-graph`
+       `conda install -c marufr python-igraph`
     
    
 ## Usage
