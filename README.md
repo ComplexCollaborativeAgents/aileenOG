@@ -12,7 +12,7 @@ Grounded language learning agent based on Soar cognitive architecture
 * Download Soar9.6 from [here](https://soar.eecs.umich.edu/Downloads) and extract the files to a preferred location on the local file system.
 * Clone this repository  
    `git clone git@gitlab-external.parc.com:aileen/aileen-world.git`
-* Pull in code from submodule
+* Pull in code from `strands_qsr_lib` submodule
    `git submodule update --init`
 * Edit the `Soar`  `path` element in `config.json` to point to your `/local/soar/installation/bin/linux64`
 * Ignore changes to config.json by the command `git update-index --assume-unchanged config.json`
