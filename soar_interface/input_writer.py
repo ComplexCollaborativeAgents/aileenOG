@@ -18,6 +18,8 @@ class input_writer(object):
         self._objects_link = self._world_link.CreateIdWME("objects")
         self._interaction_link = self._input_link.CreateIdWME("interaction")
 
+        self._svs_objects = []
+
     def generate_input(self):
         time.sleep(self._config['Soar']['sleep-time'])
 
@@ -26,12 +28,19 @@ class input_writer(object):
             self.add_objects_to_working_memory(objects)
             self.add_objects_to_svs(objects)
 
+    ## SM: both these methods need to be rewritten to maintain the list of objects properly
     def add_objects_to_svs(self, objects):
-        logging.debug("[input_writer] :: writing objects to SVS")
+        logging.info("[input_writer] :: writing objects to SVS")
         for w_object in objects:
             object_id = "object{}".format(w_object['id'])
-            svs_command = SVSHelper.get_svs_command_for_add_box(object_id, position=w_object['position'])
+            if object_id in self._svs_objects:
+                svs_command = SVSHelper.get_svs_command_for_change_position(object_id, w_object['position'])
+            else:
+                svs_command = SVSHelper.get_svs_command_for_add_box(object_id, position=w_object['position'])
+                self._svs_objects.append(object_id)
+
             self._soar_agent._agent.SendSVSInput(svs_command)
+            logging.debug("[input_writer] :: updating svs with {}".format(svs_command))
 
     def add_objects_to_working_memory(self, objects):
         self.delete_all_children(self._objects_link)

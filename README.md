@@ -7,6 +7,7 @@ Grounded language learning agent based on Soar cognitive architecture
 * Python 2 
 * Soar cognitive architecture
 * [aileen_world](https://gitlab-external.parc.com/aileen/aileen-world)
+* qhull (needed for running svs_viewer; ubuntu `sudo apt install qhull-bin`)
 
 ### Steps
 * Download Soar9.6 from [here](https://soar.eecs.umich.edu/Downloads) and extract the files to a preferred location on the local file system.
