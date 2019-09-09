@@ -9,14 +9,15 @@ class input_writer(object):
     def __init__(self, soar_agent, config, world_server):
         self._soar_agent = soar_agent
         self._config = config
-        self._input_link = soar_agent.get_input_link()
         self._world_server = world_server
         self.set_time = None
         self.timestamp = 0
 
-        self._world_link = self._input_link.CreateIdWME("world")
-        self._objects_link = self._world_link.CreateIdWME("objects")
-        self._interaction_link = self._input_link.CreateIdWME("interaction")
+        if soar_agent: #Enable stand alone testing
+            self._input_link = soar_agent.get_input_link() 
+            self._world_link = self._input_link.CreateIdWME("world")
+            self._objects_link = self._world_link.CreateIdWME("objects")
+            self._interaction_link = self._input_link.CreateIdWME("interaction")
 
     def generate_input(self):
         time.sleep(self._config['Soar']['sleep-time'])
@@ -59,7 +60,8 @@ class input_writer(object):
 - While qsrlib allows includes a parameter for orientation/rotation, it is not clear it is used. It is being ignored for now.
 
 Saving sample input from aileen world for later testing.
-        objects = {'objects': [{'orientation': [1.0, -5.75539615965681e-17, 3.38996313371214e-17, 5.75539615965681e-17, 1.0, 2.98427949019241e-17, -3.38996313371214e-17, -2.98427949019241e-17, 1.0], 'bounding_object': 'Box', 'held': 'false', 'bounding_box': [0.721, 0.3998037998119487, -0.249, 0.8210000000000001, 0.49980379981194867, -0.14900000000000002], 'position': [0.771, 0.4498037998119487, -0.199], 'id': 397}, {'orientation': [1.0, 4.8853319907279786e-17, -4.193655877514327e-17, -4.8853319907279786e-17, 1.0, -1.80524117148876e-16, 4.193655877514327e-17, 1.80524117148876e-16, 1.0], 'bounding_object': 'Cylinder', 'held': 'false', 'bounding_box': [0.369851, 0.39992295234206066, 0.067742, 0.46985099999999996, 0.49992295234206063, 0.167742], 'position': [0.419851, 0.44992295234206064, 0.117742], 'id': 403}]}
+
+objects = [{'orientation': [1.0, -5.75539615965681e-17, 3.38996313371214e-17, 5.75539615965681e-17, 1.0, 2.98427949019241e-17, -3.38996313371214e-17, -2.98427949019241e-17, 1.0], 'bounding_object': 'Box', 'held': 'false', 'bounding_box': [0.721, 0.3998037998119487, -0.249, 0.8210000000000001, 0.49980379981194867, -0.14900000000000002], 'position': [0.771, 0.4498037998119487, -0.199], 'id': 397}, {'orientation': [1.0, 4.8853319907279786e-17, -4.193655877514327e-17, -4.8853319907279786e-17, 1.0, -1.80524117148876e-16, 4.193655877514327e-17, 1.80524117148876e-16, 1.0], 'bounding_object': 'Cylinder', 'held': 'false', 'bounding_box': [0.369851, 0.39992295234206066, 0.067742, 0.46985099999999996, 0.49992295234206063, 0.167742], 'position': [0.419851, 0.44992295234206064, 0.117742], 'id': 403}]
         '''
         qsrlib = QSRlib() # We don't need a new object each time
         world = World_Trace()
@@ -71,12 +73,23 @@ Saving sample input from aileen world for later testing.
                               xsize=obj['bounding_box'][3]-obj['bounding_box'][0],
                               ysize=obj['bounding_box'][5]-obj['bounding_box'][2]
                 )])
-        qsrlib_request_message = QSRlib_Request_Message(["rcc8","ra"], world)
+        qsrlib_request_message = QSRlib_Request_Message(["rcc8","cardir"], world)
         qsrlib_response_message = qsrlib.request_qsrs(req_msg=qsrlib_request_message)
-        res_str = ""
+        ret = {}
         for t in qsrlib_response_message.qsrs.get_sorted_timestamps():
             for k, v in zip(qsrlib_response_message.qsrs.trace[t].qsrs.keys(),
                             qsrlib_response_message.qsrs.trace[t].qsrs.values()):
-                res_str += str(k) + ":" + str(v.qsr) + "; "
-        logging.info("[input_writer] :: qsrs computed {}".format(res_str))
-        return qsrlib_response_message
+                args = k.split(',')
+                if args[0] not in ret:
+                    ret[args[0]] = {}
+                ret[args[0]][args[1]] = v.qsr
+        logging.info("[input_writer] :: qsrs computed {}".format(ret))
+        return ret
+
+
+if __name__ == '__main__':
+    iw = input_writer(None,None,None)
+    objects = [{'orientation': [1.0, -5.75539615965681e-17, 3.38996313371214e-17, 5.75539615965681e-17, 1.0, 2.98427949019241e-17, -3.38996313371214e-17, -2.98427949019241e-17, 1.0], 'bounding_object': 'Box', 'held': 'false', 'bounding_box': [0.721, 0.3998037998119487, -0.249, 0.8210000000000001, 0.49980379981194867, -0.14900000000000002], 'position': [0.771, 0.4498037998119487, -0.199], 'id': 397}, {'orientation': [1.0, 4.8853319907279786e-17, -4.193655877514327e-17, -4.8853319907279786e-17, 1.0, -1.80524117148876e-16, 4.193655877514327e-17, 1.80524117148876e-16, 1.0], 'bounding_object': 'Cylinder', 'held': 'false', 'bounding_box': [0.369851, 0.39992295234206066, 0.067742, 0.46985099999999996, 0.49992295234206063, 0.167742], 'position': [0.419851, 0.44992295234206064, 0.117742], 'id': 403}]
+    res = iw.create_qsrs(objects)
+    print(len(res))
+    print(res)
