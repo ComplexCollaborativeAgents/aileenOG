@@ -21,7 +21,7 @@ Grounded language learning agent based on Soar cognitive architecture
 
        `conda create --name aileen python=2.7`
 
-       `conda install coloredlogs numpy pyyaml yaml`
+       `conda install coloredlogs numpy pyyaml yaml shapely pytest`
 
        `conda install -c marufr python-igraph`
     
@@ -48,3 +48,9 @@ This should startup the SoarJavaDebugger window that lets us inspect the state o
 `export SWT_GTK3=0`
 
 * If you want PyCharm terminal to show color coded logs, you can check the box for `emulate terminal output` in `Run configurations` dialog.
+
+## Testing
+
+`python -m pytest --junitxml=test.xml`
+
+* From the top level dictory should result in a single test being run and a text.xml file being created at the top level.
