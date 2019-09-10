@@ -21,7 +21,9 @@ class soar_agent(object):
         self._world_server = world_server
         self.setup_soar_agent()
         self.init_state_maintenance_data_structures()
-        self.execute_command("svs --enable")
+
+        if Configuration.config['RunParams']['svs'] == "true":
+            self.execute_command("svs --enable")
 
     def init_state_maintenance_data_structures(self):
         self.stop_requested = False

@@ -25,7 +25,8 @@ class InputWriter(object):
         objects = self.request_server_for_objects_info()
         if objects is not None:
             self.add_objects_to_working_memory(objects)
-            self.add_objects_to_svs(objects)
+            if Configuration.config['RunParams']['svs'] == "true":
+                self.add_objects_to_svs(objects)
 
     ## SM: both these methods need to be rewritten to maintain the list of objects properly
     def add_objects_to_svs(self, objects):
@@ -77,3 +78,4 @@ class InputWriter(object):
                     index)  # remove the 0th child several times, Soar kernel readjusts the list after an item is deletd
                 if child is not None:
                     child.DestroyWME()
+
