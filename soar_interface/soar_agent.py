@@ -4,29 +4,20 @@ import logging
 import json
 from threading import Thread
 import time
-
 import random
-
-
-CONFIG_FILE = "config.json"
-with open(CONFIG_FILE) as config_file:
-    try:
-        config = json.load(config_file)
-    except ValueError, e:
-        logging.fatal("[soar_client] :: Invalid json at %s; error = %s" % (CONFIG_FILE, e))
-        sys.exit()
-    try:
-        sys.path.append(config['Soar']['path'])
-        import Python_sml_ClientInterface as sml
-    except ValueError, e:
-        logging.fatal("[soar_client] :: Cannot find local soar installation")
-
 import outputreader
-import input_writer
+import inputwriter
+from configuration import Configuration
+
+try:
+    sys.path.append(Configuration.config['Soar']['path'])
+    import Python_sml_ClientInterface as sml
+except ValueError, e:
+    logging.fatal("[soar_client] :: Cannot find local soar installation")
+    sys.exit()
 
 class soar_agent(object):
-    def __init__(self, config, world_server):
-        self._config = config
+    def __init__(self, world_server):
         self._world_server = world_server
         self.setup_soar_agent()
         self.init_state_maintenance_data_structures()
@@ -39,13 +30,13 @@ class soar_agent(object):
 
     def setup_soar_agent(self):
         self._kernel = self.create_kernel()
-        self._agent = self.create_agent(str(self._config['SoarAgent']['name']))
-        self._agentFilepath = str(self._config['SoarAgent']['file'])
+        self._agent = self.create_agent(str(Configuration.config['SoarAgent']['name']))
+        self._agentFilepath = str(Configuration.config['SoarAgent']['file'])
         self.load_agent_rules(self._agentFilepath)
         self._input_link = self._agent.GetInputLink()
         self._output_link = self._agent.GetOutputLink()
-        self._input_writer = input_writer.input_writer(self, self._config, self._world_server)
-        self._output_reader = outputreader.OutputReader(self, self._config, self._world_server)
+        self._input_writer = inputwriter.InputWriter(self, self._world_server)
+        self._output_reader = outputreader.OutputReader(self, self._world_server)
 
 
     def create_kernel(self):
@@ -64,11 +55,11 @@ class soar_agent(object):
             exit(1)
         return agent
 
-    def load_agent_rules(self, agentFile):
-        logging.info("[soar_agent] :: Loading agent at %s" % agentFile)
-        self._agent.LoadProductions(os.path.realpath(agentFile));
+    def load_agent_rules(self, agent_file):
+        logging.info("[soar_agent] :: Loading agent at %s" % agent_file)
+        self._agent.LoadProductions(os.path.realpath(agent_file))
 
-    def run_SoarJavaDebugger(self):
+    def run_soar_java_debugger(self):
         self.stop()
         self._agent.SpawnDebugger(self._kernel.GetListenerPort())
 
@@ -103,7 +94,7 @@ class soar_agent(object):
         self._kernel.CheckForIncomingEvents()
 
     def execute_command(self, command):
-        time.sleep(self._config['Soar']['sleep-time'])
+        time.sleep(Configuration.config['Soar']['sleep-time'])
         self._agent.ExecuteCommandLine(command)
 
     def set_time(self, week, day):
@@ -118,8 +109,8 @@ class soar_agent(object):
         logging.info("[soar_agent] :: spun-off agent thread.")
 
         ## start debugger
-        if self._config["RunParams"]["run_mode"] == "debug":
-            self.run_SoarJavaDebugger()
+        if Configuration.config["RunParams"]["run_mode"] == "debug":
+            self.run_soar_java_debugger()
 
     def stop(self):
         self.stop_requested = True

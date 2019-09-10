@@ -2,10 +2,13 @@
 <soaragent>
   <startfile path="load.soar" />
   <members>
-    <member path="" />
     <member path="primitive-actions" />
     <member path="primitive-actions/pick-up" />
     <member path="elaborations" />
+    <member path="_soar_parameters.soar" />
+    <member path="load.soar" />
+    <member path="test-actions.soar" />
+    <member path="wait.soar" />
   </members>
 </soaragent>
 

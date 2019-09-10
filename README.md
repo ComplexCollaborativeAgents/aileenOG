@@ -13,13 +13,18 @@ Grounded language learning agent based on Soar cognitive architecture
 * Download Soar9.6 from [here](https://soar.eecs.umich.edu/Downloads) and extract the files to a preferred location on the local file system.
 * Clone this repository  
    `git clone git@gitlab-external.parc.com:aileen/aileen-world.git`
+* Pull in code from `strands_qsr_lib` submodule
+   `git submodule update --init`
 * Edit the `Soar`  `path` element in `config.json` to point to your `/local/soar/installation/bin/linux64`
 * Ignore changes to config.json by the command `git update-index --assume-unchanged config.json`
+   
 * Configure a Python2 conda environment
 
        `conda create --name aileen python=2.7`
 
-       `conda install coloredlogs`
+       `conda install coloredlogs numpy pyyaml yaml shapely pytest`
+
+       `conda install -c marufr python-igraph`
     
    
 ## Usage
@@ -44,3 +49,9 @@ This should startup the SoarJavaDebugger window that lets us inspect the state o
 `export SWT_GTK3=0`
 
 * If you want PyCharm terminal to show color coded logs, you can check the box for `emulate terminal output` in `Run configurations` dialog.
+
+## Testing
+
+`python -m pytest --junitxml=test.xml`
+
+* From the top level dictory should result in a single test being run and a text.xml file being created at the top level.

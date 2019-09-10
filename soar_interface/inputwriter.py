@@ -2,13 +2,12 @@ import time
 from log_config import logging
 import xmlrpclib
 from svs_helper import SVSHelper
-from soar_agent import sml
+from configuration import Configuration
 
 
-class input_writer(object):
-    def __init__(self, soar_agent, config, world_server):
+class InputWriter(object):
+    def __init__(self, soar_agent, world_server):
         self._soar_agent = soar_agent
-        self._config = config
         self._input_link = soar_agent.get_input_link()
         self._world_server = world_server
         self.set_time = None
@@ -21,7 +20,7 @@ class input_writer(object):
         self._svs_objects = []
 
     def generate_input(self):
-        time.sleep(self._config['Soar']['sleep-time'])
+        time.sleep(Configuration.config['Soar']['sleep-time'])
 
         objects = self.request_server_for_objects_info()
         if objects is not None:
@@ -34,9 +33,12 @@ class input_writer(object):
         for w_object in objects:
             object_id = "object{}".format(w_object['id'])
             if object_id in self._svs_objects:
-                svs_command = SVSHelper.get_svs_command_for_change_position(object_id, w_object['position'])
+                svs_command = SVSHelper.get_svs_command_for_change_position(object_id,
+                                                                            w_object['position'])
             else:
-                svs_command = SVSHelper.get_svs_command_for_add_box(object_id, position=w_object['position'])
+                svs_command = SVSHelper.get_svs_command_for_add_box(object_id,
+                                                                    position=w_object['position'],
+                                                                    bounding_box=w_object['bounding_box'])
                 self._svs_objects.append(object_id)
 
             self._soar_agent._agent.SendSVSInput(svs_command)
@@ -67,11 +69,11 @@ class input_writer(object):
         objects = objects_dict['objects']
         return objects
 
-
     def delete_all_children(self, id):
         index = 0
         if id.GetNumberChildren is not None:
             for i in range(0, id.GetNumberChildren()):
-                child = id.GetChild(index)  # remove the 0th child several times, Soar kernel readjusts the list after an item is deletd
+                child = id.GetChild(
+                    index)  # remove the 0th child several times, Soar kernel readjusts the list after an item is deletd
                 if child is not None:
                     child.DestroyWME()

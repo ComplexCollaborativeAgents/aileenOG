@@ -8,7 +8,8 @@
     "name": "aileen"
   },
   "RunParams": {
-    "run_mode": "debug"
+    "run_mode": "debug",
+    "svs": "true"
   },
   "Servers":{
     "input_port": 30000,

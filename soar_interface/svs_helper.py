@@ -8,19 +8,10 @@ class SVSHelper(object):
         return "{} {} {}".format(vector[0], vector[1], vector[2])
 
     @staticmethod
-    def get_bbox_vertices_as_string():
-        return "0.1 0.1 0.1 " \
-               "0.1 0.1 -0.1 " \
-               "0.1 -0.1 0.1 " \
-               "0.1 -0.1 -0.1 " \
-               "-0.1 0.1 0.1 " \
-               "-0.1 0.1 -0.1 " \
-               "-0.1 -0.1 0.1 " \
-               "-0.1 -0.1 -0.1 "
-
-    @staticmethod
-    def get_svs_command_for_add_box(object_id, position=None, rotation=None, scale=None):
-        base_string = "add {} world v {}".format(object_id, SVSHelper.get_bbox_vertices_as_string())
+    def get_svs_command_for_add_box(object_id, position=None, bounding_box = None, rotation=None, scale=None):
+        base_string = "add {} world ".format(object_id)
+        if bounding_box is not None:
+            base_string = base_string + " v {}".format(object_id, SVSHelper.convert_to_string(bounding_box))
         if position is not None:
             base_string = base_string + " p {}".format(SVSHelper.convert_to_string(position))
         if rotation is not None:

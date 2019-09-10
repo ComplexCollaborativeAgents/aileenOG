@@ -65,3 +65,19 @@ sp {action*apply*place
     (<act>    ^name place
               ^location <loc>)
     }
+
+
+sp {svs*test-filter
+    (state <s>    ^superstate nil
+                  ^svs <svs>)
+    (<svs>    ^command <com>
+              ^spatial-scene <scene>)
+-->
+    (<com>    ^extract <e>)
+    (<e>    ^a <a1>
+            ^b <b1>
+            ^type intersect)
+    (<a1>    ^id object403 ^type node)
+    (<b1>    ^id object397 ^type node)
+   }
+    

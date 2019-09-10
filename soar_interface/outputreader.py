@@ -3,9 +3,8 @@ import xmlrpclib
 
 
 class OutputReader(object):
-    def __init__(self, soar_agent, config, world_server):
+    def __init__(self, soar_agent, world_server):
         self._soar_agent = soar_agent
-        self._config = config
         self._world = world_server
 
     def read_output(self):
