@@ -4,9 +4,11 @@ import xmlrpclib
 from svs_helper import SVSHelper
 from configuration import Configuration
 
-
-from qsrlib.qsrlib import QSRlib, QSRlib_Request_Message
-from qsrlib_io.world_trace import Object_State, World_Trace
+try:
+    from qsrlib.qsrlib import QSRlib, QSRlib_Request_Message
+    from qsrlib_io.world_trace import Object_State, World_Trace
+except:
+    logging.fatal("[input_writer] :: cannot find spatial reasoning library")
 
 class InputWriter(object):
     def __init__(self, soar_agent, world_server):

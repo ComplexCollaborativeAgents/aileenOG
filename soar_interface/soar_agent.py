@@ -1,7 +1,6 @@
 import os
 import sys
 import logging
-import json
 from threading import Thread
 import time
 import random
@@ -10,11 +9,12 @@ import input_writer
 from configuration import Configuration
 
 try:
-    sys.path.append(Configuration.config['Soar']['path'])
     import Python_sml_ClientInterface as sml
 except ValueError, e:
-    logging.fatal("[soar_client] :: Cannot find local soar installation")
+    logging.fatal("[soar_agent] :: Cannot find local soar installation")
     sys.exit()
+
+
 
 class soar_agent(object):
     def __init__(self, world_server):
@@ -39,7 +39,6 @@ class soar_agent(object):
         self._output_link = self._agent.GetOutputLink()
         self._input_writer = input_writer.InputWriter(self, self._world_server)
         self._output_reader = output_reader.OutputReader(self, self._world_server)
-
 
     def create_kernel(self):
         soar_kernel_port = random.randint(40000, 60000)
