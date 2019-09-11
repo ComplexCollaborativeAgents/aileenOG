@@ -11,14 +11,15 @@ from qsrlib_io.world_trace import Object_State, World_Trace
 class InputWriter(object):
     def __init__(self, soar_agent, world_server):
         self._soar_agent = soar_agent
-        self._input_link = soar_agent.get_input_link()
         self._world_server = world_server
         self.set_time = None
         self.timestamp = 0
 
-        self._world_link = self._input_link.CreateIdWME("world")
-        self._objects_link = self._world_link.CreateIdWME("objects")
-        self._interaction_link = self._input_link.CreateIdWME("interaction")
+        if soar_agent:  # Enable stand alone testing
+            self._input_link = soar_agent.get_input_link()
+            self._world_link = self._input_link.CreateIdWME("world")
+            self._objects_link = self._world_link.CreateIdWME("objects")
+            self._interaction_link = self._input_link.CreateIdWME("interaction")
 
         self._svs_objects = []
 
