@@ -70,5 +70,5 @@ fabric.properties
 *.pyc
 
 .gitmodules
-.idea/vcs.xml
+.idea/*
 test.xml

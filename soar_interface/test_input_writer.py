@@ -2,7 +2,7 @@ import sys # This seems absurd to have to do it everytime
 sys.path.append("strands_qsr_lib/qsr_lib/src") # Add QSR Lib Submodule to path
 
 import pytest
-from inputwriter import InputWriter
+from input_writer import InputWriter
 
 def test_qsr_input_writer():
     iw = InputWriter(None,None)

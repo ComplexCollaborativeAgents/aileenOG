@@ -5,8 +5,8 @@ import json
 from threading import Thread
 import time
 import random
-import outputreader
-import inputwriter
+import output_reader
+import input_writer
 from configuration import Configuration
 
 try:
@@ -37,8 +37,8 @@ class soar_agent(object):
         self.load_agent_rules(self._agentFilepath)
         self._input_link = self._agent.GetInputLink()
         self._output_link = self._agent.GetOutputLink()
-        self._input_writer = inputwriter.InputWriter(self, self._world_server)
-        self._output_reader = outputreader.OutputReader(self, self._world_server)
+        self._input_writer = input_writer.InputWriter(self, self._world_server)
+        self._output_reader = output_reader.OutputReader(self, self._world_server)
 
 
     def create_kernel(self):
