@@ -70,4 +70,6 @@ fabric.properties
 *.pyc
 
 # Webots project files
-*.wbproj 
+*.wbproj
+
+.idea/*
