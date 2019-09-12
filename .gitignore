@@ -73,3 +73,5 @@ fabric.properties
 *.wbproj
 
 .idea/*
+
+*.png

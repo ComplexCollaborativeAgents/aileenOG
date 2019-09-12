@@ -44,8 +44,15 @@ class AileenWorldServer:
             logging.info("[aileen_world_server] :: received apply-action for {}".format(action))
             return aileen_supervisor.apply_action(action)
 
+        def get_image():
+            logging.info("[aileen_world_server] :: received get_image from client")
+            binary_image = aileen_supervisor.get_image()
+            logging.debug("[aileen_world_server] :: sending image in binary format")
+            return binary_image
+
         self._server.register_function(get_all, 'get_all')
         self._server.register_function(apply_action, 'apply_action')
+        self._server.register_function(get_image, 'get_image')
 
     def run(self):
         while not self._quit:

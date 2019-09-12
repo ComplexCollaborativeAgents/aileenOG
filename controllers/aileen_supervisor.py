@@ -3,12 +3,12 @@ from log_config import logging
 from threading import Thread
 from action_executor import ActionExecutor
 import constants
+import xmlrpclib
 
 
 class AileenSupervisor(Supervisor):
 
     def __init__(self):
-        #self._supervisor = Supervisor()
         super(AileenSupervisor, self).__init__()
         logging.info("[aileen_supervisor] :: started supervisor control of the world")
 
@@ -40,9 +40,6 @@ class AileenSupervisor(Supervisor):
     def get_held_node(self):
         return self._held_node
 
-    def dummy(self):
-        logging.debug("[aileen_supervisor] :: dummy function called")
-
     def get_all(self):
         logging.debug("[aileen_supervisor] :: processing get_all from client")
         root = self.getRoot()
@@ -70,7 +67,6 @@ class AileenSupervisor(Supervisor):
                 objects.append(object_dict)
 
         output_dict = {'objects': objects}
-        #self._supervisor.step(constants.TIME_STEP)
         return output_dict
 
     def computeBoundingBox(self,object_node):
@@ -93,7 +89,6 @@ class AileenSupervisor(Supervisor):
                     centroid[0]+radius, centroid[1]+height/2, centroid[2]+radius]
         else:
             raise Exception("[aileen_supervisor] :: Unable to compute bounding box for type {}".format(bounding_obj))
-
         
     def apply_action(self, action):
         logging.debug("[aileen_supervisor] :: processing apply_action from client for action {}".format(action))
@@ -102,3 +97,14 @@ class AileenSupervisor(Supervisor):
             return False
         acknowledgement = self._action_executor.process_action_command(action)
         return acknowledgement
+
+    def get_image(self):
+        logging.debug("[aileen_supervisor] :: processing get_image from client")
+        image_string = self._camera.getImage()
+        logging.debug("[aileen_supervisor] :: got current image")
+        self._camera.saveImage(constants.CURRENT_IMAGE_PATH, 100)
+        logging.debug("[aileen_supervisor] :: saved current image at {}".format(constants.CURRENT_IMAGE_PATH))
+
+        with open(constants.CURRENT_IMAGE_PATH, "rb") as handle:
+            binary_image = xmlrpclib.Binary(handle.read())
+            return binary_image

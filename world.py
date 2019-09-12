@@ -2,7 +2,7 @@ import json
 import sys
 from log_config import logging
 from world_server import AileenWorldServer
-from controllers.aileensupervisor import AileenSupervisor
+from controllers.aileen_supervisor import AileenSupervisor
 
 # read in the config file
 CONFIG_FILE = "config.json"
