@@ -53,13 +53,14 @@ class AileenSupervisor(Supervisor):
             object_name = object_node.getTypeName()
             if 'Solid' in object_name:
                 object_children = object_node.getField('children')
-                shape_node = object_children.getMFNode(0)
                 object_dict = {
                     'id': object_node.getId(),
                     'position': object_node.getPosition(),
-                    'orientation': object_node.getOrientation(),
                     'bounding_box': self.computeBoundingBox(object_node),
-                    'bounding_object': object_node.getField('boundingObject').getSFNode().getTypeName()}
+                    'shape': self.get_object_shape(object_node),
+                    'color': self.get_object_color(object_node),
+                    'texture': self.get_object_texture(object_node)
+                }
                 if object_node == self._held_node:
                     object_dict['held'] = 'true'
                 else:
@@ -68,6 +69,23 @@ class AileenSupervisor(Supervisor):
 
         output_dict = {'objects': objects}
         return output_dict
+
+    def get_object_shape(self, object_node):
+        children = object_node.getField('children')
+        for i in range(0, children.getCount()):
+            shape_node = children.getMFNode(i)
+            if shape_node.getTypeName() == "Shape":
+                geometry_node = shape_node.getField('geometry').getSFNode()
+                geometry_string = geometry_node.getTypeName()
+                label_string = "s_{}".format(geometry_string.lower())
+                return label_string
+
+
+    def get_object_color(self, object_node):
+        return "c_"
+
+    def get_object_texture(self, object_node):
+        return "t_"
 
     def computeBoundingBox(self,object_node):
         '''
