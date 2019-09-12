@@ -3,6 +3,7 @@ from log_config import logging
 import xmlrpclib
 from svs_helper import SVSHelper
 from configuration import Configuration
+import constants
 
 
 from qsrlib.qsrlib import QSRlib, QSRlib_Request_Message
@@ -25,6 +26,9 @@ class InputWriter(object):
 
     def generate_input(self):
         time.sleep(Configuration.config['Soar']['sleep-time'])
+
+        binary_image = self.request_server_for_current_state_image()
+        self.write_binary_image_to_file(binary_image)
 
         objects = self.request_server_for_objects_info()
         if objects is not None:
@@ -65,15 +69,32 @@ class InputWriter(object):
         try:
             objects_dict = self._world_server.get_all()
         except xmlrpclib.ProtocolError as err:
-            logging.error("[output_reader] :: protocol error {}".format(err.errmsg))
+            logging.error("[input_writer] :: protocol error {}".format(err.errmsg))
             return
         except xmlrpclib.Fault as fault:
-            logging.error("[output_reader] :: fault code {}; fault string{}".format(fault.faultCode, fault.faultString))
+            logging.error("[input_writer] :: fault code {}; fault string{}".format(fault.faultCode, fault.faultString))
             return
 
         logging.debug("[input_writer] :: received objects from server {}".format(objects_dict))
         objects = objects_dict['objects']
         return objects
+
+    def request_server_for_current_state_image(self):
+        try:
+            binary_image = self._world_server.get_image()
+        except xmlrpclib.ProtocolError as err:
+            logging.error("[input_writer] :: protocol error {}".format(err.errmsg))
+            return
+        except xmlrpclib.Fault as fault:
+            logging.error("[input_writer] :: fault code {}; fault string{}".format(fault.faultCode, fault.faultString))
+            return
+
+        logging.debug("[input_writer] :: received binary image from server")
+        return binary_image
+
+    def write_binary_image_to_file(self, binary_image):
+        with open(constants.CURRENT_IMAGE_PATH, "wb") as handle:
+            handle.write(binary_image.data)
 
     def delete_all_children(self, id):
         index = 0

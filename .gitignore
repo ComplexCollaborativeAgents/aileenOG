@@ -72,3 +72,4 @@ fabric.properties
 .gitmodules
 .idea/*
 test.xml
+*.png
