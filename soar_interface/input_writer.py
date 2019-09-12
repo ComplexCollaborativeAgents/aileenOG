@@ -28,16 +28,18 @@ class InputWriter(object):
     def generate_input(self):
         time.sleep(Configuration.config['Soar']['sleep-time'])
 
-        objects = self.request_server_for_objects_info()
-        if objects is not None:
-            self.add_objects_to_working_memory(objects)
+        objects_list = self.request_server_for_objects_info()
+        if objects_list is not None:
+            self.add_objects_to_working_memory(objects_list)
             if Configuration.config['RunParams']['svs'] == "true":
-                self.add_objects_to_svs(objects)
+                self.add_objects_to_svs(objects_list)
+
+        qsrs = self.create_qsrs(objects_list)
 
     ## SM: both these methods need to be rewritten to maintain the list of objects properly
-    def add_objects_to_svs(self, objects):
+    def add_objects_to_svs(self, objects_list):
         logging.info("[input_writer] :: writing objects to SVS")
-        for w_object in objects:
+        for w_object in objects_list:
             object_id = "object{}".format(w_object['id'])
             if object_id in self._svs_objects:
                 svs_command = SVSHelper.get_svs_command_for_change_position(object_id,
@@ -51,10 +53,9 @@ class InputWriter(object):
             self._soar_agent._agent.SendSVSInput(svs_command)
             logging.debug("[input_writer] :: updating svs with {}".format(svs_command))
 
-    def add_objects_to_working_memory(self, objects):
+    def add_objects_to_working_memory(self, objects_list):
         self.delete_all_children(self._objects_link)
-        qsrs = self.create_qsrs(objects)
-        for w_object in objects:
+        for w_object in objects_list:
             object_id = self._objects_link.CreateIdWME("object")
             object_id.CreateIntWME('id', w_object['id']),
             position_id = object_id.CreateIdWME('position')
@@ -74,8 +75,8 @@ class InputWriter(object):
             return
 
         logging.debug("[input_writer] :: received objects from server {}".format(objects_dict))
-        objects = objects_dict['objects']
-        return objects
+        objects_list = objects_dict['objects']
+        return objects_list
 
     def delete_all_children(self, id):
         index = 0
@@ -120,7 +121,7 @@ objects = [{'orientation': [1.0, -5.75539615965681e-17, 3.38996313371214e-17, 5.
 
 
 if __name__ == '__main__':
-    iw = InputWriter(None,None,None)
+    iw = InputWriter(None,None)
     objects = [{'orientation': [1.0, -5.75539615965681e-17, 3.38996313371214e-17, 5.75539615965681e-17, 1.0, 2.98427949019241e-17, -3.38996313371214e-17, -2.98427949019241e-17, 1.0], 'bounding_object': 'Box', 'held': 'false', 'bounding_box': [0.721, 0.3998037998119487, -0.249, 0.8210000000000001, 0.49980379981194867, -0.14900000000000002], 'position': [0.771, 0.4498037998119487, -0.199], 'id': 397}, {'orientation': [1.0, 4.8853319907279786e-17, -4.193655877514327e-17, -4.8853319907279786e-17, 1.0, -1.80524117148876e-16, 4.193655877514327e-17, 1.80524117148876e-16, 1.0], 'bounding_object': 'Cylinder', 'held': 'false', 'bounding_box': [0.369851, 0.39992295234206066, 0.067742, 0.46985099999999996, 0.49992295234206063, 0.167742], 'position': [0.419851, 0.44992295234206064, 0.117742], 'id': 403}]
     res = iw.create_qsrs(objects)
     print(len(res))

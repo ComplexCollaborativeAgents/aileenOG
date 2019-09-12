@@ -1,4 +1,7 @@
+import pytest
 from input_writer import InputWriter
+from soar_agent import soar_agent
+
 
 def test_qsr_input_writer():
     iw = InputWriter(None,None)
