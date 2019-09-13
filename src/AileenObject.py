@@ -1,45 +1,27 @@
+import json
 import random
 import sys
 import uuid
+
+COLOR_FILE = 'colors.json'
 
 class AileenObject:
 
     shape_set= {'box', 'ball', 'cylinder', 'cone'}
     texture_set = {'smooth', 'rough'}
-    color_set = {'yellow', 'red', 'green', 'blue'}
-    rgb_data = {
-        'yellow': [
-            (255, 255, 0),
-            (238, 238, 0),
-            (205, 205, 0),
-            (255, 236, 139)
-         ],
-        'red': [
-            (255, 0, 0),
-            (238, 0, 0),
-            (205, 0, 0),
-            (139, 0, 0)
-         ],
-        'green': [
-            (0, 128, 0),
-            (0, 238, 0),
-            (0, 205, 0),
-            (50, 205, 50)
-         ],
-        'blue': [
-            (0, 191, 255),
-            (0, 178, 238),
-            (0, 154, 205),
-            (30, 144, 255)
-         ]
-    }
+
+    def get_colors(self):
+        with open(COLOR_FILE) as f:
+            colors = json.load(f)
+        return colors
 
     def __init__(self):
+        rgb_data = self.get_colors()
         self.object_id = str(uuid.uuid4())
         self.texture = random.choice(tuple(self.texture_set))
         self.shape = random.choice(tuple(self.shape_set))
-        self.color = random.choice(tuple(self.color_set))
-        self.rgb = random.choice(self.rgb_data[self.color])
+        self.color = random.choice(rgb_data.keys())
+        self.rgb = random.choice(rgb_data[self.color])
         self.object = None
 
         if self.shape == 'box':
@@ -52,7 +34,6 @@ class AileenObject:
             self.object = Cone()
 
         self.object.emissiveColor = self.rgb
-
 
     def get_yaml(self):
         '''For a given object, generate the YAML code that defines it'''
