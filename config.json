@@ -9,10 +9,12 @@
   },
   "RunParams": {
     "run_mode": "debug",
-    "svs": "true"
+    "svs": "False",
+    "cv": "False"
   },
   "Servers":{
     "input_port": 30000,
-    "input_host": "localhost"
+    "input_host": "localhost",
+    "output_port": 40000
   }
 }

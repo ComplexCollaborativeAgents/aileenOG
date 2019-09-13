@@ -1,6 +1,3 @@
-import sys
-sys.path.append("strands_qsr_lib/qsr_lib/src") # Add QSR Lib Submodule to path
-import json
 import xmlrpclib
 from log_config import logging
 from soar_interface import soar_agent
@@ -24,6 +21,8 @@ if __name__ == '__main__':
     aileen_agent.register_output_callback(update, aileen_agent)
     aileen_agent.start()
     aileen_agent.stop()
+    aileen_agent_server = AileenAgentServer(aileen_agent,  port=Configuration.config['Servers']['output_port'])
+    aileen_agent_server.run_in_background()
 
     while(True):
         pass

@@ -6,14 +6,15 @@ from threading import Thread
 
 
 class AileenAgentServer():
-    def __init__(self, port=11000):
+    def __init__(self, aileen_agent, port=11000):
         logging.info("[aileen_agent_server] :: aileen_agent_server connecting on port {}".format(port))
 
         self._port = port
         self._quit = True
         self._thread = None
+        self._agent = aileen_agent
 
-        self._host = socket.gethostbyname("0.0.0.0.")
+        self._host = socket.gethostbyname("0.0.0.0")
         logging.info("[aileen_world_server] :: starting aileen_agent_host on {}".format(self._host))
 
         class RequestHandler(SimpleXMLRPCRequestHandler):
@@ -23,8 +24,9 @@ class AileenAgentServer():
 
         self._server.register_introspection_functions()
 
-        def process_language():
+        def process_language(language_dict):
             acknowledgement = True
+            aileen_agent.process_language(language_dict['language'])
             return acknowledgement
 
         self._server.register_function(process_language, 'process_language')
