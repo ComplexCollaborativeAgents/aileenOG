@@ -6,6 +6,7 @@ from log_config import logging
 from soar_interface import soar_agent
 from soar_interface.soar_agent import update
 from configuration import Configuration
+from aileen_agent_server import AileenAgentServer
 
 
 def create_connection_with_aileen_world():
