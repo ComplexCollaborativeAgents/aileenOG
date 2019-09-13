@@ -25,8 +25,6 @@ class AileenWorldServer:
         class RequestHandler(SimpleXMLRPCRequestHandler):
             rpc_paths = ('/RPC2',)
 
-        # Create server
-
         self._host = socket.gethostbyname("0.0.0.0")
         logging.info("[aileen_world_server] :: hostname: " + self._host)
 
@@ -35,34 +33,40 @@ class AileenWorldServer:
         self._server.register_introspection_functions()
 
         def get_all():
-            logging.info("[aileen_world_server] :: received get_all from client")
+            logging.info("[aileen_world_server] :: received get_all from agent client")
             output = aileen_supervisor.get_all()
             logging.debug("[aileen_world_server] :: sending response {}".format(output))
             return output
 
         def apply_action(action):
-            logging.info("[aileen_world_server] :: received apply-action for {}".format(action))
+            logging.info("[aileen_world_server] :: received apply-action for {} from agent client".format(action))
             return aileen_supervisor.apply_action(action)
 
         def get_image():
-            logging.info("[aileen_world_server] :: received get_image from client")
+            logging.info("[aileen_world_server] :: received get_image from agent client")
             binary_image = aileen_supervisor.get_image()
             logging.debug("[aileen_world_server] :: sending image in binary format")
             return binary_image
 
+        def set_scene(scene_description):
+            logging.info("[aileen_world_server] :: received set_scene from instructor client")
+            acknowledgement = aileen_supervisor.set_scene()
+            logging.debug("[aileen_world_server] :: sending acknowledgement")
+            return acknowledgement
+
         self._server.register_function(get_all, 'get_all')
         self._server.register_function(apply_action, 'apply_action')
         self._server.register_function(get_image, 'get_image')
+        self._server.register_function(set_scene, 'set_scene')
 
     def run(self):
         while not self._quit:
             self._server.handle_request()
-            print self._server.handle_request()
+            logging.debug("[aileen_world_server] :: serving request {}".format(self._server.handle_request()))
 
     def update_world_in_background(self):
         while self._aileen_supervisor.step(constants.TIME_STEP) != -1:
             time.sleep(0.001)
-            pass
 
     def run_in_background(self):
         self._world_thread = Thread(target=self.update_world_in_background, args=())
@@ -73,10 +77,5 @@ class AileenWorldServer:
         self._thread = Thread(target=self.run, args=())
         self._thread.start()
 
-
-
     def stop(self):
         self._quit = True
-        url = 'http://{}:{}'.format(self.host, self.port)
-        s = xmlrpclib.client.ServerProxy(url)
-        s.dummy()

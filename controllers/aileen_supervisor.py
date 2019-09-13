@@ -126,3 +126,6 @@ class AileenSupervisor(Supervisor):
         with open(constants.CURRENT_IMAGE_PATH, "rb") as handle:
             binary_image = xmlrpclib.Binary(handle.read())
             return binary_image
+
+    def set_scene(self):
+        return True
