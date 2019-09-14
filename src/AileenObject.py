@@ -3,7 +3,7 @@ import random
 import sys
 import uuid
 
-COLOR_FILE = 'colors.json'
+COLOR_FILE = 'resources/colors.json'
 
 class AileenObject:
 
@@ -36,8 +36,8 @@ class AileenObject:
         self.object.emissiveColor = self.rgb
 
     def get_yaml(self):
-        '''For a given object, generate the YAML code that defines it'''
-
+#        '''For a given object, generate the YAML code that defines it'''
+            return self.object.get_yaml()
 
 class Box:
     translation = []
@@ -49,6 +49,20 @@ class Box:
     physics = 0
     castShadows = True
     emissiveColor = ()
+
+    def get_yaml(self):
+        yaml = "Solid {\n"
+        yaml += "   translation {} {} {}\n".format(0.771, 0.46, -0.199)
+        yaml += "   children [\n"
+        yaml += "      Shape {\n"
+        yaml += "          appearance PBRAppearance {\n}\n"
+        yaml += "          geometry Box {\n"
+        yaml += "             size 0.1 0.1 0.1\n}\n"
+        yaml += "           castShadows FALSE\n"
+        yaml += "      }\n"
+        yaml += "    ]\n"
+
+        return yaml
 
 class Ball:
     translation = []
@@ -62,13 +76,32 @@ class Ball:
     angularDamping = 0.33
     emissiveColor = ()
 
+    def get_yaml(self):
+        yaml = "Solid {\n"
+        yaml += "translation {} {} {}\n".format(0.771, 0.46, -0.199)
+        return yaml
+
 class Cylinder:
     bottomRadius = 0.05
     height = 0.1
     emissiveColor = ()
 
+    def get_yaml(self):
+        yaml = "Solid {\n"
+        yaml += "   translation {} {} {}\n".format(0.771, 0.46, -0.199)
+        yaml += "   children [\n"
+        yaml += "      Shape {\n"
+        yaml += "          appearance PBRAppearance {\n}\n"
+        yaml += "          geometry ??? {\n"
+        return yaml
+
 class Cone:
     bottomRadius = 0.05
     height = 0.1
     emissiveColor = ()
+
+    def get_yaml(self):
+        yaml = "Solid {\n"
+        yaml += "translation {} {} {}\n".format(0.771, 0.46, -0.199)
+        return yaml
 
