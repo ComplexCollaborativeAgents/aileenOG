@@ -5,7 +5,7 @@ import json
 
 class Configuration:
     ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
-    CONFIG_FILE = os.path.join(ROOT_DIR, 'config.json')
+    CONFIG_FILE = os.path.join(ROOT_DIR, '..', 'resources', 'config.json')
     with open(CONFIG_FILE) as config_file:
         try:
             config = json.load(config_file)

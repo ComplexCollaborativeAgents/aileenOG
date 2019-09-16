@@ -1,9 +1,10 @@
 import json
+import os
 import random
 import sys
 import uuid
 
-COLOR_FILE = 'colors.json'
+COLOR_FILE_NAME = 'colors.json'
 
 class AileenObject:
 
@@ -11,7 +12,9 @@ class AileenObject:
     texture_set = {'smooth', 'rough'}
 
     def get_colors(self):
-        with open(COLOR_FILE) as f:
+        root_dir = os.path.dirname(os.path.abspath(__file__))
+        color_file = os.path.join(root_dir, '..', 'resources', COLOR_FILE_NAME)
+        with open(color_file) as f:
             colors = json.load(f)
         return colors
 
