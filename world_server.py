@@ -8,7 +8,6 @@ from threading import Thread
 import constants
 import time
 
-
 class AileenWorldServer:
 
     def __init__(self, aileen_supervisor, port=10000):
@@ -50,7 +49,9 @@ class AileenWorldServer:
 
         def set_scene(scene_description):
             logging.info("[aileen_world_server] :: received set_scene from instructor client")
-            acknowledgement = aileen_supervisor.set_scene()
+
+            acknowledgement = aileen_supervisor.set_scene(scene_description)
+
             logging.debug("[aileen_world_server] :: sending acknowledgement")
             return acknowledgement
 
