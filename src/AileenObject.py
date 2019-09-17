@@ -40,7 +40,7 @@ class AileenObject:
 
     def get_yaml(self):
         '''For a given object, generate the YAML code that defines it'''
-            return self.object.get_yaml()
+        return self.object.get_yaml()
 
 class Box:
     translation = []
