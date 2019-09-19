@@ -32,6 +32,7 @@ if __name__ == '__main__':
 
         scene = AileenScene()
         obj_desc = []
+        print(str(scene.objects))
         for obj in scene.objects:
             obj_desc.append(obj.get_yaml())
         scene_acknowledgement = world_server.set_scene(obj_desc)
