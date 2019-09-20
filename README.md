@@ -36,9 +36,13 @@ Grounded language learning agent based on Soar cognitive architecture
 This should startup the SoarJavaDebugger window that lets us inspect the state of Soar kernel.
 
 
+## Architecture
+An overview of how `aileen-agent` fits with the rest of the [architecture](https://gitlab-external.parc.com/aileen/aileen-agent/wikis/architecture-diagram)
+
+
 ## Structure and Editing
-* aileen-agent is built in three parts: 
-    1. a python client to aileen-world `aileen-agent/aileen.py`
+* aileen-agent has the following components: 
+    1. a python client to aileen-world `aileen-agent/aileen.py`. This module makes requests as described in the [protocol](https://gitlab-external.parc.com/aileen/aileen-world/wikis/communication-protocol).
     2. a python interface to Soar kernel `aileen-agent/soar_interface` that uses python SWIG bindings to the Soar kernel
     2. a set of rules that guide reasoning in Soar in `aileen-agent/agent`
     
