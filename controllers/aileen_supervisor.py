@@ -5,11 +5,7 @@ from action_executor import ActionExecutor
 import constants
 import os
 import xmlrpclib
-
-TEMPLATE_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "worlds", "template.wbt")
-TEMPLATE_OBJECTS_MARKER = '<objects>'
-generated_scene_file = "scene.wbt"
-
+import scene_writer
 
 class AileenSupervisor(Supervisor):
 
@@ -133,18 +129,7 @@ class AileenSupervisor(Supervisor):
             return binary_image
 
     def set_scene(self, objects):
-        out = open(generated_scene_file, "w")
-        with open(TEMPLATE_FILE) as f:
-            for line in f:
-                cleaned_line = line.strip()
-                if cleaned_line.startswith(TEMPLATE_OBJECTS_MARKER):
-                    for obj in objects:
-                        out.write(obj)
-                        out.write('\n')
-                else:
-                    out.write(line)
-        out.close()
-
+        scene_writer.write_scene(objects)
         self.worldSave()
         self.worldLoad(generated_scene_file)
         return True
