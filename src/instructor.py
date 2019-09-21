@@ -3,8 +3,8 @@ from log_config import logging
 from configuration import Configuration
 import time
 
-from AileenObject import AileenObject
-from AileenScene import AileenScene
+from AileenObject_temp import AileenObject
+from AileenScene_temp import AileenScene
 
 
 def create_connection_with_aileen_world():
