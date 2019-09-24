@@ -10,7 +10,7 @@ class AileenVisualWordLesson:
 
     def __init__(self):
         self._scene = AileenScene()
-        self._language = None
+        self._language = {}
         self._colors = self.get_colors()
         self._shapes = constants.SHAPE_SET
 
@@ -19,7 +19,7 @@ class AileenVisualWordLesson:
         self.generate_scene()
 
         lesson['scene'] = self._scene.generate_scene_description()
-        lesson['language']  = self._language
+        lesson['interaction'] = self._language
 
         return lesson
 
@@ -34,15 +34,14 @@ class AileenVisualWordLesson:
         scene_object.set_translation(self.get_random_position_on_table())
         self._scene.add_object(scene_object)
 
-        self._language = "{} {}".format(scene_object_color, scene_object_shape)
+        self._language['language'] = "{} {}".format(scene_object_color, scene_object_shape)
 
 
     @staticmethod
     def get_random_position_on_table():
-        position = []
-        position.append(uniform(constants.OBJECT_POSITION_MIN_X, constants.OBJECT_POSITION_MAX_X))
-        position.append(uniform(constants.OBJECT_POSITION_MIN_Y, constants.OBJECT_POSITION_MAX_Y))
-        position.append(uniform(constants.OBJECT_POSITION_MIN_Z, constants.OBJECT_POSITION_MAX_Z))
+        position = [uniform(constants.OBJECT_POSITION_MIN_X, constants.OBJECT_POSITION_MAX_X),
+                    uniform(constants.OBJECT_POSITION_MIN_Y, constants.OBJECT_POSITION_MAX_Y),
+                    uniform(constants.OBJECT_POSITION_MIN_Z, constants.OBJECT_POSITION_MAX_Z)]
         return position
 
     @staticmethod

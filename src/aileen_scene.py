@@ -8,8 +8,7 @@ class AileenScene:
         self._objects.append(aileen_object)
 
     def generate_scene_description(self):
-        description = ""
+        description = []
         for scene_object in self._objects:
-            description += scene_object.get_object_description()
-            description += "\n"
+            description.append(scene_object.get_object_description())
         return description

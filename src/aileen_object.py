@@ -38,7 +38,9 @@ class AileenObject:
         description += "        }\n"
         description += "    ]\n"
         description += "   boundingObject {}".format(self.get_bounding_object_description())
+        description += "   physics Physics {\n}"
         description += "}"
+
 
         logging.debug("[aileen_object] :: added string {}".format(description))
 
@@ -67,6 +69,12 @@ class AileenObject:
         if self._shape == "cylinder":
             description += "          radius {}\n".format(self._width_x / 2)
             description += "          height {}\n".format(self._height_y)
+            description += "        }"
+            return description
+
+        if self._shape == "sphere":
+            description += "          radius {}\n".format(self._width_x / 2)
+            description += "          subdivision 3\n"
             description += "        }"
             return description
 

@@ -3,8 +3,7 @@ from log_config import logging
 from configuration import Configuration
 import time
 
-from AileenObject_temp import AileenObject
-from AileenScene_temp import AileenScene
+from aileen_visual_word_lesson import AileenVisualWordLesson
 
 
 def create_connection_with_aileen_world():
@@ -28,16 +27,14 @@ if __name__ == '__main__':
     agent_server = create_connection_with_aileen_agent()
 
     while True:
-        time.sleep(0.005)
+        raw_input("Press any key to generate the next lesson...")
 
-        scene = AileenScene()
-        obj_desc = []
-        for obj in scene.objects:
-            obj_desc.append(obj.get_yaml())
-        scene_acknowledgement = world_server.set_scene(obj_desc)
+        lesson = AileenVisualWordLesson().generate_lesson()
+
+        scene_acknowledgement = world_server.set_scene(lesson['scene'])
         logging.info("[aileen_instructor] :: received from world {}".format(scene_acknowledgement))
 
-        language = {'language':'test-language'}
-        language_acknowledgement = agent_server.process_language(language)
+        language_acknowledgement = agent_server.process_language(lesson['interaction'])
         logging.info("[aileen_instructor] :: received from agent {}".format(language_acknowledgement))
-        break
+
+

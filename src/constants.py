@@ -10,7 +10,7 @@ OBJECT_POSITION_MAX_Z = 0.242
 OBJECT_POSITION_MIN_Z = -0.245
 
 
-SHAPE_SET = ['cone', 'box', 'cylinder']
+SHAPE_SET = ['cone', 'box', 'cylinder', 'sphere']
 
 COLOR_FILE_NAME = 'colors.json'
 
