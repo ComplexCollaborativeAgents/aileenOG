@@ -5,12 +5,15 @@ from action_executor import ActionExecutor
 import constants
 import os
 import xmlrpclib
-import scene_writer
 
 class AileenSupervisor(Supervisor):
 
     def __init__(self):
         super(AileenSupervisor, self).__init__()
+
+        self._root = self.getRoot()
+        self._children = self._root.getField('children')
+
         logging.info("[aileen_supervisor] :: started supervisor control of the world")
 
         self._action_executor = ActionExecutor(self)
@@ -43,14 +46,12 @@ class AileenSupervisor(Supervisor):
 
     def get_all(self):
         logging.debug("[aileen_supervisor] :: processing get_all from client")
-        root = self.getRoot()
-        children = root.getField('children')
-        num_children = children.getCount()
+        num_children = self._children.getCount()
         logging.debug("[aileen_supervisor] :: world contains {} nodes".format(num_children))
         objects = []
 
         for i in range(0, num_children):
-            object_node = children.getMFNode(i)
+            object_node = self._children.getMFNode(i)
             object_name = object_node.getTypeName()
             if 'Solid' in object_name:
                 object_children = object_node.getField('children')
@@ -128,8 +129,19 @@ class AileenSupervisor(Supervisor):
             binary_image = xmlrpclib.Binary(handle.read())
             return binary_image
 
-    def set_scene(self, objects):
-        scene_writer.write_scene(objects)
-        self.worldSave()
-        self.worldLoad(generated_scene_file)
+    def set_scene(self, scene_objects):
+        self.clean_scene()
+        logging.debug("[aileen_supervisor] :: trying to add new objects to the scene.")
+        for scene_object in scene_objects:
+            self._children.importMFNodeFromString(-1, scene_object)
         return True
+
+    def clean_scene(self):
+        logging.debug("[aileen_supervisor] :: cleaning objects from the scene")
+        num_children = self._children.getCount()
+
+        for i in range(0, num_children):
+            object_node = self._children.getMFNode(i)
+            object_name = object_node.getTypeName()
+            if 'Solid' in object_name:
+                object_node.remove()

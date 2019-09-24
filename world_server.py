@@ -49,9 +49,7 @@ class AileenWorldServer:
 
         def set_scene(scene_description):
             logging.info("[aileen_world_server] :: received set_scene from instructor client")
-
             acknowledgement = aileen_supervisor.set_scene(scene_description)
-
             logging.debug("[aileen_world_server] :: sending acknowledgement")
             return acknowledgement
 
