@@ -1,4 +1,5 @@
-from aileen_object import AileenObject
+from random import uniform
+import constants
 
 class AileenScene:
     def __init__(self):
@@ -12,3 +13,10 @@ class AileenScene:
         for scene_object in self._objects:
             description.append(scene_object.get_object_description())
         return description
+
+    @staticmethod
+    def get_random_position_on_table():
+        position = [uniform(constants.OBJECT_POSITION_MIN_X, constants.OBJECT_POSITION_MAX_X),
+                    uniform(constants.OBJECT_POSITION_MIN_Y, constants.OBJECT_POSITION_MAX_Y),
+                    uniform(constants.OBJECT_POSITION_MIN_Z, constants.OBJECT_POSITION_MAX_Z)]
+        return position
