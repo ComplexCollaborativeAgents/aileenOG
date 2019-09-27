@@ -129,19 +129,29 @@ class AileenSupervisor(Supervisor):
             binary_image = xmlrpclib.Binary(handle.read())
             return binary_image
 
-    def set_scene(self, scene_objects):
+    def set_scene(self, scene_objects, label):
         self.clean_scene()
         logging.debug("[aileen_supervisor] :: trying to add new objects to the scene.")
         for scene_object in scene_objects:
             self._children.importMFNodeFromString(-1, scene_object)
+
+        self.setLabel(1,label,0.4,0.1,0.1,0x000000,0,"Arial")
         return True
 
     def clean_scene(self):
         logging.debug("[aileen_supervisor] :: cleaning objects from the scene")
         num_children = self._children.getCount()
 
+        nodes_to_remove = []
+
         for i in range(0, num_children):
             object_node = self._children.getMFNode(i)
             object_name = object_node.getTypeName()
             if 'Solid' in object_name:
-                object_node.remove()
+                nodes_to_remove.append(object_node.getId())
+
+        print len(nodes_to_remove)
+        for i in range(0, len(nodes_to_remove)):
+            node_id = nodes_to_remove[i]
+            node = self.getFromId(node_id)
+            node.remove()
