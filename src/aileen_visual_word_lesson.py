@@ -17,14 +17,8 @@ class AileenVisualWordLesson:
 
     def generate_scene(self):
         logging.debug("[aileen_visual_word_lesson] :: generating a new scene for visual word learning")
-        scene_object_color = AileenObject.get_random_color()
-        scene_object_color_vector = AileenObject.get_color_vector_sample(scene_object_color)
-        scene_object_shape = AileenObject.get_random_shape()
-        scene_object_translation = AileenScene.get_random_position_on_table()
-        scene_object = AileenObject(shape=scene_object_shape,
-                                    color=scene_object_color_vector,
-                                    translation=scene_object_translation)
-
+        position = AileenScene.get_random_position_on_table()
+        scene_object = AileenObject.generate_random_object_at(position)
         self._scene.add_object(scene_object)
         self._language['language'] = "{} {}".format(scene_object_color, scene_object_shape)
 

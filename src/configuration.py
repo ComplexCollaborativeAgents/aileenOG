@@ -13,3 +13,5 @@ class Configuration:
         except ValueError, e:
             logging.fatal("[aileen_instructor] :: Invalid json at %s; error = %s" % (CONFIG_FILE, e))
             sys.exit()
+
+    sys.path.append("/home/smohan/AILEEN/aileen-instructor/strands_qsr_lib/qsr_lib/src")

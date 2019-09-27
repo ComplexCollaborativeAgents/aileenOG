@@ -39,7 +39,7 @@ class AileenObject:
         description += "        castShadows FALSE\n"
         description += "        }\n"
         description += "    ]\n"
-        description += "    name \"{}\"".format(self._name)
+     #   description += "    name \"{}\"\n".format(self._name)
         description += "   boundingObject {}".format(self.get_bounding_object_description())
         description += "   physics Physics {\n}"
         description += "}"
@@ -85,10 +85,12 @@ class AileenObject:
         logging.debug("[aileen_object] :: setting translation of object to {}".format(position_vector))
         self._translation = position_vector
 
+    def set_language(self, word_list):
+        self._language = word_list
+
     @staticmethod
     def get_random_color():
         colors = AileenObject.get_colors().keys()
-        print colors
         return choice(colors)
 
     @staticmethod
@@ -106,5 +108,16 @@ class AileenObject:
     @staticmethod
     def get_random_shape():
         return choice(constants.SHAPE_SET)
+
+    @staticmethod
+    def generate_random_object_at(position):
+        scene_object_color = AileenObject.get_random_color()
+        scene_object_color_vector = AileenObject.get_color_vector_sample(scene_object_color)
+        scene_object_shape = AileenObject.get_random_shape()
+        scene_object = AileenObject(shape=scene_object_shape,
+                                    color=scene_object_color_vector,
+                                    translation=position)
+        scene_object._language = [scene_object_color, scene_object_shape]
+        return scene_object
 
 
