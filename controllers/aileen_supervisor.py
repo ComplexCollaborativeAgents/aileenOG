@@ -3,6 +3,7 @@ from log_config import logging
 from threading import Thread
 from action_executor import ActionExecutor
 import constants
+import language
 import os
 import xmlrpclib
 import scene_writer
@@ -59,8 +60,11 @@ class AileenSupervisor(Supervisor):
                     'position': object_node.getPosition(),
                     'bounding_box': self.computeBoundingBox(object_node),
                     'shape': self.get_object_shape(object_node),
+                    'shape_name': language.get_shape_name(self.get_object_shape(object_node)),
                     'color': self.get_object_color(object_node),
-                    'texture': self.get_object_texture(object_node)
+                    'color_name': language.get_color_name(self.get_object_color(object_node)),
+                    'texture': self.get_object_texture(object_node),
+                    'texture_name': language.get_texture_name(self.get_object_texture(object_node)),
                 }
                 if object_node == self._held_node:
                     object_dict['held'] = 'true'
