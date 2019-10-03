@@ -15,8 +15,14 @@ class LanguageGenerator:
         return object_phrase
 
     @staticmethod
-    def generate_language_for_spatial_relation(aileen_object1, spatial_relationship, aileen_object2):
-        object_phrase1 = LanguageGenerator.generate_language_for_object(aileen_object1)
-        object_phrase2 = LanguageGenerator.generate_language_for_object(aileen_object2)
+    def generate_language_for_spatial_relation(arg1, arg2, relation):
+        object_phrase1 = LanguageGenerator.generate_language_for_object(arg1)
+        object_phrase2 = LanguageGenerator.generate_language_for_object(arg2)
+        return object_phrase1 + relation + " " + object_phrase2
 
-        return object_phrase1 + spatial_relationship + " " + object_phrase2
+    @staticmethod
+    def generate_language_for_action(word_list):
+        string = ""
+        for word in word_list:
+            string = string + word + " "
+        return string

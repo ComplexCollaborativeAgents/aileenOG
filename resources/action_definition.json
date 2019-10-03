@@ -1,0 +1,61 @@
+{
+  "move-right-of": {
+    "objects": ["<obj1>", "<obj2>"],
+    "relations": ["right-of"],
+    "initial_configuration": [],
+    "trace-actions": [
+      {"name": "pick-up", "argument": "<obj1>"},
+      {"name": "place", "argument1": "<obj1>", "argument2": "<obj2>", "relation": "right-of"}],
+    "language": ["move", "<obj1>", "right-of", "<obj2>"]
+  },
+
+  "move-left-of": {
+    "objects": ["<obj1>", "<obj2>"],
+    "relations": ["left-of"],
+    "initial_configuration": [],
+    "trace-actions": [
+      {"name": "pick-up", "argument": "<obj1>"},
+      {"name": "place", "argument1": "<obj1>", "argument2": "<obj2>", "relation": "left-of"}],
+    "language": ["move", "<obj1>", "left-of", "<obj2>"]
+  },
+
+  "move-next-to": {
+    "objects": ["<obj1>", "<obj2>"],
+    "relations": ["next-to"],
+    "initial_configuration": [],
+    "trace-actions": [
+      {"name": "pick-up", "argument": "<obj1>"},
+      {"name": "place", "argument1": "<obj1>", "argument2": "<obj2>", "relation": "next-to"}],
+    "language": ["move", "<obj1>", "next-to", "<obj2>"]
+  },
+
+  "move-on": {
+    "objects": ["<obj1>", "<obj2>"],
+    "relations": ["on"],
+    "initial_configuration": [],
+    "trace-actions": [
+      {"name": "pick-up", "argument": "<obj1>"},
+      {"name": "place", "argument1": "<obj1>", "argument2": "<obj2>", "relation": "on"}],
+    "language": ["move", "<obj1>", "on", "<obj2>"]
+  },
+
+  "move-behind": {
+    "objects": ["<obj1>", "<obj2>"],
+    "relations": ["behind"],
+    "initial_configuration": [],
+    "trace-actions": [
+      {"name": "pick-up", "argument": "<obj1>"},
+      {"name": "place", "argument1": "<obj1>", "argument2": "<obj2>", "relation": "behind"}],
+    "language": ["move", "<obj1>", "behind", "<obj2>"]
+  },
+
+  "move-in-front-of": {
+    "objects": ["<obj1>", "<obj2>"],
+    "relations": ["in-front-of"],
+    "initial_configuration": [],
+    "trace-actions": [
+      {"name": "pick-up", "argument": "<obj1>"},
+      {"name": "place", "argument1": "<obj1>", "argument2": "<obj2>", "relation": "in-front-of"}],
+    "language": ["move", "<obj1>", "in-front-of", "<obj2>"]
+  }
+}

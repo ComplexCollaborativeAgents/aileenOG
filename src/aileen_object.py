@@ -1,22 +1,25 @@
-from log_config import logging
-import os
 import json
-from random import choice
-import constants
+import os
 import uuid
+from random import choice
+
+import constants
+from log_config import logging
 
 
 class AileenObject:
 
-    def __init__(self, shape, color, translation, height_y=0.1, width_x=0.1, width_z=0.1):
+    def __init__(self, shape, color, translation=[0, 0, 0], height_y=constants.OBJECT_STANDARD_HEIGHT,
+                 width_x=constants.OBJECT_STANDARD_WIDTH_X, width_z=constants.OBJECT_STANDARD_WIDTH_Z):
+
         self._shape = shape
         self._color = color
         self._height_y = height_y
         self._width_x = width_x
         self._width_z = width_z
         self._translation = translation
-        self._name = "o{}".format(uuid.uuid4())
-        self._language = None #a list of words that can be used to describe the object
+        self._name = "{}".format(uuid.uuid4())
+        self._language = None
         logging.debug("[aileen_object] :: created a new object")
 
     def get_object_description(self):
@@ -39,11 +42,10 @@ class AileenObject:
         description += "        castShadows FALSE\n"
         description += "        }\n"
         description += "    ]\n"
-     #   description += "    name \"{}\"\n".format(self._name)
+        description += "    name \"{}\"\n".format(self._name)
         description += "   boundingObject {}".format(self.get_bounding_object_description())
         description += "   physics Physics {\n}"
         description += "}"
-
 
         logging.debug("[aileen_object] :: added string {}".format(description))
 
@@ -110,13 +112,12 @@ class AileenObject:
         return choice(constants.SHAPE_SET)
 
     @staticmethod
-    def generate_random_object_at(position):
+    def generate_random_object():
         scene_object_color = AileenObject.get_random_color()
         scene_object_color_vector = AileenObject.get_color_vector_sample(scene_object_color)
         scene_object_shape = AileenObject.get_random_shape()
         scene_object = AileenObject(shape=scene_object_shape,
-                                    color=scene_object_color_vector,
-                                    translation=position)
+                                    color=scene_object_color_vector)
         scene_object._language = [scene_object_color, scene_object_shape]
         return scene_object
 

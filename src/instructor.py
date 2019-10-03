@@ -1,10 +1,10 @@
 import xmlrpclib
 from log_config import logging
 from configuration import Configuration
-import time
 
-from aileen_visual_word_lesson import AileenVisualWordLesson
-from aileen_spatial_word_lesson import AileenSpatialWordLesson
+from visual_word_lesson import VisualWordLesson
+from spatial_word_lesson import SpatialWordLesson
+from action_word_lesson import ActionWordLesson
 
 
 def create_connection_with_aileen_world():
@@ -27,15 +27,9 @@ if __name__ == '__main__':
     world_server = create_connection_with_aileen_world()
     agent_server = create_connection_with_aileen_agent()
 
-    while True:
-        raw_input("Press any key to generate the next lesson...")
+    #VisualWordLesson.administer_curriculum(world_server, agent_server)
+    #SpatialWordLesson.administer_curriculum(world_server, agent_server)
+    ActionWordLesson.administer_curriculum(world_server, agent_server)
 
-        lesson = AileenSpatialWordLesson().generate_lesson()
-
-        scene_acknowledgement = world_server.set_scene({'configuration': lesson['scene'], 'label': lesson['interaction']})
-        logging.info("[aileen_instructor] :: received from world {}".format(scene_acknowledgement))
-
-        language_acknowledgement = agent_server.process_language(lesson['interaction'])
-        logging.info("[aileen_instructor] :: received from agent {}".format(language_acknowledgement))
 
 

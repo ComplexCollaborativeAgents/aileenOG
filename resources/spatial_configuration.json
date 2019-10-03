@@ -1,0 +1,8 @@
+{
+    "next-to": ["ec"],
+    "left-of": ["s", "dc"],
+    "right-of": ["n", "dc"],
+    "on": ["s", "ec"],
+    "behind": ["w", "dc"],
+    "in-front-of": ["e", "dc"]
+}
