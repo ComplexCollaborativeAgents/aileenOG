@@ -31,5 +31,3 @@ if __name__ == '__main__':
     #SpatialWordLesson.administer_curriculum(world_server, agent_server)
     ActionWordLesson.administer_curriculum(world_server, agent_server)
 
-
-
