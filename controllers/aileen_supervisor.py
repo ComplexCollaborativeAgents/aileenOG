@@ -1,10 +1,12 @@
-from controller import Supervisor
-from log_config import logging
-from threading import Thread
-from action_executor import ActionExecutor
-import constants
-import os
 import xmlrpclib
+from threading import Thread
+
+from controller import Supervisor
+
+import constants
+from action_executor import ActionExecutor
+from log_config import logging
+
 
 class AileenSupervisor(Supervisor):
 
@@ -39,7 +41,10 @@ class AileenSupervisor(Supervisor):
 
     def set_held_node(self, node):
         self._held_node = node
-        logging.info("[action_supervisor] :: held object is {}".format(self._held_node.getId()))
+        if self._held_node is not None:
+            logging.info("[action_supervisor] :: held object is {}".format(self._held_node.getId()))
+        else:
+            logging.info("[action_supervisor] :: no object is currently held")
 
     def get_held_node(self):
         return self._held_node
@@ -82,34 +87,33 @@ class AileenSupervisor(Supervisor):
                 label_string = "s_{}".format(geometry_string.lower())
                 return label_string
 
-
     def get_object_color(self, object_node):
         return "c_"
 
     def get_object_texture(self, object_node):
         return "t_"
 
-    def computeBoundingBox(self,object_node):
+    def computeBoundingBox(self, object_node):
         '''
         computes the bounding box in geojson format
         https://tools.ietf.org/html/rfc7946#section-5
-        ''' 
+        '''
         centroid = object_node.getPosition()
         bounding_obj = object_node.getField('boundingObject').getSFNode()
         logging.debug("[aileen_supervisor] :: computing bounding box for {}".format(
             bounding_obj.getTypeName()))
         if (bounding_obj.getTypeName() == "Box"):
             size = bounding_obj.getField('size').getSFVec3f()
-            return [centroid[0]-size[0]/2, centroid[1]-size[1]/2, centroid[2]-size[2]/2,
-                    centroid[0]+size[0]/2, centroid[1]+size[1]/2, centroid[2]+size[2]/2]
+            return [centroid[0] - size[0] / 2, centroid[1] - size[1] / 2, centroid[2] - size[2] / 2,
+                    centroid[0] + size[0] / 2, centroid[1] + size[1] / 2, centroid[2] + size[2] / 2]
         elif (bounding_obj.getTypeName() == "Cylinder"):
             height = bounding_obj.getField('height').getSFFloat()
             radius = bounding_obj.getField('radius').getSFFloat()
-            return [centroid[0]-radius, centroid[1]-height/2, centroid[2]-radius,
-                    centroid[0]+radius, centroid[1]+height/2, centroid[2]+radius]
+            return [centroid[0] - radius, centroid[1] - height / 2, centroid[2] - radius,
+                    centroid[0] + radius, centroid[1] + height / 2, centroid[2] + radius]
         else:
             raise Exception("[aileen_supervisor] :: Unable to compute bounding box for type {}".format(bounding_obj))
-        
+
     def apply_action(self, action):
         logging.debug("[aileen_supervisor] :: processing apply_action from client for action {}".format(action))
         if action is None:
@@ -135,7 +139,7 @@ class AileenSupervisor(Supervisor):
         for scene_object in scene_objects:
             self._children.importMFNodeFromString(-1, scene_object)
 
-        self.setLabel(1,label,0.4,0.1,0.1,0x000000,0,"Arial")
+        self.setLabel(1, label, 0.4, 0.1, 0.1, 0x000000, 0, "Arial")
         return True
 
     def clean_scene(self):
