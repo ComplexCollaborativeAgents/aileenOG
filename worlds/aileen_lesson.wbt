@@ -33,8 +33,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation -0.033960829269057406 0.8995931726959154 0.4354064603497001 2.996861662002129
-  position 1.5078454139585111 2.641324571560069 -2.2615800678936973
+  orientation -0.04352121820607886 0.9218124444731992 0.3851853070668764 2.92880236652749
+  position 1.6472145530892628 2.5101572184039136 -2.3365485222969546
   follow "floor"
   followOrientation TRUE
 }
@@ -51,8 +51,8 @@ WoodenBox {
   locked TRUE
 }
 Youbot {
-  translation 0.025710634892494835 0.10194971167852762 -4.6129770572539904e-05
-  rotation 0.9999995220478702 -0.0006475755429983809 0.0007324956976559345 -1.57083238450516
+  translation 0.02571117767344175 0.10196957865880718 -4.5863043188738174e-05
+  rotation 0.9999991925105576 -0.0008556617095550498 0.0009395856915478227 -1.5708303173757066
   controller "<extern>"
   controllerArgs "demo"
   supervisor TRUE
@@ -70,17 +70,45 @@ Youbot {
   ]
 }
 Solid {
-  translation 0.6339969999999999 0.45999999999999996 -0.034984999999999995
-  children [
-    Shape {
-      appearance PBRAppearance {
-      }
-      geometry Box {
-        size 0.1 0.1 0.1
-      }
-    }
-  ]
-  boundingObject Box {
-    size 0.1 0.1 0.1
-  }
-}
+   translation 0.581857208499 0.45 -0.115617874234
+   children [
+       Shape {
+          appearance PBRAppearance {
+          baseColor 1 0.1 0.1
+          metalness 0
+          emissiveColor 1 0.1 0.1
+        }
+        geometry Sphere {
+          radius 0.05
+          subdivision 3
+        }
+        castShadows FALSE
+        }
+    ]
+    name "o23a63624-003d-490d-934b-de5f454f501e"
+   boundingObject Box {
+     size 0.1 0.1 0.1
+   }
+   physics Physics {
+}}
+Solid {
+   translation 0.519160060239 0.45 0.242
+   children [
+       Shape {
+          appearance PBRAppearance {
+          baseColor 1 0.2 0
+          metalness 0
+          emissiveColor 1 0.2 0
+        }
+        geometry Box {
+          size 0.1 0.1 0.1
+        }
+        castShadows FALSE
+        }
+    ]
+    name "oc462a717-1cf2-4ac2-8fe7-9d1350d0e80a"
+   boundingObject Box {
+     size 0.1 0.1 0.1
+   }
+   physics Physics {
+}}

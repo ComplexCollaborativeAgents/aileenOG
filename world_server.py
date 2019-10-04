@@ -47,11 +47,9 @@ class AileenWorldServer:
             logging.debug("[aileen_world_server] :: sending image in binary format")
             return binary_image
 
-        def set_scene(scene_description):
+        def set_scene(scene_specification):
             logging.info("[aileen_world_server] :: received set_scene from instructor client")
-
-            acknowledgement = aileen_supervisor.set_scene(scene_description)
-
+            acknowledgement = aileen_supervisor.set_scene(scene_specification['configuration'], scene_specification['label'])
             logging.debug("[aileen_world_server] :: sending acknowledgement")
             return acknowledgement
 
