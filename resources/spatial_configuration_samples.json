@@ -5,3 +5,15 @@
     "on": ["s", "ec"],
     "in-front-of": ["e"]
 }
+
+{
+    "left": [["s", "dc"], ["s", "ec"]],
+    "not-left": [[["not", "s"], "dc"], [["not s", "ec"], "ec"]]
+}
+
+{
+    "left-of": {
+        "objects": ["<o1>", "<o2>"],
+        "definition": [["s" , "<o1>", "<o2>"], ["dc", "<o1>", "<o2>"]]
+    }
+}''
