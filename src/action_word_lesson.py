@@ -49,8 +49,9 @@ class ActionWordLesson:
         initial_state_description = self._action_definition[constants.ACTION_DEF_INIT_CONFIG]
         if len(initial_state_description) < 1 and len(self._scene_objects) <= 2:
             for scene_object_name in self._scene_objects.keys():
-                position = AileenScene.get_random_position_on_table()
-                self._scene_objects[scene_object_name].set_translation(position)
+                if (AileenObject.unique_id == None):
+                    position = AileenScene.get_random_position_on_table()
+                    self._scene_objects[scene_object_name].set_translation(position)
                 self._initial_scene.add_object(self._scene_objects[scene_object_name])
 
     def advance_lesson_state(self):

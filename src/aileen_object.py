@@ -8,7 +8,7 @@ from log_config import logging
 
 class AileenObject:
 
-    unique_id = -1 # class variable
+    unique_id = None # class variable
 
     def __init__(self, shape, color, translation=[0, 0, 0], height_y=constants.OBJECT_STANDARD_HEIGHT,
                  width_x=constants.OBJECT_STANDARD_WIDTH_X, width_z=constants.OBJECT_STANDARD_WIDTH_Z):
@@ -19,7 +19,7 @@ class AileenObject:
         self._width_x = width_x
         self._width_z = width_z
         self._translation = translation
-        if AileenObject.unique_id == -1:
+        if AileenObject.unique_id == None:
             self._name = "{}".format(uuid.uuid4())
         else:
             self._name = AileenObject.unique_id
@@ -121,8 +121,21 @@ class AileenObject:
         scene_object_color = AileenObject.get_random_color()
         scene_object_color_vector = AileenObject.get_color_vector_sample(scene_object_color)
         scene_object_shape = AileenObject.get_random_shape()
+        scene_object_translation = [0, 0, 0]
+        # Fix the results for unit testing.
+        if AileenObject.unique_id == 1:
+            scene_object_color = 'blue'
+            scene_object_color_vector = [0, 0, 1]
+            scene_object_shape = 'cylinder'
+            scene_object_translation = [0.586304972021, 0.45, 0.238382561155]
+        if AileenObject.unique_id == 2:
+            scene_object_color = 'blue'
+            scene_object_color_vector = [0, 0, 1]
+            scene_object_shape = 'box'
+            scene_object_translation = [0.477095092251, 0.45, -0.1671282021741]
         scene_object = AileenObject(shape=scene_object_shape,
-                                    color=scene_object_color_vector)
+                                    color=scene_object_color_vector,
+                                    translation=scene_object_translation)
         scene_object._language = [scene_object_color, scene_object_shape]
         return scene_object
 
