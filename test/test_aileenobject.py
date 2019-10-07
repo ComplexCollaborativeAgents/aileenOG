@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import unittest
 
-from AileenObject import AileenObject
+from aileen_object import AileenObject
 
 class AileenObjectTest(unittest.TestCase):
 

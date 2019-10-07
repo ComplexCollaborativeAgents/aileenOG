@@ -3,7 +3,7 @@ import os
 import sys
 import unittest
 
-from AileenScene import AileenScene
+from aileen_scene import AileenScene
 
 class SceneFileTest(unittest.TestCase):
 

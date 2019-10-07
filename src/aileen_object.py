@@ -6,8 +6,9 @@ from random import choice
 import constants
 from log_config import logging
 
-
 class AileenObject:
+
+    unique_id = -1 # class variable
 
     def __init__(self, shape, color, translation=[0, 0, 0], height_y=constants.OBJECT_STANDARD_HEIGHT,
                  width_x=constants.OBJECT_STANDARD_WIDTH_X, width_z=constants.OBJECT_STANDARD_WIDTH_Z):
@@ -18,7 +19,11 @@ class AileenObject:
         self._width_x = width_x
         self._width_z = width_z
         self._translation = translation
-        self._name = "{}".format(uuid.uuid4())
+        if AileenObject.unique_id == -1:
+            self._name = "{}".format(uuid.uuid4())
+        else:
+            self._name = AileenObject.unique_id
+            AileenObject.unique_id += 1
         self._language = None
         logging.debug("[aileen_object] :: created a new object")
 

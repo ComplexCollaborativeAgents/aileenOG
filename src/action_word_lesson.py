@@ -74,6 +74,7 @@ class ActionWordLesson:
                 'language': self._language
             }
         }
+        self.advance_lesson_state()
         return segment
 
     def get_structure_for_pick_up_action(self, trace_action):
@@ -118,20 +119,26 @@ class ActionWordLesson:
         self.advance_lesson_state()
         return segment
 
+    def get_next_segment(self):
+        if self._lesson_state == constants.ACTION_LESSON_STATE_START:
+            return self.get_segment_for_lesson_start()
+        if self._lesson_state == constants.ACTION_LESSON_STATE_TRACE:
+            return self.get_segment_for_lesson_action_trace()
+        if self._lesson_state == constants.ACTION_LESSON_STATE_END:
+            self.get_segment_for_lesson_end()
 
     def deliver_action_lesson_segment(self, world_server, agent_server):
         if self._lesson_state == constants.ACTION_LESSON_STATE_START:
             logging.debug("[action_word_lesson] :: setting up the initial state configuration of action")
-            segment = self.get_segment_for_lesson_start()
+            segment = self.get_next_segment()
             scene_acknowledgement = world_server.set_scene(
                 {'configuration': segment['scene'], 'label': "{}".format(self._language)})
             interaction_acknowledgement = agent_server.process_language(segment['interaction'])
-            self.advance_lesson_state()
             return
 
         if self._lesson_state == constants.ACTION_LESSON_STATE_TRACE:
             logging.debug("[action_word_lesson] :: providing the next step in action trace")
-            segment = self.get_segment_for_lesson_action_trace()
+            segment = self.get_next_segment()
             logging.debug("[action_word_lesson] :: received action trace {}".format(segment))
             if segment['action'] is not None:
                 scene_acknowledgement = world_server.apply_action(segment['action'])
@@ -140,7 +147,7 @@ class ActionWordLesson:
 
         if self._lesson_state == constants.ACTION_LESSON_STATE_END:
             logging.debug("[action_word_lesson] :: communicating the terminal state configuration of action")
-            segment = self.get_segment_for_lesson_end()
+            segment = self.get_next_segment()
             interaction_acknowledgement = agent_server.process_language(segment['interaction'])
             return
 
