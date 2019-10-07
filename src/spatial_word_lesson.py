@@ -15,34 +15,37 @@ class SpatialWordLesson:
         self._spatial_configurations_set = SpatialWordLesson.get_spatial_configurations_set()
         self._spatial_configuration = choice(self._spatial_configurations_set.keys())
         self._spatial_configuration_def = self._spatial_configurations_set[self._spatial_configuration]
+        self._scene_objects = {}
         self._scene = AileenScene()
         self._language = None
-        pass
 
     def generate_lesson(self):
-        lesson = {}
+        self.generate_setup()
         self.generate_scene()
-        lesson['scene'] = self._scene.generate_scene_description()
-        lesson['interaction'] = self._language
+        lesson = {
+            'scene': self._scene.generate_scene_description(),
+            'interaction': {
+                'language': self._language
+            }
+        }
         return lesson
+
+    def generate_setup(self):
+        logging.debug("[action_word_lesson] :: generate the setup for the new lesson")
+        objects = self._spatial_configuration_def[constants.SPATIAL_DEF_OBJECTS]
+        if len(objects) > 0:
+            for obj in objects:
+                self._scene_objects[obj] = AileenObject.generate_random_object()
+        self._language = LanguageGenerator.generate_language_from_template(self._scene_objects, self._spatial_configuration_def[constants.SPATIAL_DEF_LANGUAGE_TEMPLATE])
+
 
     def generate_scene(self):
         logging.debug("[aileen_spatial_word_lesson] :: generating a new scene for spatial word learning")
-        scene_object1 = AileenObject.generate_random_object()
-        scene_object2 = AileenObject.generate_random_object()
-
-        translation1, translation2 = AileenScene.place_objects_in_configuration(scene_object1, scene_object2,
-                                                                                self._spatial_configuration_def)
-
-        scene_object1.set_translation(translation1)
-        scene_object2.set_translation(translation2)
-
-        self._scene.add_object(scene_object1)
-        self._scene.add_object(scene_object2)
-
-        self._language = LanguageGenerator.generate_language_for_spatial_relation(arg1=scene_object1,
-                                                                                  arg2=scene_object2,
-                                                                                  relation=self._spatial_configuration)
+        translations = AileenScene.place_objects_in_configuration(self._scene_objects, self._spatial_configuration_def[constants.SPATIAL_DEF_DEFINITION])
+        for scene_object_name in self._scene_objects.keys():
+            scene_object = self._scene_objects[scene_object_name]
+            scene_object.set_translation(translations[scene_object_name])
+            self._scene.add_object(scene_object)
 
     @staticmethod
     def get_spatial_configurations_set():
@@ -61,7 +64,7 @@ class SpatialWordLesson:
             lesson = SpatialWordLesson().generate_lesson()
 
             scene_acknowledgement = world_server.set_scene(
-                {'configuration': lesson['scene'], 'label': lesson['interaction']})
+                {'configuration': lesson['scene'], 'label': lesson['interaction']['language']})
             logging.info("[aileen_instructor] :: received from world {}".format(scene_acknowledgement))
 
             language_acknowledgement = agent_server.process_language(lesson['interaction'])
@@ -69,5 +72,6 @@ class SpatialWordLesson:
 
 
 if __name__ == '__main__':
-    lesson1 = SpatialWordLesson()
-    print(lesson1.generate_lesson())
+    lesson1 = SpatialWordLesson().generate_lesson()
+    print(lesson1)
+

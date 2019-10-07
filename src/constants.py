@@ -17,7 +17,12 @@ OBJECT_STANDARD_WIDTH_Z = 0.1
 SHAPE_SET = ['cone', 'box', 'cylinder', 'sphere']
 
 COLOR_FILE_NAME = 'colors.json'
+
+
 SPATIAL_CONFIGURATION_FILE_NAME = 'spatial_configuration.json'
+SPATIAL_DEF_OBJECTS = 'objects'
+SPATIAL_DEF_DEFINITION = 'definition'
+SPATIAL_DEF_LANGUAGE_TEMPLATE = 'language'
 
 
 

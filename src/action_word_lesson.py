@@ -37,11 +37,8 @@ class ActionWordLesson:
             for rel in relations:
                 self._scene_relations[rel] = SpatialWordLesson.get_spatial_configurations_set()[rel]
 
-        language = self._action_definition[constants.ACTION_DEF_LANGUAGE]
-        for i in range (0, len(language)):
-            if "<" in language[i]:
-                language[i] = LanguageGenerator.generate_language_for_object(self._scene_objects[language[i]])
-        self._language = LanguageGenerator.generate_language_for_action(language)
+        language_template = self._action_definition[constants.ACTION_DEF_LANGUAGE]
+        self._language = LanguageGenerator.generate_language_from_template(self._scene_objects, language_template)
         logging.debug("[action_word_lesson] :: generated language for action: {}".format(self._language))
 
 
@@ -87,8 +84,12 @@ class ActionWordLesson:
         scene_object1 = self._scene_objects[trace_action['argument1']]
         scene_object2 = self._scene_objects[trace_action['argument2']]
         relation_def = SpatialWordLesson.get_spatial_configurations_set()[trace_action['relation']]
+        relation_qsr = relation_def[constants.SPATIAL_DEF_DEFINITION]
+        logging.debug("[action_word_lesson] :: attempting to place objects in configuration {}".format(relation_qsr))
         try:
-            position = AileenScene.place_object_in_configuration_with(scene_object2, scene_object1, relation_def)
+            position = AileenScene.place_object_in_configuration_with(target_object_name=trace_action['argument1'],
+                                                                      scene_objects=self._scene_objects,
+                                                                      configuration_def=relation_qsr)
             action_dict['location'] = position
             return action_dict
         except ValueError:
@@ -117,7 +118,6 @@ class ActionWordLesson:
         }
         self.advance_lesson_state()
         return segment
-
 
     def deliver_action_lesson_segment(self, world_server, agent_server):
         if self._lesson_state == constants.ACTION_LESSON_STATE_START:

@@ -35,15 +35,7 @@ class AileenScene:
         return position
 
     @staticmethod
-    def place_objects_in_configuration(arg1_object, arg2_object, configuration_def):
-        """
-        This function uses qsrlib to find a point in the world such that arg1_object
-        and arg2_object are in a configuration as defined in configuration_def
-        :param arg1_object: an instance of AileenObject
-        :param arg2_object: an instance of AileenObject
-        :param configuration_def: a list of rccXXXX properties
-        """
-
+    def place_objects_in_configuration(scene_objects, configuration_def):
         table = box(constants.OBJECT_POSITION_MIN_X,
                     constants.OBJECT_POSITION_MIN_Z,
                     constants.OBJECT_POSITION_MAX_X,
@@ -52,74 +44,75 @@ class AileenScene:
         point = None
 
         while point is None:
+            logging.debug("[aileen_scene] :: attempting new config for {}".format(configuration_def))
+            transitions = {}
             world = World_State(0.0)
-            position1 = AileenScene.get_random_position_on_table()
-            arg1 = Object_State(name="o1", timestamp=0,
-                                x=position1[0],
-                                y=position1[2],
-                                xsize=arg1_object._width_x,
-                                ysize=arg1_object._width_z)
+            i = 0
+            for scene_object_name in scene_objects:
+                if i is not 0:
+                    scene_object = scene_objects[scene_object_name]
+                    position = AileenScene.get_random_position_on_table()
+                    world_object = Object_State(name=str(scene_object_name), timestamp=0,
+                                                x=position[0],
+                                                y=position[2],
+                                                xsize=scene_object._width_x,
+                                                ysize=scene_object._width_z)
+                    world.add_object_state(world_object)
+                    transitions[scene_object_name] = position
+                    logging.debug("[aileen_scene] :: added object {} to scene".format(str(scene_object_name)))
+                else:
+                    query_object_name = scene_object_name
+                i = i + 1
 
-            world.add_object_state(arg1)
-
-            position2 = AileenScene.get_random_position_on_table()
-
-            arg2 = Object_State(name="o2", timestamp=0,
-                                x=position2[0],
-                                y=position2[2],
-                                xsize=arg2_object._width_x,
-                                ysize=arg2_object._width_z)
-
-            qsrs = []
-            for item in configuration_def:
-                qsrs.append([item, "o1", "o2"])
+            position = AileenScene.get_random_position_on_table()
+            query_scene_object = scene_objects[query_object_name]
+            query_object = Object_State(name=str(query_object_name), timestamp=0,
+                                        x=position[0],
+                                        y=position[2],
+                                        xsize=query_scene_object._width_x,
+                                        ysize=query_scene_object._width_z)
 
             try:
-                point = sample_position_from_region(compute_region_for_relations(world, qsrs, arg2, table))
+                point = sample_position_from_region(
+                    compute_region_for_relations(world, configuration_def, query_object, table))
+                position = [point.x, constants.OBJECT_POSITION_MAX_Y, point.y]
+                transitions[query_object_name] = position
             except ValueError:
                 point = None
 
-        return position1, [point.x, constants.OBJECT_POSITION_MAX_Y, point.y]
+        return transitions
+
 
     @staticmethod
-    def place_object_in_configuration_with(arg1_object, arg2_object, configuration_def):
-        """
-        This function uses qsrlib to find a point in the world such that arg1_object
-        and arg2_object are in a configuration as defined in configuration_def
-        :param arg1_object: an instance of AileenObject
-        :param arg2_object: an instance of AileenObject
-        :param configuration_def: a list of rccXXXX properties
-        """
-
+    def place_object_in_configuration_with(target_object_name, scene_objects, configuration_def):
         table = box(constants.OBJECT_POSITION_MIN_X,
                     constants.OBJECT_POSITION_MIN_Z,
                     constants.OBJECT_POSITION_MAX_X,
                     constants.OBJECT_POSITION_MAX_Z)
 
         world = World_State(0.0)
-        position1 = arg1_object._translation
-        arg1 = Object_State(name="o1", timestamp=0,
-                            x=position1[0],
-                            y=position1[2],
-                            xsize=arg1_object._width_x,
-                            ysize=arg1_object._width_z)
 
-        world.add_object_state(arg1)
+        for object_name in scene_objects:
+            if object_name != target_object_name:
+                scene_object = scene_objects[object_name]
+                world_object = Object_State(name=str(object_name), timestamp=0,
+                                            x=scene_object._translation[0],
+                                            y=scene_object._translation[2],
+                                            xsize=scene_object._width_x,
+                                            ysize=scene_object._width_z)
+                world.add_object_state(world_object)
+                logging.debug("[aileen_scene] :: added object {} to scene".format(str(object_name)))
 
-        position2 = AileenScene.get_random_position_on_table()
-
-        arg2 = Object_State(name="o2", timestamp=0,
-                            x=position2[0],
-                            y=position2[2],
-                            xsize=arg2_object._width_x,
-                            ysize=arg2_object._width_z)
-
-        qsrs = []
-        for item in configuration_def:
-            qsrs.append([item, "o1", "o2"])
+        position = AileenScene.get_random_position_on_table()
+        target_scene_object = scene_objects[target_object_name]
+        target_object = Object_State(name=str(target_object_name), timestamp=0,
+                                    x=position[0],
+                                    y=position[2],
+                                    xsize=target_scene_object._width_x,
+                                    ysize=target_scene_object._width_z)
 
         try:
-            point = sample_position_from_region(compute_region_for_relations(world, qsrs, arg2, table))
+            point = sample_position_from_region(compute_region_for_relations(world, configuration_def, target_object, table))
         except ValueError:
             logging.error("[aileen_scene] :: cannot find a point that satisfies the relationship")
             raise ValueError
