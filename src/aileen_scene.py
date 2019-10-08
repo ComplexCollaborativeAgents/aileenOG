@@ -9,12 +9,16 @@ from configuration import Configuration
 try:
     from qsrlib_io.world_trace import Object_State, World_State
     from qsrlib.qsr_realization import compute_region_for_relations, sample_position_from_region
+    from shapely.geometry import Point
 except:
     logging.fatal("[aileen_scene] :: cannot find spatial reasoning library")
     exit()
 
 
 class AileenScene:
+
+    test_id = None; # Class variable for unit tests
+
     def __init__(self):
         self._objects = []
 
@@ -32,6 +36,12 @@ class AileenScene:
         position = [uniform(constants.OBJECT_POSITION_MIN_X, constants.OBJECT_POSITION_MAX_X),
                     uniform(constants.OBJECT_POSITION_MIN_Y, constants.OBJECT_POSITION_MAX_Y),
                     uniform(constants.OBJECT_POSITION_MIN_Z, constants.OBJECT_POSITION_MAX_Z)]
+        if AileenScene.test_id == 1:
+            position = [0.586304972021, 0.45, 0.238382561155]
+            AileenScene.test_id += 1;
+        elif AileenScene.test_id == 2:
+            position = [0.477095092251, 0.45, -0.1671282021741]
+            AileenScene.test_id += 1;
         return position
 
     @staticmethod
@@ -50,6 +60,11 @@ class AileenScene:
                     constants.OBJECT_POSITION_MAX_Z)
 
         point = None
+
+        if AileenScene.test_id == 1:
+            position1 = [0.676147498734, 0.45, -0.0202334240995]
+            point = Point(0.750422886282, 0.177034392513, 0.45)
+            AileenScene.test_id += 1;
 
         while point is None:
             world = World_State(0.0)

@@ -11,9 +11,14 @@ from log_config import logging
 
 class SpatialWordLesson:
 
+    test_id = None  # Class variable used for unit tests
+
     def __init__(self):
         self._spatial_configurations_set = SpatialWordLesson.get_spatial_configurations_set()
         self._spatial_configuration = choice(self._spatial_configurations_set.keys())
+        if SpatialWordLesson.test_id == 1:
+            self._spatial_configuration = 'right-of'
+            SpatialWordLesson.test_id += 1
         self._spatial_configuration_def = self._spatial_configurations_set[self._spatial_configuration]
         self._scene = AileenScene()
         self._language = None

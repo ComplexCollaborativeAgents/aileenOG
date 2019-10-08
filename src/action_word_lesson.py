@@ -12,9 +12,14 @@ from language_generator import LanguageGenerator
 
 class ActionWordLesson:
 
+    test_id = None  # Class variable used for unit tests
+
     def __init__(self):
         self._action_definitions_set = ActionWordLesson.get_action_definition_set()
         self._action = choice(self._action_definitions_set.keys())
+        if ActionWordLesson.test_id == 1:
+            self._action = 'move-left-of'
+            ActionWordLesson.test_id += 1
         self._action_definition = self._action_definitions_set[self._action]
         self._initial_scene = AileenScene()
         self._scene_objects = {}
@@ -49,9 +54,8 @@ class ActionWordLesson:
         initial_state_description = self._action_definition[constants.ACTION_DEF_INIT_CONFIG]
         if len(initial_state_description) < 1 and len(self._scene_objects) <= 2:
             for scene_object_name in self._scene_objects.keys():
-                if (AileenObject.unique_id == None):
-                    position = AileenScene.get_random_position_on_table()
-                    self._scene_objects[scene_object_name].set_translation(position)
+                position = AileenScene.get_random_position_on_table()
+                self._scene_objects[scene_object_name].set_translation(position)
                 self._initial_scene.add_object(self._scene_objects[scene_object_name])
 
     def advance_lesson_state(self):
