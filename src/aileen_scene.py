@@ -35,6 +35,55 @@ class AileenScene:
         return position
 
     @staticmethod
+    def place_objects_in_configuration_recursively(scene_objects, configuration_def):
+        table = box(constants.OBJECT_POSITION_MIN_X,
+                    constants.OBJECT_POSITION_MIN_Z,
+                    constants.OBJECT_POSITION_MAX_X,
+                    constants.OBJECT_POSITION_MAX_Z)
+
+        world = World_State(0.0)
+
+        if len(scene_objects) == 1:
+            return AileenScene.get_random_position_on_table()
+        else:
+            # assume that the last object in the list is the target object
+            scene_objects_subset = scene_objects.copy()
+            target_object_tuple = scene_objects_subset.popitem(True)
+            target_object_name = target_object_tuple(0)
+            target_scene_object = target_object_tuple(1)
+
+            AileenScene.place_objects_in_configuration_recursively(scene_objects_subset, configuration_def_subset)
+
+            world = World_State(0.0)
+
+            for object_name in scene_objects_subset:
+                scene_object = scene_objects[object_name]
+                world_object = Object_State(name=str(object_name), timestamp=0,
+                                            x=scene_object._translation[0],
+                                            y=scene_object._translation[2],
+                                            xsize=scene_object._width_x,
+                                            ysize=scene_object._width_z)
+                world.add_object_state(world_object)
+                logging.debug("[aileen_scene] :: added object {} to scene".format(str(object_name)))
+
+            position = AileenScene.get_random_position_on_table()
+            target_object = Object_State(name=str(target_object_name), timestamp=0,
+                                         x=position[0],
+                                         y=position[2],
+                                         xsize=target_scene_object._width_x,
+                                         ysize=target_scene_object._width_z)
+
+            try:
+                point = sample_position_from_region(
+                    compute_region_for_relations(world, configuration_def, target_object, table))
+                target_scene_object.set_translation(point.x, constants.OBJECT_POSITION_MAX_Y, point.y)
+            except ValueError:
+                logging.info("[aileen_scene] :: cannot find a point that satisfies the relationship in current config")
+                AileenScene.place_objects_in_configuration_recursively(scene_objects_subset, configuration_def_subset)
+
+
+
+    @staticmethod
     def place_objects_in_configuration(scene_objects, configuration_def):
         table = box(constants.OBJECT_POSITION_MIN_X,
                     constants.OBJECT_POSITION_MIN_Z,

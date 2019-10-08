@@ -1,7 +1,20 @@
 {
-     "next-to": {
-        "objects": ["<obj1>", "<obj2>"],
-        "definition": [["ec" , "<obj2>", "<obj1>"]],
-        "language": ["<obj1>", "next-to","<obj2>"]
+      "between": {
+        "objects": ["<obj1>", "<obj2>", "<obj3>"],
+        "definition": [
+                        [
+                            [["dc", "<obj1>", "<obj2>"],["w", "<obj1>", "<obj2>"]],
+                            [["dc", "<obj2>", "<obj3>"],["w", "<obj2>", "<obj3>"]]
+                        ],
+                        [
+                            [["dc", "<obj1>", "<obj2>"],["s", "<obj1>", "<obj2>"]],
+                            [["dc", "<obj2>", "<obj3>"],["s", "<obj2>", "<obj3>"]]
+                        ],
+                        [
+                            [["dc", "<obj1>", "<obj2>"], ["se", "<obj1>", "<obj2>"]],
+                            [["dc", "<obj2>", "<obj3>"], ["se", "<obj2>", "<obj3>"]]
+                        ]
+                    ],
+        "language": ["<obj2>", "between", "<obj1>", "<obj3>"]
     }
 }

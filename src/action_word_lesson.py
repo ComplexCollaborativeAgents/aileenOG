@@ -8,6 +8,7 @@ from aileen_object import AileenObject
 from aileen_scene import AileenScene
 from spatial_word_lesson import SpatialWordLesson
 from language_generator import LanguageGenerator
+from collections import OrderedDict
 
 
 class ActionWordLesson:
@@ -17,7 +18,7 @@ class ActionWordLesson:
         self._action = choice(self._action_definitions_set.keys())
         self._action_definition = self._action_definitions_set[self._action]
         self._initial_scene = AileenScene()
-        self._scene_objects = {}
+        self._scene_objects = OrderedDict()
         self._scene_relations = {}
         self._trace_action_list = self._action_definition[constants.ACTION_DEF_TRACE_ACTIONS]
         self._lesson_state = constants.ACTION_LESSON_STATE_START
