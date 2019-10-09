@@ -1,11 +1,11 @@
 {
-   "move-next-to": {
+    "move-right-of": {
     "objects": ["<obj1>", "<obj2>"],
-    "relations": ["next-to"],
-    "initial_configuration": [[["not","ec"], "<obj2>", "<obj1>"]],
+    "relations": ["right-of"],
+    "initial_configuration": [[["not","n"], "<obj2>", "<obj1>"], ["dc", "<obj2>", "<obj1>"]],
     "trace-actions": [
       {"name": "pick-up", "argument": "<obj1>"},
-      {"name": "place", "argument1": "<obj1>", "argument2": "<obj2>", "relation": "next-to"}],
-    "language": ["move", "<obj1>", "next-to", "<obj2>"]
+      {"name": "place", "argument1": "<obj1>", "argument2": "<obj2>", "relation": "right-of"}],
+    "language": ["move", "<obj1>", "right-of", "<obj2>"]
   }
 }
