@@ -46,6 +46,7 @@ class InputWriter(object):
         qsrs = self.create_qsrs(objects_list)
 
     def input_language(self, string):
+        logging.debug("[input_writer] :: received training string: {}".format(string))
         self._language = string
 
     ## SM: both these methods need to be rewritten to maintain the list of objects properly
