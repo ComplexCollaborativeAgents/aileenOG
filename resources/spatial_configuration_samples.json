@@ -30,7 +30,7 @@
 
 "next-to": {
         "objects": ["<obj1>", "<obj2>"],
-        "definition": ["ec", "<obj2>", "<obj1>"],
+        "definition": [["ec", "<obj2>", "<obj1>"]],
         "language": ["<obj1>", "next-to", "<obj2>"]
     }
 
