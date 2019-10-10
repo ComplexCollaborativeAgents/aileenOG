@@ -6,8 +6,9 @@ from random import choice
 import constants
 from log_config import logging
 
-
 class AileenObject:
+
+    test_id = None # class variable used for unit test
 
     def __init__(self, shape, color, translation=[0, 0, 0], height_y=constants.OBJECT_STANDARD_HEIGHT,
                  width_x=constants.OBJECT_STANDARD_WIDTH_X, width_z=constants.OBJECT_STANDARD_WIDTH_Z):
@@ -116,8 +117,20 @@ class AileenObject:
         scene_object_color = AileenObject.get_random_color()
         scene_object_color_vector = AileenObject.get_color_vector_sample(scene_object_color)
         scene_object_shape = AileenObject.get_random_shape()
+        # Fix the results for unit testing.
+        if AileenObject.test_id == 1:
+            scene_object_color = 'blue'
+            scene_object_color_vector = [0, 0, 1]
+            scene_object_shape = 'cylinder'
+        elif AileenObject.test_id == 2:
+            scene_object_color = 'blue'
+            scene_object_color_vector = [0, 0, 1]
+            scene_object_shape = 'box'
         scene_object = AileenObject(shape=scene_object_shape,
                                     color=scene_object_color_vector)
+        if AileenObject.test_id != None:
+            scene_object._name = AileenObject.test_id
+            AileenObject.test_id += 1
         scene_object._language = [scene_object_color, scene_object_shape]
         return scene_object
 

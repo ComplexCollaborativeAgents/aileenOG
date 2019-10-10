@@ -5,11 +5,13 @@ class LanguageGenerator:
     def __init__(self):
         pass
 
+    test_id = None  # Class variable for unit tests
 
     @staticmethod
     def generate_language_for_object(aileen_object):
         object_phrase = ""
-        random.shuffle(aileen_object._language)
+        if LanguageGenerator.test_id == None:
+            random.shuffle(aileen_object._language)
         for visual_word in aileen_object._language:
             object_phrase += visual_word + " "
         return object_phrase

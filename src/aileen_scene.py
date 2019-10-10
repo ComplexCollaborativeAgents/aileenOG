@@ -9,12 +9,16 @@ from configuration import Configuration
 try:
     from qsrlib_io.world_trace import Object_State, World_State
     from qsrlib.qsr_realization import compute_region_for_relations, sample_position_from_region
+    from shapely.geometry import Point
 except:
     logging.fatal("[aileen_scene] :: cannot find spatial reasoning library")
     exit()
 
 
 class AileenScene:
+
+    test_id = None; # Class variable for unit tests
+
     def __init__(self):
         self._objects = []
 
@@ -32,138 +36,162 @@ class AileenScene:
         position = [uniform(constants.OBJECT_POSITION_MIN_X, constants.OBJECT_POSITION_MAX_X),
                     uniform(constants.OBJECT_POSITION_MIN_Y, constants.OBJECT_POSITION_MAX_Y),
                     uniform(constants.OBJECT_POSITION_MIN_Z, constants.OBJECT_POSITION_MAX_Z)]
+        if AileenScene.test_id == 1:
+            position = [0.586304972021, 0.45, 0.238382561155]
+            AileenScene.test_id += 1;
+        elif AileenScene.test_id == 2:
+            position = [0.477095092251, 0.45, -0.1671282021741]
+            AileenScene.test_id += 1;
         return position
 
     @staticmethod
-    def place_objects_in_configuration_recursively(scene_objects, configuration_def):
+    def place_two_objects_in_configuration(target_object_name, reference_object_name, scene_objects, configuration_definition):
+        translations = {}
+        reference_object = scene_objects[reference_object_name]
+        target_object = scene_objects[target_object_name]
+
         table = box(constants.OBJECT_POSITION_MIN_X,
                     constants.OBJECT_POSITION_MIN_Z,
                     constants.OBJECT_POSITION_MAX_X,
                     constants.OBJECT_POSITION_MAX_Z)
-
-        world = World_State(0.0)
-
-        if len(scene_objects) == 1:
-            return AileenScene.get_random_position_on_table()
-        else:
-            # assume that the last object in the list is the target object
-            scene_objects_subset = scene_objects.copy()
-            target_object_tuple = scene_objects_subset.popitem(True)
-            target_object_name = target_object_tuple(0)
-            target_scene_object = target_object_tuple(1)
-
-            AileenScene.place_objects_in_configuration_recursively(scene_objects_subset, configuration_def_subset)
-
+        found_target_object_position = None
+        while found_target_object_position is None:
             world = World_State(0.0)
 
-            for object_name in scene_objects_subset:
-                scene_object = scene_objects[object_name]
-                world_object = Object_State(name=str(object_name), timestamp=0,
-                                            x=scene_object._translation[0],
-                                            y=scene_object._translation[2],
-                                            xsize=scene_object._width_x,
-                                            ysize=scene_object._width_z)
-                world.add_object_state(world_object)
-                logging.debug("[aileen_scene] :: added object {} to scene".format(str(object_name)))
+            new_reference_object_position = AileenScene.get_random_position_on_table()
+
+            qsr_reference_object = Object_State(name=str(reference_object_name), timestamp=0,
+                                            x=new_reference_object_position[0],
+                                            y=new_reference_object_position[2],
+                                            xsize=reference_object._width_x,
+                                            ysize=reference_object._width_z)
+            world.add_object_state(qsr_reference_object)
+            logging.debug("[aileen_scene] :: added reference object {} to QSRLib scene".format(str(reference_object_name)))
+            translations[reference_object_name] = new_reference_object_position
 
             position = AileenScene.get_random_position_on_table()
-            target_object = Object_State(name=str(target_object_name), timestamp=0,
-                                         x=position[0],
-                                         y=position[2],
-                                         xsize=target_scene_object._width_x,
-                                         ysize=target_scene_object._width_z)
+            qsr_target_object = Object_State(name=str(target_object_name), timestamp=0,
+                                                 x=position[0],
+                                                 y=position[2],
+                                                 xsize=target_object._width_x,
+                                                 ysize=target_object._width_z)
 
             try:
-                point = sample_position_from_region(
-                    compute_region_for_relations(world, configuration_def, target_object, table))
-                target_scene_object.set_translation(point.x, constants.OBJECT_POSITION_MAX_Y, point.y)
-            except ValueError:
-                logging.info("[aileen_scene] :: cannot find a point that satisfies the relationship in current config")
-                AileenScene.place_objects_in_configuration_recursively(scene_objects_subset, configuration_def_subset)
-
-
-
-    @staticmethod
-    def place_objects_in_configuration(scene_objects, configuration_def):
-        table = box(constants.OBJECT_POSITION_MIN_X,
-                    constants.OBJECT_POSITION_MIN_Z,
-                    constants.OBJECT_POSITION_MAX_X,
-                    constants.OBJECT_POSITION_MAX_Z)
-
-        point = None
-
-        while point is None:
-            logging.debug("[aileen_scene] :: attempting new config for {}".format(configuration_def))
-            transitions = {}
-            world = World_State(0.0)
-            i = 0
-            for scene_object_name in scene_objects:
-                if i is not 0:
-                    scene_object = scene_objects[scene_object_name]
-                    position = AileenScene.get_random_position_on_table()
-                    world_object = Object_State(name=str(scene_object_name), timestamp=0,
-                                                x=position[0],
-                                                y=position[2],
-                                                xsize=scene_object._width_x,
-                                                ysize=scene_object._width_z)
-                    world.add_object_state(world_object)
-                    transitions[scene_object_name] = position
-                    logging.debug("[aileen_scene] :: added object {} to scene".format(str(scene_object_name)))
-                else:
-                    query_object_name = scene_object_name
-                i = i + 1
-
-            position = AileenScene.get_random_position_on_table()
-            query_scene_object = scene_objects[query_object_name]
-            query_object = Object_State(name=str(query_object_name), timestamp=0,
-                                        x=position[0],
-                                        y=position[2],
-                                        xsize=query_scene_object._width_x,
-                                        ysize=query_scene_object._width_z)
-
-            try:
-                point = sample_position_from_region(
-                    compute_region_for_relations(world, configuration_def, query_object, table))
-                position = [point.x, constants.OBJECT_POSITION_MAX_Y, point.y]
-                transitions[query_object_name] = position
+                found_target_object_position = sample_position_from_region(compute_region_for_relations(world, configuration_definition, qsr_target_object, table))
+                position = [found_target_object_position.x, constants.OBJECT_POSITION_MAX_Y, found_target_object_position.y]
+                translations[target_object_name] = position
             except ValueError:
                 point = None
-
-        return transitions
-
+        return translations
 
     @staticmethod
-    def place_object_in_configuration_with(target_object_name, scene_objects, configuration_def):
+    def place_object_in_configuration_with(target_object_name, reference_object_name, scene_objects, configuration_definition):
+        reference_object = scene_objects[reference_object_name]
+        target_object = scene_objects[target_object_name]
+
         table = box(constants.OBJECT_POSITION_MIN_X,
                     constants.OBJECT_POSITION_MIN_Z,
                     constants.OBJECT_POSITION_MAX_X,
                     constants.OBJECT_POSITION_MAX_Z)
 
-        world = World_State(0.0)
+        found_target_object_position = None
+        while found_target_object_position is None:
+            world = World_State(0.0)
+            qsr_reference_object = Object_State(name=str(reference_object_name), timestamp=0,
+                                                x=reference_object._translation[0],
+                                                y=reference_object._translation[2],
+                                                xsize=reference_object._width_x,
+                                                ysize=reference_object._width_z)
+            world.add_object_state(qsr_reference_object)
+            logging.debug(
+                "[aileen_scene] :: added reference object {} to QSRLib scene".format(str(reference_object_name)))
 
-        for object_name in scene_objects:
-            if object_name != target_object_name:
-                scene_object = scene_objects[object_name]
-                world_object = Object_State(name=str(object_name), timestamp=0,
-                                            x=scene_object._translation[0],
-                                            y=scene_object._translation[2],
-                                            xsize=scene_object._width_x,
-                                            ysize=scene_object._width_z)
-                world.add_object_state(world_object)
-                logging.debug("[aileen_scene] :: added object {} to scene".format(str(object_name)))
+            position = AileenScene.get_random_position_on_table()
+            qsr_target_object = Object_State(name=str(target_object_name), timestamp=0,
+                                             x=position[0],
+                                             y=position[2],
+                                             xsize=target_object._width_x,
+                                             ysize=target_object._width_z)
 
-        position = AileenScene.get_random_position_on_table()
-        target_scene_object = scene_objects[target_object_name]
-        target_object = Object_State(name=str(target_object_name), timestamp=0,
-                                    x=position[0],
-                                    y=position[2],
-                                    xsize=target_scene_object._width_x,
-                                    ysize=target_scene_object._width_z)
+            try:
+                found_target_object_position = sample_position_from_region(
+                    compute_region_for_relations(world, configuration_definition, qsr_target_object, table))
+                position = [found_target_object_position.x, constants.OBJECT_POSITION_MAX_Y,
+                            found_target_object_position.y]
+            except ValueError:
+                logging.error("[aileen_scene] :: cannot place {} in configuration with {}", target_object_name, reference_object_name)
+                raise ValueError
+        return position
 
-        try:
-            point = sample_position_from_region(compute_region_for_relations(world, configuration_def, target_object, table))
-        except ValueError:
-            logging.error("[aileen_scene] :: cannot find a point that satisfies the relationship")
+
+    @staticmethod
+    def place_three_objects_in_configuration(target_object_name, first_reference_object_name, second_reference_object_name, scene_objects, configuration_definition):
+        table = box(constants.OBJECT_POSITION_MIN_X,
+                    constants.OBJECT_POSITION_MIN_Z,
+                    constants.OBJECT_POSITION_MAX_X,
+                    constants.OBJECT_POSITION_MAX_Z)
+        first_reference_object = scene_objects[first_reference_object_name]
+        second_reference_object = scene_objects[second_reference_object_name]
+        target_object = scene_objects[target_object_name]
+
+        configuration_definition_subset = AileenScene.subset_configuration_definition_for_object(target_object_name, configuration_definition)
+
+        found_target_object_position = None
+
+        while found_target_object_position is None:
+            world = World_State(0.0)
+            translations = AileenScene.place_two_objects_in_configuration(target_object_name=second_reference_object_name,
+                                                                          reference_object_name=first_reference_object_name,
+                                                                          scene_objects=scene_objects,
+                                                                          configuration_definition=configuration_definition_subset)
+            qsr_first_reference_object = Object_State(name=str(first_reference_object_name), timestamp=0,
+                                                      x=translations[first_reference_object_name][0],
+                                                      y=translations[first_reference_object_name][2],
+                                                      xsize=first_reference_object._width_x,
+                                                      ysize=first_reference_object._width_z)
+            world.add_object_state(qsr_first_reference_object)
+
+            qsr_second_reference_object = Object_State(name=str(second_reference_object_name), timestamp=0,
+                                                      x=translations[second_reference_object_name][0],
+                                                      y=translations[second_reference_object_name][2],
+                                                      xsize=second_reference_object._width_x,
+                                                      ysize=second_reference_object._width_z)
+            world.add_object_state(qsr_second_reference_object)
+            logging.debug("[aileen_scene] :: added reference objects {} and {} to QSRLib scene".format(first_reference_object_name, second_reference_object_name))
+
+            position = AileenScene.get_random_position_on_table()
+            qsr_target_object = Object_State(name=str(target_object_name), timestamp=0,
+                                             x=position[0],
+                                             y=position[2],
+                                             xsize=target_object._width_x,
+                                             ysize=target_object._width_z)
+
+            try:
+                found_target_object_position = sample_position_from_region(
+                    compute_region_for_relations(world, configuration_definition, qsr_target_object, table))
+                position = [found_target_object_position.x, constants.OBJECT_POSITION_MAX_Y,
+                            found_target_object_position.y]
+                translations[target_object_name] = position
+            except ValueError:
+                point = None
+        return translations
+
+
+
+    @staticmethod
+    def subset_configuration_definition_for_object(object_name, configuration_def):
+        subset_def = []
+        for disjunctive_element in configuration_def:
+            new_disjunctive_element = []
+            for conjunctive_element in disjunctive_element:
+                print conjunctive_element
+                if object_name not in conjunctive_element:
+                    new_disjunctive_element.append(conjunctive_element)
+            if len(new_disjunctive_element) >= 1:
+                subset_def.append(new_disjunctive_element)
+        if len(subset_def) == 0:
+            logging.error("[aileen_scene] :: configuration cannot be reduced by removing {}".format(object_name))
             raise ValueError
-
-        return [point.x, constants.OBJECT_POSITION_MAX_Y, point.y]
+        else:
+            logging.debug("[aileen_scene] :: subset configuration after removing {} is {}".format(object_name, subset_def))
+            return subset_def

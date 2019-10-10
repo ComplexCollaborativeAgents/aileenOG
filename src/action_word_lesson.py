@@ -13,9 +13,14 @@ from collections import OrderedDict
 
 class ActionWordLesson:
 
+    test_id = None  # Class variable used for unit tests
+
     def __init__(self):
         self._action_definitions_set = ActionWordLesson.get_action_definition_set()
         self._action = choice(self._action_definitions_set.keys())
+        if ActionWordLesson.test_id == 1:
+            self._action = 'move-left-of'
+            ActionWordLesson.test_id += 1
         self._action_definition = self._action_definitions_set[self._action]
         self._initial_scene = AileenScene()
         self._scene_objects = OrderedDict()
@@ -52,7 +57,10 @@ class ActionWordLesson:
                 self._scene_objects[scene_object_name].set_translation(position)
                 self._initial_scene.add_object(self._scene_objects[scene_object_name])
         if len(initial_state_description) <= 2 and len(self._scene_objects) <= 2:
-            positions = AileenScene.place_objects_in_configuration(self._scene_objects, initial_state_description)
+            positions = AileenScene.place_two_objects_in_configuration(target_object_name=self._scene_objects.items()[0][0],
+                                                                       reference_object_name=self._scene_objects.items()[1][0],
+                                                                       scene_objects=self._scene_objects,
+                                                                       configuration_definition=initial_state_description)
             for object_name in positions.keys():
                 scene_object = self._scene_objects[object_name]
                 scene_object.set_translation(positions[object_name])
@@ -81,6 +89,7 @@ class ActionWordLesson:
                 'language': self._language
             }
         }
+        self.advance_lesson_state()
         return segment
 
     def get_structure_for_pick_up_action(self, trace_action):
@@ -98,8 +107,9 @@ class ActionWordLesson:
         logging.debug("[action_word_lesson] :: attempting to place objects in configuration {}".format(relation_qsr))
         try:
             position = AileenScene.place_object_in_configuration_with(target_object_name=trace_action['argument1'],
+                                                                      reference_object_name=trace_action['argument2'],
                                                                       scene_objects=self._scene_objects,
-                                                                      configuration_def=relation_qsr)
+                                                                      configuration_definition=relation_qsr)
             action_dict['location'] = position
             return action_dict
         except ValueError:
@@ -129,19 +139,27 @@ class ActionWordLesson:
         self.advance_lesson_state()
         return segment
 
+
+    def get_next_segment(self):
+        if self._lesson_state == constants.ACTION_LESSON_STATE_START:
+            return self.get_segment_for_lesson_start()
+        if self._lesson_state == constants.ACTION_LESSON_STATE_TRACE:
+            return self.get_segment_for_lesson_action_trace()
+        if self._lesson_state == constants.ACTION_LESSON_STATE_END:
+            self.get_segment_for_lesson_end()
+
     def deliver_action_lesson_segment(self, world_server, agent_server):
         if self._lesson_state == constants.ACTION_LESSON_STATE_START:
             logging.debug("[action_word_lesson] :: setting up the initial state configuration of action")
-            segment = self.get_segment_for_lesson_start()
+            segment = self.get_next_segment()
             scene_acknowledgement = world_server.set_scene(
                 {'configuration': segment['scene'], 'label': "{}".format(self._language)})
             interaction_acknowledgement = agent_server.process_language(segment['interaction'])
-            self.advance_lesson_state()
             return
 
         if self._lesson_state == constants.ACTION_LESSON_STATE_TRACE:
             logging.debug("[action_word_lesson] :: providing the next step in action trace")
-            segment = self.get_segment_for_lesson_action_trace()
+            segment = self.get_next_segment()
             logging.debug("[action_word_lesson] :: received action trace {}".format(segment))
             if segment['action'] is not None:
                 scene_acknowledgement = world_server.apply_action(segment['action'])
@@ -150,8 +168,8 @@ class ActionWordLesson:
 
         if self._lesson_state == constants.ACTION_LESSON_STATE_END:
             logging.debug("[action_word_lesson] :: communicating the terminal state configuration of action")
-            segment = self.get_segment_for_lesson_end()
-            interaction_acknowledgement = agent_server.process_language(segment['interaction'])
+            segment = self.get_next_segment()
+            interaction_acknowledgement = agent_server.process_language({'marker':'end'})
             return
 
         if self._lesson_state == constants.ACTION_LESSON_STATE_BAD:
