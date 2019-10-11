@@ -55,6 +55,18 @@ class AileenScene:
                     constants.OBJECT_POSITION_MAX_X,
                     constants.OBJECT_POSITION_MAX_Z)
         found_target_object_position = None
+
+        if AileenScene.test_id == 1:
+            translations[target_object_name] = [0.676147498734, 0.45, -0.0202334240995]
+            translations[reference_object_name] = [0.750422886282, constants.OBJECT_POSITION_MAX_Y, 0.177034392513]
+            AileenScene.test_id += 1;
+            found_target_object_position = True
+        elif AileenScene.test_id == 2:
+            translations[target_object_name] = [0.586304972021, 0.45, 0.238382561155]
+            translations[reference_object_name] = [0.477095092251, constants.OBJECT_POSITION_MAX_Y, -0.167128202174]
+            AileenScene.test_id += 1;
+            found_target_object_position = True
+
         while found_target_object_position is None:
             world = World_State(0.0)
 
@@ -119,7 +131,7 @@ class AileenScene:
                 position = [found_target_object_position.x, constants.OBJECT_POSITION_MAX_Y,
                             found_target_object_position.y]
             except ValueError:
-                logging.error("[aileen_scene] :: cannot place {} in configuration with {}", target_object_name, reference_object_name)
+                logging.error("[aileen_scene] :: cannot place {} in configuration with {}".format(target_object_name, reference_object_name))
                 raise ValueError
         return position
 
