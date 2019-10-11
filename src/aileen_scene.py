@@ -32,19 +32,6 @@ class AileenScene:
         return description
 
     @staticmethod
-    def get_random_position_on_table():
-        position = [uniform(constants.OBJECT_POSITION_MIN_X, constants.OBJECT_POSITION_MAX_X),
-                    uniform(constants.OBJECT_POSITION_MIN_Y, constants.OBJECT_POSITION_MAX_Y),
-                    uniform(constants.OBJECT_POSITION_MIN_Z, constants.OBJECT_POSITION_MAX_Z)]
-        if AileenScene.test_id == 1:
-            position = [0.586304972021, 0.45, 0.238382561155]
-            AileenScene.test_id += 1;
-        elif AileenScene.test_id == 2:
-            position = [0.477095092251, 0.45, -0.1671282021741]
-            AileenScene.test_id += 1;
-        return position
-
-    @staticmethod
     def place_two_objects_in_configuration(target_object_name, reference_object_name, scene_objects, configuration_definition):
         translations = {}
         reference_object = scene_objects[reference_object_name]
@@ -70,7 +57,7 @@ class AileenScene:
         while found_target_object_position is None:
             world = World_State(0.0)
 
-            new_reference_object_position = AileenScene.get_random_position_on_table()
+            new_reference_object_position = AileenScene.randomizer.get_random_position_on_table()
 
             qsr_reference_object = Object_State(name=str(reference_object_name), timestamp=0,
                                             x=new_reference_object_position[0],
@@ -81,7 +68,7 @@ class AileenScene:
             logging.debug("[aileen_scene] :: added reference object {} to QSRLib scene".format(str(reference_object_name)))
             translations[reference_object_name] = new_reference_object_position
 
-            position = AileenScene.get_random_position_on_table()
+            position = AileenScene.randomizer.get_random_position_on_table()
             qsr_target_object = Object_State(name=str(target_object_name), timestamp=0,
                                                  x=position[0],
                                                  y=position[2],
@@ -118,7 +105,7 @@ class AileenScene:
             logging.debug(
                 "[aileen_scene] :: added reference object {} to QSRLib scene".format(str(reference_object_name)))
 
-            position = AileenScene.get_random_position_on_table()
+            position = AileenScene.randomizer.get_random_position_on_table()
             qsr_target_object = Object_State(name=str(target_object_name), timestamp=0,
                                              x=position[0],
                                              y=position[2],
@@ -171,7 +158,7 @@ class AileenScene:
             world.add_object_state(qsr_second_reference_object)
             logging.debug("[aileen_scene] :: added reference objects {} and {} to QSRLib scene".format(first_reference_object_name, second_reference_object_name))
 
-            position = AileenScene.get_random_position_on_table()
+            position = AileenScene.randomizer.get_random_position_on_table()
             qsr_target_object = Object_State(name=str(target_object_name), timestamp=0,
                                              x=position[0],
                                              y=position[2],
@@ -207,3 +194,19 @@ class AileenScene:
         else:
             logging.debug("[aileen_scene] :: subset configuration after removing {} is {}".format(object_name, subset_def))
             return subset_def
+
+    class Randomizer:
+
+        def get_random_position_on_table(self):
+            position = [uniform(constants.OBJECT_POSITION_MIN_X, constants.OBJECT_POSITION_MAX_X),
+                        uniform(constants.OBJECT_POSITION_MIN_Y, constants.OBJECT_POSITION_MAX_Y),
+                        uniform(constants.OBJECT_POSITION_MIN_Z, constants.OBJECT_POSITION_MAX_Z)]
+            if AileenScene.test_id == 1:
+                position = [0.586304972021, 0.45, 0.238382561155]
+                AileenScene.test_id += 1;
+            elif AileenScene.test_id == 2:
+                position = [0.477095092251, 0.45, -0.1671282021741]
+                AileenScene.test_id += 1;
+            return position
+
+    randomizer = Randomizer()

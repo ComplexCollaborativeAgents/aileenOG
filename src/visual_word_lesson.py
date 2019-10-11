@@ -19,7 +19,7 @@ class VisualWordLesson:
     def generate_scene(self):
         logging.debug("[aileen_visual_word_lesson] :: generating a new scene for visual word learning")
         scene_object = AileenObject.generate_random_object()
-        scene_object.set_translation(AileenScene.get_random_position_on_table())
+        scene_object.set_translation(AileenScene.randomizer.get_random_position_on_table())
         self._scene.add_object(scene_object)
         self._language = LanguageGenerator.generate_language_for_object(scene_object)
 
