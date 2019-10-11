@@ -8,8 +8,6 @@ from log_config import logging
 
 class AileenObject:
 
-    test_id = None # class variable used for unit test
-
     def __init__(self, shape, color, translation=[0, 0, 0], height_y=constants.OBJECT_STANDARD_HEIGHT,
                  width_x=constants.OBJECT_STANDARD_WIDTH_X, width_z=constants.OBJECT_STANDARD_WIDTH_Z):
 
@@ -19,7 +17,7 @@ class AileenObject:
         self._width_x = width_x
         self._width_z = width_z
         self._translation = translation
-        self._name = "{}".format(uuid.uuid4())
+        self._name = "{}".format(AileenObject.randomizer.uuid4())
         self._language = None
         logging.debug("[aileen_object] :: created a new object")
 
@@ -92,15 +90,6 @@ class AileenObject:
         self._language = word_list
 
     @staticmethod
-    def get_random_color():
-        colors = AileenObject.get_colors().keys()
-        return choice(colors)
-
-    @staticmethod
-    def get_color_vector_sample(color_symbol):
-        return choice(AileenObject.get_colors()[color_symbol])
-
-    @staticmethod
     def get_colors():
         root_dir = os.path.dirname(os.path.abspath(__file__))
         color_file = os.path.join(root_dir, '..', 'resources', constants.COLOR_FILE_NAME)
@@ -109,29 +98,29 @@ class AileenObject:
         return colors
 
     @staticmethod
-    def get_random_shape():
-        return choice(constants.SHAPE_SET)
-
-    @staticmethod
     def generate_random_object():
-        scene_object_color = AileenObject.get_random_color()
-        scene_object_color_vector = AileenObject.get_color_vector_sample(scene_object_color)
-        scene_object_shape = AileenObject.get_random_shape()
-        # Fix the results for unit testing.
-        if AileenObject.test_id == 1:
-            scene_object_color = 'blue'
-            scene_object_color_vector = [0, 0, 1]
-            scene_object_shape = 'cylinder'
-        elif AileenObject.test_id == 2:
-            scene_object_color = 'blue'
-            scene_object_color_vector = [0, 0, 1]
-            scene_object_shape = 'box'
+        scene_object_color = AileenObject.randomizer.get_random_color()
+        scene_object_color_vector = AileenObject.randomizer.get_color_vector_sample(scene_object_color)
+        scene_object_shape = AileenObject.randomizer.get_random_shape()
         scene_object = AileenObject(shape=scene_object_shape,
                                     color=scene_object_color_vector)
-        if AileenObject.test_id != None:
-            scene_object._name = AileenObject.test_id
-            AileenObject.test_id += 1
         scene_object._language = [scene_object_color, scene_object_shape]
         return scene_object
 
+    # Put randomization code in separate class so that it can be overridden.
+    class Randomizer:
 
+        def get_random_color(self):
+            colors = AileenObject.get_colors().keys()
+            return choice(colors)
+
+        def get_color_vector_sample(self,color_symbol):
+            return choice(AileenObject.get_colors()[color_symbol])
+
+        def get_random_shape(self):
+            return choice(constants.SHAPE_SET)
+
+        def uuid4(self):
+            return uuid.uuid4()
+
+    randomizer = Randomizer()  # Allows unit test to override
