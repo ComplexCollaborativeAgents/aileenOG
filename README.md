@@ -26,7 +26,16 @@ Grounded language learning agent based on Soar cognitive architecture
 
        `conda install -c marufr python-igraph`
     
-   
+* On the Mac using Python2, you will also need to:
+
+	cd /usr/local/opt/python
+	ln -s /System/Library/Frameworks
+        sudo -H pip2 install PyYAML
+	brew install cairo
+	brew install py2cairo
+	brew install igraph
+	sudo pip install --user python-igraph
+
 ## Usage
 * Run [aileen_world](https://gitlab-external.parc.com/aileen/aileen-world)
 * Activate the conda environment `conda activate aileen`
