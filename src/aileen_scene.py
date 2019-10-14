@@ -3,6 +3,7 @@ import constants
 from shapely.geometry import box
 from aileen_object import AileenObject
 from log_config import logging
+from qsrlib_qsrs import QSR_RCC8, QSR_Cardinal_Direction
 
 from configuration import Configuration
 
@@ -17,8 +18,6 @@ except:
 
 
 class AileenScene:
-
-    test_id = None; # Class variable for unit tests
 
     def __init__(self):
         self._objects = []
@@ -43,18 +42,6 @@ class AileenScene:
                     constants.OBJECT_POSITION_MAX_X,
                     constants.OBJECT_POSITION_MAX_Z)
         found_target_object_position = None
-
-        if AileenScene.test_id == 1:
-            translations[target_object_name] = [0.676147498734, 0.45, -0.0202334240995]
-            translations[reference_object_name] = [0.750422886282, constants.OBJECT_POSITION_MAX_Y, 0.177034392513]
-            AileenScene.test_id += 1;
-            found_target_object_position = True
-        elif AileenScene.test_id == 2:
-            translations[target_object_name] = [0.586304972021, 0.45, 0.238382561155]
-            translations[reference_object_name] = [0.477095092251, constants.OBJECT_POSITION_MAX_Y, -0.167128202174]
-            AileenScene.test_id += 1;
-            found_target_object_position = True
-
         while found_target_object_position is None:
             world = World_State(0.0)
 
@@ -201,12 +188,6 @@ class AileenScene:
             position = [uniform(constants.OBJECT_POSITION_MIN_X, constants.OBJECT_POSITION_MAX_X),
                         uniform(constants.OBJECT_POSITION_MIN_Y, constants.OBJECT_POSITION_MAX_Y),
                         uniform(constants.OBJECT_POSITION_MIN_Z, constants.OBJECT_POSITION_MAX_Z)]
-            if AileenScene.test_id == 1:
-                position = [0.586304972021, 0.45, 0.238382561155]
-                AileenScene.test_id += 1;
-            elif AileenScene.test_id == 2:
-                position = [0.477095092251, 0.45, -0.1671282021741]
-                AileenScene.test_id += 1;
             return position
 
         def sample_position_from_region(self, region):

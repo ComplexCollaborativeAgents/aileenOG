@@ -5,13 +5,10 @@ class LanguageGenerator:
     def __init__(self):
         pass
 
-    test_id = None  # Class variable for unit tests
-
     @staticmethod
     def generate_language_for_object(aileen_object):
         object_phrase = ""
-        if LanguageGenerator.test_id == None:
-            random.shuffle(aileen_object._language)
+        LanguageGenerator.randomizer.shuffle_string(aileen_object._language)
         for visual_word in aileen_object._language:
             object_phrase += visual_word + " "
         return object_phrase
@@ -29,7 +26,6 @@ class LanguageGenerator:
             if "<" in word_list[i]:
                 word_list[i] = LanguageGenerator.generate_language_for_object(scene_objects[word_list[i]])
         return LanguageGenerator.generate_string_from(word_list)
-    
 
     @staticmethod
     def generate_string_from(word_list):
@@ -37,3 +33,11 @@ class LanguageGenerator:
         for word in word_list:
             string = string + word + " "
         return str(string).rstrip()
+
+
+    class Randomizer:
+
+        def shuffle_string(self, string):
+            random.shuffle(string)
+
+    randomizer = Randomizer()

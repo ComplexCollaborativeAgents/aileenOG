@@ -16,29 +16,26 @@ class LessonGeneratorTest(unittest.TestCase):
     
     def test_action_word_segment(self):
         logging.debug("[test_lesson_generator] :: test_action_word_segment")
-        ActionWordLesson.test_id = 1
+        ActionWordLesson.randomizer = ActionRandomizer()
         AileenObject.randomizer = ObjectRandomizer()
-        AileenScene.test_id = 2
-        # AileenScene.test_id = None
-        # AileenScene.randomizer = SceneRandomizer()
-        LanguageGenerator.test_id = 1
+        AileenScene.randomizer = SceneRandomizer()
+        LanguageGenerator.randomizer = LanguageRandomizer()
         self.maxDiff = None
         lesson1 = ActionWordLesson()
         segment = lesson1.get_next_segment()
-        self.assertEquals(segment, {'interaction': {'marker': 'start', 'language': 'move blue cylinder  left-of blue box'}, 'scene': ['Solid {\n   translation 0.586304972021 0.45 0.238382561155\n   children [\n       Shape {\n          appearance PBRAppearance {\n          baseColor 0 0 1\n          metalness 0\n          emissiveColor 0 0 1\n        }\n        geometry Cylinder {\n          radius 0.05\n          height 0.1\n        }\n        castShadows FALSE\n        }\n    ]\n    name "1"\n   boundingObject Box {\n     size 0.1 0.1 0.1\n   }\n   physics Physics {\n}}', 'Solid {\n   translation 0.477095092251 0.45 -0.167128202174\n   children [\n       Shape {\n          appearance PBRAppearance {\n          baseColor 0 0 1\n          metalness 0\n          emissiveColor 0 0 1\n        }\n        geometry Box {\n          size 0.1 0.1 0.1\n        }\n        castShadows FALSE\n        }\n    ]\n    name "2"\n   boundingObject Box {\n     size 0.1 0.1 0.1\n   }\n   physics Physics {\n}}']})
+        self.assertEquals(segment, {'interaction': {'marker': 'start', 'language': 'move blue cylinder  left-of blue box'}, 'scene': ['Solid {\n   translation 0.676147498734 0.45 -0.0202334240995\n   children [\n       Shape {\n          appearance PBRAppearance {\n          baseColor 0 0 1\n          metalness 0\n          emissiveColor 0 0 1\n        }\n        geometry Cylinder {\n          radius 0.05\n          height 0.1\n        }\n        castShadows FALSE\n        }\n    ]\n    name "1"\n   boundingObject Box {\n     size 0.1 0.1 0.1\n   }\n   physics Physics {\n}}', 'Solid {\n   translation 0.586304972021 0.45 0.238382561155\n   children [\n       Shape {\n          appearance PBRAppearance {\n          baseColor 0 0 1\n          metalness 0\n          emissiveColor 0 0 1\n        }\n        geometry Box {\n          size 0.1 0.1 0.1\n        }\n        castShadows FALSE\n        }\n    ]\n    name "2"\n   boundingObject Box {\n     size 0.1 0.1 0.1\n   }\n   physics Physics {\n}}']})
         segment = lesson1.get_next_segment()
         self.assertEquals(segment, {'action': {'name': 'pick-up', 'uuid': '1'}, 'interaction': 'none'})
         segment = lesson1.get_next_segment()
-        self.assertEquals(segment, {'action': None, 'interaction': 'none'})
+        self.assertEquals(segment, {'action': {'location': [0.676147498734, 0.45, -0.0202334240995], 'name': 'place'}, 'interaction': 'none'})
         segment = lesson1.get_next_segment()
         self.assertEquals(segment, None)
     
     def test_spatial_word_lesson(self): 
         logging.debug("[test_lesson_generator] :: test_spatial_word_segment")
         AileenObject.randomizer = ObjectRandomizer()
-        AileenScene.test_id = None
         AileenScene.randomizer = SceneRandomizer()
-        LanguageGenerator.test_id = 1
+        LanguageGenerator.randomizer = LanguageRandomizer()
         SpatialWordLesson.randomizer = SpatialRandomizer()
         lesson1 = SpatialWordLesson()
         self.maxDiff = None
@@ -47,9 +44,8 @@ class LessonGeneratorTest(unittest.TestCase):
     def test_visual_word_lesson(self):
         logging.debug("[test_lesson_generator] :: test_visual_word_segment")
         AileenObject.randomizer = ObjectRandomizer()
-        AileenScene.test_id = None
         AileenScene.randomizer = SceneRandomizer()
-        LanguageGenerator.test_id = 1
+        LanguageGenerator.randomizer = LanguageRandomizer()
         lesson1 = VisualWordLesson()
         self.maxDiff = None
         self.assertEquals(lesson1.generate_lesson(), {'interaction': 'blue cylinder ', 'scene': ['Solid {\n   translation 0.586304972021 0.45 0.238382561155\n   children [\n       Shape {\n          appearance PBRAppearance {\n          baseColor 0 0 1\n          metalness 0\n          emissiveColor 0 0 1\n        }\n        geometry Cylinder {\n          radius 0.05\n          height 0.1\n        }\n        castShadows FALSE\n        }\n    ]\n    name "1"\n   boundingObject Box {\n     size 0.1 0.1 0.1\n   }\n   physics Physics {\n}}']})
@@ -104,15 +100,27 @@ class SceneRandomizer:
 
     def sample_position_from_region(self, region):
         self.point_index += 1
-        position = self.points[self.point_index % len(self.points)]
-        logging.debug("[scene_randomizer] :: random region position {}".format(position))
-        return position
+        point = self.points[self.point_index % len(self.points)]
+        logging.debug("[scene_randomizer] :: random region position {}".format(point))
+        return point
 
 
 class SpatialRandomizer:
 
     def random_spatial_configuration(self, configurations):
         return 'right-of'
+
+
+class ActionRandomizer:
+
+    def random_action(self, actions):
+        return 'move-left-of'
+
+
+class LanguageRandomizer:
+
+    def shuffle_string(self, string):
+        pass
 
 
 if __name__ == '__main__':

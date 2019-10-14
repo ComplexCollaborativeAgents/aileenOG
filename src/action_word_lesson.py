@@ -13,14 +13,9 @@ from collections import OrderedDict
 
 class ActionWordLesson:
 
-    test_id = None  # Class variable used for unit tests
-
     def __init__(self):
         self._action_definitions_set = ActionWordLesson.get_action_definition_set()
-        self._action = choice(self._action_definitions_set.keys())
-        if ActionWordLesson.test_id == 1:
-            self._action = 'move-left-of'
-            ActionWordLesson.test_id += 1
+        self._action = ActionWordLesson.randomizer.random_action(self._action_definitions_set.keys())
         self._action_definition = self._action_definitions_set[self._action]
         self._initial_scene = AileenScene()
         self._scene_objects = OrderedDict()
@@ -197,6 +192,14 @@ class ActionWordLesson:
         with open(action_definition_file) as f:
             action_definitions = json.load(f)
         return action_definitions
+
+
+    class Randomizer:
+
+        def random_action(self, actions):
+            return choice(actions)
+
+    randomizer = Randomizer()
 
 
 if __name__ == '__main__':
