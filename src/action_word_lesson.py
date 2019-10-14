@@ -200,4 +200,5 @@ class ActionWordLesson:
 
 
 if __name__ == '__main__':
-    pass
+    lesson1 = ActionWordLesson()
+    print(lesson1.get_segment_for_lesson_start())

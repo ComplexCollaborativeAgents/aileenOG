@@ -8,7 +8,8 @@ from configuration import Configuration
 
 try:
     from qsrlib_io.world_trace import Object_State, World_State
-    from qsrlib.qsr_realization import compute_region_for_relations, sample_position_from_region
+    from qsrlib import qsr_realization
+    from qsrlib.qsr_realization import compute_region_for_relations
     from shapely.geometry import Point
 except:
     logging.fatal("[aileen_scene] :: cannot find spatial reasoning library")
@@ -76,7 +77,8 @@ class AileenScene:
                                                  ysize=target_object._width_z)
 
             try:
-                found_target_object_position = sample_position_from_region(compute_region_for_relations(world, configuration_definition, qsr_target_object, table))
+                found_target_object_position = AileenScene.randomizer.sample_position_from_region(
+                    compute_region_for_relations(world, configuration_definition, qsr_target_object, table))
                 position = [found_target_object_position.x, constants.OBJECT_POSITION_MAX_Y, found_target_object_position.y]
                 translations[target_object_name] = position
             except ValueError:
@@ -113,7 +115,7 @@ class AileenScene:
                                              ysize=target_object._width_z)
 
             try:
-                found_target_object_position = sample_position_from_region(
+                found_target_object_position = AileenScene.randomizer.sample_position_from_region(
                     compute_region_for_relations(world, configuration_definition, qsr_target_object, table))
                 position = [found_target_object_position.x, constants.OBJECT_POSITION_MAX_Y,
                             found_target_object_position.y]
@@ -121,7 +123,6 @@ class AileenScene:
                 logging.error("[aileen_scene] :: cannot place {} in configuration with {}".format(target_object_name, reference_object_name))
                 raise ValueError
         return position
-
 
     @staticmethod
     def place_three_objects_in_configuration(target_object_name, first_reference_object_name, second_reference_object_name, scene_objects, configuration_definition):
@@ -166,7 +167,7 @@ class AileenScene:
                                              ysize=target_object._width_z)
 
             try:
-                found_target_object_position = sample_position_from_region(
+                found_target_object_position = AileenScene.randomizer.sample_position_from_region(
                     compute_region_for_relations(world, configuration_definition, qsr_target_object, table))
                 position = [found_target_object_position.x, constants.OBJECT_POSITION_MAX_Y,
                             found_target_object_position.y]
@@ -174,8 +175,6 @@ class AileenScene:
             except ValueError:
                 point = None
         return translations
-
-
 
     @staticmethod
     def subset_configuration_definition_for_object(object_name, configuration_def):
@@ -195,6 +194,7 @@ class AileenScene:
             logging.debug("[aileen_scene] :: subset configuration after removing {} is {}".format(object_name, subset_def))
             return subset_def
 
+
     class Randomizer:
 
         def get_random_position_on_table(self):
@@ -208,5 +208,8 @@ class AileenScene:
                 position = [0.477095092251, 0.45, -0.1671282021741]
                 AileenScene.test_id += 1;
             return position
+
+        def sample_position_from_region(self, region):
+            return qsr_realization.sample_position_from_region(region)
 
     randomizer = Randomizer()

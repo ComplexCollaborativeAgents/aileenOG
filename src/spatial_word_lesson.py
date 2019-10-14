@@ -11,14 +11,11 @@ from collections import OrderedDict
 
 
 class SpatialWordLesson:
-    test_id = None  # Class variable used for unit tests
 
     def __init__(self):
         self._spatial_configurations_set = SpatialWordLesson.get_spatial_configurations_set()
-        self._spatial_configuration = choice(self._spatial_configurations_set.keys())
-        if SpatialWordLesson.test_id == 1:
-            self._spatial_configuration = 'right-of'
-            SpatialWordLesson.test_id += 1
+        self._spatial_configuration = SpatialWordLesson.randomizer.random_spatial_configuration(
+            self._spatial_configurations_set.keys())
         self._spatial_configuration_def = self._spatial_configurations_set[self._spatial_configuration]
         self._scene_objects = OrderedDict()
         self._scene = AileenScene()
@@ -93,6 +90,14 @@ class SpatialWordLesson:
 
             language_acknowledgement = agent_server.process_language(lesson['interaction'])
             logging.info("[aileen_instructor] :: received from agent {}".format(language_acknowledgement))
+
+
+    class Randomizer:
+
+        def random_spatial_configuration(self, configurations):
+            return choice(configurations)
+
+    randomizer = Randomizer()
 
 
 if __name__ == '__main__':
