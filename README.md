@@ -36,6 +36,9 @@ Grounded language learning agent based on Soar cognitive architecture
 	brew install igraph
 	sudo pip install --user python-igraph
 
+* To install Pynini for Python 2, download pynini-1.9.3.tar.gz from http://www.openfst.org/twiki/bin/view/GRM/PyniniDownload and follow the instructions in README.rst.
+Be sure to get the specified versions of openfst and re2 and to configure openfst using ./configure --enable-grm.
+
 ## Usage
 * Run [aileen_world](https://gitlab-external.parc.com/aileen/aileen-world)
 * Activate the conda environment `conda activate aileen`
