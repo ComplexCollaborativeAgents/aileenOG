@@ -1,3 +1,0 @@
-[submodule "strands_qsr_lib"]
-	path = strands_qsr_lib
-	url = git@gitlab-external.parc.com:aileen/strands_qsr_lib.git

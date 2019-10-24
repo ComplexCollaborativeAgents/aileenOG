@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 import unittest
 
-from aileen_object import AileenObject
+from instructor.aileen_object import AileenObject
+
 
 class AileenObjectTest(unittest.TestCase):
 
@@ -9,6 +10,7 @@ class AileenObjectTest(unittest.TestCase):
         obj = AileenObject()
         colors = obj.get_colors()
         self.assertEquals(len(colors.keys()), 4)
+
 
 if __name__ == '__main__':
     unittest.main()
