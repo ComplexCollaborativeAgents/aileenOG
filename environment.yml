@@ -5,5 +5,5 @@ dependencies:
   - pytest
   - coloredlogs
   - pip:
-      - git+https://gitlab-external.parc.com/aileen/strands_qsr_lib.git@fde1b8dbbde2403fe4261617edb84a6f410fff3b#egg=qsr_lib&subdirectory=qsr_lib
+      - strands_qsr_lib/qsr_lib/
       - -e .

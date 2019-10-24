@@ -4,6 +4,11 @@ Script that generates lesson plans to teach aileen-agent
 
 ## Contributing
 
+1. Clone the repository including the submodule:
+   ```bash
+   git clone --recurse-submodules git@gitlab-external.parc.com:aileen/aileen-instructor.git
+   ```
+   
 1. Set up a Conda environment with dependencies:
    ```bash
    conda env create -f environment.yml
