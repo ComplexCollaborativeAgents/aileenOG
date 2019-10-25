@@ -1,10 +1,11 @@
 import xmlrpclib
+import sys
 from log_config import logging
 from soar_interface import soar_agent
 from soar_interface.soar_agent import update
 from configuration import Configuration
 from aileen_agent_server import AileenAgentServer
-
+from aileen_vision_module.Detector import detector
 
 def create_connection_with_aileen_world():
     url = 'http://{}:{}'.format(Configuration.config['Servers']['input_host'],

@@ -104,6 +104,9 @@ class InputWriter(object):
         return binary_image
 
     def write_binary_image_to_file(self, binary_image):
+        dir_name = os.path.split(constants.CURRENT_IMAGE_PATH)[0]
+        if not os.path.exists(dir_name):
+            os.mkdir(dir_name)
         with open(constants.CURRENT_IMAGE_PATH, "wb") as handle:
             handle.write(binary_image.data)
 
