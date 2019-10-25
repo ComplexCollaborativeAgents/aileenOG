@@ -1,9 +1,8 @@
-#!/usr/bin/env python
 import os
 import sys
 import unittest
 
-from aileen_scene import AileenScene
+from instructor.aileen_scene import AileenScene
 
 class SceneFileTest(unittest.TestCase):
 
@@ -20,7 +19,3 @@ class SceneFileTest(unittest.TestCase):
     def test_nonexistent_template(self):
         scene = AileenScene()
         scene.write_scene("nofile.wbt", sys.stdout)
-
-if __name__ == '__main__':
-    unittest.main()
-

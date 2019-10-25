@@ -71,7 +71,7 @@ class SpatialWordLesson:
     @staticmethod
     def get_spatial_configurations_set():
         root_dir = os.path.dirname(os.path.abspath(__file__))
-        spatial_configuration_file = os.path.join(root_dir, '..', 'resources',
+        spatial_configuration_file = os.path.join(root_dir, 'resources',
                                                   constants.SPATIAL_CONFIGURATION_FILE_NAME)
         with open(spatial_configuration_file) as f:
             spatial_configurations = json.load(f)

@@ -187,7 +187,7 @@ class ActionWordLesson:
     @staticmethod
     def get_action_definition_set():
         root_dir = os.path.dirname(os.path.abspath(__file__))
-        action_definition_file = os.path.join(root_dir, "..", 'resources',
+        action_definition_file = os.path.join(root_dir, 'resources',
                                               constants.ACTION_DEFINITION_FILE_NAME)
         with open(action_definition_file) as f:
             action_definitions = json.load(f)

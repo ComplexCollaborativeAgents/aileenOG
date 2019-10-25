@@ -92,7 +92,7 @@ class AileenObject:
     @staticmethod
     def get_colors():
         root_dir = os.path.dirname(os.path.abspath(__file__))
-        color_file = os.path.join(root_dir, '..', 'resources', constants.COLOR_FILE_NAME)
+        color_file = os.path.join(root_dir, 'resources', constants.COLOR_FILE_NAME)
         with open(color_file) as f:
             colors = json.load(f)
         return colors

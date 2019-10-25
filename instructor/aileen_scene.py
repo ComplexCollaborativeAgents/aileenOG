@@ -1,18 +1,14 @@
 from random import uniform
 import constants
 from shapely.geometry import box
-from aileen_object import AileenObject
 from log_config import logging
-from qsrlib_qsrs import QSR_RCC8, QSR_Cardinal_Direction
-
-from configuration import Configuration
 
 try:
     from qsrlib_io.world_trace import Object_State, World_State
     from qsrlib import qsr_realization
     from qsrlib.qsr_realization import compute_region_for_relations
     from shapely.geometry import Point
-except:
+except ImportError:
     logging.fatal("[aileen_scene] :: cannot find spatial reasoning library")
     exit()
 
