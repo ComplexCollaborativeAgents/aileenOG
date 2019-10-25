@@ -1,9 +1,13 @@
 import time
+import os
 from log_config import logging
 import xmlrpclib
 from svs_helper import SVSHelper
 from configuration import Configuration
 import constants
+from aileen_vision_module.Detector import Detector
+import cv2
+import numpy as np
 
 try:
     from qsrlib.qsrlib import QSRlib, QSRlib_Request_Message
@@ -23,6 +27,12 @@ class InputWriter(object):
             self._objects_link = self._world_link.CreateIdWME("objects")
             self._interaction_link = self._input_link.CreateIdWME("interaction")
 
+        if Configuration.config['RunParams']['cv'] == "True":
+            # ToDo: Move the input to Detector to the config file.
+            self.detector = Detector("aileen_vision_module/aileen.names",
+                                     "aileen_vision_module/yolov3-tiny-aileen.cfg",
+                                     "aileen_vision_module/yolov3-tiny-aileen_900.weights",
+                                     'color')
         self._svs_objects = []
 
     def generate_input(self):
@@ -36,6 +46,8 @@ class InputWriter(object):
         if Configuration.config['RunParams']['cv'] == "True":
             binary_image = self.request_server_for_current_state_image()
             self.write_binary_image_to_file(binary_image)
+            im = cv2.imdecode(np.fromstring(binary_image.data, dtype=np.uint8), 1)
+            cv_detections = self.detector.run(im)
 
         objects_list = self.request_server_for_objects_info()
         if objects_list is not None:
