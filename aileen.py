@@ -1,4 +1,5 @@
 import xmlrpclib
+import sys
 from log_config import logging
 from soar_interface import soar_agent
 from soar_interface.soar_agent import update
