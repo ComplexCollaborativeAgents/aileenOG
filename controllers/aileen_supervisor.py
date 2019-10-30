@@ -28,7 +28,6 @@ class AileenSupervisor(Supervisor):
 
         self._camera = self.getCamera('camera')
         self._camera.enable(constants.TIME_STEP)
-        self._camera.recognitionEnable(constants.TIME_STEP)
         logging.info("[aileen_supervisor] :: enabled camera")
 
         self._world_thread = None
