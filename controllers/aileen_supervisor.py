@@ -132,6 +132,9 @@ class AileenSupervisor(Supervisor):
         logging.debug("[aileen_supervisor] :: processing get_image from client")
         image_string = self._camera.getImage()
         logging.debug("[aileen_supervisor] :: got current image")
+        dir_name = os.path.split(constants.CURRENT_IMAGE_PATH)[0]
+        if not os.path.exists(dir_name):
+            os.mkdir(dir_name)
         self._camera.saveImage(constants.CURRENT_IMAGE_PATH, 100)
         logging.debug("[aileen_supervisor] :: saved current image at {}".format(constants.CURRENT_IMAGE_PATH))
 
