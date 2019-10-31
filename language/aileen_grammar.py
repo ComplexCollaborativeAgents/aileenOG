@@ -17,7 +17,8 @@ class AileenGrammar:
     property_names = None
     relation_rules = None
 
-    _transducer = None
+    _parser = None
+    _fragment_parser = None
 
     def reset_rules(self):
         """Reset the rules to None."""
@@ -30,7 +31,8 @@ class AileenGrammar:
 
     def reset_parser(self):
         """Reset the parser so that it can be rebuilt from the latest grammar rules."""
-        self._transducer = None
+        self._parser = None
+        self._fragment_parser = None
 
     def use_default_rules(self):
         """Create a grammar with default rules."""
@@ -55,13 +57,22 @@ class AileenGrammar:
     def _compile_rules(self):
         """Compile the grammar rules into a transducer."""
         replacements = []
+        # STANDARD PARSER
         self._append_replacement("[action]", self.action_rules, replacements)
         self._append_replacement("[obj]", self.object_rules, replacements)
         self._append_replacement("[obj_name]", self.object_names, replacements)
         self._append_replacement("[prop]", self.property_names, replacements)
         self._append_replacement("[rel]", self.relation_rules, replacements)
-        root = self._string_map(["[obj]"]).optimize()
-        return pynini.pdt_replace(root, replacements)
+        root = self._string_map(["[obj]"])
+        self._parser = pynini.pdt_replace(root.optimize(), replacements)
+        # FRAGMENT PARSER
+        self._append_replacement("[fragment]", ["[action]", "[obj]", "[prop]", "[rel]"], replacements)
+        self._append_replacement("[fragment]", ["[obj]", "[prop]"], replacements)
+        fragments = self._convert_rule_to_fst("[fragment]").optimize()
+        fragments.concat(self._convert_rule_to_fst(" [fragment]").closure(0)).optimize()
+        replacements.append([self._rename_categories("[fragments]"), fragments])
+        root = self._string_map(["[fragments]"])
+        self._fragment_parser = pynini.pdt_replace(root.optimize(), replacements)
     
     def _append_replacement(self, category, rules, replacements):
         if rules != None:
@@ -89,6 +100,7 @@ class AileenGrammar:
         # Look for the next category.
         last_index = 0;
         index = rule.find("[", last_index)
+        tag_cats = ["[action]", "[fragments]", "[obj]", "[prop]", "[rel]"]
         while (index >= 0):
             # Append anything between the last category and this category.
             if (last_index < index):
@@ -99,12 +111,12 @@ class AileenGrammar:
                 raise Exception("missing ] in {}".format(rule))
             cat = rule[index:index2+1]
             # Add a start tag.
-            if (cat in ["[action]", "[obj]", "[prop]", "[rel]"]):
+            if (cat in tag_cats):
                 fst.concat(pynini.transducer("", "<" + cat[1:-1] + ">"))
             # Convert the category to a label.
             fst.concat(pynini.acceptor(self._rename_categories(cat)))
             # Add an end tag.
-            if (cat in ["[action]", "[obj]", "[prop]", "[rel]"]):
+            if (cat in tag_cats):
                 fst.concat(pynini.transducer("", "</" + cat[1:-1] + ">"))
             # Look for the next category.
             last_index = index2 + 1
@@ -116,9 +128,11 @@ class AileenGrammar:
 
     def _rename_categories(self, string):
         """Rename categories as single characters"""
-        # I couldn't get SymbolTable to work, so I use capital letters to represent categories.
+        # JTM: I couldn't get SymbolTable to work, so I use capital letters to represent categories.
+        # TODO: Figure out how to use SymbolTable to represent pushdown arcs.
         string = string.replace("[action]", "A")
-        string = string.replace("[fragments]", "F")
+        string = string.replace("[fragment]", "F")
+        string = string.replace("[fragments]", "G")
         string = string.replace("[obj_name]", "N")
         string = string.replace("[obj]", "O")
         string = string.replace("[prop]", "P")
@@ -131,15 +145,22 @@ class AileenGrammar:
         Returns a typed list (e.g. "blue box" => [obj [prop blue] box])."""
         if (self.object_names == None):
             self.use_default_rules()
-        if (self._transducer == None):
-            self._transducer = self._compile_rules()
+        if (self._parser == None):
+            self._compile_rules()
         # Parse using pdt_compose.
-        fst = pynini.pdt_compose(sentence, self._transducer[0], self._transducer[1],
+        fst = pynini.pdt_compose(sentence, self._parser[0], self._parser[1],
                                 compose_filter="expand", left_pdt=False).optimize()
+        if fst.num_states() == 0:
+            # Try parsing with the fragment parser.
+            fst = pynini.pdt_compose(sentence, self._fragment_parser[0], self._fragment_parser[1],
+                                     compose_filter="expand", left_pdt=False).optimize()
         # get output
+        # TODO: Figure out why we can't used weighted FSTs to find the parses with the fewest fragments.
         outputs = []
         for string in pynini.StringPathIterator(fst).ostrings():
             outputs.append(self._convert_markup_to_list(string))
+        outputs = self._filter_fragments(outputs)
+        logging.info("[aileen_grammar] :: parse({}) = {}".format(sentence, outputs))
         return outputs
 
     def _convert_markup_to_list(self, string):
@@ -181,9 +202,23 @@ class AileenGrammar:
         assert (len(stack) == 1)
         return result[0]
 
+    def _filter_fragments(self, parses):
+        min_size = -1
+        for parse in parses:
+            if parse[0] == 'fragments':
+                if min_size == -1 or len(parse) < min_size:
+                    min_size = len(parse)
+        if min_size < 0:
+            return parses
+        new_parses = []
+        for parse in parses:
+            if len(parse) == min_size:
+                new_parses.append(parse)
+        return new_parses
+
+
 if __name__ == '__main__':
     grammar = AileenGrammar()
-    grammar.use_default_rules()
-    outputs = grammar.parse("blue sphere on block on box")
+    outputs = grammar.parse("blue blue")
     for output in outputs:
         logging.info("[aileen_grammar] :: test: {}".format(output))
