@@ -29,6 +29,9 @@ class AileenGrammarTest(unittest.TestCase):
         outputs = grammar.parse("blue box blue")
         self.assertEquals(len(outputs), 1)
         self.assertEquals(outputs[0], ['fragments', ['obj', ['prop', 'blue'], 'box'], ['prop', 'blue']])
+        outputs = grammar.parse("foo box")
+        self.assertEquals(len(outputs), 1)
+        self.assertEquals(outputs[0], ['fragments', "foo", ['obj', 'box']])
 
 
 if __name__ == '__main__':

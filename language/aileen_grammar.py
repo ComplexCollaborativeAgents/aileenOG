@@ -63,11 +63,16 @@ class AileenGrammar:
         self._append_replacement("[obj_name]", self.object_names, replacements)
         self._append_replacement("[prop]", self.property_names, replacements)
         self._append_replacement("[rel]", self.relation_rules, replacements)
-        root = self._string_map(["[obj]"])
+        root = self._string_map(["[action]", "[obj]"])
         self._parser = pynini.pdt_replace(root.optimize(), replacements)
         # FRAGMENT PARSER
-        self._append_replacement("[fragment]", ["[action]", "[obj]", "[prop]", "[rel]"], replacements)
-        self._append_replacement("[fragment]", ["[obj]", "[prop]"], replacements)
+        word = self._string_map(["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m",
+                                 "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"])
+        # word = char+
+        word = word.closure(1).optimize()
+        replacements.append([self._rename_categories("[word]"), word])
+        # fragments = [fragment]+
+        self._append_replacement("[fragment]", ["[action]", "[obj]", "[prop]", "[rel]", "[word]"], replacements)
         fragments = self._convert_rule_to_fst("[fragment]").optimize()
         fragments.concat(self._convert_rule_to_fst(" [fragment]").closure(0)).optimize()
         replacements.append([self._rename_categories("[fragments]"), fragments])
@@ -137,6 +142,7 @@ class AileenGrammar:
         string = string.replace("[obj]", "O")
         string = string.replace("[prop]", "P")
         string = string.replace("[rel]", "R")
+        string = string.replace("[word]", "W")
         return string
     
     def parse(self, sentence):
@@ -203,18 +209,36 @@ class AileenGrammar:
         return result[0]
 
     def _filter_fragments(self, parses):
-        min_size = -1
+        """Filter high scoring fragments from parses"""
+        # Find the minimum score for the parses.
+        min_score = -1
+        has_fragments = False
         for parse in parses:
+            score = self._fragment_score(parse)
+            if min_score == -1 or score < min_score:
+                min_score = score
             if parse[0] == 'fragments':
-                if min_size == -1 or len(parse) < min_size:
-                    min_size = len(parse)
-        if min_size < 0:
+                has_fragments = True
+        if has_fragments is False:
             return parses
+        # Collect parses that have min_score.
         new_parses = []
         for parse in parses:
-            if len(parse) == min_size:
+            score = self._fragment_score(parse)
+            if score == min_score:
                 new_parses.append(parse)
         return new_parses
+
+    def _fragment_score(self, parse):
+        if parse[0] != 'fragments':
+            return 0
+        score = 0
+        for item in parse:
+            if type(item) is list:
+                score += 1
+            else:
+                score += 2
+        return score
 
 
 if __name__ == '__main__':
