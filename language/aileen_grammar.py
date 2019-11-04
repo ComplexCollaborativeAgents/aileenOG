@@ -13,14 +13,14 @@ class AileenGrammar:
         property_names give the classes properties.  They produce a 'prop' type.
         relation_rules give the syntax of relations.  They produce a 'rel' type."""
 
-    action_rules = []
-    object_names = []
-    object_rules = []
-    property_names = []
-    relation_rules = []
-
-    _parser = None
-    _fragment_parser = None
+    def __init__(self):
+        self.action_rules = []
+        self.object_names = []
+        self.object_rules = []
+        self.property_names = []
+        self.relation_rules = []
+        self._parser = None
+        self._fragment_parser = None
 
     def reset_rules(self):
         """Reset the rules to None."""
@@ -102,7 +102,7 @@ class AileenGrammar:
     
     def _convert_rule_to_fst(self, rule):
         """Convert the given rule into an FST."""
-        if (rule.lower() != rule):
+        if rule.lower() != rule:
             # We are using capital letters to push and pop transducers.
             raise Exception("rule cannot contain capital letters: {}".format(rule))
         # Replace categories like [obj] with a character label.
@@ -114,26 +114,26 @@ class AileenGrammar:
         tag_cats = ["[action]", "[fragments]", "[obj]", "[prop]", "[rel]"]
         while (index >= 0):
             # Append anything between the last category and this category.
-            if (last_index < index):
+            if last_index < index:
                 fst.concat(pynini.acceptor(rule[last_index:index]))
             # Find the end of the category.
             index2 = rule.find("]", index)
-            if (index2 < 0):
+            if index2 < 0:
                 raise Exception("missing ] in {}".format(rule))
             cat = rule[index:index2+1]
             # Add a start tag.
-            if (cat in tag_cats):
+            if cat in tag_cats:
                 fst.concat(pynini.transducer("", "<" + cat[1:-1] + ">"))
             # Convert the category to a label.
             fst.concat(pynini.acceptor(self._rename_categories(cat)))
             # Add an end tag.
-            if (cat in tag_cats):
+            if cat in tag_cats:
                 fst.concat(pynini.transducer("", "</" + cat[1:-1] + ">"))
             # Look for the next category.
             last_index = index2 + 1
             index = rule.find("[", last_index)
         # Append anything that remains.
-        if (last_index < len(rule)):
+        if last_index < len(rule):
             fst.concat(pynini.acceptor(rule[last_index:]))
         return fst.optimize()
 
@@ -155,10 +155,10 @@ class AileenGrammar:
         """Parse the given sentence using a parser compiled from the current grammar.
         If there are no grammar rules, uses the default rules.
         Returns a typed list (e.g. "blue box" => [obj [prop blue] box])."""
-        if (self._fragment_parser == None):
+        if self._fragment_parser == None:
             self._compile_rules()
         # Parse using pdt_compose.
-        if (self._parser != None):
+        if self._parser != None:
             fst = pynini.pdt_compose(sentence, self._parser[0], self._parser[1],
                                      compose_filter="expand", left_pdt=False).optimize()
         if self._parser == None or fst.num_states() == 0:
@@ -182,16 +182,16 @@ class AileenGrammar:
         token = ""
         index = 0
         while (index < len(string)):
-            if (string[index] == "<"):
+            if string[index] == "<":
                 # We found a tag.
                 # First, deal with the token, if any.
-                if (token != ""):
+                if token != "":
                     stack[-1].append(token)
                 token = ""
                 # Then find the rest of the tag.
                 index2 = string.find(">", index)
                 cat = string[index+1:index2]
-                if (cat[0] == "/"):
+                if cat[0] == "/":
                     # We found an end tag.  Pop the stack.
                     stack.pop()
                 else:
@@ -200,9 +200,9 @@ class AileenGrammar:
                     stack[-1].append(new_list)
                     stack.append(new_list)
                 index = index2
-            elif (string[index] == " "):
+            elif string[index] == " ":
                 # A space marks the end of a token.
-                if (token != ""):
+                if token != "":
                     stack[-1].append(token)
                 token = ""
             else:

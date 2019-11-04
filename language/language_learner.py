@@ -6,8 +6,11 @@ class LanguageLearner:
     It works by abduction: it tries to find the smallest number of rules that need to be added
     to make the input parsable.  The result is an AileenGrammar.
     """
-    
-    _grammar = aileen_grammar.AileenGrammar()
+    def __init__(self, grammar=None):
+        if grammar == None:
+            self._grammar = aileen_grammar.AileenGrammar()
+        else:
+            self._grammar = grammar
     
     def set_grammar(self, grammar):
         """Set the initial grammar used by the language learner.
