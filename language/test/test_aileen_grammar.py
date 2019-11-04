@@ -6,7 +6,7 @@ from aileen_grammar import AileenGrammar
 class AileenGrammarTest(unittest.TestCase):
     
     def test_parse(self):
-        logging.debug("[test_aileen_generator] :: test_parse")
+        logging.debug("[test_aileen_grammar] :: test_parse")
         grammar = AileenGrammar()
         grammar.use_default_rules()
         outputs = grammar.parse("blue box")
@@ -22,7 +22,7 @@ class AileenGrammarTest(unittest.TestCase):
         self.assertEquals(len(outputs), 2)
 
     def test_fragments(self):
-        logging.debug("[test_aileen_generator] :: test_fragments")
+        logging.debug("[test_aileen_ggrammar] :: test_fragments")
         grammar = AileenGrammar()
         grammar.use_default_rules()
         outputs = grammar.parse("blue blue")
