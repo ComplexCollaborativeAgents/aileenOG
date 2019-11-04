@@ -8,6 +8,7 @@ class AileenGrammarTest(unittest.TestCase):
     def test_parse(self):
         logging.debug("[test_aileen_generator] :: test_parse")
         grammar = AileenGrammar()
+        grammar.use_default_rules()
         outputs = grammar.parse("blue box")
         self.maxDiff = None
         self.assertEquals(len(outputs), 1)
@@ -23,6 +24,7 @@ class AileenGrammarTest(unittest.TestCase):
     def test_fragments(self):
         logging.debug("[test_aileen_generator] :: test_fragments")
         grammar = AileenGrammar()
+        grammar.use_default_rules()
         outputs = grammar.parse("blue blue")
         self.assertEquals(len(outputs), 1)
         self.assertEquals(outputs[0], ['fragments', ['prop', 'blue'], ['prop', 'blue']])

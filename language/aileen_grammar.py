@@ -5,28 +5,30 @@ class AileenGrammar:
     """An AileenGrammar contains grammar rules for aileen's syntax.
     Grammar rules are strings that use square brackets to mark categories.
     For example, 'between [obj] and [obj]' is a grammar rule for the 'between' relation.
+    Parsing with it will produce ['rel' 'between' ['obj' ...] 'and' ['obj' ...]].
     Here are the different categories of rules:
         action_rules give the syntax of commands.  They produce an 'action' type.
         object_names give the classes of objects.
         object_rules give the syntax of objects.  They produce an 'obj' type.
         property_names give the classes properties.  They produce a 'prop' type.
         relation_rules give the syntax of relations.  They produce a 'rel' type."""
-    action_rules = None
-    object_names = None
-    object_rules = None
-    property_names = None
-    relation_rules = None
+
+    action_rules = []
+    object_names = []
+    object_rules = []
+    property_names = []
+    relation_rules = []
 
     _parser = None
     _fragment_parser = None
 
     def reset_rules(self):
         """Reset the rules to None."""
-        self.action_rules = None
-        self.object_names = None
-        self.object_rules = None
-        self.property_names = None
-        self.relation_rules = None
+        self.action_rules = []
+        self.object_names = []
+        self.object_rules = []
+        self.property_names = []
+        self.relation_rules = []
         self.reset_parser()
 
     def reset_parser(self):
@@ -53,6 +55,7 @@ class AileenGrammar:
                                "left of [obj]",
                                "on [obj]",
                                "right of [obj]"]
+        self.reset_parser()
 
     def _compile_rules(self):
         """Compile the grammar rules into a transducer."""
@@ -63,8 +66,11 @@ class AileenGrammar:
         self._append_replacement("[obj_name]", self.object_names, replacements)
         self._append_replacement("[prop]", self.property_names, replacements)
         self._append_replacement("[rel]", self.relation_rules, replacements)
-        root = self._string_map(["[action]", "[obj]"])
-        self._parser = pynini.pdt_replace(root.optimize(), replacements)
+        if len(self.object_names) > 0 and len(self.object_rules) > 0:
+            root = self._string_map(["[action]", "[obj]"])
+            self._parser = pynini.pdt_replace(root.optimize(), replacements)
+        else:
+            self._parser = None
         # FRAGMENT PARSER
         word = self._string_map(["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m",
                                  "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"])
@@ -80,7 +86,7 @@ class AileenGrammar:
         self._fragment_parser = pynini.pdt_replace(root.optimize(), replacements)
     
     def _append_replacement(self, category, rules, replacements):
-        if rules != None:
+        if len(rules) > 0:
             replacements.append([self._rename_categories(category), self._string_map(rules)])
     
     def _string_map(self, rules):
@@ -149,14 +155,13 @@ class AileenGrammar:
         """Parse the given sentence using a parser compiled from the current grammar.
         If there are no grammar rules, uses the default rules.
         Returns a typed list (e.g. "blue box" => [obj [prop blue] box])."""
-        if (self.object_names == None):
-            self.use_default_rules()
-        if (self._parser == None):
+        if (self._fragment_parser == None):
             self._compile_rules()
         # Parse using pdt_compose.
-        fst = pynini.pdt_compose(sentence, self._parser[0], self._parser[1],
-                                compose_filter="expand", left_pdt=False).optimize()
-        if fst.num_states() == 0:
+        if (self._parser != None):
+            fst = pynini.pdt_compose(sentence, self._parser[0], self._parser[1],
+                                     compose_filter="expand", left_pdt=False).optimize()
+        if self._parser == None or fst.num_states() == 0:
             # Try parsing with the fragment parser.
             fst = pynini.pdt_compose(sentence, self._fragment_parser[0], self._fragment_parser[1],
                                      compose_filter="expand", left_pdt=False).optimize()
