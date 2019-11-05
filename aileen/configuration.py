@@ -14,4 +14,3 @@ class Configuration:
             logging.fatal("[aileen] :: Invalid json at %s; error = %s" % (CONFIG_FILE, e))
             sys.exit()
     sys.path.append(config['Soar']['path'])
-    sys.path.append("strands_qsr_lib/qsr_lib/src")

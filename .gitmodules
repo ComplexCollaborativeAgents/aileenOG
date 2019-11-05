@@ -1,6 +1,6 @@
 [submodule "strands_qsr_lib"]
 	path = strands_qsr_lib
-	url = https://gitlab-external.parc.com/aileen/strands_qsr_lib.git
+	url = ../aileen/strands_qsr_lib.git
 [submodule "aileen-vision-module"]
-	path = aileen-vision-module
-	url = https://gitlab-external.parc.com/aileen/aileen-vision-module.git
+	path = vision
+	url = ../aileen/aileen-vision-module.git
