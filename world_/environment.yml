@@ -1,4 +1,0 @@
-name: aileen
-dependencies:
-  - python=2.7
-  - coloredlogs

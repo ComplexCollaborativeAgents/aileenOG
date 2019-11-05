@@ -1,9 +1,9 @@
 import time
-from aileen.log_config import logging
+from agent.log_config import logging
 import xmlrpclib
 from svs_helper import SVSHelper
-from aileen.configuration import Configuration
-from aileen import constants
+from agent.configuration import Configuration
+from agent import constants
 
 try:
     from qsrlib.qsrlib import QSRlib, QSRlib_Request_Message

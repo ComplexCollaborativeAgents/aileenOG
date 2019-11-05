@@ -1,9 +1,0 @@
-name: aileen-instructor
-dependencies:
-  - python=2.7
-  - shapely
-  - pytest
-  - coloredlogs
-  - pip:
-      - strands_qsr_lib/qsr_lib/
-      - -e .

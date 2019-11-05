@@ -2,5 +2,5 @@
 	path = strands_qsr_lib
 	url = ../aileen/strands_qsr_lib.git
 [submodule "aileen-vision-module"]
-	path = vision
+	path = agent/vision
 	url = ../aileen/aileen-vision-module.git

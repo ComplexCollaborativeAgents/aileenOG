@@ -6,7 +6,7 @@ import time
 import random
 import output_reader
 import input_writer
-from aileen.configuration import Configuration
+from agent.configuration import Configuration
 
 try:
     import Python_sml_ClientInterface as sml

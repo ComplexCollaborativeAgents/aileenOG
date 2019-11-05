@@ -10,6 +10,7 @@ dependencies:
   - shapely
   - pytest
   - python-igraph
+  - pip
   - pip:
       - strands_qsr_lib/qsr_lib/
       - -e .
