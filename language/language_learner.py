@@ -13,7 +13,7 @@ class LanguageLearner:
     
     def set_grammar(self, grammar):
         """Set the initial grammar used by the language learner.
-        If this function is not called then the LanguageLearner starts with an empty grammar."""
+        This replaces the grammar given when LanguageLearner was created."""
         self._grammar = grammar
     
     def get_grammar(self):
@@ -61,10 +61,11 @@ class LanguageLearner:
         """Disambiguate the parses using the scenes."""
         new_parses = []
         for parse in parses:
-            new_parses.append(self._ground_parse_using_scene_info(parse, scenes))
+            new_parse = self._ground_parse_using_scene_info(parse, scenes)
+            new_parses.append(new_parse)
         if len(new_parses) == 1:
             return new_parses
-        # Find the smallest parses.
+        # Find the simplest parses.
         min_size = 10000
         for parse in new_parses:
             if len(parse) < min_size:
@@ -78,14 +79,13 @@ class LanguageLearner:
     def _ground_parse_using_scene_info(self, parse, scenes):
         """Ground the items in a fragment parse using the scenes."""
         if scenes == None or len(scenes) == 0:
-            logging.info("[language_learner] :: no scenes to ground, returning {}".format(parse))
             # Cannot ground the objects in parse.
             return parse
         if parse[0] != 'fragments':
             return parse
         new_parse = []
         for item in parse:
-            if type(item[1]) == 'list':
+            if type(item) is list:
                 new_items = self._split_object_using_scene_info(item, scenes)
                 new_parse.extend(new_items)
             else:
@@ -93,39 +93,46 @@ class LanguageLearner:
         return new_parse
 
     def _split_object_using_scene_info(self, item, scenes):
-        if type(scenes) is not 'list':
+        """Split the given item into parts based on the scenes."""
+        if type(scenes) is not list:
             scenes = [scenes]
-        assert type(item) == 'list'
+        assert type(item) is list
         if item[0] == 'obj':
             object_ = item
         else:
+            # Convert item into an object.
             object_ = ['obj'] + item
         # Check how many scenes object_ appears in.
         appearances = self._get_appearances(object_, scenes)
-        # Keep the item if object_ appears in every scene.
+        # Keep the item together if object_ appears in every scene.
         if len(appearances) == len(scenes):
             return [item]
-        # Split the object if it appears in one scene and part of it appears in the rest.
+        # Keep the item together if it appears in the first scene.
+        if scenes[0] in appearances:
+            return [item]
+        # Split the object if it appears in one scene and part of it appears in the others.
         # Example: "move block left of cylinder"
         if len(appearances) > 0 and len(object_) > 2:
             other_scenes = list(set(scenes) - set(appearances))
-            if type(object_[-1]) == 'list':
+            if type(object_[-1]) is list:
+                # Try removing a trailing item from object_.
                 sub_object = object_[:-1]
                 scenes2 = self._get_appearances(sub_object, other_scenes)
                 if len(scenes2) == len(other_scenes):
-                    return [sub_object, object[-1]]
-            if type(object_[1]) == 'list':
+                    return [sub_object, object_[-1]]
+            if type(object_[1]) is list:
+                # Try removing an initial item from object_.
                 sub_object = ['obj'] + object_[2:]
                 scenes2 = self._get_appearances(sub_object, other_scenes)
                 if len(scenes2) == len(other_scenes):
-                    return [object[1], sub_object]
-        # Return the item if appears in any scene.
+                    return [object_[1], sub_object]
+        # Return the item if object_ appears in any scene.
         if len(appearances) > 0:
-            return item
+            return [item]
         # Otherwise, recurse on item's parts.
         new_items = []
         for part in item[1:]:
-            if type(part) == 'list':
+            if type(part) is list:
                 new_parts = self._split_object_using_scene_info(part, scenes)
                 new_items.extend(new_parts)
             else:
@@ -204,7 +211,6 @@ class LanguageLearner:
             # No missing rules.
             return []
         rule = self._convert_parse_to_rule(['action'] + parse[1:])
-        logging.info("[language_learner] :: guessing {}".format(rule))
         return [['action', rule]]
 
     def _convert_parse_to_rule(self, parse):
@@ -214,7 +220,7 @@ class LanguageLearner:
         parse = parse[1:]
         obj_name_added = False
         for item in parse:
-            if type(item) == list:
+            if type(item) is list:
                 rule = self._add_token(rule, "[" + item[0] + "]")
             elif parse_type == 'obj':
                 # An unlabeled item becomes [obj_name] one time.
