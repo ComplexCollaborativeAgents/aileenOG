@@ -8,9 +8,8 @@ class LanguageLearner:
     """
     def __init__(self, grammar=None):
         if grammar == None:
-            self._grammar = aileen_grammar.AileenGrammar()
-        else:
-            self._grammar = grammar
+            grammar = aileen_grammar.AileenGrammar()
+        self.set_grammar(grammar)
     
     def set_grammar(self, grammar):
         """Set the initial grammar used by the language learner.
@@ -32,21 +31,114 @@ class LanguageLearner:
         parses = self._disambiguate(parses, scene)
         if len(parses) > 1:
             logging.warn("[language_learner] :: parse_description: {} cannot be disambiguated against {}".format(sentence, scene))
-            parses = parses[0]
+            parses = [parses[0]]
         # Guess the missing rules.
         labeled_rules = self._guess_description_rules(parses[0])
-        # Add the rules to the grammar.
-        for rule in labeled_rules:
-            old_rules = self._get_grammar_rules(rule[0])
-            old_rules.append(rule[1])
-            self._grammar.reset_parser()
-            logging.info("[language_learner] :: parse_description: adding '{}' to {}".format(rule[1], rule[0]))
+        self._add_rules_to_grammar(labeled_rules)
         # Parse the sentence again with the new grammar.
         return self._grammar.parse(sentence)
 
-    def _disambiguate(self, parses, scene):
-        """Disambiguate the parses against the scene."""
-        return parses
+    def parse_action(self, sentence, scenes=[]):
+        """Parse a natural language representation of an action.
+        Learns grammar rules as a side effect.
+        The scenes, if given, should correspond to the set of action states.
+        The scenes should implement ground_object_description(description).
+        ground_object_description should take a typed list (e.g. ['obj' ['prop' 'blue'] 'box'])
+        and should return a list of objects matching the description."""
+        # Parse the sentence with the current grammar and disambiguate it against the scenes.
+        parses = self._grammar.parse(sentence)
+        parses = self._disambiguate(parses, scenes)
+        if len(parses) > 1:
+            logging.warn("[language_learner] :: parse_action: {} cannot be disambiguated against {}".format(sentence, scenes))
+            parses = [parses[0]]
+        # Guess the missing rules
+        labeled_rules = self._guess_action_rules(parses[0])
+        self._add_rules_to_grammar(labeled_rules)
+        # Parse the sentence again with the new grammar.
+        return self._grammar.parse(sentence)
+
+    def _disambiguate(self, parses, scenes):
+        """Disambiguate the parses using the scenes."""
+        new_parses = []
+        for parse in parses:
+            new_parses.append(self._ground_parse_using_scene_info(parse, scenes))
+        if len(new_parses) == 1:
+            return new_parses
+        # Find the smallest parses.
+        min_size = 10000
+        for parse in new_parses:
+            if len(parse) < min_size:
+                min_size = len(parse)
+        min_parses = []
+        for parse in new_parses:
+            if len(parse) == min_size:
+                min_parses.append(parse)
+        return min_parses
+
+    def _ground_parse_using_scene_info(self, parse, scenes):
+        """Ground the items in a fragment parse using the scenes."""
+        if scenes == None or len(scenes) == 0:
+            logging.info("[language_learner] :: no scenes to ground, returning {}".format(parse))
+            # Cannot ground the objects in parse.
+            return parse
+        if parse[0] != 'fragments':
+            return parse
+        new_parse = []
+        for item in parse:
+            if type(item[1]) == 'list':
+                new_items = self._split_object_using_scene_info(item, scenes)
+                new_parse.extend(new_items)
+            else:
+                new_parse.append(item)
+        return new_parse
+
+    def _split_object_using_scene_info(self, item, scenes):
+        if type(scenes) is not 'list':
+            scenes = [scenes]
+        assert type(item) == 'list'
+        if item[0] == 'obj':
+            object_ = item
+        else:
+            object_ = ['obj'] + item
+        # Check how many scenes object_ appears in.
+        appearances = self._get_appearances(object_, scenes)
+        # Keep the item if object_ appears in every scene.
+        if len(appearances) == len(scenes):
+            return [item]
+        # Split the object if it appears in one scene and part of it appears in the rest.
+        # Example: "move block left of cylinder"
+        if len(appearances) > 0 and len(object_) > 2:
+            other_scenes = list(set(scenes) - set(appearances))
+            if type(object_[-1]) == 'list':
+                sub_object = object_[:-1]
+                scenes2 = self._get_appearances(sub_object, other_scenes)
+                if len(scenes2) == len(other_scenes):
+                    return [sub_object, object[-1]]
+            if type(object_[1]) == 'list':
+                sub_object = ['obj'] + object_[2:]
+                scenes2 = self._get_appearances(sub_object, other_scenes)
+                if len(scenes2) == len(other_scenes):
+                    return [object[1], sub_object]
+        # Return the item if appears in any scene.
+        if len(appearances) > 0:
+            return item
+        # Otherwise, recurse on item's parts.
+        new_items = []
+        for part in item[1:]:
+            if type(part) == 'list':
+                new_parts = self._split_object_using_scene_info(part, scenes)
+                new_items.extend(new_parts)
+            else:
+                new_items.append(part)
+        return new_items
+
+    def _get_appearances(self, object_, scenes):
+        appearances = []
+        for scene in scenes:
+            objects = scene.ground_object_description(object_)
+            if len(objects) > 0:
+                appearances.append(scene)
+        return appearances
 
     def _guess_description_rules(self, parse):
         """Guess the description rules needed to complete a fragment parse."""
@@ -97,16 +189,7 @@ class LanguageLearner:
                 self._append_new_rule(labeled_rules, ['obj', rule])
         elif total_count > 1 and parse[1][0] == 'obj':
             # Extract relation rule for portion after initial object.
-            rule = ""
-            for item in parse[2:]:
-                if item[0] == 'obj':
-                    rule = self._add_token(rule, "[obj]")
-                elif item[0] == 'prop':
-                    rule = self._add_token(rule, "[prop]")
-                elif item[0] == 'rel':
-                    rule = self._add_token(rule, "[rel]")
-                else:
-                    rule = self._add_token(rule, item)
+            rule = self._convert_parse_to_rule(['rel'] + parse[2:])
             self._append_new_rule(labeled_rules, ['rel', rule])
             # Extract object rule for initial object plus a relation.
             rule = self._convert_parse_to_rule(parse[1]) + " [rel]"
@@ -114,6 +197,15 @@ class LanguageLearner:
         else:
             logging.warn("[language_learner] :: guess_description_rules: cannot guess {}".format(parse))
         return labeled_rules
+
+    def _guess_action_rules(self, parse):
+        """Guess the action rules needed to complete parse."""
+        if parse[0] != 'fragments':
+            # No missing rules.
+            return []
+        rule = self._convert_parse_to_rule(['action'] + parse[1:])
+        logging.info("[language_learner] :: guessing {}".format(rule))
+        return [['action', rule]]
 
     def _convert_parse_to_rule(self, parse):
         """Convert the given parse into a rule."""
@@ -145,7 +237,16 @@ class LanguageLearner:
         if labeled_rule[1] not in old_rules:
             labeled_rules.append(labeled_rule)
 
+    def _add_rules_to_grammar(self, labeled_rules):
+        """Add the labeled rules to the grammar."""
+        for rule in labeled_rules:
+            old_rules = self._get_grammar_rules(rule[0])
+            old_rules.append(rule[1])
+            self._grammar.reset_parser()
+            logging.info("[language_learner] :: adding '{}' to {} rule".format(rule[1], rule[0]))
+
     def _get_grammar_rules(self, rule_type):
+        """Get the grammar rules for the given rule_type."""
         if rule_type == 'action':
             return self._grammar.action_rules
         elif rule_type == 'obj':
@@ -157,7 +258,8 @@ class LanguageLearner:
         elif rule_type == 'rel':
             return self._grammar.relation_rules
         else:
-            raise Exception("unknown rule type: {}".format(type))
+            raise Exception("unknown rule type: {}".format(rule_type))
+
 
 if __name__ == '__main__':
     learner = LanguageLearner()

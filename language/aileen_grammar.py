@@ -124,6 +124,8 @@ class AileenGrammar:
             # Add a start tag.
             if cat in tag_cats:
                 fst.concat(pynini.transducer("", "<" + cat[1:-1] + ">"))
+            elif not cat in ["[fragment]", "[obj_name]", "[word]"]:
+                raise Exception("unknown category {} in {}".format(cat, rule))
             # Convert the category to a label.
             fst.concat(pynini.acceptor(self._rename_categories(cat)))
             # Add an end tag.
