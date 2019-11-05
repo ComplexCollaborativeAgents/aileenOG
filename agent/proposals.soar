@@ -1,0 +1,14 @@
+##!
+# @file
+#
+# @created smohan 20191105
+
+
+sp {aileen*propose*interaction
+    (state <s>    ^name aileen
+                  ^io.input-link.interaction <inter>)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name interaction
+             ^interaction <inter>)
+}

@@ -19,7 +19,7 @@ class InputWriter(object):
     def __init__(self, soar_agent, world_server):
         self._soar_agent = soar_agent
         self._world_server = world_server
-        self._language = None
+        self._interaction = None
 
         if soar_agent:  # Enable stand alone testing
             self._input_link = soar_agent.get_input_link()
@@ -48,6 +48,7 @@ class InputWriter(object):
             self.write_binary_image_to_file(binary_image)
             im = cv2.imdecode(np.fromstring(binary_image.data, dtype=np.uint8), 1)
             cv_detections = self.detector.run(im)
+            print cv_detections
 
         objects_list = self.request_server_for_objects_info()
         if objects_list is not None:
@@ -57,9 +58,9 @@ class InputWriter(object):
 
         qsrs = self.create_qsrs(objects_list)
 
-    def input_language(self, string):
-        logging.debug("[input_writer] :: received training string: {}".format(string))
-        self._language = string
+    def process_interaction(self, interaction_dict):
+        logging.debug("[input_writer] :: received training string: {}".format(interaction_dict))
+        self._interaction = interaction_dict
 
     ## SM: both these methods need to be rewritten to maintain the list of objects properly
     def add_objects_to_svs(self, objects_list):
