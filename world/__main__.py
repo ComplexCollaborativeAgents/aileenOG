@@ -1,11 +1,13 @@
 import json
+import os
 import sys
+
 from log_config import logging
+from world.controllers.aileen_supervisor import AileenSupervisor
 from world_server import AileenWorldServer
-from controllers.aileen_supervisor import AileenSupervisor
 
 # read in the config file
-CONFIG_FILE = "config.json"
+CONFIG_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "config.json")
 
 with open(CONFIG_FILE) as config_file:
     try:
@@ -22,5 +24,5 @@ def create_and_run_aileen_world_server(controller):
 
 if __name__ == '__main__':
     aileen_supervisor = AileenSupervisor()
-    #aileen_supervisor.run_in_background()
+    # aileen_supervisor.run_in_background()
     create_and_run_aileen_world_server(aileen_supervisor)

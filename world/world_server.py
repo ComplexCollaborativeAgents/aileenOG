@@ -1,6 +1,5 @@
 from SimpleXMLRPCServer import SimpleXMLRPCServer
 from SimpleXMLRPCServer import SimpleXMLRPCRequestHandler
-import xmlrpclib
 
 from log_config import logging
 import socket

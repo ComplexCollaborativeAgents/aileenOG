@@ -1,15 +1,13 @@
-import xmlrpclib
 from threading import Thread
 
 from controller import Supervisor
 
-import constants
+from world import constants, language
 
-import language
 import os
 import xmlrpclib
 from action_executor import ActionExecutor
-from log_config import logging
+from world.log_config import logging
 
 class AileenSupervisor(Supervisor):
 

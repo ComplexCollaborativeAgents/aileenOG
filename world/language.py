@@ -3,7 +3,7 @@
 #
 import json
 
-COLORS_FILE = '../aileen-instructor/resources/colors.json'
+COLORS_FILE = '../../aileen-instructor/resources/colors.json'
 
 shape_table = {
     's_box': 'box',
