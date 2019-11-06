@@ -1,0 +1,16 @@
+name: aileen
+channels:
+  - marufr
+dependencies:
+  - python=2.7
+  - coloredlogs
+  - numpy
+  - pyyaml
+  - yaml
+  - shapely
+  - pytest
+  - python-igraph
+  - pip
+  - pip:
+      - strands_qsr_lib/qsr_lib/
+      - -e .
