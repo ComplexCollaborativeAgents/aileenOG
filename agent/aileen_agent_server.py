@@ -26,7 +26,8 @@ class AileenAgentServer():
 
         def process_language(language_dict):
             acknowledgement = True
-            aileen_agent.process_language(language_dict['language'])
+            print language_dict
+            #aileen_agent.process_language(language_dict['language'])
             return acknowledgement
 
         self._server.register_function(process_language, 'process_language')
