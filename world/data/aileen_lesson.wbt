@@ -1,0 +1,114 @@
+#VRML_SIM R2019b utf8
+WorldInfo {
+  info [
+    "Simulation of the KUKA youBot robot."
+    "This model includes an accurate and fast simulation of the Meccanum wheels."
+    "The robot can be equiped with various sensors (including the Microsoft Kinect) and configured with zero, one or two arms."
+  ]
+  title "KUKA youBot"
+  basicTimeStep 16
+  contactProperties [
+    ContactProperties {
+      material1 "InteriorWheelMat"
+      coulombFriction [
+        1.8, 0, 0.2
+      ]
+      frictionRotation -0.9648 0
+      bounce 0
+      forceDependentSlip [
+        10, 0
+      ]
+    }
+    ContactProperties {
+      material1 "ExteriorWheelMat"
+      coulombFriction [
+        1.8, 0, 0.2
+      ]
+      frictionRotation 0.9648 0
+      bounce 0
+      forceDependentSlip [
+        10, 0
+      ]
+    }
+  ]
+}
+Viewpoint {
+  orientation -0.04352121820607886 0.9218124444731992 0.3851853070668764 2.92880236652749
+  position 1.6472145530892628 2.5101572184039136 -2.3365485222969546
+  follow "floor"
+  followOrientation TRUE
+}
+TexturedBackground {
+}
+TexturedBackgroundLight {
+}
+Floor {
+  size 100 100
+}
+WoodenBox {
+  translation 0.605448 0.2 -0.00121984
+  size 0.6 0.4 0.6
+  locked TRUE
+}
+Youbot {
+  translation 0.02571117767344175 0.10196957865880718 -4.5863043188738174e-05
+  rotation 0.9999991925105576 -0.0008556617095550498 0.0009395856915478227 -1.5708303173757066
+  controller "<extern>"
+  controllerArgs "demo"
+  supervisor TRUE
+  bodySlot [
+    Camera {
+      translation 0.6 0 1.2
+      recognitionColors [
+        0 0 0
+      ]
+      width 512
+      height 512
+      recognition Recognition {
+      }
+    }
+  ]
+}
+Solid {
+   translation 0.581857208499 0.45 -0.115617874234
+   children [
+       Shape {
+          appearance PBRAppearance {
+          baseColor 1 0.1 0.1
+          metalness 0
+          emissiveColor 1 0.1 0.1
+        }
+        geometry Sphere {
+          radius 0.05
+          subdivision 3
+        }
+        castShadows FALSE
+        }
+    ]
+    name "o23a63624-003d-490d-934b-de5f454f501e"
+   boundingObject Box {
+     size 0.1 0.1 0.1
+   }
+   physics Physics {
+}}
+Solid {
+   translation 0.519160060239 0.45 0.242
+   children [
+       Shape {
+          appearance PBRAppearance {
+          baseColor 1 0.2 0
+          metalness 0
+          emissiveColor 1 0.2 0
+        }
+        geometry Box {
+          size 0.1 0.1 0.1
+        }
+        castShadows FALSE
+        }
+    ]
+    name "oc462a717-1cf2-4ac2-8fe7-9d1350d0e80a"
+   boundingObject Box {
+     size 0.1 0.1 0.1
+   }
+   physics Physics {
+}}

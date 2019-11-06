@@ -1,10 +1,10 @@
 import time
 import os
-from log_config import logging
+from agent.log_config import logging
 import xmlrpclib
 from svs_helper import SVSHelper
-from configuration import Configuration
-import constants
+from agent.configuration import Configuration
+from agent import constants
 from aileen_vision_module.Detector import Detector
 import cv2
 import numpy as np
