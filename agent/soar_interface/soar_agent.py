@@ -128,10 +128,10 @@ class soar_agent(object):
     def get_number_of_commands(self):
         return self._agent.GetNumberCommands()
 
-    def process_language(self, interaction_dictionary):
-        logging.debug("[soar_agent] :: handling process_interaction request")
-        self._input_writer.interaction(interaction_dictionary)
-
+    def process_interaction(self, interaction_dictionary):
+        logging.debug("[soar_agent] :: handling process_interaction request {}".format(interaction_dictionary))
+        self._input_writer.set_interaction(interaction_dictionary)
+        return True
 
 def update(mid, this_agent, agent, message):
     this_agent.stop_agent_if_requested()

@@ -5,7 +5,7 @@ import xmlrpclib
 from svs_helper import SVSHelper
 from agent.configuration import Configuration
 from agent import constants
-from aileen_vision_module.Detector import Detector
+#from aileen_vision_module.Detector import Detector
 import cv2
 import numpy as np
 
@@ -35,13 +35,19 @@ class InputWriter(object):
                                      'color')
         self._svs_objects = []
 
+    def set_interaction(self, interaction_dictionary):
+        self._interaction = interaction_dictionary
+
     def generate_input(self):
         time.sleep(Configuration.config['Soar']['sleep-time'])
 
-        #if self._language is not None:
-         #   self.delete_all_children(self._interaction_link)
-         #   self._interaction_link.CreateStringWme('language', self._language)
-          #  self._language = None
+        if self._interaction is not None:
+            self.delete_all_children(self._interaction_link)
+            signal = str(self._interaction['signal'])
+            content = str(self._interaction['content'])
+            self._interaction_link.CreateStringWME('signal', signal)
+            self._interaction_link.CreateStringWME('content', content)
+            self._interaction = None
 
         if Configuration.config['RunParams']['cv'] == "True":
             binary_image = self.request_server_for_current_state_image()

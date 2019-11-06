@@ -7,13 +7,13 @@ from language_generator import LanguageGenerator
 class VisualWordLesson:
     def __init__(self):
         self._scene = AileenScene()
-        self._language = None
+        self._interaction = {}
 
     def generate_lesson(self):
         lesson = {}
         self.generate_scene()
         lesson['scene'] = self._scene.generate_scene_description()
-        lesson['interaction'] = self._language
+        lesson['interaction'] = self._interaction
         return lesson
 
     def generate_scene(self):
@@ -21,19 +21,8 @@ class VisualWordLesson:
         scene_object = AileenObject.generate_random_object()
         scene_object.set_translation(AileenScene.randomizer.get_random_position_on_table())
         self._scene.add_object(scene_object)
-        self._language = LanguageGenerator.generate_language_for_object(scene_object)
-
-    def generate_training_example(self):
-        pass
-
-    def generate_verification_test(self):
-        pass
-
-    def generate_comprehension_test(self):
-        pass
-
-    def generate_generation_test(self):
-        pass
+        self._interaction['signal'] = 'learn'
+        self._interaction['content'] = LanguageGenerator.generate_language_for_object(scene_object)
 
     @staticmethod
     def administer_curriculum(world_server, agent_server):
@@ -43,11 +32,11 @@ class VisualWordLesson:
             lesson = VisualWordLesson().generate_lesson()
 
             scene_acknowledgement = world_server.set_scene(
-                {'configuration': lesson['scene'], 'label': lesson['interaction']})
+                {'configuration': lesson['scene'], 'label': lesson['interaction']['content']})
             logging.info("[aileen_instructor] :: received from world {}".format(scene_acknowledgement))
 
-            # language_acknowledgement = agent_server.process_language(lesson['interaction'])
-            # logging.info("[aileen_instructor] :: received from agent {}".format(language_acknowledgement))
+            interaction_acknowledgement = agent_server.process_interaction(lesson['interaction'])
+            logging.info("[aileen_instructor] :: received from agent {}".format(interaction_acknowledgement))
 
 if __name__ == '__main__':
     lesson1 = VisualWordLesson()
