@@ -9,16 +9,7 @@ class LanguageLearner:
     def __init__(self, grammar=None):
         if grammar == None:
             grammar = aileen_grammar.AileenGrammar()
-        self.set_grammar(grammar)
-    
-    def set_grammar(self, grammar):
-        """Set the initial grammar used by the language learner.
-        This replaces the grammar given when LanguageLearner was created."""
-        self._grammar = grammar
-    
-    def get_grammar(self):
-        """Return the grammar that has been learned."""
-        return self._grammar
+        self.grammar = grammar
     
     def parse_description(self, sentence, scene=None):
         """Parse a natural language description of a scene.
@@ -27,7 +18,7 @@ class LanguageLearner:
         ground_object_description should take a typed list (e.g. ['obj' ['prop' 'blue'] 'box'])
         and should return a list of objects matching the description."""
         # Parse the sentence with the current grammar and disambiguate it against the scene.
-        parses = self._grammar.parse(sentence)
+        parses = self.grammar.parse(sentence)
         parses = self._disambiguate(parses, scene)
         if len(parses) > 1:
             logging.warn("[language_learner] :: parse_description: {} cannot be disambiguated against {}".format(sentence, scene))
@@ -36,7 +27,7 @@ class LanguageLearner:
         labeled_rules = self._guess_description_rules(parses[0])
         self._add_rules_to_grammar(labeled_rules)
         # Parse the sentence again with the new grammar.
-        return self._grammar.parse(sentence)
+        return self.grammar.parse(sentence)
 
     def parse_action(self, sentence, scenes=[]):
         """Parse a natural language representation of an action.
@@ -46,7 +37,7 @@ class LanguageLearner:
         ground_object_description should take a typed list (e.g. ['obj' ['prop' 'blue'] 'box'])
         and should return a list of objects matching the description."""
         # Parse the sentence with the current grammar and disambiguate it against the scenes.
-        parses = self._grammar.parse(sentence)
+        parses = self.grammar.parse(sentence)
         parses = self._disambiguate(parses, scenes)
         if len(parses) > 1:
             logging.warn("[language_learner] :: parse_action: {} cannot be disambiguated against {}".format(sentence, scenes))
@@ -55,7 +46,7 @@ class LanguageLearner:
         labeled_rules = self._guess_action_rules(parses[0])
         self._add_rules_to_grammar(labeled_rules)
         # Parse the sentence again with the new grammar.
-        return self._grammar.parse(sentence)
+        return self.grammar.parse(sentence)
 
     def _disambiguate(self, parses, scenes):
         """Disambiguate the parses using the scenes."""
@@ -248,21 +239,21 @@ class LanguageLearner:
         for rule in labeled_rules:
             old_rules = self._get_grammar_rules(rule[0])
             old_rules.append(rule[1])
-            self._grammar.reset_parser()
+            self.grammar.reset_parser()
             logging.info("[language_learner] :: adding '{}' to {} rule".format(rule[1], rule[0]))
 
     def _get_grammar_rules(self, rule_type):
         """Get the grammar rules for the given rule_type."""
         if rule_type == 'action':
-            return self._grammar.action_rules
+            return self.grammar.action_rules
         elif rule_type == 'obj':
-            return self._grammar.object_rules
+            return self.grammar.object_rules
         elif rule_type == 'obj_name':
-            return self._grammar.object_names
+            return self.grammar.object_names
         elif rule_type == 'prop':
-            return self._grammar.property_names
+            return self.grammar.property_names
         elif rule_type == 'rel':
-            return self._grammar.relation_rules
+            return self.grammar.relation_rules
         else:
             raise Exception("unknown rule type: {}".format(rule_type))
 

@@ -46,7 +46,7 @@ class LanguageLearnerTest(unittest.TestCase):
     def test_give_ball(self):
         logging.debug("[test_language_learner] :: test_parse_action")
         learner = LanguageLearner()
-        grammar = learner.get_grammar()
+        grammar = learner.grammar
         grammar.object_names = ["ball", "instructor"]
         grammar.object_rules = ["[obj_name]"]
         self.maxDiff = None
@@ -60,7 +60,7 @@ class LanguageLearnerTest(unittest.TestCase):
     def test_move_ball(self):
         logging.debug("[test_language_learner] :: testing 'move ball left of cylinder'")
         learner = LanguageLearner()
-        grammar = learner.get_grammar()
+        grammar = learner.grammar
         grammar.object_names = ["ball", "cylinder"]
         grammar.object_rules = ["[obj_name]", "[obj_name] [rel]"]
         grammar.relation_rules = ["left of [obj]"]
@@ -91,7 +91,7 @@ class LanguageLearnerTest(unittest.TestCase):
     def test_build_tower(self):
         logging.debug("[test_language_learner] :: testing 'build tall tower'")
         learner = LanguageLearner()
-        grammar = learner.get_grammar()
+        grammar = learner.grammar
         self.maxDiff = None
         # Build a tall tower from scratch.
         grammar.object_names = ["tower"]
