@@ -38,6 +38,13 @@ Grounded language learning agent based on Soar cognitive architecture
 
 * To install Pynini for Python 2, download pynini-1.9.3.tar.gz from http://www.openfst.org/twiki/bin/view/GRM/PyniniDownload and follow the instructions in README.rst.
 Be sure to get the specified versions of openfst and re2 and to configure openfst using ./configure --enable-grm.
+  * This is what worked on Shiwali's setup (Ubuntu 19.04)
+    * Installing OpenFST: download 1.6.8 from [openFST](http://www.openfst.org/twiki/bin/view/FST/FstDownload)
+      `./configure --enable-grm --prefix=<path to your local conda environment>`
+      `make & make install`
+    * Installing re2: download re2 from [re2](git@github.com:google/re2.git)
+      `make & make install --prefix=<path to your local conda environment>`
+    * Installing pynini: `python setup.py install` seemed to install to my local conda environment. However, I was still unable to use Pynini. It seems like it is compiling some files that are not copied to the conda environment. Setting up `$PYTHONPATH` to `pynini-1.9.3` directory enabled running pynini.
 
 ### Usage
 * Run [aileen_world](https://gitlab-external.parc.com/aileen/aileen-world)
