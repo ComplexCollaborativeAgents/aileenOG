@@ -1,6 +1,6 @@
 {
   "Soar": {
-    "path":"/local/home/aang/Applications/SoarSuite_9.6.0-Multiplatform_64bit/bin/linux64",
+    "path":"/usr/local/SoarSuite_9.6.0-Multiplatform_64bit/bin/linux64",
     "sleep-time": 0.0001
   },
   "SoarAgent": {

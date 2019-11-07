@@ -1,16 +1,22 @@
 name: aileen
 channels:
+  - conda-forge
   - marufr
+  - menpo
 dependencies:
   - python=2.7
   - coloredlogs
+  - enum
+  - typing
   - numpy
   - pyyaml
   - yaml
   - shapely
   - pytest
   - python-igraph
+  - opencv
   - pip
   - pip:
       - strands_qsr_lib/qsr_lib/
+      - agent/vision/
       - -e .
