@@ -21,25 +21,25 @@
    wget https://github.com/cyberbotics/webots/releases/download/R2019b-rev1/webots_2019b-rev1_amd64.deb
    sudo dpkg -i webots_2019b-rev1_amd64.deb
    ```
-3. Download and build [Darknet](https://pjreddie.com/darknet/) using `pyyolo`:
+3. Clone this repository and its submodules:
+   ```bash
+   git clone --recurse-submodules git@gitlab-external.parc.com:aileen/aileen-agent.git
+   ``` 
+4. Download and build [Darknet](https://pjreddie.com/darknet/) using `pyyolo`:
    ```bash
    cd agent/vision
    GPU=0 OPENCV=0 REBUILD=1 python2 setup.py build_ext
    ```
 
 ### Development environment setup
-1. Clone this repository and its submodules:
-   ```bash
-   git clone --recurse-submodules git@gitlab-external.parc.com:aileen/aileen-agent.git
-   ``` 
-2. Create a Conda environment:
-   ```bash
-   conda env create -f environment.yml
-   ```
-   Whenever a new dependency is added to `environment.yml`, the environment can be updated using:
-   ```bash
-   conda env update -f environment.yml
-   ```
+Create a Conda environment:
+```bash
+conda env create -f environment.yml
+```
+Whenever a new dependency is added to `environment.yml`, the environment can be updated using:
+```bash
+conda env update -f environment.yml
+```
    
 ### Run
 1. Open Webots and load the world: "File", "Open World...", and select `world/data/aileen_world.wbt`.
