@@ -3,15 +3,27 @@
 #
 # @created smohan 20191105
 
-sp {interaction*elaborate*state
+sp {interaction*elaborate*signal
     (state <s>    ^name interaction
-                  ^superstate <ss>)
-    (<ss>    ^operator <sop>)
-    (<sop>    ^interaction <inter>)
-    (<inter>    ^signal <signal>
-                ^content <cont>)
+                  ^superstate.interaction <inter>)
+    (<inter>    ^signal <signal>)
 -->
-    (<s>    ^signal <signal>
-            ^content <cont>)
+    (<s>    ^signal <signal>)
+    }
+
+sp {interaction*elaborate*content
+    (state <s>    ^name interaction
+                  ^superstate.interaction <inter>)
+    (<inter>    ^content <content>)
+-->
+    (<s>    ^content <content>)
+    }
+
+sp {interaction*elaborate*parse
+    (state <s>    ^name interaction
+                  ^superstate.interaction <inter>)
+    (<inter>    ^parse <parse>)
+-->
+    (<s>    ^parse <parse>)
     }
 

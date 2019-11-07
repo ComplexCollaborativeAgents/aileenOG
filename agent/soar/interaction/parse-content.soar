@@ -1,0 +1,15 @@
+##!
+# @file
+#
+# @created smohan 20191107
+
+sp {interaction*apply*parse-content
+    (state <s>    ^name interaction
+                  ^operator <op>
+                  ^io.output-link <ol>)
+    (<op>    ^name parse-content
+             ^content <cont>)
+-->
+    (<ol>    ^language <l>)
+    (<l>    ^parse-content <cont>)
+    }

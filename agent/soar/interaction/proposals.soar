@@ -2,3 +2,14 @@
 # @file
 #
 # @created smohan 20191105
+
+sp {interaction*propose*parse
+    (state <s>    ^name interaction
+                  ^content <cont>
+                  -^parse <parse>)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name parse-content
+             ^content <cont>)
+    }
+

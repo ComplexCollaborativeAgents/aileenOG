@@ -6,7 +6,8 @@
 
 sp {aileen*propose*interaction
     (state <s>    ^name aileen
-                  ^io.input-link.interaction <inter>)
+                  ^interaction <inter>)
+    (<inter> -^complete true)
 -->
     (<s>    ^operator <op> +)
     (<op>    ^name interaction

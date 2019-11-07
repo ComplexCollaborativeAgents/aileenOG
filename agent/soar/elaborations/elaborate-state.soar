@@ -15,3 +15,9 @@ sp {all*elaborate*topstate
 -->
     (<s> ^topstate <ts>)
  }
+
+sp {all*elaborate*io
+    (state <s>    ^superstate.io <io>)
+-->
+    (<s>    ^io <io>)
+    }

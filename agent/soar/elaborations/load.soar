@@ -4,3 +4,5 @@
 # @created smohan 20190828
 
 source "elaborate-state.soar"
+
+source "elaborate-from-input-link.soar"
