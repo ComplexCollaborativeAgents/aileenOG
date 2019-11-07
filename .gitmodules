@@ -3,4 +3,4 @@
 	url = ../../aileen/strands_qsr_lib.git
 [submodule "agent/vision"]
 	path = agent/vision
-	url = git@gitlab-external.parc.com:aileen/aileen-vision-module.git
+	url = ../../aileen/aileen-vision-module.git
