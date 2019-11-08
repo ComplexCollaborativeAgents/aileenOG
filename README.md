@@ -1,3 +1,83 @@
+# Aileen
+![](https://img.shields.io/badge/python-2.7-blue)
+
+## Contributing
+
+### Prerequisites
+- [Anaconda](https://www.anaconda.com/)
+- [Soar 9.6.0](https://soar.eecs.umich.edu/)
+- [Qhull](http://www.qhull.org/) (required for `svs_viewer`; Ubuntu: `sudo apt install qhull-bin`)
+- [Webots](https://cyberbotics.com/)
+- [Darknet](https://pjreddie.com/darknet/)
+
+1. Download [Soar 9.6.0](https://soar.eecs.umich.edu/) and extract the files to 
+   `/usr/local/SoarSuite_9.6.0-Multiplatform_64bit`:
+   ```bash
+   wget http://soar.eecs.umich.edu/downloads/SoarSuite/SoarSuite_9.6.0-Multiplatform_64bit.zip
+   sudo unzip -d /usr/local SoarSuite_9.6.0-Multiplatform_64bit.zip 
+   ```
+2. Download and install [Webots](https://cyberbotics.com/):
+   ```bash
+   wget https://github.com/cyberbotics/webots/releases/download/R2019b-rev1/webots_2019b-rev1_amd64.deb
+   sudo dpkg -i webots_2019b-rev1_amd64.deb
+   ```
+3. Clone this repository and its submodules:
+   ```bash
+   git clone --recurse-submodules git@gitlab-external.parc.com:aileen/aileen-agent.git
+   ``` 
+4. Download and build [Darknet](https://pjreddie.com/darknet/) using `pyyolo`:
+   ```bash
+   cd agent/vision
+   GPU=0 OPENCV=0 REBUILD=1 python2 setup.py build_ext
+   ```
+
+### Development environment setup
+Create a Conda environment:
+```bash
+conda env create -f environment.yml
+```
+Whenever a new dependency is added to `environment.yml`, the environment can be updated using:
+```bash
+conda env update -f environment.yml
+```
+   
+### Run
+1. Open Webots and load the world: "File", "Open World...", and select `world/data/aileen_world.wbt`.
+2. Run the world server:
+   ```bash
+   export WEBOTS_HOME="/usr/local/webots"
+   export PYTHONPATH="/usr/local/webots/lib/python27:$PYTHONPATH"
+   export LD_LIBRARY_PATH=/usr/local/webots/lib
+   conda activate aileen
+   (aileen) python world
+   ```
+3. Run the agent in another shell instance:
+   ```bash
+   conda activate aileen
+   (aileen) python agent
+   ```
+4. Run the instructor in another shell instance:
+   ```bash
+   conda activate aileen
+   (aileen) python instructor
+   ```
+
+### Run test suite
+```bash
+conda activate aileen
+(aileen) pytest --pyargs tests
+```
+
+### PyCharm
+1. Go to "File", "Settings...", "Tools", "Python Integrated Tools".
+2. Under "Testing", set the default test runner to "pytest".
+
+
+
+
+
+
+
 ## aileen-agent
 Grounded language learning agent based on Soar cognitive architecture
 
@@ -38,6 +118,13 @@ Grounded language learning agent based on Soar cognitive architecture
 
 * To install Pynini for Python 2, download pynini-1.9.3.tar.gz from http://www.openfst.org/twiki/bin/view/GRM/PyniniDownload and follow the instructions in README.rst.
 Be sure to get the specified versions of openfst and re2 and to configure openfst using ./configure --enable-grm.
+  * This is what worked on Shiwali's setup (Ubuntu 19.04)
+    * Installing OpenFST: download 1.6.8 from [openFST](http://www.openfst.org/twiki/bin/view/FST/FstDownload)
+      `./configure --enable-grm --prefix=<path to your local conda environment>`
+      `make & make install`
+    * Installing re2: download re2 from [re2](git@github.com:google/re2.git)
+      `make & make install --prefix=<path to your local conda environment>`
+    * Installing pynini: `python setup.py install` seemed to install to my local conda environment. However, I was still unable to use Pynini. It seems like it is compiling some files that are not copied to the conda environment. Setting up `$PYTHONPATH` to `pynini-1.9.3` directory enabled running pynini.
 
 ### Usage
 * Run [aileen_world](https://gitlab-external.parc.com/aileen/aileen-world)
@@ -116,42 +203,3 @@ A simple xmlrpc python server to receive requests from the agent client and upda
 
 ### Misc
 * If you want PyCharm terminal to show color coded logs, you can check the box for `emulate terminal output` in the `Run configurations` dialog.
-
-
-
-
-## aileen-instructor
-
-Script that generates lesson plans to teach aileen-agent
-
-### Contributing
-
-1. Clone the repository including the submodule:
-   ```bash
-   git clone --recurse-submodules git@gitlab-external.parc.com:aileen/aileen-instructor.git
-   ```
-   
-1. Set up a Conda environment with dependencies:
-   ```bash
-   conda env create -f environment.yml
-   ```
-   
-2. Activate the environment:
-   ```bash
-   conda activate aileen-instructor
-   ```
-
-3. Run the instructor:
-   ```bash
-   (aileen-instructor) python -m instructor 
-   ```
-   
-4. Run the tests:
-   ```bash
-   (aileen-instructor) pytest
-   ```
-   
-#### PyCharm
-
-1. Go to "File", "Settings...", "Tools", "Python Integrated Tools".
-2. Under "Testing", set the default test runner to "pytest".

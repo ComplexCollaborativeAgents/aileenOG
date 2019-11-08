@@ -5,7 +5,7 @@ import xmlrpclib
 from svs_helper import SVSHelper
 from agent.configuration import Configuration
 from agent import constants
-#from aileen_vision_module.Detector import Detector
+from agent.vision.Detector import Detector
 import cv2
 import numpy as np
 
