@@ -1,0 +1,6 @@
+
+;;example 4 Green Cylinder
+(in-microtheory AileenExp4)
+
+(isa Obj4 CVCylinder)
+(isa Obj4 CVRed)

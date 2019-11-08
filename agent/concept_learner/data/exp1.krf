@@ -1,0 +1,6 @@
+
+;;example 1 Red Cube
+(in-microtheory AileenExp1)
+
+(isa Obj1 CVCube)
+(isa Obj1 CVRed)

@@ -1,0 +1,12 @@
+
+;;example 6 red Cylinder left of blue box
+(in-microtheory AileenExp6)
+
+(isa Obj6A CVCube)
+(isa Obj6A CVBlue)
+
+(isa Obj6B CVCube)
+(isa Obj6B CVGreen)
+
+(w Obj6A Obj6B)
+(ec Obj6A Obj6B)

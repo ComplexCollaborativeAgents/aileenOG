@@ -1,0 +1,12 @@
+
+;;example 9 red Cylinder on blue box
+(in-microtheory AileenExp9)
+
+(isa Obj9A CVCube)
+(isa Obj9A CVBlue)
+
+(isa Obj9B CVCube)
+(isa Obj9B CVGreen)
+
+(n Obj9A Obj9B)
+(ec Obj9A Obj9B)
