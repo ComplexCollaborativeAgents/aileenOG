@@ -1,7 +1,6 @@
-#!/usr/bin/env python
 import unittest
-from log_config import logging
-from aileen_grammar import AileenGrammar
+from agent.log_config import logging
+from agent.language.aileen_grammar import AileenGrammar
 
 class AileenGrammarTest(unittest.TestCase):
     
