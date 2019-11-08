@@ -20,12 +20,14 @@ class InputWriter(object):
         self._soar_agent = soar_agent
         self._world_server = world_server
         self._interaction = None
+        self._language = None
 
         if soar_agent:  # Enable stand alone testing
             self._input_link = soar_agent.get_input_link()
             self._world_link = self._input_link.CreateIdWME("world")
             self._objects_link = self._world_link.CreateIdWME("objects")
             self._interaction_link = self._input_link.CreateIdWME("interaction")
+            self._language_link = self._input_link.CreateIdWME("language")
 
         if Configuration.config['RunParams']['cv'] == "True":
             # ToDo: Move the input to Detector to the config file.
@@ -35,6 +37,9 @@ class InputWriter(object):
                                      'color')
         self._svs_objects = []
 
+    def set_language(self, language_dictionary):
+        self._language = language_dictionary
+
     def set_interaction(self, interaction_dictionary):
         self._interaction = interaction_dictionary
 
@@ -42,12 +47,10 @@ class InputWriter(object):
         time.sleep(Configuration.config['Soar']['sleep-time'])
 
         if self._interaction is not None:
-            self.delete_all_children(self._interaction_link)
-            signal = str(self._interaction['signal'])
-            content = str(self._interaction['content'])
-            self._interaction_link.CreateStringWME('signal', signal)
-            self._interaction_link.CreateStringWME('content', content)
-            self._interaction = None
+            self.write_interaction_dictionary_to_input_link()
+
+        if self._language is not None:
+            self.write_language_to_input_link()
 
         if Configuration.config['RunParams']['cv'] == "True":
             binary_image = self.request_server_for_current_state_image()
@@ -63,6 +66,39 @@ class InputWriter(object):
                 self.add_objects_to_svs(objects_list)
 
         qsrs = self.create_qsrs(objects_list)
+
+    def write_language_to_input_link(self):
+        logging.debug("[input_writer] :: writing generated parse to input link")
+
+        self.delete_all_children(self._language_link)
+
+        ## write all parses
+        parses = self._language['parse']
+        parses_link = self._language_link.CreateIdWME("parses")
+        for parse in parses:
+            parse_link = parses_link.CreateIdWME("parse")
+            item = parse[0]
+            if item == 'obj': ### function is partially written, will only write obj parses to Soar
+                obj_ref_link = parse_link.CreateIdWME("obj-ref")
+                i = 1
+                while isinstance(parse[i], list): ## property
+                    property = parse[i]
+                    assert property[0] == 'prop'
+                    prop_link = obj_ref_link.CreateIdWME('prop')
+                    prop_link.CreateStringWME('tag', property[1])
+                    i = i+1
+                obj_ref_link.CreateStringWME('tag', parse[i])
+        self._language = None
+
+
+
+    def write_interaction_dictionary_to_input_link(self):
+        self.delete_all_children(self._interaction_link)
+        signal = str(self._interaction['signal'])
+        content = str(self._interaction['content'])
+        self._interaction_link.CreateStringWME('signal', signal)
+        self._interaction_link.CreateStringWME('content', content)
+        self._interaction = None
 
     def process_interaction(self, interaction_dict):
         logging.debug("[input_writer] :: received training string: {}".format(interaction_dict))

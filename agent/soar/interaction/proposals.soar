@@ -6,10 +6,18 @@
 sp {interaction*propose*parse
     (state <s>    ^name interaction
                   ^content <cont>
-                  -^parse <parse>)
+                  -^parses <parse>)
 -->
     (<s>    ^operator <op> +)
     (<op>    ^name parse-content
              ^content <cont>)
+    }
+
+sp {interaction*propose*write-parse-to-superstate
+    (state <s>    ^name interaction
+                  ^parses <parse>)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name write-parse-superstate)
     }
 

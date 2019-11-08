@@ -3,7 +3,7 @@
 #
 # @created smohan 20191107
 
-sp {topstate*elaborate*from*input-link
+sp {topstate*elaborate*interaction*from*input-link
     :o-support
     (state <s>    ^name aileen
                   ^io.input-link.interaction <inter>)
