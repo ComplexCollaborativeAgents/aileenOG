@@ -1,4 +1,4 @@
-from log_config import logging
+from agent.log_config import logging
 import aileen_grammar
 
 class LanguageLearner:

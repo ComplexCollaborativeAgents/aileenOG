@@ -1,4 +1,4 @@
-import logging
+from agent.log_config import logging
 import xmlrpclib
 from agent.language.aileen_grammar import AileenGrammar
 
