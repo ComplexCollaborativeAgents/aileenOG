@@ -1,6 +1,6 @@
 import logging
 import xmlrpclib
-from agent.aileen_grammar import AileenGrammar
+from agent.language.aileen_grammar import AileenGrammar
 
 class OutputReader(object):
     def __init__(self, soar_agent, world_server):
@@ -54,4 +54,4 @@ class OutputReader(object):
                 logging.info("[output-reader] :: received parse-content command for {}".format(content))
                 parsed_content = self._grammar.parse(content)
                 logging.debug("[output-reader] :: parsed content to {}".format(parsed_content))
-                self._soar_agent._input_writer.set_language({'parse': parsed_content})
+                self._soar_agent._input_writer.set_language({'parses': parsed_content})

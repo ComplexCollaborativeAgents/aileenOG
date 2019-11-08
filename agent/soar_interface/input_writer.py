@@ -73,7 +73,7 @@ class InputWriter(object):
         self.delete_all_children(self._language_link)
 
         ## write all parses
-        parses = self._language['parse']
+        parses = self._language['parses']
         parses_link = self._language_link.CreateIdWME("parses")
         for parse in parses:
             parse_link = parses_link.CreateIdWME("parse")
