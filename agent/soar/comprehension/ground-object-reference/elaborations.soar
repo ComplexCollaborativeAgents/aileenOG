@@ -1,0 +1,21 @@
+##!
+# @file
+#
+# @created smohan 20191108
+
+sp {grounded-object-reference*elaborate*state
+    (state <s>    ^name ground-object-reference
+                  ^superstate.operator <sop>)
+    (<sop>    ^name grounded-object-reference
+              ^object-ref <ref>)
+-->
+    (<s>    ^object-ref <ref>)
+    }
+
+sp {grounded-object-reference*elaborate*grounds
+    (state <s>    ^name ground-object-reference
+                  ^object-ref <ref>)
+-->
+    (<s>    ^grounds <g>)
+    }
+

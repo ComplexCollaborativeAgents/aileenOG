@@ -13,3 +13,14 @@ sp {aileen*propose*interaction
     (<op>    ^name interaction
              ^interaction <inter>)
 }
+
+sp {aileen*propose*comprehension
+    (state <s>    ^name aileen
+                  ^interaction <inter>)
+    (<inter>    ^parses <p>)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name comprehension
+             ^parses <p>)
+    }
+

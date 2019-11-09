@@ -14,3 +14,13 @@ source "interaction/load.soar"
 source "init-agent.soar"
 
 source "proposals.soar"
+
+source "comprehension/load.soar"
+
+source "perferences.soar"
+
+source "_semantic-memory/load.soar"
+
+source "_knowledge/load.soar"
+
+source "default/load.soar"

@@ -1,0 +1,14 @@
+##!
+# @file
+#
+# @created smohan 20191108
+
+sp {ground-object-reference*propose*create-filter
+    (state <s>    ^name ground-object-reference
+                  ^object-ref <ref>)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name create-filter
+             ^object-ref <ref>)
+    }
+

@@ -1,0 +1,47 @@
+##!
+# @file
+#
+# @created smohan 20191108
+
+sp {create-filter*elaborate*object-ref
+    (state <s>    ^name create-filter
+                  ^superstate.operator <sop>)
+    (<sop>    ^name create-filter
+              ^object-ref <oref>)
+-->
+    (<s>    ^object-ref <oref>)
+    }
+
+
+sp {create-filter*elaborate*visual-words*object*tag
+    (state <s>    ^name create-filter
+                  ^object-ref <oref>)
+    (<oref>    ^tag    <nl-tag>)
+-->
+    (<s>    ^visual-word <nl-tag>)
+    }
+
+sp {create-filter*elaborate*visual-words*prop*tag
+    (state <s>    ^name create-filter
+                  ^object-ref <oref>)
+    (<oref>    ^prop.tag <tag>)
+-->
+    (<s>    ^visual-word <nl-tag>)
+    }
+
+
+sp {create-filter*elaborate*filter
+    (state <s>    ^name create-filter)
+-->
+    (<s>    ^filter <f>)
+    }
+
+sp {create-filter*query*smem
+    (state <s>    ^name create-filter
+                  ^visual-world <tag>)
+-->
+    (<s>    ^smem-query <sq>)
+    (<sq>    ^cue <cue>)
+    (<cue>    ^nl <tag>)
+    }
+

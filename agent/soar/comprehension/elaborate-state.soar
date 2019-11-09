@@ -1,0 +1,15 @@
+##!
+# @file
+#
+# @created smohan 20191108
+
+sp {comprehension*elaborate*parses
+    (state <s>   ^name comprehension
+                 ^superstate.operator <sop>)
+    (<sop>    ^name comprehension
+              ^parses <parse>)
+-->
+    (<s>    ^parses <parse>)
+    }
+
+

@@ -1,0 +1,15 @@
+##!
+# @file
+#
+# @created smohan 20191108
+
+sp {comprehension*propose*comprehend-object-reference
+    (state <s>    ^name comprehension
+                  ^parses.parse <parse>)
+    (<parse>    ^obj-ref <obj-ref>)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name ground-object-reference
+             ^reference <obj-ref>)
+    }
+
