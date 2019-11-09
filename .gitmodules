@@ -6,4 +6,4 @@
 	url = ../../aileen/aileen-vision-module.git
 [submodule "agent/concept_learner/analogystack"]
 	path = agent/concept_learner/analogystack
-	url = https://gitlab-external.parc.com/klenk/analogystack
+	url = ../../klenk/analogystack
