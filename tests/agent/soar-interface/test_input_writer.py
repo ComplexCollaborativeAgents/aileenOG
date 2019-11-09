@@ -27,7 +27,6 @@ def test_writing_language_to_input_link_obj():
 
     llink = iwriter._language_link.ConvertToIdentifier()
 
-    # print llink.GetValueAsString()
     parses_link = llink.GetChild(0).ConvertToIdentifier()
     assert parses_link.GetAttribute() == 'parses'
 
