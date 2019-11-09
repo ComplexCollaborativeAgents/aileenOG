@@ -1,4 +1,6 @@
 import xmlrpclib
+import sys
+
 from log_config import logging
 from configuration import Configuration
 
@@ -27,7 +29,13 @@ if __name__ == '__main__':
     world_server = create_connection_with_aileen_world()
     agent_server = create_connection_with_aileen_agent()
 
+    if len(sys.argv) > 1:
+        if str(sys.argv[1]).__contains__('--train-vision'):
+            # run vision training scripts
+            print ('Generating images that will train vision system.')
+
     VisualWordLesson.administer_curriculum(world_server, agent_server)
     # SpatialWordLesson.administer_curriculum(world_server, agent_server)
     # ActionWordLesson.administer_curriculum(world_server, agent_server)
+
 
