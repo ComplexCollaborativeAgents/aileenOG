@@ -1,0 +1,4 @@
+1. Unzip nextkb
+- mkdir analogystack/planb/kbs/nextkb
+- unzip analogystack/planb/kbs/nextkb.zip -d analogystack/planb/kbs/nextkb/
+

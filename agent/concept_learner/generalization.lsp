@@ -6,12 +6,12 @@
 ;;;;   Created: November  6, 2019 14:54:11
 ;;;;   Purpose: 
 ;;;; ----------------------------------------------------------------------------
-;;;;  Modified: Friday, November  8, 2019 at 15:30:23 by klenk
+;;;;  Modified: Friday, November  8, 2019 at 16:04:14 by klenk
 ;;;; ----------------------------------------------------------------------------
 
 (in-package :cl-user)
 
-(load "~/code/qrg/qrgsetup.lsp")
+(load "analogystack/qrgsetup.lsp")
 (require-module "fire" :fire)
 
 (defun make-reasoner ()
@@ -32,14 +32,14 @@
 (defun generalization-of-concepts-of-aileen ()
   (make-reasoner)
   (format t "~%loading ~s" (qrg:make-qrg-file-name
-			    (qrg:make-qrg-path ".." "AILEEN" "concept-learning" "data")
+			    (qrg:make-qrg-path ".." "data")
 			    "aileen-mt.krf"))
 ;; Definitions must be in the kb, not just working memory.  
   (fire:kr-file->kb (qrg:make-qrg-file-name
-			    (qrg:make-qrg-path ".." "AILEEN" "concept-learning" "data")
+			    (qrg:make-qrg-path ".." "data")
 			    "aileen-mt.krf")
 	       :error-on-bad-exps? t :kb fire::*kb*)
-  (load-flatfiles-in-dir-into-wm (qrg:make-qrg-path ".." "AILEEN" "concept-learning" "data"))
+  (load-flatfiles-in-dir-into-wm (qrg:make-qrg-path ".." "data"))
   (create-gpool *r-cube* *r-cube-context*)
   (create-gpool *r-green* *r-green-context*)
   (create-gpool *r-cylinder* *r-cylinder-context*)  
