@@ -1,4 +1,4 @@
-from log_config import logging
+from agent.log_config import logging
 import pynini
 
 class AileenGrammar:
