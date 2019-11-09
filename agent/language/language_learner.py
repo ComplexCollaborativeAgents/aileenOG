@@ -1,5 +1,6 @@
 from agent.log_config import logging
-import aileen_grammar
+from agent.language import aileen_grammar
+
 
 class LanguageLearner:
     """The LanguageLearner tries to learn the grammar of the instructor's natural language input.
