@@ -9,6 +9,8 @@ import xmlrpclib
 from action_executor import ActionExecutor
 from world.log_config import logging
 
+import json
+
 class AileenSupervisor(Supervisor):
 
     def __init__(self):
@@ -27,6 +29,8 @@ class AileenSupervisor(Supervisor):
         self._camera = self.getCamera('camera')
         self._camera.enable(constants.TIME_STEP)
         logging.info("[aileen_supervisor] :: enabled camera")
+
+        self._color_definitions = self.get_colors()
 
         self._world_thread = None
 
@@ -84,11 +88,30 @@ class AileenSupervisor(Supervisor):
             if shape_node.getTypeName() == "Shape":
                 geometry_node = shape_node.getField('geometry').getSFNode()
                 geometry_string = geometry_node.getTypeName()
-                label_string = "s_{}".format(geometry_string.lower())
+                label_string = "cv_{}".format(geometry_string.lower())
                 return label_string
 
     def get_object_color(self, object_node):
-        return "c_"
+        children = object_node.getField('children')
+        for i in range(0, children.getCount()):
+            shape_node = children.getMFNode(i)
+            if shape_node.getTypeName() == "Shape":
+                appearance_node = shape_node.getField('appearance').getSFNode()
+                color_vector = appearance_node.getField('baseColor').getSFColor()
+
+                for color_def in self._color_definitions.keys():
+                    if color_vector in self._color_definitions[color_def]:
+                        return "cv_{}".format(color_def)
+
+                # appearance_children = appearance_node.get
+                # for j in range(0, appearance_children.getCount()):
+                #     color_node = appearance_children.getMFNode(j)
+                #     color_vector = color_node.getSFVec2f()
+                #     logging.debug(color_vector)
+                #     label_string = "cv_"
+                #     return label_string
+        return "cv_"
+
 
     def get_object_texture(self, object_node):
         return "t_"
@@ -162,3 +185,10 @@ class AileenSupervisor(Supervisor):
             node_id = nodes_to_remove[i]
             node = self.getFromId(node_id)
             node.remove()
+
+    @staticmethod
+    def get_colors():
+        color_file = constants.COLOR_FILE_NAME
+        with open(color_file) as f:
+            colors = json.load(f)
+        return colors
