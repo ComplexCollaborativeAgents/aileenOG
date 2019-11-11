@@ -6,17 +6,27 @@
 ;;;;   Created: November  6, 2019 14:54:11
 ;;;;   Purpose: 
 ;;;; ----------------------------------------------------------------------------
-;;;;  Modified: Friday, November  8, 2019 at 16:04:14 by klenk
+;;;;  Modified: Monday, November 11, 2019 at 13:16:15 by klenk
 ;;;; ----------------------------------------------------------------------------
 
-(in-package :cl-user)
+(in-package :aileen)
 
-(load "analogystack/qrgsetup.lsp")
-(require-module "fire" :fire)
+;; (load "analogystack/qrgsetup.lsp")
+;; (require-module "fire" :fire)
 
 (defun make-reasoner ()
   (fire:open-or-create-kb :kb-path (qrg::make-qrg-path "planb" "kbs" "nextkb"))
   (fire:in-reasoner (fire:make-reasoner 'concept)))
+
+
+(defun add-case-to-gpool (facts context gpool)
+  (fire::create-gpool-if-needed fire:*reasoner* gpool)
+  (fire:tell-all facts fire:*reasoner* :assumption context)
+  (fire:tell-it `(d::sageWMSelectAndGeneralize ,context ,gpool))
+  (values (length (fire:ask-it `(d::wmGpoolGeneralization ,gpool ?z ?num)))
+	  (length (fire:ask-it `(d::wmGpoolExample ,gpool ?z ?num)))) )
+
+;;;; Testing code
 
 (defparameter *r-cube* '(1 2))
 (defparameter *r-cube-context* 'r-cube-gpool)
@@ -29,7 +39,7 @@
 (defparameter *r-on* '(8 9 10))
 (defparameter *r-on-context* 'r-on-gpool)
 
-(defun generalization-of-concepts-of-aileen ()
+(defun generalization-of-concepts-aileen ()
   (make-reasoner)
   (format t "~%loading ~s" (qrg:make-qrg-file-name
 			    (qrg:make-qrg-path ".." "data")
@@ -39,7 +49,7 @@
 			    (qrg:make-qrg-path ".." "data")
 			    "aileen-mt.krf")
 	       :error-on-bad-exps? t :kb fire::*kb*)
-  (load-flatfiles-in-dir-into-wm (qrg:make-qrg-path ".." "data"))
+  (cl-user::load-flatfiles-in-dir-into-wm (qrg:make-qrg-path ".." "data"))
   (create-gpool *r-cube* *r-cube-context*)
   (create-gpool *r-green* *r-green-context*)
   (create-gpool *r-cylinder* *r-cylinder-context*)  
@@ -74,19 +84,19 @@
   
 (defun create-gpool (ids gpool)
   (fire::create-gpool-if-needed fire:*reasoner* gpool)
-  (fire:tell-it `(wmGpoolSelectStrategy ,gpool :macfac) )
-  (fire:tell-it `(wmGpoolUseProbability ,gpool True) )
-  (fire:tell-it `(wmGpoolProbabilityCutoff ,gpool 0.2)  )
-  (fire:tell-it `(wmGpoolAssimilationThreshold ,gpool 0) )
-  (fire:tell-it `(nukeGpool ,gpool))
+  (fire:tell-it `(d::wmGpoolSelectStrategy ,gpool :macfac) )
+  (fire:tell-it `(d::wmGpoolUseProbability ,gpool True) )
+  (fire:tell-it `(d::wmGpoolProbabilityCutoff ,gpool 0.2)  )
+  (fire:tell-it `(d::wmGpoolAssimilationThreshold ,gpool 0.5) )
+  (fire:tell-it `(d::nukeGpool ,gpool))
   (dolist (id ids)
-    (fire:tell-it `(sageWMSelectAndGeneralize
+    (fire:tell-it `(d::sageWMSelectAndGeneralize
 		    ,(microtheory-by-id id)
 		    ,gpool)))
   (format t "~%Gpool ~A has ~d generalizations and ~d exemplars"
 	  gpool
-	  (length (fire:ask-it `(wmGpoolGeneralization ,gpool ?z ?num)))
-	  (length (fire:ask-it `(wmGpoolExample ,gpool ?z ?num)))))
+	  (length (fire:ask-it `(d::wmGpoolGeneralization ,gpool ?z ?num)))
+	  (length (fire:ask-it `(d::wmGpoolExample ,gpool ?z ?num)))))
 
 
 (defun compare-random-object-with-gpools (gpools)
@@ -97,8 +107,8 @@
     (dolist (gpool gpools)
       (format t "~% ~A : ~A"
 	      gpool
-	      (fire:ask-it `(and (sageWMSelect ,exp ,gpool ?ret ?mapping)
-				 (structuralEvaluationScoreOf ?mapping ?score))
+	      (fire:ask-it `(d::and (d::sageWMSelect ,exp ,gpool ?ret ?mapping)
+				 (d::structuralEvaluationScoreOf ?mapping ?score))
 			   :response '(?score))))
     ))
 
@@ -125,8 +135,8 @@
     (dolist (gpool gpools)
       (format t "~% ~A : ~A"
 	      gpool
-	      (fire:ask-it `(and (sageWMSelect ,exp ,gpool ?ret ?mapping)
-				 (structuralEvaluationScoreOf ?mapping ?score))
+	      (fire:ask-it `(d::and (d::sageWMSelect ,exp ,gpool ?ret ?mapping)
+				 (d::structuralEvaluationScoreOf ?mapping ?score))
 			   :response '(?score))))
     ))
     

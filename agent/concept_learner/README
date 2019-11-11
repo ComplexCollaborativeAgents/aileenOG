@@ -2,3 +2,10 @@
 - mkdir analogystack/planb/kbs/nextkb
 - unzip analogystack/planb/kbs/nextkb.zip -d analogystack/planb/kbs/nextkb/
 
+# To run as a service
+Open a terminal
+- /usr/local/acl10.1.64/mlisp8 -batch -L server.lsp
+
+# To test the service
+Open a terminal (Currently the process can only run on dubs due to licsensing issues...)
+- curl -d "foo=10" --request POST http://dubs:8000/run-example
