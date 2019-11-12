@@ -71,6 +71,7 @@ class AileenSupervisor(Supervisor):
                     'shape': self.get_object_shape(object_node),
                     'color': self.get_object_color(object_node),
                     'texture': self.get_object_texture(object_node),
+                    'id_name': self.get_object_name(object_node)
                 }
                 if object_node == self._held_node:
                     object_dict['held'] = 'true'
@@ -80,6 +81,10 @@ class AileenSupervisor(Supervisor):
 
         output_dict = {'objects': objects}
         return output_dict
+
+    def get_object_name(self, object_node):
+        object_id = object_node.getField('name').getSFString()
+        return object_id
 
     def get_object_shape(self, object_node):
         children = object_node.getField('children')
