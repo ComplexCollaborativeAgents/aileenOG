@@ -21,8 +21,11 @@ class VisualWordLesson:
         scene_object = AileenObject.generate_random_object()
         scene_object.set_translation(AileenScene.randomizer.get_random_position_on_table())
         self._scene.add_object(scene_object)
-        self._interaction['signal'] = 'learn'
+        self._interaction['signal'] = 'verify'
         self._interaction['content'] = LanguageGenerator.generate_language_for_object(scene_object)
+
+    def evaluate_agent_response(self):
+        pass
 
     @staticmethod
     def administer_curriculum(world_server, agent_server):
