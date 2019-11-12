@@ -9,6 +9,17 @@
     <member path="wait.soar" />
     <member path="elaborations/elaborate-state.soar" />
     <member path="elaborations/load.soar" />
+    <member path="_knowledge" />
+    <member path="_knowledge/_semantic-memory" />
+    <member path="comprehension" />
+    <member path="comprehension/ground-object-reference" />
+    <member path="comprehension/ground-object-reference/create-filter" />
+    <member path="default" />
+    <member path="default/smem-operators" />
+    <member path="interaction/elaborations.soar" />
+    <member path="interaction/load.soar" />
+    <member path="interaction/parse-content.soar" />
+    <member path="interaction/proposals.soar" />
   </members>
 </soaragent>
 

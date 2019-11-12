@@ -6,3 +6,11 @@
 
 
 source "elaborations.soar"
+
+source ".soar"
+
+source "proposals.soar"
+
+source "write-to-superstate.soar"
+
+source "mark-unknown-concept.soar"

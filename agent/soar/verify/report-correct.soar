@@ -1,0 +1,26 @@
+##!
+# @file
+#
+# @created smohan 20191111
+
+
+sp {verify*propose*success
+    (state <s>    ^name verify
+                  ^superstate.interaction <inter>)
+    (<inter>    ^grounds <g>
+                ^parses.parse <p>)
+    (<p>    ^obj-ref <ref>)
+    (<g>    ^reference <ref>
+            ^object <obj>)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name report-success)
+    }
+
+sp {verify*apply*report-correct
+    (state <s>    ^name verify
+                  ^operator.name report-success
+                  ^superstate.interaction <inter>)
+-->
+    (<inter>    ^verification success)
+    }

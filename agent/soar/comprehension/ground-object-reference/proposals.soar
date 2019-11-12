@@ -5,10 +5,31 @@
 
 sp {ground-object-reference*propose*create-filter
     (state <s>    ^name ground-object-reference
-                  ^object-ref <ref>)
+                  ^reference <ref>
+                  -^filter <filt>)
 -->
     (<s>    ^operator <op> +)
     (<op>    ^name create-filter
-             ^object-ref <ref>)
+             ^reference <ref>)
     }
 
+
+sp {ground-object-reference*propose*filter-scene
+    (state <s>    ^name ground-object-reference
+                  ^filter <filt>
+                  ^grounds <g>)
+    (<g>    -^object <obj>)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name filter-scene
+             ^filter <filt>)
+    }
+
+sp {ground-object-reference*propose*write-to-superstate
+    (state <s>    ^name ground-object-reference
+                  ^grounds <g>)
+    (<g>    ^object <any>)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name write-to-superstate)
+    }

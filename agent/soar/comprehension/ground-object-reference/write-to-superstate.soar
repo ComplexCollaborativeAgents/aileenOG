@@ -1,0 +1,14 @@
+##!
+# @file
+#
+# @created smohan 20191111
+
+
+sp {ground-object-reference*apply*write-to-superstate
+    (state <s>    ^name ground-object-reference
+                  ^operator.name write-to-superstate
+                  ^grounds <g>
+                  ^superstate <ss>)
+-->
+    (<ss>    ^grounds <g>)
+    }

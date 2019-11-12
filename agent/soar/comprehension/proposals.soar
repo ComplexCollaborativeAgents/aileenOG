@@ -5,11 +5,21 @@
 
 sp {comprehension*propose*comprehend-object-reference
     (state <s>    ^name comprehension
-                  ^parses.parse <parse>)
+                  ^parses.parse <parse>
+                  -^grounds.reference <obj-ref>)
     (<parse>    ^obj-ref <obj-ref>)
 -->
     (<s>    ^operator <op> +)
     (<op>    ^name ground-object-reference
              ^reference <obj-ref>)
+    }
+
+sp {comprehension*propose*write-to-superstate
+    (state <s>    ^name comprehension
+                  ^grounds <g>
+                  ^superstate.interaction <inter>)
+-->
+    (<s>    ^operator <op> + <)
+    (<op>    ^name write-to-superstate)
     }
 

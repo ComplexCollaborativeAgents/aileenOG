@@ -1,0 +1,28 @@
+##!
+# @file
+#
+# @created smohan 20191111
+
+sp {create-filter*propose*mark-unknown-concept
+    (state <s>    ^name create-filter
+                  ^visual-word <tag>
+                  ^smem-query <query>
+                  ^topstate <ts>)
+    (<query>    ^cue <cue>
+                ^result failure)
+    (<cue>    ^nl <tag>)
+-->
+    (<s>    ^operator <op> + >)
+    (<op>    ^name mark-unknown-concept
+             ^nl <tag>)
+   }
+
+
+sp {create-filter*propose*write-to-superstate
+    (state <s>    ^name create-filter
+                  ^filter <filt>)
+-->
+    (<s>    ^operator <op> + <)
+    (<op>    ^name write-to-superstate)
+    }
+    

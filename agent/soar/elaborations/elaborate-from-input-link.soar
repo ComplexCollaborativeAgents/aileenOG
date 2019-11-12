@@ -10,3 +10,12 @@ sp {topstate*elaborate*interaction*from*input-link
 -->
     (<s>    ^interaction <inter>)
     }
+
+
+sp {topstate*elaborate*world*from*input-link
+    (state <s>    ^name aileen
+                  ^topstate <s>
+                  ^io.input-link.world <w>)
+-->
+    (<s>    ^world <w>)
+    }

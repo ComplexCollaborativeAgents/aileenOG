@@ -8,5 +8,3 @@ source "elaborations.soar"
 source "proposals.soar"
 
 source "parse-content.soar"
-
-source "write-parse-superstate.soar"

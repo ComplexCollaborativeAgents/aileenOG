@@ -11,7 +11,7 @@ sp {anystate*propose*smem-query
    (<query> ^cue <cue>
            -^result)
 -->
-   (<s> ^operator <o> + > =)
+   (<s> ^operator <o> + =)
    (<o> ^name smem-query
         ^query-info <query>)
 }

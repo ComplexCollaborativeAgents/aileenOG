@@ -42,12 +42,15 @@ sp {anystate*apply*smem-retrieve-lti*copy*retrieve*params
 
 sp {anystate*apply*smem-retrieve-lti*mark*retrieved
    (state <s> ^operator <o>
-              ^smem.result.{ << success failure >> } <lti>)
+              ^smem.result <sres>)
+   (<sres>    ^{ << success failure >> } <lti>
+              ^retrieved <nlti>)
    (<o> ^name smem-retrieve-lti
         ^retrieve-info <ret>)
    (<ret> ^identifier <lti>)
 -->
-   (<ret> ^retrieved true)
+   (<ret> ^retrieved true
+          ^retrieved-lti <nlti>)
 }
 
 sp {anystate*apply*smem-retrieve-lti*clear*smem*command

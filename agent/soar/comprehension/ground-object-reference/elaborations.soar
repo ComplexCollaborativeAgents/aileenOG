@@ -6,16 +6,17 @@
 sp {grounded-object-reference*elaborate*state
     (state <s>    ^name ground-object-reference
                   ^superstate.operator <sop>)
-    (<sop>    ^name grounded-object-reference
-              ^object-ref <ref>)
+    (<sop>    ^name ground-object-reference
+              ^reference <ref>)
 -->
-    (<s>    ^object-ref <ref>)
+    (<s>    ^reference <ref>)
     }
 
 sp {grounded-object-reference*elaborate*grounds
     (state <s>    ^name ground-object-reference
-                  ^object-ref <ref>)
+                  ^reference <ref>)
 -->
     (<s>    ^grounds <g>)
+    (<g>    ^reference <ref>)
     }
 

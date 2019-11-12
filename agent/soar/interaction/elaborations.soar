@@ -21,7 +21,7 @@ sp {interaction*elaborate*content
 
 sp {interaction*elaborate*parse
     (state <s>    ^name interaction
-                  ^io.input-link.language.parses <parses>)
+                  ^superstate.interaction.parses <parses>)
 -->
     (<s>    ^parses <parses>)
     }

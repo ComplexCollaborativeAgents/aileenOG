@@ -5,8 +5,6 @@
 
 source "smem-query.soar"
 
-source ".soar"
-
 source "smem-retrieve.soar"
 
 source "smem-store.soar"

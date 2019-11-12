@@ -1,0 +1,14 @@
+##!
+# @file
+#
+# @created smohan 20191111
+
+sp {create-filte*apply*write-to-superstate
+    (state <s>    ^name create-filter
+                  ^operator.name write-to-superstate
+                  ^filter <filter>
+                  ^superstate <ss>)
+-->
+    (<ss>    ^filter <filter>)
+    }
+    
