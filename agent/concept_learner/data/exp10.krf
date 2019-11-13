@@ -8,5 +8,5 @@
 (isa Obj10B CVSphere)
 (isa Obj10B CVBlue)
 
-(w Obj10A Obj10B)
-(dc Obj10A Obj10B)
+(n Obj10A Obj10B)
+(ec Obj10A Obj10B)

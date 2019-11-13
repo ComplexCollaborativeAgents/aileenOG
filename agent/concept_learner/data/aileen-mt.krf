@@ -3,9 +3,19 @@
 
 (in-microtheory AileenMt)
 
+;; Collections to facilitate control
+
+(isa AileenReasoningSymbol Collection)
+(comment AileenReasoningSymbol "These are symbols that are created by aileen to refer to objects")
+
+(isa aileenReasoningPredicate Predicate)
+(comment aileenReasoningRelation "These are symbols that are created by aileen to refer to sets of objects")
+
+(isa AileenGPoolMt Collection)
+(comment AileenGPoolMt "These correspond to each AileenReasoningSymbol/Relation for controlling SAGE")
+
 ;; This microtheory contains the definitions of the symbols from the
 ;; computer vision system and example symbols from natural langauge
-
 
 ;;; Color
 (isa CVRed Collection)
