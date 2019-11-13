@@ -8,3 +8,5 @@ source "elaborations.soar"
 source "proposals.soar"
 
 source "parse-content.soar"
+
+source "complete-interaction.soar"

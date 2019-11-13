@@ -6,7 +6,7 @@
 sp {topstate*elaborate*interaction*from*input-link
     :o-support
     (state <s>    ^name aileen
-                  ^io.input-link.interaction <inter>)
+                  ^io.input-link.interaction-link.interaction <inter>)
 -->
     (<s>    ^interaction <inter>)
     }

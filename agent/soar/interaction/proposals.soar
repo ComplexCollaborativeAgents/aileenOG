@@ -12,3 +12,13 @@ sp {interaction*propose*parse
     (<op>    ^name parse-content
              ^content <cont>)
     }
+
+
+sp {interaction*propose*complete-interaction
+    (state <s>    ^name interaction
+                  ^signal verify
+                  ^verification success)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name complete-interaction)
+    }

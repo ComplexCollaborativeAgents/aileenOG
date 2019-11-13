@@ -27,3 +27,9 @@ sp {interaction*elaborate*parse
     }
 
 
+sp {interaction*elaborate*verification
+    (state <s>    ^name interaction
+                  ^superstate.interaction.verification <verify>)
+-->
+    (<s>    ^verification <verify>)
+    }
