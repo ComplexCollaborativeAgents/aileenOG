@@ -61,7 +61,7 @@ class ObjectRandomizer:
             return AileenObject.get_colors()[color_symbol][0]
 
         def get_random_shape(self):
-            self.shape_index += 1
+            self.shape_index += 13
             return self.shapes[self.shape_index % len(self.shapes)]
 
         def uuid4(self):
