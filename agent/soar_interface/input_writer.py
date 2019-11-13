@@ -26,8 +26,10 @@ class InputWriter(object):
             self._input_link = soar_agent.get_input_link()
             self._world_link = self._input_link.CreateIdWME("world")
             self._objects_link = self._world_link.CreateIdWME("objects")
-            self._interaction_link = self._input_link.CreateIdWME("interaction")
-            self._language_link = self._input_link.CreateIdWME("language")
+            self._interaction_link = self._input_link.CreateIdWME("interaction-link")
+            self._clean_interaction_link_flag = False
+            self._language_link = self._input_link.CreateIdWME("language-link")
+            self._clean_language_link_flag = False
 
         if Configuration.config['RunParams']['cv'] == "True":
             # ToDo: Move the input to Detector to the config file.
@@ -46,11 +48,18 @@ class InputWriter(object):
     def generate_input(self):
         time.sleep(Configuration.config['Soar']['sleep-time'])
 
+        if self._clean_interaction_link_flag:
+            self.clean_interaction_link()
+
+        if self._clean_language_link_flag:
+            self.clean_language_link()
+
         if self._interaction is not None:
             self.write_interaction_dictionary_to_input_link()
 
         if self._language is not None:
             self.write_language_to_input_link()
+
 
         if Configuration.config['RunParams']['cv'] == "True":
             binary_image = self.request_server_for_current_state_image()
@@ -67,14 +76,16 @@ class InputWriter(object):
 
         qsrs = self.create_qsrs(objects_list)
 
-    def write_language_to_input_link(self):
-        logging.debug("[input_writer] :: writing generated parse to input link")
-
+    def clean_language_link(self):
         self.delete_all_children(self._language_link)
+        self._clean_language_link_flag = False
 
+    def write_language_to_input_link(self):
+        new_language_link = self._language_link.CreateIdWME("language")
+        logging.debug("[input_writer] :: writing generated parse to input link")
         ## write all parses
         parses = self._language['parses']
-        parses_link = self._language_link.CreateIdWME("parses")
+        parses_link = new_language_link.CreateIdWME("parses")
         for parse in parses:
             parse_link = parses_link.CreateIdWME("parse")
             item = parse[0]
@@ -89,16 +100,21 @@ class InputWriter(object):
                     i = i+1
                 obj_ref_link.CreateStringWME('tag', parse[i])
         self._language = None
+        self._clean_language_link_flag = True
 
-
+    def clean_interaction_link(self):
+        self.delete_all_children(self._interaction_link)
+        self._clean_interaction_link_flag = False
 
     def write_interaction_dictionary_to_input_link(self):
-        self.delete_all_children(self._interaction_link)
+        logging.debug("[input_writer] :: writing interaction to input link")
+        new_interaction_link = self._interaction_link.CreateIdWME("interaction")
         signal = str(self._interaction['signal'])
         content = str(self._interaction['content'])
-        self._interaction_link.CreateStringWME('signal', signal)
-        self._interaction_link.CreateStringWME('content', content)
+        new_interaction_link.CreateStringWME('signal', signal)
+        new_interaction_link.CreateStringWME('content', content)
         self._interaction = None
+        self._clean_interaction_link_flag = True
 
     def process_interaction(self, interaction_dict):
         logging.debug("[input_writer] :: received training string: {}".format(interaction_dict))
