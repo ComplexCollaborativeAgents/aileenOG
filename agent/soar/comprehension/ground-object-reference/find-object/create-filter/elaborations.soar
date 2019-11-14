@@ -1,7 +1,7 @@
 ##!
 # @file
 #
-# @created smohan 20191108
+# @created smohan 20191113
 
 sp {create-filter*elaborate*object-ref
     (state <s>    ^name create-filter
@@ -72,6 +72,4 @@ sp {create-filter*elaborate*filter*percepts
 -->
     (<filter>    ^percept <p>)
     }
-    
-        
     

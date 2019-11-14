@@ -9,4 +9,5 @@ source "proposals.soar"
 
 source "ground-object-reference/load.soar"
 
-source "write-to-superstate.soar"
+source "parse-content.soar"
+source "complete-comprehension.soar"

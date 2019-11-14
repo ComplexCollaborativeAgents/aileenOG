@@ -11,10 +11,24 @@ sp {topstate*propose*init-agent
     (<op>    ^name init-agent)
     }
 
-sp {topstate*apply*init-agent
+sp {topstate*apply*init-agent*name
     (state <s>    ^superstate nil
                   ^operator <op>)
     (<op>    ^name init-agent)
 -->
     (<s>    ^name aileen)
+    }
+
+sp {topstate*apply*init-agent*interaction*stack
+    (state <s>    ^superstate nil
+                  ^operator <op>)
+    (<op>    ^name init-agent)
+-->
+    (<s>    ^interaction <inter>)
+    (<inter>    ^stack <stack>
+                ^processing-status <proc-stat>)
+    (<stack>    ^segment <seg>)
+    (<seg>    ^_metadata <met>)
+    (<met>    ^counter 1
+              ^id 10)
     }

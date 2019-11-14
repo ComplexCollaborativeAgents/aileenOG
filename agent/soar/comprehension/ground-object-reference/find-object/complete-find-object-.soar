@@ -1,0 +1,13 @@
+##!
+# @file
+#
+# @created smohan 20191113
+
+sp {find-object*apply*complete-find-object
+    (state <s>    ^name find-object
+                  ^operator.name complete-find-object
+                  ^superstate <ss>
+                  ^found <f>)
+-->
+    (<ss>    ^found <f>)
+    }

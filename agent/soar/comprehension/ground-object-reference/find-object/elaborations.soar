@@ -1,0 +1,30 @@
+##!
+# @file
+#
+# @created smohan 20191113
+
+sp {find-object*elaborate*reference
+    (state <s>    ^name find-object
+                  ^superstate.operator <sop>)
+    (<sop>    ^reference <ref>)
+-->
+    (<s>    ^reference <ref>)
+    }
+
+sp {find-object*elaborate*found-objects
+    (state <s>    ^name find-object
+                  ^superstate.operator <sop>)
+    (<sop>    ^reference <ref>)
+-->
+    (<s>    ^found <f>)
+    (<f>    ^objects <fo>)
+    (<f>    ^reference <ref>)
+    }
+
+sp {find-object*elaborate*object-set
+    (state <s>    ^name find-object
+                  ^superstate.operator <sop>)
+    (<sop>    ^object-set <os>)
+-->
+    (<s>    ^object-set <os>)
+    }

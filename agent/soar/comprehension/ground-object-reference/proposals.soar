@@ -2,34 +2,36 @@
 # @file
 #
 # @created smohan 20191108
-
-sp {ground-object-reference*propose*create-filter
+ 
+sp {ground-object-reference*propose*find-object
     (state <s>    ^name ground-object-reference
                   ^reference <ref>
-                  -^filter <filt>)
+                  ^world.objects <objs>
+                  -^found.reference <ref>)
 -->
     (<s>    ^operator <op> +)
-    (<op>    ^name create-filter
+    (<op>    ^name find-object
+             ^object-set <objs>
              ^reference <ref>)
     }
 
-
-sp {ground-object-reference*propose*filter-scene
+sp {ground-object-reference*propose*resolve-grounding
     (state <s>    ^name ground-object-reference
-                  ^filter <filt>
-                  ^grounds <g>)
-    (<g>    -^object <obj>)
+                  ^grounding <g>
+                  ^resolution <res>
+                  ^found.objects <objs>)
+    (<g>    -^object <any>)
 -->
     (<s>    ^operator <op> +)
-    (<op>    ^name filter-scene
-             ^filter <filt>)
+    (<op>    ^name resolve-grounding
+             ^grounding <g>
+             ^resolution <res>
+             ^objects <objs>)
     }
 
-sp {ground-object-reference*propose*write-to-superstate
-    (state <s>    ^name ground-object-reference
-                  ^grounds <g>)
-    (<g>    ^object <any>)
+sp {ground-object-reference*propose*complete-index-entity
+    (state <s>    ^name ground-object-reference)
 -->
-    (<s>    ^operator <op> +)
-    (<op>    ^name write-to-superstate)
+    (<s>    ^operator <op> + <)
+    (<op>    ^name complete-ground-object-reference)
     }

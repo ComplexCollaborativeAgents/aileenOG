@@ -3,8 +3,8 @@
 #
 # @created smohan 20191107
 
-sp {interaction*apply*parse-content
-    (state <s>    ^name interaction
+sp {comprehension*apply*parse-content
+    (state <s>    ^name comprehension
                   ^operator <op>
                   ^io.output-link <ol>)
     (<op>    ^name parse-content
@@ -14,12 +14,13 @@ sp {interaction*apply*parse-content
     (<l>    ^parse-content <cont>)
     }
 
-sp {interaction*apply*parse-content*write
-    (state <s>    ^name interaction
+sp {comprehension*apply*parse-content*write
+    (state <s>    ^name comprehension
+                  ^segment <seg>
                   ^operator <op>
                   ^io.input-link.language-link.language.parses <parses>
                   ^superstate.interaction <inter>)
     (<op>    ^name parse-content)
 -->
-    (<inter>    ^parses <parses>)
+    (<seg>    ^parses <parses>)
     }

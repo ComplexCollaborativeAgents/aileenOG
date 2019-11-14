@@ -7,9 +7,8 @@ source "proposals.soar"
 
 source "elaborations.soar"
 
+source "find-object/load.soar"
 
-source "create-filter/load.soar"
+source "resolve-grounding.soar"
 
-source "filter-scene.soar"
-
-source "write-to-superstate.soar"
+source "complete-ground-object-reference.soar"

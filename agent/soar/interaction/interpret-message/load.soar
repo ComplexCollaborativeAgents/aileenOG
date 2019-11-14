@@ -1,0 +1,8 @@
+##!
+# @file: 
+#
+# @created smohan 20191113
+
+source "proposals.soar"
+
+source "interpret-verify.soar"

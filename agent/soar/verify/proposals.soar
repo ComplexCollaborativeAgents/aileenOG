@@ -1,0 +1,21 @@
+##!
+# @file
+#
+# @created smohan 20191114
+
+
+
+## verification is successful if there are one or more objects that the object reference can be grounded into
+sp {verify*propose*report-success
+    (state <s>    ^name verify
+                  ^segment <seg>)
+    (<seg>    ^grounding <g>
+              ^parses.parse.obj-ref <oref>)
+    (<g>    ^entity <g-entity>)
+    (<g-entity>    ^_metadata.description <oref>
+                   ^object <obj>)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name report-success)
+    }
+                  

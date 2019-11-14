@@ -4,3 +4,7 @@
 # @created smohan 20191111
 
 source "report-correct.soar"
+
+source "elaborations.soar"
+
+source "proposals.soar"

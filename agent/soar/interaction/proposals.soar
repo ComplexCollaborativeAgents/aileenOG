@@ -3,22 +3,31 @@
 #
 # @created smohan 20191105
 
-sp {interaction*propose*parse
+sp {interaction*propose*interpret-message
     (state <s>    ^name interaction
-                  ^content <cont>
-                  -^parses <parse>)
+                  ^message <m>
+                  -^<< new-segment terminate-segment modify-segment >>)
 -->
     (<s>    ^operator <op> +)
-    (<op>    ^name parse-content
-             ^content <cont>)
+    (<op>    ^name interpret-message
+             ^message <m>)
     }
 
-
-sp {interaction*propose*complete-interaction
+sp {interaction*propse*interpret-purpose
     (state <s>    ^name interaction
-                  ^signal verify
-                  ^verification success)
+                  ^interaction.stack.segment <seg>)
+    (<seg>    ^purpose <p>)
+    (<p>    ^completed <any>)
 -->
     (<s>    ^operator <op> +)
-    (<op>    ^name complete-interaction)
+    (<op>    ^name interpret-purpose-status
+             ^purpose <p>)
+    }
+
+sp {interaction*propose*update-stack
+    (state <s>    ^name interaction
+                  ^{<seg-type> << new-segment terminate-segment modify-segment >>} <seg>)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name update-stack)
     }

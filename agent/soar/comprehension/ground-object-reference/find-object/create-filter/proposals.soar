@@ -1,7 +1,7 @@
 ##!
 # @file
 #
-# @created smohan 20191111
+# @created smohan 20191113
 
 sp {create-filter*propose*mark-unknown-concept
     (state <s>    ^name create-filter
@@ -25,4 +25,3 @@ sp {create-filter*propose*write-to-superstate
     (<s>    ^operator <op> + <)
     (<op>    ^name write-to-superstate)
     }
-    

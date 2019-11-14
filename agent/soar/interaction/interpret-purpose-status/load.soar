@@ -1,0 +1,8 @@
+##!
+# @file: 
+#
+# @created smohan 20191114
+
+source "elaborations.soar"
+
+source "purpose.soar"

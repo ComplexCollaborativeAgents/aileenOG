@@ -3,47 +3,73 @@
 #
 # @created smohan 20191105
 
-
-sp {aileen*propose*interaction
+sp {aileen*propose*interaction*message
     (state <s>    ^name aileen
+                  ^message <m>
                   ^interaction <inter>)
-    (<inter> -^complete true)
+    (<m>    -^processed true)
 -->
     (<s>    ^operator <op> +)
     (<op>    ^name interaction
+             ^type incoming-message
+             ^message <m>
              ^interaction <inter>)
-}
+          }
 
 sp {aileen*propose*comprehension
     (state <s>    ^name aileen
-                  ^interaction <inter>)
-    (<inter>    ^parses <p>
-                -^grounds <g>)
+                  ^interaction.stack.segment <seg>)
+    (<seg>    ^message <m>
+              -^grounding <any>)
 -->
     (<s>    ^operator <op> +)
     (<op>    ^name comprehension
-             ^parses <p>)
+             ^segment <seg>)
     }
-
 
 sp {aileen*propose*verify
     (state <s>    ^name aileen
-                  ^interaction <inter>)
-    (<inter>    ^signal verify
-                ^grounds <g>
-                ^content <cont>
-                ^parses <p>
-                -^verification)
+                  ^interaction.stack.segment <seg>)
+    (<seg>    ^purpose <p>)
+    (<p>    -^completed)
+    (<seg>    ^grounding <g>)
 -->
     (<s>    ^operator <op> +)
-    (<op>    ^name verify)
+    (<op>    ^name verify
+             ^segment <seg>)
     }
 
-sp {aileen*propose*learn
+sp {aileen*propose*interaction*status
     (state <s>    ^name aileen
-                  ^learn <learn>)
+                  ^interaction.stack.segment <seg>)
+    (<seg>    ^purpose <p>)
+    (<p>    ^completed <any>)
 -->
     (<s>    ^operator <op> +)
-    (<op>    ^name learn
-             ^details <learn>)
+    (<op>    ^name interaction
+             ^type new-status
+             ^interaction <inter>)
     }
+
+#
+#sp {aileen*propose*verify
+#    (state <s>    ^name aileen
+#                  ^interaction <inter>)
+#    (<inter>    ^signal verify
+#                ^grounds <g>
+#                ^content <cont>
+#                ^parses <p>
+#                -^verification)
+#-->
+#    (<s>    ^operator <op> +)
+#    (<op>    ^name verify)
+#    }
+#
+#sp {aileen*propose*learn
+#    (state <s>    ^name aileen
+#                  ^learn <learn>)
+#-->
+#    (<s>    ^operator <op> +)
+#    (<op>    ^name learn
+#             ^details <learn>)
+#    }

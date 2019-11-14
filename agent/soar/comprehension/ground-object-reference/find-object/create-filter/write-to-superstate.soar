@@ -1,7 +1,7 @@
 ##!
 # @file
 #
-# @created smohan 20191111
+# @created smohan 20191113
 
 sp {create-filte*apply*write-to-superstate
     (state <s>    ^name create-filter
@@ -11,4 +11,3 @@ sp {create-filte*apply*write-to-superstate
 -->
     (<ss>    ^filter <filter>)
     }
-    

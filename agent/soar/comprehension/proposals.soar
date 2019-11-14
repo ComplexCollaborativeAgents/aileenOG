@@ -3,23 +3,40 @@
 #
 # @created smohan 20191108
 
+
+sp {comprehension*propose*parse
+    (state <s>    ^name comprehension
+                  ^segment <seg>)
+    (<seg>    ^message.content <cont>
+              -^parses <parse>)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name parse-content
+             ^content <cont>)
+    }
+
+
 sp {comprehension*propose*comprehend-object-reference
     (state <s>    ^name comprehension
-                  ^parses.parse <parse>
-                  -^grounds.reference <obj-ref>)
+                  ^segment <seg>
+                  ^grounding <g>)
+    (<seg>    ^parses.parse <parse>)
     (<parse>    ^obj-ref <obj-ref>)
+    -{(<g>    ^entity <any>)
+      (<any>    ^_metadata.description <obj-ref>)}
 -->
     (<s>    ^operator <op> +)
     (<op>    ^name ground-object-reference
-             ^reference <obj-ref>)
+             ^reference <obj-ref>
+             ^argument entity)
     }
 
-sp {comprehension*propose*write-to-superstate
+sp {comprehension*propose*complete-comprehension
     (state <s>    ^name comprehension
-                  ^grounds <g>
-                  ^superstate.interaction <inter>)
+                  ^grounding <g>)
 -->
     (<s>    ^operator <op> + <)
-    (<op>    ^name write-to-superstate)
+    (<op>    ^name complete-comprehension
+             ^grounding <g>)
     }
-
+                  

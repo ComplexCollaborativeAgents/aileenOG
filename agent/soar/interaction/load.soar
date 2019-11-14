@@ -7,6 +7,8 @@ source "elaborations.soar"
 
 source "proposals.soar"
 
-source "parse-content.soar"
+source "interpret-message/load.soar"
 
-source "complete-interaction.soar"
+source "update-stack.soar"
+
+source "interpret-purpose-status/load.soar"
