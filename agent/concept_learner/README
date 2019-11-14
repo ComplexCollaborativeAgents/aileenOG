@@ -4,8 +4,8 @@
 
 # To run as a service
 Open a terminal
-- /usr/local/acl10.1.64/mlisp8 -batch -L server.lsp
+- /usr/local/acl10.1.64/mlisp8 -batch -L server.lsp -e "(aileen::start-server :port 8000)"
 
 # To test the service
 Open a terminal (Currently the process can only run on dubs due to licsensing issues...)
-- curl -d "foo=10" --request POST http://dubs:8000/run-example
+- python ConceptClient.py
