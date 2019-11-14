@@ -1,105 +1,52 @@
-import json
-import os
-from random import choice
-
-import constants
 from aileen_object import AileenObject
 from aileen_scene import AileenScene
-from language_generator import LanguageGenerator
 from log_config import logging
-from collections import OrderedDict
+from language_generator import LanguageGenerator
+from agent.soar_interface import input_writer
+import cv2
+import numpy as np
+
+image_output_folder = '/home/mshreve/M/Datasets/Aileen/session2'
 
 
-class SpatialWordLesson:
-
+class TrainingImage:
     def __init__(self):
-        self._spatial_configurations_set = SpatialWordLesson.get_spatial_configurations_set()
-        self._spatial_configuration = SpatialWordLesson.randomizer.random_spatial_configuration(
-            self._spatial_configurations_set.keys())
-        self._spatial_configuration_def = self._spatial_configurations_set[self._spatial_configuration]
-        self._scene_objects = OrderedDict()
         self._scene = AileenScene()
         self._language = None
 
-    def generate_lesson(self):
-        self.generate_setup()
-        self.generate_scene()
-        lesson = {
-            'scene': self._scene.generate_scene_description(),
-            'interaction': {
-                'language': self._language
-            }
-        }
+    def generate_lesson(self, num_objects=1):
+        lesson = {}
+        self.generate_scene(num_objects)
+        lesson['scene'] = self._scene.generate_scene_description()
+        lesson['interaction'] = self._language
         return lesson
 
-    def generate_setup(self):
-        logging.debug("[action_word_lesson] :: generate the setup for the new lesson")
-        objects = self._spatial_configuration_def[constants.SPATIAL_DEF_OBJECTS]
-        if len(objects) > 0:
-            for obj in objects:
-                self._scene_objects[obj] = AileenObject.generate_random_object()
-        self._language = LanguageGenerator.generate_language_from_template(self._scene_objects,
-                                                                           self._spatial_configuration_def[
-                                                                               constants.SPATIAL_DEF_LANGUAGE_TEMPLATE])
-
-    def generate_scene(self):
-        logging.debug("[aileen_spatial_word_lesson] :: generating a new scene for spatial word learning")
-        if len(self._scene_objects) == 2:
-            translations = AileenScene.place_two_objects_in_configuration(
-                target_object_name=self._scene_objects.items()[0][0],
-                reference_object_name=self._scene_objects.items()[1][0],
-                scene_objects=self._scene_objects,
-                configuration_definition=self._spatial_configuration_def[constants.SPATIAL_DEF_DEFINITION])
-            for scene_object_name in self._scene_objects.keys():
-                scene_object = self._scene_objects[scene_object_name]
-                scene_object.set_translation(translations[scene_object_name])
-                self._scene.add_object(scene_object)
-
-        if len(self._scene_objects) == 3:
-            print(self._scene_objects.items()[0][0], self._scene_objects.items()[1][0])
-            translations = AileenScene.place_three_objects_in_configuration(
-                target_object_name=self._scene_objects.items()[2][0],
-                first_reference_object_name=self._scene_objects.items()[0][0],
-                second_reference_object_name=self._scene_objects.items()[1][0],
-                scene_objects=self._scene_objects,
-                configuration_definition=self._spatial_configuration_def[constants.SPATIAL_DEF_DEFINITION])
-            for scene_object_name in self._scene_objects.keys():
-                scene_object = self._scene_objects[scene_object_name]
-                scene_object.set_translation(translations[scene_object_name])
-                self._scene.add_object(scene_object)
+    def generate_scene(self, num_objects=1):
+        logging.debug("[aileen_visual_word_lesson] :: generating a new scene for visual word learning")
+        for i in range(0, num_objects):
+            scene_object = AileenObject.generate_random_object()
+            scene_object.set_translation(AileenScene.randomizer.get_random_position_on_table())
+            self._scene.add_object(scene_object)
+            self._language = LanguageGenerator.generate_language_for_object(scene_object)
 
     @staticmethod
-    def get_spatial_configurations_set():
-        root_dir = os.path.dirname(os.path.abspath(__file__))
-        spatial_configuration_file = os.path.join(root_dir, 'resources',
-                                                  constants.SPATIAL_CONFIGURATION_FILE_NAME)
-        with open(spatial_configuration_file) as f:
-            spatial_configurations = json.load(f)
-        return spatial_configurations
+    def generate_scenes(world_server, agent_server):
 
-    @staticmethod
-    def administer_curriculum(world_server, agent_server):
+        # iw = input_writer.InputWriter(agent_server, world_server)
+        counter = 0
         while True:
-            raw_input("Press any key to generate the next spatial word lesson...")
 
-            lesson = SpatialWordLesson().generate_lesson()
-
+            lesson = TrainingImage().generate_lesson(4)
             scene_acknowledgement = world_server.set_scene(
-                {'configuration': lesson['scene'], 'label': lesson['interaction']['language']})
+                {'configuration': lesson['scene'], 'label': lesson['interaction']})
             logging.info("[aileen_instructor] :: received from world {}".format(scene_acknowledgement))
-
-            language_acknowledgement = agent_server.process_language(lesson['interaction'])
-            logging.info("[aileen_instructor] :: received from agent {}".format(language_acknowledgement))
-
-
-    class Randomizer:
-
-        def random_spatial_configuration(self, configurations):
-            return choice(configurations)
-
-    randomizer = Randomizer()
+            binary_image = world_server.get_image()
+            im = cv2.imdecode(np.fromstring(binary_image.data, dtype=np.uint8), 1)
+            cv2.imwrite(image_output_folder + '/image' + str(counter) + '.png', im)
+            meta = world_server.get_all()
+            counter += 1
 
 
 if __name__ == '__main__':
-    lesson1 = SpatialWordLesson().generate_lesson()
-    print(lesson1)
+    lesson1 = TrainingImage()
+    print(lesson1.generate_lesson())

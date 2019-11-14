@@ -1,1 +1,1 @@
-CURRENT_IMAGE_PATH = 'soar_interface/images/current_image.png'
+CURRENT_IMAGE_PATH = 'agent/soar_interface/images/current_image.png'

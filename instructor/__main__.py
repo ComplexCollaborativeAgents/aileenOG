@@ -5,6 +5,7 @@ from log_config import logging
 from configuration import Configuration
 
 from visual_word_lesson import VisualWordLesson
+from generate_training_images import TrainingImage
 from spatial_word_lesson import SpatialWordLesson
 from action_word_lesson import ActionWordLesson
 
@@ -33,9 +34,10 @@ if __name__ == '__main__':
         if str(sys.argv[1]).__contains__('--train-vision'):
             # run vision training scripts
             print ('Generating images that will train vision system.')
-
-    VisualWordLesson.administer_curriculum(world_server, agent_server)
-    # SpatialWordLesson.administer_curriculum(world_server, agent_server)
-    # ActionWordLesson.administer_curriculum(world_server, agent_server)
+            TrainingImage.generate_scenes(world_server, agent_server)
+    else:
+        VisualWordLesson.administer_curriculum(world_server, agent_server)
+        # SpatialWordLesson.administer_curriculum(world_server, agent_server)
+        # ActionWordLesson.administer_curriculum(world_server, agent_server)
 
 

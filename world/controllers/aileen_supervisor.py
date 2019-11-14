@@ -1,13 +1,14 @@
 from threading import Thread
 
 from controller import Supervisor
-
+from controller import CameraRecognitionObject
 from world import constants
 
 import os
 import xmlrpclib
 from action_executor import ActionExecutor
 from world.log_config import logging
+
 
 class AileenSupervisor(Supervisor):
 
@@ -26,6 +27,10 @@ class AileenSupervisor(Supervisor):
 
         self._camera = self.getCamera('camera')
         self._camera.enable(constants.TIME_STEP)
+        self._camera.recognitionEnable(constants.TIME_STEP)
+        self.resX = self._camera.getWidth()
+        self.resY = self._camera.getHeight()
+
         logging.info("[aileen_supervisor] :: enabled camera")
 
         self._world_thread = None
@@ -50,6 +55,10 @@ class AileenSupervisor(Supervisor):
         return self._held_node
 
     def get_all(self):
+
+        objects = self._camera.getRecognitionObjects()
+        logging.debug("Retrieving objects in camera")
+        logging.debug(objects)
         logging.debug("[aileen_supervisor] :: processing get_all from client")
         num_children = self._children.getCount()
         logging.debug("[aileen_supervisor] :: world contains {} nodes".format(num_children))
@@ -130,6 +139,7 @@ class AileenSupervisor(Supervisor):
         if not os.path.exists(dir_name):
             os.mkdir(dir_name)
         self._camera.saveImage(constants.CURRENT_IMAGE_PATH, 100)
+
         logging.debug("[aileen_supervisor] :: saved current image at {}".format(constants.CURRENT_IMAGE_PATH))
 
         with open(constants.CURRENT_IMAGE_PATH, "rb") as handle:
