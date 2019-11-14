@@ -1,12 +1,12 @@
 ;;;; -*-  Mode: LISP; Syntax: Common-Lisp; Base: 10                          -*-
 ;;;; ----------------------------------------------------------------------------
-;;;; File name: rpcserver.lsp
+;;;; File name: server.lsp
 ;;;;    System: 
 ;;;;    Author: Matthew Klenk
 ;;;;   Created: November 13, 2019 16:14:37
 ;;;;   Purpose: 
 ;;;; ----------------------------------------------------------------------------
-;;;;  Modified: Wednesday, November 13, 2019 at 16:35:31 by klenk
+;;;;  Modified: Thursday, November 14, 2019 at 10:26:01 by klenk
 ;;;; ----------------------------------------------------------------------------
 
 (load "analogystack/qrgsetup.lsp")
@@ -115,16 +115,16 @@
 	      :start nil :enable t
 	      :publish '(:path "/ConceptLearner")  )))
     (net.xml-rpc:export-xml-rpc-method
-     rcp '("create-reasoning-symbol" create-reasoning-symbol-helper)
+     rcp '("create_reasoning_symbol" create-reasoning-symbol-helper)
      :base64 :base64)
     (net.xml-rpc:export-xml-rpc-method
-     rcp '("create-reasoning-predicate" create-reasoning-predicate-helper)
+     rcp '("create_reasoning_predicate" create-reasoning-predicate-helper)
      :base64 :base64)
     (net.xml-rpc:export-xml-rpc-method
-     rcp '("add-case-to-gpool" add-case-to-gpool-helper)
+     rcp '("add_case_to_gpool" add-case-to-gpool-helper)
      :base64 :base64)
     (net.xml-rpc:export-xml-rpc-method
-     rcp '("match-case-against-gpool" match-case-against-gpool-helper)
+     rcp '("match_case_against_gpool" match-case-against-gpool-helper)
      :base64 :base64)
     				       
     (net.aserve:start :port port)

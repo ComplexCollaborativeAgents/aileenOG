@@ -1,15 +1,15 @@
 ;;;; -*-  Mode: LISP; Syntax: Common-Lisp; Base: 10                          -*-
 ;;;; ----------------------------------------------------------------------------
-;;;; File name: rcpclient.lsp
+;;;; File name: test-client.lsp
 ;;;;    System: 
 ;;;;    Author: Matthew Klenk
 ;;;;   Created: November 13, 2019 16:35:48
 ;;;;   Purpose: 
 ;;;; ----------------------------------------------------------------------------
-;;;;  Modified: Wednesday, November 13, 2019 at 16:36:20 by klenk
+;;;;  Modified: Thursday, November 14, 2019 at 10:29:14 by klenk
 ;;;; ----------------------------------------------------------------------------
 
-(load "rcpserver.lsp")
+(load "server.lsp")
 
 (in-package :aileen)
 
@@ -28,7 +28,7 @@
     (setq res (cl-json:decode-json-from-string 
 	      (net.xml-rpc:xml-rpc-call
 	       (net.xml-rpc:encode-xml-rpc-call
-		"add-case-to-gpool"
+		"add_case_to_gpool"
 		(net.xml-rpc:make-xml-rpc-encoding 
 		 (cl-json::encode-json-alist-to-string
 		  (pairlis '("facts" "context" "gpool")
@@ -46,7 +46,7 @@
     (setq res (cl-json:decode-json-from-string 
 	      (net.xml-rpc:xml-rpc-call
 	       (net.xml-rpc:encode-xml-rpc-call
-		"add-case-to-gpool"
+		"add_case_to_gpool"
 		(net.xml-rpc:make-xml-rpc-encoding 
 		 (cl-json::encode-json-alist-to-string
 			      (pairlis '("facts" "context" "gpool")
@@ -65,7 +65,7 @@
     (setq res (cl-json:decode-json-from-string 
 	      (net.xml-rpc:xml-rpc-call
 	       (net.xml-rpc:encode-xml-rpc-call
-		"match-case-against-gpool"
+		"match_case_against_gpool"
 		(net.xml-rpc:make-xml-rpc-encoding 
 		 (cl-json::encode-json-alist-to-string
 			      (pairlis '("facts" "context" "gpool" "pattern")
@@ -84,7 +84,7 @@
   (let ((res (cl-json:decode-json-from-string 
 	      (net.xml-rpc:xml-rpc-call
 	       (net.xml-rpc:encode-xml-rpc-call
-		"create-reasoning-symbol"
+		"create_reasoning_symbol"
 		(net.xml-rpc:make-xml-rpc-encoding 
 		 (cl-json::encode-json-alist-to-string
 		  (pairlis '("symbol")
@@ -97,7 +97,7 @@
     (setq res (cl-json::decode-json-from-string
 	       (net.xml-rpc:xml-rpc-call
 		(net.xml-rpc:encode-xml-rpc-call
-		 "create-reasoning-predicate"
+		 "create_reasoning_predicate"
 		 (net.xml-rpc:make-xml-rpc-encoding 
 		  (cl-json::encode-json-alist-to-string
 		   (pairlis '("predicate")
