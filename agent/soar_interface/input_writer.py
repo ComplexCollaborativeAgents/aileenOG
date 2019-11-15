@@ -30,8 +30,8 @@ class InputWriter(object):
         if Configuration.config['RunParams']['cv'] == "True":
             # ToDo: Move the input to Detector to the config file.
             self.detector = Detector("aileen_vision_module/aileen.names",
-                                     "aileen_vision_module/yolov3-tiny-aileen.cfg",
-                                     "aileen_vision_module/yolov3-tiny-aileen_900.weights",
+                                     "aileen_vision_module/yolov3-tiny-aileen-test.cfg",
+                                     "aileen_vision_module/yolov3-tiny-aileen_210000.weights",
                                      'color')
         self._svs_objects = []
 
