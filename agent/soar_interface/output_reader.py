@@ -8,6 +8,7 @@ class OutputReader(object):
         self._world = world_server
         self._grammar = AileenGrammar()
         self._grammar.use_default_rules()
+        self._response = None
 
     def read_output(self):
         number_of_commands = self._soar_agent._agent.GetNumberCommands()
@@ -19,6 +20,10 @@ class OutputReader(object):
 
             if commandName == 'language':
                 self.process_language_command(commandID)
+            commandID.AddStatusComplete()
+
+            if commandName == 'interaction':
+                self.process_repsonse(commandID)
             commandID.AddStatusComplete()
 
 
@@ -55,3 +60,10 @@ class OutputReader(object):
                 parsed_content = self._grammar.parse(content)
                 logging.debug("[output-reader] :: parsed content to {}".format(parsed_content))
                 self._soar_agent._input_writer.set_language({'parses': parsed_content})
+
+    def process_repsonse(self, commandID):
+        for i in range(0, commandID.GetNumberChildren()):
+            child = commandID.GetChild(i)
+            if child.GetAttribute() == 'response':
+                self._response = {'status': child.GetValueAsString()}
+                logging.debug("[output_reader] :: repsonding with {}".format(self._response))

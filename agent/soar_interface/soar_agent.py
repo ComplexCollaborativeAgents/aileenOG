@@ -131,7 +131,11 @@ class soar_agent(object):
     def process_interaction(self, interaction_dictionary):
         logging.debug("[soar_agent] :: handling process_interaction request {}".format(interaction_dictionary))
         self._input_writer.set_interaction(interaction_dictionary)
-        return True
+        while self._output_reader._response is None:
+            pass
+        response = self._output_reader._response
+        self._output_reader._response = None
+        return response
 
 def update(mid, this_agent, agent, message):
     this_agent.stop_agent_if_requested()

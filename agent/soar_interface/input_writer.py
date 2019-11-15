@@ -109,10 +109,14 @@ class InputWriter(object):
     def write_interaction_dictionary_to_input_link(self):
         logging.debug("[input_writer] :: writing interaction to input link")
         new_interaction_link = self._interaction_link.CreateIdWME("message")
-        signal = str(self._interaction['signal'])
-        content = str(self._interaction['content'])
-        new_interaction_link.CreateStringWME('signal', signal)
-        new_interaction_link.CreateStringWME('content', content)
+        if 'signal' in self._interaction:
+            signal = str(self._interaction['signal'])
+            new_interaction_link.CreateStringWME('signal', signal)
+
+        if 'content' in self._interaction:
+            content = str(self._interaction['content'])
+            new_interaction_link.CreateStringWME('content', content)
+
         self._interaction = None
         self._clean_interaction_link_flag = True
 
