@@ -56,9 +56,10 @@ class AileenSupervisor(Supervisor):
 
     def get_all(self):
 
-        objects = self._camera.getRecognitionObjects()
+        image_objects = self._camera.getRecognitionObjects()
         logging.debug("Retrieving objects in camera")
-        logging.debug(objects)
+        logging.debug(image_objects)
+
         logging.debug("[aileen_supervisor] :: processing get_all from client")
         num_children = self._children.getCount()
         logging.debug("[aileen_supervisor] :: world contains {} nodes".format(num_children))
@@ -68,11 +69,24 @@ class AileenSupervisor(Supervisor):
             object_node = self._children.getMFNode(i)
             object_name = object_node.getTypeName()
             if 'Solid' in object_name:
+                im_bbox = [0.0, 0.0, 0.0, 0.0]
+                im_colors = [0, 0, 0]
+                for j in range(0, self._camera.getRecognitionNumberOfObjects()):
+                    if object_node.getId() == image_objects[j].get_id():
+                        x, y = image_objects[j].get_position_on_image()[0:2]
+                        w, h = image_objects[j].get_size_on_image()[0:2]
+                        im_bbox = [float(x) / float(self.resX),
+                                   float(y) / float(self.resY),
+                                   float(w) / float(self.resX),
+                                   float(h) / float(self.resY)]
+                        im_colors = image_objects[j].get_colors()
                 object_children = object_node.getField('children')
                 object_dict = {
                     'id': object_node.getId(),
                     'position': object_node.getPosition(),
                     'bounding_box': self.computeBoundingBox(object_node),
+                    'bounding_box_camera': im_bbox,
+                    'colors_camera': im_colors,
                     'shape': self.get_object_shape(object_node),
                     'color': self.get_object_color(object_node),
                     'texture': self.get_object_texture(object_node),

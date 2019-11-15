@@ -5,9 +5,13 @@ from language_generator import LanguageGenerator
 from agent.soar_interface import input_writer
 import cv2
 import numpy as np
+import constants
+import random
+
 
 image_output_folder = '/home/mshreve/M/Datasets/Aileen/session2'
 
+class_map = dict()
 
 class TrainingImage:
     def __init__(self):
@@ -33,17 +37,25 @@ class TrainingImage:
     def generate_scenes(world_server, agent_server):
 
         # iw = input_writer.InputWriter(agent_server, world_server)
-        counter = 0
+        counter = 557
         while True:
-
-            lesson = TrainingImage().generate_lesson(4)
+            num_obj = random.randint(1,6)
+            lesson = TrainingImage().generate_lesson(num_obj)
             scene_acknowledgement = world_server.set_scene(
                 {'configuration': lesson['scene'], 'label': lesson['interaction']})
             logging.info("[aileen_instructor] :: received from world {}".format(scene_acknowledgement))
             binary_image = world_server.get_image()
             im = cv2.imdecode(np.fromstring(binary_image.data, dtype=np.uint8), 1)
-            cv2.imwrite(image_output_folder + '/image' + str(counter) + '.png', im)
+            cv2.imwrite(image_output_folder + '/frame_' + "{:0>6d}".format(counter) + '.jpg', im)
             meta = world_server.get_all()
+
+            for j in range(0, len(meta['objects'])):
+                obj = meta['objects'][j]
+                bb = obj['bounding_box_camera']
+                shape = obj['shape'].split('s_')[1]
+                with open(image_output_folder + '/frame_' + "{:0>6d}".format(counter) + '.txt', 'a+') as f:
+                    f.write("%d %f %f %f %f\n" % (constants.SHAPE_SET.index(shape), bb[0], bb[1], bb[2], bb[3]))
+
             counter += 1
 
 
