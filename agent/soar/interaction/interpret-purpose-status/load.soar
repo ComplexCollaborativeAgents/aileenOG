@@ -5,4 +5,6 @@
 
 source "elaborations.soar"
 
-source "purpose.soar"
+source "proposals.soar"
+
+source "request-acknowledgement.soar"

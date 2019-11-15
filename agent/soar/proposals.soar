@@ -41,8 +41,10 @@ sp {aileen*propose*verify
 
 sp {aileen*propose*interaction*status
     (state <s>    ^name aileen
-                  ^interaction.stack.segment <seg>)
-    (<seg>    ^purpose <p>)
+                  ^interaction <inter>)
+    (<inter>    ^stack.segment <seg>)
+    (<seg>    ^purpose <p>
+              -^communicated)
     (<p>    ^completed <any>)
 -->
     (<s>    ^operator <op> +)

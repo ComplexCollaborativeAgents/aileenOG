@@ -20,3 +20,13 @@ sp {interaction*elaborate*state*interaction
 -->
     (<s>    ^interaction <inter>)
     }
+
+
+sp {topstate*delete*processed*response
+    (state <s>    ^name interaction
+                  ^topstate <ts>)
+    (<ts>    ^response <res>)
+    (<res>    ^processed true)
+-->
+    (<ts>    ^response <res> -)
+    }

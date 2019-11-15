@@ -1,0 +1,26 @@
+##!
+# @file
+#
+# @created smohan 20191114
+
+sp {topstate*elaborate*output-link*response
+    (state <s>    ^name aileen
+                  ^io.output-link <ol>
+                  ^response <res>)
+    (<res>    ^status <stat>)
+-->
+    (<ol>    ^interaction <inter>)
+    (<inter>    ^response <stat>)
+    (<res>    ^processed true)
+    }
+
+
+sp {topstate*elaborate*output-link
+    :o-support
+    (state <s>    ^name aileen
+                  ^io.output-link <ol>)
+    (<ol>    ^<command> <com>)
+    (<com>    ^status complete)
+-->
+    (<ol>    ^<command> <com> -)
+    }

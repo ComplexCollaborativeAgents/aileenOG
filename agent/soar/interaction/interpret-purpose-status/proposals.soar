@@ -1,0 +1,16 @@
+##!
+# @file
+#
+# @created smohan 20191114
+
+
+sp {interaction-purpose-status*propose*confirm
+    (state <s>    ^name interpret-purpose-status
+                  ^purpose <p>)
+    (<p>    ^type verify
+            ^completed true
+            ^status success)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name request-acknowldegement)
+    }

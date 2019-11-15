@@ -18,3 +18,20 @@ sp {interaction*apply*update-stack*message*new-segment
                 ^segment <seg> -)
     (<m>    ^processed true)
     }
+
+sp {interaction*apply*update-stack*terminate-segment*only*status
+    (state <s>    ^name interaction
+                ^operator.name update-stack
+                 ^interaction <inter>
+                  ^terminate-segment <seg>
+                   -^new-segment <new-seg>)
+     (<inter>    ^stack <stack>)
+     (<stack>    ^segment <seg>)
+      (<seg>    ^next <next-seg>
+                ^message <m>)
+      (<m>    -^processed true)
+-->
+    (<stack>    ^segment <next-seg>
+                  ^segment <seg> -) 
+    (<m>    ^processed true)
+  }

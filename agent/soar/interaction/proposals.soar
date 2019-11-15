@@ -16,7 +16,8 @@ sp {interaction*propose*interpret-message
 sp {interaction*propse*interpret-purpose
     (state <s>    ^name interaction
                   ^interaction.stack.segment <seg>)
-    (<seg>    ^purpose <p>)
+    (<seg>    ^purpose <p>
+              -^communicated)
     (<p>    ^completed <any>)
 -->
     (<s>    ^operator <op> +)

@@ -9,6 +9,6 @@ sp {verify*apply*report-correct
                   ^segment <seg>)
     (<seg>    ^purpose <p>)
 -->
-    (<p>    ^completed true
+    (<p>    ^completed true 
               ^status success)
 }

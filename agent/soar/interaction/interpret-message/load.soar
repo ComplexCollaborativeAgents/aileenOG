@@ -6,3 +6,5 @@
 source "proposals.soar"
 
 source "interpret-verify.soar"
+
+source "interpret-feedback.soar"
