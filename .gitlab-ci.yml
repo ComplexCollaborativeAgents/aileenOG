@@ -4,6 +4,7 @@ variables:
   GIT_SUBMODULE_STRATEGY: recursive
 
 before_script:
+  - python2 --version
   - ./bootstrap.sh
   - source activate aileen
 
