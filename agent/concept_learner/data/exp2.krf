@@ -4,3 +4,4 @@
 
 (isa Obj2 CVCube)
 (isa Obj2 CVGreen)
+(isa Obj2 RCube)

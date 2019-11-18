@@ -4,3 +4,4 @@
 
 (isa Obj1 CVCube)
 (isa Obj1 CVRed)
+(isa Obj1 RCube)

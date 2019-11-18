@@ -7,3 +7,6 @@
 [submodule "agent/concept_learner/analogystack"]
 	path = agent/concept_learner/analogystack
 	url = ../../klenk/analogystack
+[submodule "agent/concept_learner/lisp-unit"]
+	path = agent/concept_learner/lisp-unit
+	url = git@gitlab-external.parc.com:klenk/lisp-unit.git

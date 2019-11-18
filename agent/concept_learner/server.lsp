@@ -6,7 +6,7 @@
 ;;;;   Created: November 13, 2019 16:14:37
 ;;;;   Purpose: 
 ;;;; ----------------------------------------------------------------------------
-;;;;  Modified: Thursday, November 14, 2019 at 10:26:01 by klenk
+;;;;  Modified: Monday, November 18, 2019 at 11:41:49 by klenk
 ;;;; ----------------------------------------------------------------------------
 
 (load "analogystack/qrgsetup.lsp")
@@ -107,6 +107,25 @@
 	       (format t "~%Ill formed match-case-against-gpool-helper request ~A" str)
 	       ""))))
 
+(defun filter-scene-by-expression-helper (str)
+  (format t "~%Checking context against gpool for pattern ~A" str)
+  (let* ((json (cl-json:decode-json-from-string str))
+	 (facts (str->symbols (cdr (assoc :FACTS json)))) ;;; all facts in scene
+	 (context (str->symbols (cdr (assoc :CONTEXT json)))) ;;; id for current scene
+	 (gpool (str->symbols (cdr (assoc :GPOOL json)))) ;;; 
+	 (prev-matches (str->symbols (cdr (assoc :PREVQUERIES json)))) ;;; Previous Statements that Constraint Current Query 
+	 (pattern (str->symbols (cdr (assoc :QUERY json))))) ;; Statement with variables
+    (format t "~%Checking context ~A against gpool ~A for pattern ~A" context gpool pattern)
+    (cond ((and facts context gpool pattern)
+	   (let ((matches (filter-scene-by-expression facts context gpool prevmatches pattern))) 
+	     (format t "~%Found matches ~A" matches)
+	     (cl-json:encode-json-alist-to-string
+	      (pairlis '("matches" "pattern") (list matches pattern))
+					)))
+	      (t
+	       (format t "~%Ill formed match-case-against-gpool-helper request ~A" str)
+	       ""))))
+
 
 
 (defun start-server (&key (port 8000))
@@ -114,6 +133,7 @@
   (let ((rcp (net.xml-rpc:make-xml-rpc-server
 	      :start nil :enable t
 	      :publish '(:path "/ConceptLearner")  )))
+    ;; Add an init_kb helper that reinitializes the kb.
     (net.xml-rpc:export-xml-rpc-method
      rcp '("create_reasoning_symbol" create-reasoning-symbol-helper)
      :base64 :base64)
@@ -123,8 +143,12 @@
     (net.xml-rpc:export-xml-rpc-method
      rcp '("add_case_to_gpool" add-case-to-gpool-helper)
      :base64 :base64)
-    (net.xml-rpc:export-xml-rpc-method
-     rcp '("match_case_against_gpool" match-case-against-gpool-helper)
+;; Klenk: We want to match against the whole scene.
+;;    (net.xml-rpc:export-xml-rpc-method
+;;     rcp '("match_case_against_gpool" match-case-against-gpool-helper)
+;;     :base64 :base64)
+    (net.xml-rpc:export-xml-rpc-method  
+     rcp '("filter_scene_by_expression" filter-scene-by-expression-helper)
      :base64 :base64)
     				       
     (net.aserve:start :port port)
