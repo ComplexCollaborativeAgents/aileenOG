@@ -4,6 +4,9 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
+sudo apt-get update --fix-missing
+sudo apt-get install -y python-setuptools
+
 (cd agent/vision; GPU=0 OPENCV=0 REBUILD=1 python2 setup.py build_ext)
 conda env create --file environment.yml
 
