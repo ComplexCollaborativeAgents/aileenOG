@@ -60,6 +60,14 @@ class TrainingImage:
                 with open(constants.TRAINING_DATA_FOLDER + '/frame_' + "{:0>6d}".format(counter) + '.txt', 'a+') as f:
                     f.write("%d %f %f %f %f\n" % (constants.SHAPE_SET.index(shape), bb[0], bb[1], bb[2], bb[3]))
 
+            # Split the training/validation data 80/20
+            if random.randint(0, 100) < 80:
+                with open(constants.TRAIN_FILES, 'a+') as f:
+                    f.write(constants.TRAINING_DATA_FOLDER + '/frame_' + "{:0>6d}".format(counter) + '.jpg\n')
+            else:
+                with open(constants.TEST_FILES, 'a+') as f:
+                    f.write(constants.TRAINING_DATA_FOLDER + '/frame_' + "{:0>6d}".format(counter) + '.jpg\n')
+
             counter += 1
 
 
