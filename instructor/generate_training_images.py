@@ -1,3 +1,7 @@
+# Matthew Shreve, PARC 2019
+# Generates random arrangements of N shapes in webots simulator
+# Saves annotated images to disk and generates training files
+
 from aileen_object import AileenObject
 from aileen_scene import AileenScene
 from log_config import logging
