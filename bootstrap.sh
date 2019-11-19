@@ -4,8 +4,14 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
-apt-get update --fix-missing
-apt-get install -y python-setuptools build-essential
+if ! command -v sudo; then
+  apt-get update --fix-missing
+  apt-get install -y sudo
+else
+  sudo apt-get update --fix-missing
+fi
+
+sudo apt-get install -y python-setuptools build-essential
 
 (cd agent/vision; GPU=0 OPENCV=0 REBUILD=1 python2 setup.py build_ext)
 conda env create --file environment.yml
