@@ -9,8 +9,7 @@ import constants
 import random
 import os
 
-class_map = dict()
-
+# create output folder if it does not exist
 os.makedirs(constants.TRAINING_DATA_FOLDER)
 
 
