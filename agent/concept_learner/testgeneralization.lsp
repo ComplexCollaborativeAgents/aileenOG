@@ -6,7 +6,7 @@
 ;;;;   Created: November 18, 2019 13:04:34
 ;;;;   Purpose: 
 ;;;; ----------------------------------------------------------------------------
-;;;;  Modified: Monday, November 18, 2019 at 20:56:58 by klenk
+;;;;  Modified: Tuesday, November 19, 2019 at 14:26:43 by klenk
 ;;;; ----------------------------------------------------------------------------
 
 (in-package :cl-user)
@@ -28,6 +28,7 @@
   (load-test-flat-files)
   (setq lisp-unit::*print-failures* t lisp-unit::*print-errors* t)
   (lisp-unit:write-tap-to-file (lisp-unit:run-tests :all :aileen) "concept_test.tap")
+  (clean-tests)
   )
 
 (defun load-test-flat-files ()
@@ -43,7 +44,6 @@
   (make-reasoner)
   (generalization-of-concepts-aileen)
   (test-object-filter)
-  (clean-tests)
   )
 
 (lisp-unit:define-test concept-learner-rel-generalization
@@ -51,7 +51,6 @@
   (make-reasoner)
   (generalization-of-rel-concepts-aileen)
   ;(test-rel-filter)
-  (clean-tests)
   )
 
 ;;; Automated testing
@@ -105,11 +104,11 @@
     (lisp-unit:assert-equal 1 gens)
     (lisp-unit:assert-equal 0 examples))
     (multiple-value-bind (facts objs)
-	(make-random-two-object-facts :relations '((w)(dc)))
+	(make-random-two-object-facts :relations 'd::((w)(dc)))
       (lisp-unit:assert-true 
        (match-case-against-gpool facts (make-random-mt) gpool `(d::rLeft ,(car objs) ,(second objs)))))
     (multiple-value-bind (facts objs)
-	(make-random-two-object-facts :relations '((n)(ec)))
+	(make-random-two-object-facts :relations 'd::((n)(ec)))
       (lisp-unit:assert-false
        (match-case-against-gpool facts (make-random-mt) gpool `(d::rLeft ,(car objs) ,(second objs)))))))
 
@@ -122,27 +121,6 @@
       (fire:forget fact :context mt)))
   (dolist (fact (fire:ask-it `d::(ist-Information (MinimalCaseFromMtFn ?x ?y) ?z)))
     (fire:forget fact)))
-	   
-
-      
-
-  
-  
-;  (create-gpool *r-green* *r-green-context*)
-;  (create-gpool *r-cylinder* *r-cylinder-context*)
-  
-  ;; (dotimes (n 5)
-  ;;   (compare-random-object-with-gpools
-  ;;    (list *r-cube-context* *r-green-context* *r-cylinder-context*)))
-
-  ;; (format t "~%~%~% testing spatial relationships")
-  ;; (create-gpool *r-left* *r-left-context*)
-  ;; (create-gpool *r-on* *r-on-context*)
-  ;; (dotimes (n 5)
-  ;;   (compare-random-two-obj-with-gpools
-  ;;    (list *r-left-context* *r-on-context*)))
-  ;; )
-
 
 (defun make-random-object-facts (&key (propositions
 				       'd::((CVCube CVCylinder CVSphere)

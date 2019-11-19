@@ -1,6 +1,7 @@
 
 ;;example 3 Green Cube
 (in-microtheory AileenExp3)
+(isa AileenExp3 AileenCaseMt)
 
 (isa Obj3 CVCylinder)
 (isa Obj3 CVGreen)

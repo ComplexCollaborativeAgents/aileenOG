@@ -1,11 +1,12 @@
 
 ;;example 8 red Cylinder on blue box
 (in-microtheory AileenExp8)
+(isa AileenExp8 AileenCaseMt)
 
 (isa Obj8A CVCylinder)
 (isa Obj8A CVRed)
 
-(isa Obj8B CVCude)
+(isa Obj8B CVCube)
 (isa Obj8B CVBlue)
 
 (n Obj8A Obj8B)

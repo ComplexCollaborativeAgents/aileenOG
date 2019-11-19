@@ -1,6 +1,7 @@
 
 ;;example 7 red cube left of blue sphere
 (in-microtheory AileenExp7)
+(isa AileenExp7 AileenCaseMt)
 
 (isa Obj7A CVCube)
 (isa Obj7A CVRed)

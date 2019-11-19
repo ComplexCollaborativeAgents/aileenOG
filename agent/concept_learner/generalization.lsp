@@ -6,7 +6,7 @@
 ;;;;   Created: November  6, 2019 14:54:11
 ;;;;   Purpose: 
 ;;;; ----------------------------------------------------------------------------
-;;;;  Modified: Monday, November 18, 2019 at 20:55:49 by klenk
+;;;;  Modified: Tuesday, November 19, 2019 at 14:25:44 by klenk
 ;;;; ----------------------------------------------------------------------------
 
 (in-package :aileen)
@@ -14,9 +14,6 @@
 ;; (load "analogystack/qrgsetup.lsp")
 ;; (require-module "fire" :fire)
 
-;; Need to talk to QRG folks about the best way to figure out settings here
-(setq fire::*default-sagewm-threshold* 0)
-(setq fire::*default-sagewm-prob-cutoff* .2)
 
 
 (defun make-reasoner ()
@@ -109,7 +106,7 @@
 			    :context context :response (second pattern))
 	       (reverse (objs-in-context context))))))
     (dolist (obj objs objs) ;;;the fact to working memory and return the list of objects
-      (fire:tell-it `(d::isa ,obj (third pattern) :context context)))))
+      (fire:tell-it `(d::isa ,obj ,(third pattern)) :context context))))
 
 (defun filter-scene-by-expression-rel (facts context gpool prevmatches pattern)
   (assert nil)

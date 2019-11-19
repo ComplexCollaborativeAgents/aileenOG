@@ -1,6 +1,7 @@
 
 ;;example 9 red Cylinder on blue box
 (in-microtheory AileenExp9)
+(isa AileenExp9 AileenCaseMt)
 
 (isa Obj9A CVCube)
 (isa Obj9A CVBlue)
