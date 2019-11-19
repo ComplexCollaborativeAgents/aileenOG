@@ -14,7 +14,7 @@ fi
 sudo apt-get install -y python-setuptools build-essential
 
 (cd agent/vision; GPU=0 OPENCV=0 REBUILD=1 python2 setup.py build_ext)
-conda env create --file environment.yml
+conda env create --force --file environment.yml
 
 AILEEN_ENV="$(conda config --show envs_dirs | grep -o "/.*" | head -1)/aileen"
 

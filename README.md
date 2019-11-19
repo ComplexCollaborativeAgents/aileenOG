@@ -23,54 +23,20 @@
    ```bash
    git clone --recurse-submodules git@gitlab-external.parc.com:aileen/aileen-agent.git
    ``` 
-5. From the `agent/vision` directory, build [Darknet](https://pjreddie.com/darknet/) using `pyyolo`:
+5. Run the `bootstrap.sh` script to set up the Conda environment and build the Python dependencies, such as 
+   [Pynini](http://www.openfst.org/twiki/bin/view/GRM/Pynini) and [Darknet](https://pjreddie.com/darknet/):
    ```bash
-   GPU=0 OPENCV=0 REBUILD=1 python2 setup.py build_ext
+   ./bootstrap.sh
    ```
-6. From the root of the repository, create a Conda environment:
-   ```bash
-   conda env create -f environment.yml
-   ```
-   Whenever a new dependency is added to `environment.yml`, the environment can be updated using:
-   ```bash
-   conda env update -f environment.yml
-   ```
-7. From `/tmp` activate the `aileen` Conda environment and install
-   [OpenFST](http://www.openfst.org/twiki/bin/view/FST/WebHome) (Pynini requirement):
-   ```bash
-   cd /tmp
-   wget http://www.openfst.org/twiki/pub/FST/FstDownload/openfst-1.6.8.tar.gz
-   tar xf openfst-1.6.8.tar.gz
-   cd openfst-1.6.8
-   ./configure --enable-grm --prefix=/path/to/conda/envs/aileen
-   make -j4 install
-   ```
-   > Note: The path to the `aileen` Conda environment can be found using the following commands:
+   > Note: This script creates a Conda environment, called `aileen`. To activate the environment:
    > ```bash
    > conda activate aileen
-   > (aileen) conda info
-   >     ...
-   >     active env location : /path/to/conda/envs/aileen
-   >     ...
    > ```
-8. Install [RE2](https://github.com/google/re2) (Pynini requirement) in the `aileen` Conda environment:
-   ```bash
-   cd /tmp
-   git clone https://github.com/google/re2
-   cd re2
-   git checkout 2018-04-01
-   make -j4 install prefix="" DESTDIR=/path/to/conda/envs/aileen
-   ```
-9. Install [Pynini](http://www.openfst.org/twiki/bin/view/GRM/Pynini) while the `aileen` Conda environment is activated:
-   ```bash
-   cd /tmp
-   wget http://www.openfst.org/twiki/pub/GRM/PyniniDownload/pynini-1.9.3.tar.gz
-   tar xf pynini-1.9.3.tar.gz
-   cd pynini-1.9.3
-   conda activate aileen
-   (aileen) CPATH=/path/to/conda/envs/aileen/include python setup.py install
-   ```
-   
+   > Whenever a new dependency is added to `environment.yml`, the environment can be updated using:
+   > ```bash
+   > conda env update -f environment.yml
+   > ```
+
 ### Run
 1. Open Webots and load the world: "File", "Open World...", and select `world/data/aileen_world.wbt`.
 2. Run the world server:
