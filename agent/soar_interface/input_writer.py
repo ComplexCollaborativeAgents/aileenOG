@@ -15,6 +15,7 @@ try:
 except:
     logging.fatal("[input_writer] :: cannot find spatial reasoning library")
 
+
 class InputWriter(object):
     def __init__(self, soar_agent, world_server):
         self._soar_agent = soar_agent
