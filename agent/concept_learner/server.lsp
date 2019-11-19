@@ -6,7 +6,7 @@
 ;;;;   Created: November 13, 2019 16:14:37
 ;;;;   Purpose: 
 ;;;; ----------------------------------------------------------------------------
-;;;;  Modified: Monday, November 18, 2019 at 11:41:49 by klenk
+;;;;  Modified: Monday, November 18, 2019 at 15:20:32 by klenk
 ;;;; ----------------------------------------------------------------------------
 
 (load "analogystack/qrgsetup.lsp")

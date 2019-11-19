@@ -10,3 +10,5 @@
 
 (w Obj5A Obj5B)
 (dc Obj5A Obj5B)
+
+(rLeft Obj5A Obj5B)

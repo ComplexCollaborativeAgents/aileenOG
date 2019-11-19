@@ -8,11 +8,18 @@
 (isa AileenReasoningSymbol Collection)
 (comment AileenReasoningSymbol "These are symbols that are created by aileen to refer to objects")
 
-(isa aileenReasoningPredicate Predicate)
-(comment aileenReasoningRelation "These are symbols that are created by aileen to refer to sets of objects")
+(isa AileenReasoningPredicate Collection)
+(comment AileenReasoningPredicate "These are symbols that are created by aileen to refer to sets of objects")
 
 (isa AileenGPoolMt Collection)
 (comment AileenGPoolMt "These correspond to each AileenReasoningSymbol/Relation for controlling SAGE")
+
+(isa AileenCaseMt Collection)
+(comment AileenCaseMt "These correspond sets of facts from AILEEN")
+
+(isa AileenCVSymbol Collection)
+(comment AileenCVSymbol "Theseare the collections of objects that come from aileen cv")
+(isa AileenCVSymbol Thing)
 
 ;; This microtheory contains the definitions of the symbols from the
 ;; computer vision system and example symbols from natural langauge
@@ -20,28 +27,28 @@
 ;;; Color
 (isa CVRed Collection)
 (comment CVRed "An object with property Red")
-(genls CVRed Thing)
+(isa CVRed AileenCVSymbol)
 
 (isa CVBlue Collection)
 (comment CVBlue "An object with property Blue")
-(genls CVBlue Thing)
+(isa CVBlue AileenCVSymbol)
 
 (isa CVGreen Collection)
 (comment CVGreen "An object with property Green")
-(genls CVGreen Thing)
+(isa CVGreen AileenCVSymbol)
 
 ;;; Shape
 (isa CVCube Collection)
 (comment CVCube "An object with property Cube")
-(genls CVCube Thing)
+(isa CVCube AileenCVSymbol)
 
 (isa CVSphere Collection)
 (comment CVSphere "An object with property Sphere")
-(genls CVSphere Thing)
+(isa CVSphere AileenCVSymbol)
 
 (isa CVCylinder Collection)
 (comment CVCylinder "An object with property Cylinder")
-(genls CVCylinder Thing)
+(isa CVCylinder AileenCVSymbol)
 
 ;;; Positional Relations
 ;;;  Only define 4 of the positional relationships

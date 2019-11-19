@@ -10,3 +10,5 @@
 
 (w Obj6A Obj6B)
 (ec Obj6A Obj6B)
+
+(rLeft Obj6A Obj6B)
