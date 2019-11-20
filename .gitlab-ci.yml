@@ -4,7 +4,7 @@ variables:
   GIT_SUBMODULE_STRATEGY: recursive
 
 before_script:
-  - conda env create --file environment.yml
+  - ./bootstrap.sh
   - source activate aileen
 
 test:
