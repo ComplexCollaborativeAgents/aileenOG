@@ -4,13 +4,24 @@
 # @created smohan 20191114
 
 
-sp {interaction-purpose-status*propose*confirm
+sp {interaction-purpose-status*propose*requestion-acknowledgement
     (state <s>    ^name interpret-purpose-status
                   ^purpose <p>)
     (<p>    ^type verify
             ^completed true
-            ^status success)
+            ^status <any>)
 -->
     (<s>    ^operator <op> +)
     (<op>    ^name request-acknowldegement)
+    }
+
+sp {interaction-purpose-status*propose*complete-learning-status
+    (state <s>    ^name interpret-purpose-status
+                  ^purpose <p>)
+    (<p>    ^type learn
+            ^completed true)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name complete-learn-purpose
+             ^purpose <p>)
     }

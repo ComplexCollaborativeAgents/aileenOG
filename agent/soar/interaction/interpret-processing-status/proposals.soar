@@ -1,0 +1,19 @@
+##!
+# @file
+#
+# @created smohan 20191115
+
+
+sp {interpret-processing-status*propose*interpret-unknown-concept
+    (state <s>    ^name interpret-processing-status
+                  ^superstate.operator <sop>)
+    (<sop>    ^name interpret-processing-status
+              ^processing-status <ps>)
+    (<ps>    ^type unknown-visual-concept
+             ^information <info>)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name interpret-unknown-concept
+             ^information <info>
+             ^concept visual)
+    }

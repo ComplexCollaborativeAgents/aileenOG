@@ -12,3 +12,5 @@ source "interpret-message/load.soar"
 source "update-stack.soar"
 
 source "interpret-purpose-status/load.soar"
+
+source "interpret-processing-status/load.soar"

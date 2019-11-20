@@ -1,0 +1,14 @@
+##!
+# @file
+#
+# @created smohan 20191115
+
+sp {learn-from-object*apply*complete-learn-from-object
+    (state <s>    ^name learn-from-object
+                  ^operator.name complete-learn-from-object
+                  ^superstate <ss>
+                  ^information <info>)
+--> 
+    (<ss>    ^learned <info>)
+    }
+    

@@ -13,8 +13,9 @@ sp {create-filter*propose*mark-unknown-concept
     (<cue>    ^nl <tag>)
 -->
     (<s>    ^operator <op> + >)
-    (<op>    ^name mark-unknown-concept
-             ^nl <tag>)
+    (<op>    ^name mark-unknown-visual-concept
+             ^nl <tag>
+             ^type visual)
    }
 
 

@@ -1,0 +1,16 @@
+##!
+# @file
+#
+# @created smohan 20191120
+
+sp {interpret-purpose-status*apply*complete-learn-purpose
+    (state <s>    ^name interpret-purpose-status
+                  ^operator <op>
+                  ^superstate <ss>)
+    (<op>    ^name complete-learn-purpose
+             ^purpose <p>)
+    (<ss>    ^interaction.stack.segment <seg>)
+    (<seg>    ^purpose <p>)
+-->
+    (<ss>    ^terminate-segment <seg>)
+    }

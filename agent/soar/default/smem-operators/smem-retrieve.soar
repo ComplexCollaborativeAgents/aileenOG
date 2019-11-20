@@ -34,7 +34,7 @@ sp {anystate*apply*smem-retrieve-lti*copy*retrieve*params
               ^smem.command <cmd>)
    (<o> ^name smem-retrieve-lti
         ^retrieve-info <info>)
-   (<info> ^{ <att> <> identifier <> retrieved } <val>)
+   (<info> ^{ <att> <> identifier <> retrieved <> retrieved-lti } <val>)
 -->
    (<cmd> ^<att> <val>)
 }

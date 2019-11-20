@@ -8,3 +8,5 @@ source "elaborate-state.soar"
 source "elaborate-from-input-link.soar"
 
 source "elaborate-output-link.soar"
+
+source "elaborate-objects.soar"

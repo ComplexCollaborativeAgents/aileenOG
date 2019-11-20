@@ -1,0 +1,14 @@
+##!
+# @file
+#
+# @created smohan 20191115
+
+
+sp {learn-visual-concept*apply*complete-learn-visual-concept
+    (state <s>    ^name learn-visual-concept
+                  ^superstate.segment <seg>
+                  ^information <info>
+                  ^operator.name complete-learn-visual-concept)
+-->
+    (<seg>    ^learned <info>)
+    }

@@ -24,3 +24,5 @@ source "_knowledge/load.soar"
 source "default/load.soar"
 
 source "verify/load.soar"
+
+source "learn/load.soar"

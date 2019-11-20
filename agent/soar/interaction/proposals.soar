@@ -15,7 +15,8 @@ sp {interaction*propose*interpret-message
 
 sp {interaction*propse*interpret-purpose
     (state <s>    ^name interaction
-                  ^interaction.stack.segment <seg>)
+                  ^interaction.stack.segment <seg>
+                  -^<< new-segment terminate-segment modify-segment >>)
     (<seg>    ^purpose <p>
               -^communicated)
     (<p>    ^completed <any>)
@@ -24,6 +25,19 @@ sp {interaction*propse*interpret-purpose
     (<op>    ^name interpret-purpose-status
              ^purpose <p>)
     }
+
+sp {interaction*propose*interpret-processing-status
+    (state <s>    ^name interaction
+                  ^interaction <inter>
+                  ^processing-status <ps>
+                  -^<< new-segment terminate-segment modify-segment >>)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name interpret-processing-status
+             ^processing-status <ps>)
+    }
+
+
 
 sp {interaction*propose*update-stack
     (state <s>    ^name interaction
