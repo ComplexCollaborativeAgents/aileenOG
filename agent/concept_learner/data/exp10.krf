@@ -1,0 +1,13 @@
+
+;;example 10 red cube left of blue sphere
+(in-microtheory AileenExp10)
+(isa AileenExp10 AileenCaseMt)
+
+(isa Obj10A CVCube)
+(isa Obj10A CVRed)
+
+(isa Obj10B CVSphere)
+(isa Obj10B CVBlue)
+
+(n Obj10A Obj10B)
+(ec Obj10A Obj10B)
