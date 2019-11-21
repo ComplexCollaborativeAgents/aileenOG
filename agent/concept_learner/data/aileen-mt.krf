@@ -1,0 +1,96 @@
+;;;;  Modified: Thursday, November  7, 2019 at 11:03:13 by klenk
+;;;; File name: alieen-mt.krf
+
+(in-microtheory AileenMt)
+
+;; Collections to facilitate control
+
+(isa AileenReasoningSymbol Collection)
+(comment AileenReasoningSymbol "These are symbols that are created by aileen to refer to objects")
+
+(isa AileenReasoningPredicate Collection)
+(comment AileenReasoningPredicate "These are symbols that are created by aileen to refer to sets of objects")
+
+(isa AileenGPoolMt Collection)
+(comment AileenGPoolMt "These correspond to each AileenReasoningSymbol/Relation for controlling SAGE")
+
+(isa AileenCaseMt Collection)
+(comment AileenCaseMt "These correspond sets of facts from AILEEN")
+
+(isa AileenCVSymbol Collection)
+(comment AileenCVSymbol "Theseare the collections of objects that come from aileen cv")
+(isa AileenCVSymbol Thing)
+
+;; This microtheory contains the definitions of the symbols from the
+;; computer vision system and example symbols from natural langauge
+
+;;; Color
+(isa CVRed Collection)
+(comment CVRed "An object with property Red")
+(isa CVRed AileenCVSymbol)
+
+(isa CVBlue Collection)
+(comment CVBlue "An object with property Blue")
+(isa CVBlue AileenCVSymbol)
+
+(isa CVGreen Collection)
+(comment CVGreen "An object with property Green")
+(isa CVGreen AileenCVSymbol)
+
+;;; Shape
+(isa CVCube Collection)
+(comment CVCube "An object with property Cube")
+(isa CVCube AileenCVSymbol)
+
+(isa CVSphere Collection)
+(comment CVSphere "An object with property Sphere")
+(isa CVSphere AileenCVSymbol)
+
+(isa CVCylinder Collection)
+(comment CVCylinder "An object with property Cylinder")
+(isa CVCylinder AileenCVSymbol)
+
+;;; Positional Relations
+;;;  Only define 4 of the positional relationships
+(isa w Relation)
+(arity w 2)
+(arg1Isa w Thing)
+(arg2Isa w Thing)
+(comment w "arg2 is west of arg1")
+
+(isa nw Relation)
+(arity nw 2)
+(arg1Isa nw Thing)
+(arg2Isa nw Thing)
+(comment nw "arg2 is northwest of arg1")
+
+(isa n Relation)
+(arity n 2)
+(arg1Isa n Thing)
+(arg2Isa n Thing)
+(comment n "arg2 is north of arg1")
+
+(isa ne Relation)
+(arity ne 2)
+(arg1Isa ne Thing)
+(arg2Isa ne Thing)
+(comment ne "arg2 is northeast of arg1")
+
+;;; RCC8
+(isa dc Relation)
+(arity dc 2)
+(arg1Isa dc Thing)
+(arg2Isa dc Thing)
+(comment dc "arg2 is RCC8-dc of arg1")
+
+(isa po Relation)
+(arity po 2)
+(arg1Isa po Thing)
+(arg2Isa po Thing)
+(comment po "arg2 is RCC8-po of arg1")
+
+(isa ec Relation)
+(arity ec 2)
+(arg1Isa ec Thing)
+(arg2Isa ec Thing)
+(comment ec "arg2 is RCC8-ec of arg1")

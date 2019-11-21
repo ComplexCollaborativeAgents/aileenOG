@@ -4,3 +4,9 @@
 [submodule "agent/vision"]
 	path = agent/vision
 	url = ../../aileen/aileen-vision-module.git
+[submodule "agent/concept_learner/analogystack"]
+	path = agent/concept_learner/analogystack
+	url = ../../klenk/analogystack
+[submodule "agent/concept_learner/lisp-unit"]
+	path = agent/concept_learner/lisp-unit
+	url = ../../klenk/lisp-unit
