@@ -11,7 +11,7 @@ else
   sudo apt-get update --fix-missing
 fi
 
-sudo apt-get install -y python-setuptools build-essential
+sudo apt-get install -y python-setuptools build-essential libgl1-mesa-glx
 
 (cd agent/vision; GPU=0 OPENCV=0 REBUILD=1 python2 setup.py build_ext)
 conda env create --force --file environment.yml
