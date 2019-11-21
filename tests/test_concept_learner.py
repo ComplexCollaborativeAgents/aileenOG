@@ -1,16 +1,28 @@
 import json
 import xmlrpclib
-
+import subprocess
+import time
+import agent.configuration
+import pytest
 
 def test_square():
     num = 7
     assert num*num == 49
 
+@pytest.fixture
+def load_configuration():
+    return agent.configuration.Configuration.config['ConceptLearner']
+
 
 # Functional test that creates a generalization and then matches against it
-def test_concept_learner_server(port=8000):
-    server = xmlrpclib.ServerProxy('http://dubs:'+str(port)+'/ConceptLearner')
+def test_concept_learner_server(load_configuration):
+    cmd = 'ssh {} {}/start_concept_learner.sh {}'.format(load_configuration['hostname'],
+                                                         load_configuration['learner_path'],
+                                                         load_configuration['port'])
+    out = subprocess.Popen(cmd,stdout=subprocess.PIPE, stderr=subprocess.STDOUT,shell=True)
+    time.sleep(5) # Need to wait for lisp to start
 
+    server = xmlrpclib.ServerProxy('http://dubs:'+str(load_configuration['port'])+'/ConceptLearner')
     r = server.create_reasoning_symbol(xmlrpclib.Binary(json.dumps({'symbol':'RRed'})))
     res = json.loads(r.data)
     assert res['gpool'] == 'RRedMt'
@@ -47,3 +59,7 @@ def test_concept_learner_server(port=8000):
     r = server.filter_scene_by_expression(xmlrpclib.Binary(json.dumps(data)))
     res = json.loads(r.data)
     assert len(res['matches']) == 1
+
+    out.kill()
+    cmd = "ssh {} kill `pidof mlisp8`".format(load_configuration['hostname'])
+    out = subprocess.Popen(cmd,stdout=subprocess.PIPE, stderr=subprocess.STDOUT,shell=True)

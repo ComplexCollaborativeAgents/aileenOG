@@ -20,6 +20,6 @@
   "ConceptLearner":{
     "hostname": "dubs",
     "port": 8080,
-    "learner_path": "~/code/AILEEN/aileen-agent/agent/concept_learner"
+    "learner_path": "/home/klenk/code/AILEEN/aileen-agent/agent/concept_learner"
   }
 }
