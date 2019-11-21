@@ -10,3 +10,5 @@ def test_process_language_command():
     oreader.process_language_command(language_link)
 
     assert agent._input_writer._language == {'parses': [['obj', ['prop', 'blue'], 'box']]}
+    agent.stop()
+    agent.quit()

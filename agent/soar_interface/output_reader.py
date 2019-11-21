@@ -5,10 +5,12 @@ from agent.language.aileen_grammar import AileenGrammar
 class OutputReader(object):
     def __init__(self, soar_agent, world_server):
         self._soar_agent = soar_agent
-        self._world = world_server
         self._grammar = AileenGrammar()
         self._grammar.use_default_rules()
         self._response = None
+
+        if world_server:
+            self._world_server = world_server
 
     def read_output(self):
         number_of_commands = self._soar_agent._agent.GetNumberCommands()

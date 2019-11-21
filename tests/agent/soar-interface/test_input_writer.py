@@ -22,37 +22,41 @@ def test_writing_interaction_to_input_link():
     assert content_child.GetValueAsString() == 'test_content'
 
     assert iwriter._interaction is None
+    agent.stop()
+    agent.shutdown()
 
 
-# def test_writing_language_to_input_link_obj():
-#     agent = soar_agent(None)
-#     iwriter = agent._input_writer
-#     iwriter._language = {'parses': [['obj', ['prop', 'blue'], 'box']]}
-#     iwriter.write_language_to_input_link()
-#
-#     llink = iwriter._language_link
-#
-#     language_link_WME = llink.GetChild(0)
-#     assert language_link_WME.GetAttribute() == "language"
-#
-#     language_link = language_link_WME.ConvertToIdentifier()
-#
-#     parses_link = language_link.GetChild(0).ConvertToIdentifier()
-#     assert parses_link.GetAttribute() == 'parses'
-#
-#     parse_link = parses_link.GetChild(0).ConvertToIdentifier()
-#     assert parse_link.GetAttribute() == 'parse'
-#
-#     for i in range(0, parses_link.GetNumberChildren()):
-#          child = parses_link.GetChild(i)
-#          if child.GetAttribute() == 'tag':
-#              assert child.GetValueAsString == 'box'
-#          if child.GetAttribute == 'prop':
-#              childId = child.ConvertToIdentifier()
-#              assert childId.GetChild(0).GetAttribute() == 'tag'
-#              assert childId.GetChild(0).GetAttribute() == 'blue'
-#
-#     assert iwriter._language is None
+def test_writing_language_to_input_link_obj():
+    agent = soar_agent(None)
+    iwriter = agent._input_writer
+    iwriter._language = {'parses': [['obj', ['prop', 'blue'], 'box']]}
+    iwriter.write_language_to_input_link()
+
+    llink = iwriter._language_link
+
+    language_link_WME = llink.GetChild(0)
+    assert language_link_WME.GetAttribute() == "language"
+
+    language_link = language_link_WME.ConvertToIdentifier()
+
+    parses_link = language_link.GetChild(0).ConvertToIdentifier()
+    assert parses_link.GetAttribute() == 'parses'
+
+    parse_link = parses_link.GetChild(0).ConvertToIdentifier()
+    assert parse_link.GetAttribute() == 'parse'
+
+    for i in range(0, parses_link.GetNumberChildren()):
+         child = parses_link.GetChild(i)
+         if child.GetAttribute() == 'tag':
+             assert child.GetValueAsString == 'box'
+         if child.GetAttribute == 'prop':
+             childId = child.ConvertToIdentifier()
+             assert childId.GetChild(0).GetAttribute() == 'tag'
+             assert childId.GetChild(0).GetAttribute() == 'blue'
+
+    assert iwriter._language is None
+    agent.stop()
+    agent.shutdown()
 
 def test_qsr_input_writer():
     agent = soar_agent(None)
@@ -61,3 +65,5 @@ def test_qsr_input_writer():
     res = iw.create_qsrs(objects)
     assert len(res)==2
     assert len(res['403']['397']) == 2
+    agent.stop()
+    agent.shutdown()

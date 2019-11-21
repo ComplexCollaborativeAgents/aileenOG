@@ -17,8 +17,8 @@ except ValueError, e:
 
 class soar_agent(object):
     def __init__(self, world_server):
-        self._world_server = world_server
-        self.setup_soar_agent()
+
+        self.setup_soar_agent(world_server)
         self.init_state_maintenance_data_structures()
 
         if Configuration.config['RunParams']['svs'] == "true":
@@ -29,15 +29,15 @@ class soar_agent(object):
         self._agent_thread = None
         self._is_running = False
 
-    def setup_soar_agent(self):
+    def setup_soar_agent(self, world_server):
         self._kernel = self.create_kernel()
         self._agent = self.create_agent(str(Configuration.config['SoarAgent']['name']))
         self._agentFilepath = str(Configuration.config['SoarAgent']['file'])
         self.load_agent_rules(self._agentFilepath)
         self._input_link = self._agent.GetInputLink()
         self._output_link = self._agent.GetOutputLink()
-        self._input_writer = input_writer.InputWriter(self, self._world_server)
-        self._output_reader = output_reader.OutputReader(self, self._world_server)
+        self._input_writer = input_writer.InputWriter(self, world_server)
+        self._output_reader = output_reader.OutputReader(self, world_server)
 
     def create_kernel(self):
         soar_kernel_port = random.randint(40000, 60000)
