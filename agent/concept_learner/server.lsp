@@ -6,7 +6,7 @@
 ;;;;   Created: November 13, 2019 16:14:37
 ;;;;   Purpose: 
 ;;;; ----------------------------------------------------------------------------
-;;;;  Modified: Wednesday, November 20, 2019 at 18:39:10 by klenk
+;;;;  Modified: Thursday, November 21, 2019 at 09:09:56 by klenk
 ;;;; ----------------------------------------------------------------------------
 
 (load "analogystack/qrgsetup.lsp")
@@ -132,6 +132,7 @@
 
 
 (defun start-server (&key (port 8000))
+  (format t "~% starting server port ~A" port)
   (make-reasoner)
   (let ((rcp (net.xml-rpc:make-xml-rpc-server
 	      :start nil :enable t
