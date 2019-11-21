@@ -19,7 +19,7 @@ def create_connection_with_aileen_agent():
     url = 'http://{}:{}'.format(Configuration.config['Servers']['agent_host'],
                                 Configuration.config['Servers']['agent_port'])
     server = xmlrpclib.ServerProxy(url)
-    logging.info("[aileen_instructor] :: created a connection with the world server at: {}".format(url))
+    logging.info("[aileen_instructor] :: created a connection with the agent: {}".format(url))
     return server
 
 
