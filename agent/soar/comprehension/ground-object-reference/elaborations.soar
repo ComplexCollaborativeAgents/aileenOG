@@ -1,0 +1,38 @@
+##!
+# @file
+#
+# @created smohan 20191108
+
+sp {grounded-object-reference*elaborate*state
+    (state <s>    ^name ground-object-reference
+                  ^superstate.operator <sop>)
+    (<sop>    ^name ground-object-reference
+              ^reference <ref>)
+-->
+    (<s>    ^reference <ref>)
+    }
+
+sp {ground-object-reference*elaborate*argument
+    (state <s>    ^name ground-object-reference
+                  ^superstate.operator.argument <arg>)
+-->
+    (<s>    ^argument <arg>)
+    }
+
+sp {grounded-object-reference*elaborate*grounds
+    (state <s>    ^name ground-object-reference
+                  ^reference <ref>)
+-->
+    (<s>    ^grounding <g>)
+    (<g>    ^_metadata.description <ref>)
+    }
+
+
+### SM: we are assuming that there is only a single resolution to an object reference
+sp {grounded-object-reference*elaborate*resolution
+    (state <s>    ^name ground-object-reference)
+-->
+    (<s>    ^resolution <res>)
+    (<res>    ^preference unique
+              ^arity single)
+    }

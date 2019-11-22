@@ -1,10 +1,10 @@
 {
   "Soar": {
-    "path":"/usr/local/SoarSuite_9.6.0-Multiplatform_64bit/bin/linux64",
+    "path":"/home/smohan/soar/soar9.6/bin",
     "sleep-time": 0.0001
   },
   "SoarAgent": {
-    "file": "../agent/load.soar",
+    "file": "soar/load.soar",
     "name": "aileen"
   },
   "RunParams": {

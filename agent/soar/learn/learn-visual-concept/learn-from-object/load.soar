@@ -1,0 +1,10 @@
+##!
+# @file: 
+#
+# @created smohan 20191115
+
+source "elaborations.soar"
+
+source "proposals.soar"
+
+source "complete-learn-from-object.soar"

@@ -1,0 +1,26 @@
+##!
+# @file
+#
+# @created smohan 20191107
+
+sp {comprehension*apply*parse-content
+    (state <s>    ^name comprehension
+                  ^operator <op>
+                  ^io.output-link <ol>)
+    (<op>    ^name parse-content
+             ^content <cont>)
+-->
+    (<ol>    ^language <l>)
+    (<l>    ^parse-content <cont>)
+    }
+
+sp {comprehension*apply*parse-content*write
+    (state <s>    ^name comprehension
+                  ^segment <seg>
+                  ^operator <op>
+                  ^io.input-link.language-link.language.parses <parses>
+                  ^superstate.interaction <inter>)
+    (<op>    ^name parse-content)
+-->
+    (<seg>    ^parses <parses>)
+    }

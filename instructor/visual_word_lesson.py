@@ -7,7 +7,7 @@ from log_config import logging
 class VisualWordLesson:
     def __init__(self):
         self._scene = AileenScene()
-        self._language = None
+        self._interaction = {}
 
     def generate_lesson(self, distractors=0):
         """
@@ -16,7 +16,7 @@ class VisualWordLesson:
         lesson = {}
         self.generate_scene(distractors)
         lesson['scene'] = self._scene.generate_scene_description()
-        lesson['interaction'] = self._language
+        lesson['interaction'] = self._interaction
         return lesson
 
     def generate_scene(self, distractors):
@@ -24,25 +24,20 @@ class VisualWordLesson:
         :param distractors: Number of distractors to be generated.
         """
         logging.debug("[aileen_visual_word_lesson] :: generating a new scene for visual word learning")
+
         target = AileenObject.generate_random_object()
         target.set_translation(AileenScene.randomizer.get_random_position_on_table())
         self._scene.add_object(target)
-        self._language = LanguageGenerator.generate_language_for_object(target)
 
         for distractor in self._generate_distractors(target, distractors):
             self._scene.add_object(distractor)
 
-    def generate_training_example(self):
-        pass
+        self._interaction['signal'] = 'verify'
+        self._interaction['content'] = LanguageGenerator.generate_language_for_object(target)
 
-    def generate_verification_test(self):
-        pass
-
-    def generate_comprehension_test(self):
-        pass
-
-    def generate_generation_test(self):
-        pass
+    def evaluate_agent_response(self, agent_response):
+        if agent_response['status'] == 'success':
+            return {'signal': 'correct'}
 
     def _generate_distractors(self, target, n):
         distractors = []
@@ -59,14 +54,22 @@ class VisualWordLesson:
         while True:
             raw_input("Press any key to generate the next lesson...")
 
+            lesson_object = VisualWordLesson()
+            lesson = lesson_object.generate_lesson(distractors=0)
+
             lesson = VisualWordLesson().generate_lesson(distractors=3)
 
+
             scene_acknowledgement = world_server.set_scene(
-                {'configuration': lesson['scene'], 'label': lesson['interaction']})
+                {'configuration': lesson['scene'], 'label': lesson['interaction']['content']})
             logging.info("[aileen_instructor] :: received from world {}".format(scene_acknowledgement))
 
-            # language_acknowledgement = agent_server.process_language(lesson['interaction'])
-            # logging.info("[aileen_instructor] :: received from agent {}".format(language_acknowledgement))
+            agent_response = agent_server.process_interaction(lesson['interaction'])
+            logging.info("[aileen_instructor] :: received from agent {}".format(agent_response))
+
+            evaluation = lesson_object.evaluate_agent_response(agent_response)
+            agent_response = agent_server.process_interaction(evaluation)
+            logging.info("[aileen_instructor] :: provided feedback to agent")
 
 
 if __name__ == '__main__':

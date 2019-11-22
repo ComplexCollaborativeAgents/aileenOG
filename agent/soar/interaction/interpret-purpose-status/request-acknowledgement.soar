@@ -1,0 +1,20 @@
+##!
+# @file
+#
+# @created smohan 20191114
+
+
+sp {interpret-purpose-status*apply*request-acknowledgement
+    (state <s>    ^name interpret-purpose-status
+                  ^operator.name request-acknowldegement
+                  ^purpose <p>
+                  ^topstate <ts>
+                  ^superstate.interaction.stack.segment <seg>)
+    (<p>    ^type verify
+            ^status success)
+-->
+    (<ts>  ^response <res>)
+    (<res>    ^type verify
+              ^status success)
+    (<seg>    ^communicated <res>)
+}

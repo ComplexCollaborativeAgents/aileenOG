@@ -1,0 +1,24 @@
+##!
+# @file
+#
+# @created smohan 20191115
+
+### AGENT PARAM
+sp {learn-visual-concept*elaborate*relevant-percept-set
+    (state <s>    ^name learn-visual-concept)
+-->
+    (<s>    ^relevant-percept-set <set>)
+    (<set>    ^type color shape)
+    }
+                  
+
+
+sp {learn-visual-concept*elaborate*state
+    (state <s>    ^name learn-visual-concept
+                  ^superstate.operator <sop>)
+    (<sop>    ^name learn-visual-concept
+              ^information <info>)
+-->
+    (<s>    ^information <info>)
+    }
+

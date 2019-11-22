@@ -1,0 +1,41 @@
+##!
+# @file
+#
+# @created smohan 20191113
+
+sp {interaction*apply*update-stack*new-segment
+    (state <s>    ^name interaction
+                  ^operator <op>
+                  ^interaction.stack <stack>
+                  ^new-segment <new-seg>
+                  -^terminate-segment <seg>)
+    (<stack>    ^segment <seg>)
+    (<op>    ^name update-stack)
+-->
+    (<new-seg>    ^next <seg>)
+    (<stack>    ^segment <new-seg>
+                ^segment <seg> -)
+    }
+
+sp {interaction*apply*update-stack*message*processing-status
+    (state <s>    ^name interaction
+                  ^operator <op>
+                  ^<< processing-status message >> <m>)
+    (<op>    ^name update-stack)
+-->
+    (<m>    ^processed true)
+    }
+
+sp {interaction*apply*update-stack*terminate-segment*only*status
+    (state <s>    ^name interaction
+                ^operator.name update-stack
+                 ^interaction <inter>
+                  ^terminate-segment <seg>
+                   -^new-segment <new-seg>)
+     (<inter>    ^stack <stack>)
+     (<stack>    ^segment <seg>)
+      (<seg>    ^next <next-seg>)
+-->
+    (<stack>    ^segment <next-seg>
+                  ^segment <seg> -)
+  }

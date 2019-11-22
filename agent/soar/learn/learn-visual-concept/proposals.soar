@@ -1,0 +1,36 @@
+##!
+# @file
+#
+# @created smohan 20191115
+
+sp {learn-visual-concept*propose*select-object
+    (state <s>    ^name learn-visual-concept
+                  ^world.objects.object <obj>
+                  -^selected-object)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name select-object
+             ^object <obj>)
+    }
+
+sp {learn-visual-concept*propose*learn-from-object
+    (state <s>    ^name learn-visual-concept
+                  ^information <info>
+                  ^selected-object <obj>
+                  ^relevant-percept-set <set>
+                  -^learned <info>)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name learn-from-object
+             ^object <obj>
+             ^information <info>
+             ^relevant-percept-set <set>)
+    }
+
+sp {learn-visual-concept*propose*complete-learn-visual-concept
+    (state <s>    ^name learn-visual-concept
+                  ^learned <info>)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name complete-learn-visual-concept)
+    }

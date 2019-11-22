@@ -19,13 +19,19 @@ class InputWriter(object):
     def __init__(self, soar_agent, world_server):
         self._soar_agent = soar_agent
         self._world_server = world_server
+        self._interaction = None
         self._language = None
+
+        self._world_server = world_server
 
         if soar_agent:  # Enable stand alone testing
             self._input_link = soar_agent.get_input_link()
             self._world_link = self._input_link.CreateIdWME("world")
             self._objects_link = self._world_link.CreateIdWME("objects")
-            self._interaction_link = self._input_link.CreateIdWME("interaction")
+            self._interaction_link = self._input_link.CreateIdWME("interaction-link")
+            self._clean_interaction_link_flag = False
+            self._language_link = self._input_link.CreateIdWME("language-link")
+            self._clean_language_link_flag = False
 
         if Configuration.config['RunParams']['cv'] == "True":
             # ToDo: Move the input to Detector to the config file.
@@ -35,19 +41,34 @@ class InputWriter(object):
                                      'color')
         self._svs_objects = []
 
+    def set_language(self, language_dictionary):
+        self._language = language_dictionary
+
+    def set_interaction(self, interaction_dictionary):
+        self._interaction = interaction_dictionary
+
     def generate_input(self):
         time.sleep(Configuration.config['Soar']['sleep-time'])
 
-        #if self._language is not None:
-         #   self.delete_all_children(self._interaction_link)
-         #   self._interaction_link.CreateStringWme('language', self._language)
-          #  self._language = None
+        if self._clean_interaction_link_flag:
+            self.clean_interaction_link()
+
+        if self._clean_language_link_flag:
+            self.clean_language_link()
+
+        if self._interaction is not None:
+            self.write_interaction_dictionary_to_input_link()
+
+        if self._language is not None:
+            self.write_language_to_input_link()
+
 
         if Configuration.config['RunParams']['cv'] == "True":
             binary_image = self.request_server_for_current_state_image()
             self.write_binary_image_to_file(binary_image)
             im = cv2.imdecode(np.fromstring(binary_image.data, dtype=np.uint8), 1)
             cv_detections = self.detector.run(im)
+            print cv_detections
 
         objects_list = self.request_server_for_objects_info()
         if objects_list is not None:
@@ -57,9 +78,53 @@ class InputWriter(object):
 
         qsrs = self.create_qsrs(objects_list)
 
-    def input_language(self, string):
-        logging.debug("[input_writer] :: received training string: {}".format(string))
-        self._language = string
+    def clean_language_link(self):
+        self.delete_all_children(self._language_link)
+        self._clean_language_link_flag = False
+
+    def write_language_to_input_link(self):
+        new_language_link = self._language_link.CreateIdWME("language")
+        logging.debug("[input_writer] :: writing generated parse to input link")
+        ## write all parses
+        parses = self._language['parses']
+        parses_link = new_language_link.CreateIdWME("parses")
+        for parse in parses:
+            parse_link = parses_link.CreateIdWME("parse")
+            item = parse[0]
+            if item == 'obj': ### function is partially written, will only write obj parses to Soar
+                obj_ref_link = parse_link.CreateIdWME("obj-ref")
+                i = 1
+                while isinstance(parse[i], list): ## property
+                    property = parse[i]
+                    assert property[0] == 'prop'
+                    prop_link = obj_ref_link.CreateIdWME('prop')
+                    prop_link.CreateStringWME('tag', property[1])
+                    i = i+1
+                obj_ref_link.CreateStringWME('tag', parse[i])
+        self._language = None
+        self._clean_language_link_flag = True
+
+    def clean_interaction_link(self):
+        self.delete_all_children(self._interaction_link)
+        self._clean_interaction_link_flag = False
+
+    def write_interaction_dictionary_to_input_link(self):
+        logging.debug("[input_writer] :: writing interaction to input link")
+        new_interaction_link = self._interaction_link.CreateIdWME("message")
+        if 'signal' in self._interaction:
+            signal = str(self._interaction['signal'])
+            new_interaction_link.CreateStringWME('signal', signal)
+
+        if 'content' in self._interaction:
+            content = str(self._interaction['content'])
+            new_interaction_link.CreateStringWME('content', content)
+
+        self._interaction = None
+        self._clean_interaction_link_flag = True
+
+    def process_interaction(self, interaction_dict):
+        logging.debug("[input_writer] :: received training string: {}".format(interaction_dict))
+        self._interaction = interaction_dict
 
     ## SM: both these methods need to be rewritten to maintain the list of objects properly
     def add_objects_to_svs(self, objects_list):
@@ -88,6 +153,9 @@ class InputWriter(object):
             position_id.CreateFloatWME('y', w_object['position'][1])
             position_id.CreateFloatWME('z', w_object['position'][2])
             object_id.CreateStringWME('held', w_object['held'])
+            object_id.CreateStringWME('color', w_object['color'])
+            object_id.CreateStringWME('shape', w_object['shape'])
+            object_id.CreateStringWME('id_name', w_object['id_name'])
 
     def request_server_for_objects_info(self):
         try:

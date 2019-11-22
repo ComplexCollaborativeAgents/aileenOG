@@ -1,0 +1,10 @@
+##!
+# @file: 
+#
+# @created smohan 20191108
+
+source "smem-query.soar"
+
+source "smem-retrieve.soar"
+
+source "smem-store.soar"

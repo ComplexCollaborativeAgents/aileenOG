@@ -1,0 +1,19 @@
+##!
+# @file
+#
+# @created smohan 20191115
+
+sp {create-filter*apply*mark-unknown-concept
+    (state <s>    ^name create-filter
+                  ^operator <op>
+                  ^topstate <ts>)
+    (<op>    ^name mark-unknown-visual-concept
+             ^type <type>
+             ^nl <nl>)
+-->
+    (<ts>    ^processing-status <ps>)
+    (<ps>    ^type unknown-visual-concept
+             ^information <info>
+             ^source comprehension)
+    (<info>    ^nl <nl>)
+    }

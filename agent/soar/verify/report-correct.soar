@@ -1,0 +1,14 @@
+##!
+# @file
+#
+# @created smohan 20191111
+
+sp {verify*apply*report-correct
+    (state <s>    ^name verify
+                  ^operator.name report-success
+                  ^segment <seg>)
+    (<seg>    ^purpose <p>)
+-->
+    (<p>    ^completed true 
+              ^status success)
+}

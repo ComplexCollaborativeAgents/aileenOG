@@ -1,0 +1,17 @@
+##!
+# @file
+#
+# @created smohan 20191113
+
+sp {find-object*apply*filter-scene
+    (state <s>    ^name find-object
+                  ^object-set.object <object>
+                  ^filter <filter>
+                  ^found.objects <fo>
+                  ^operator.name apply-filter)
+    -{(<filter>    ^percept <val>)
+      (<object>    -^<attr> <val>)}
+
+-->
+    (<fo>    ^object <object>)
+    }

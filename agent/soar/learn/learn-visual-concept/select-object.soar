@@ -1,0 +1,13 @@
+##!
+# @file
+#
+# @created smohan 20191115
+
+sp {learn-visual-concept*apply*select-object
+    (state <s>    ^name learn-visual-concept
+                  ^operator <op>)
+    (<op>    ^name select-object
+             ^object <obj>)
+-->
+    (<s>    ^selected-object <obj>)
+    }

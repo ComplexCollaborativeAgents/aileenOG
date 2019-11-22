@@ -5,3 +5,6 @@
 
 # enable SVS for aileen
 #svs --enable
+
+# enable smem for aileen
+smem --enable

@@ -1,0 +1,14 @@
+##!
+# @file
+#
+# @created smohan 20191113
+
+
+sp {verify*elaborate*segment
+    (state <s>    ^name verify
+                  ^superstate.operator <sop>)
+    (<sop>    ^name verify
+              ^segment <seg>)
+-->
+    (<s>    ^segment <seg>)
+    }

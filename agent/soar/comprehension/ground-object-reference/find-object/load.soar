@@ -1,0 +1,14 @@
+##!
+# @file: 
+#
+# @created smohan 20191113
+
+source "elaborations.soar"
+
+source "proposal.soar"
+
+source "create-filter/load.soar"
+
+source "apply-filter.soar"
+
+source "complete-find-object-.soar"

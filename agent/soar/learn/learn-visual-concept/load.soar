@@ -1,0 +1,14 @@
+##!
+# @file: 
+#
+# @created smohan 20191115
+
+source "elaborations.soar"
+
+source "proposals.soar"
+
+source "select-object.soar"
+
+source "learn-from-object/load.soar"
+
+source "complete-learn-visual-concept.soar"

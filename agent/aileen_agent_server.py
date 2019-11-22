@@ -24,13 +24,12 @@ class AileenAgentServer():
 
         self._server.register_introspection_functions()
 
-        def process_language(language_dict):
-            acknowledgement = True
-            print language_dict
-            #aileen_agent.process_language(language_dict['language'])
-            return acknowledgement
+        def process_interaction(interaction_dict):
+            logging.debug("[agent_server] :: received process interaction request: {}".format(interaction_dict))
+            response = aileen_agent.process_interaction(interaction_dict)
+            return response
 
-        self._server.register_function(process_language, 'process_language')
+        self._server.register_function(process_interaction, 'process_interaction')
 
     def run(self):
         while not self._quit:

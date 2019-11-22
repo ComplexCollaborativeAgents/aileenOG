@@ -1,0 +1,23 @@
+##!
+# @file
+#
+# @created smohan 20191115
+
+sp {learn*elaborate*state
+    (state <s>    ^name learn
+                  ^superstate.operator <sop>)
+    (<sop>    ^name learn
+              ^segment <seg>)
+-->
+    (<s>    ^segment <seg>)
+    }
+
+sp {learn*elaborate*purpose
+    (state <s>    ^name learn
+                  ^segment <seg>)
+    (<seg>    ^information <info>
+              ^learned <info>
+              ^purpose <p>)
+-->
+    (<p>    ^completed true)
+    }

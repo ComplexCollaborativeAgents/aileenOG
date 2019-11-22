@@ -1,0 +1,14 @@
+##!
+# @file
+#
+# @created smohan 20191114
+
+
+sp {interpret-purpose-status*elaborate*state
+    (state <s>    ^name interpret-purpose-status
+                  ^superstate.operator <sop>)
+    (<sop>    ^name interpret-purpose-status
+              ^purpose <p>)
+-->
+    (<s>    ^purpose <p>)
+    }
