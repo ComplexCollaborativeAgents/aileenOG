@@ -57,8 +57,6 @@ class VisualWordLesson:
             lesson_object = VisualWordLesson()
             lesson = lesson_object.generate_lesson(distractors=0)
 
-            lesson = VisualWordLesson().generate_lesson(distractors=3)
-
 
             scene_acknowledgement = world_server.set_scene(
                 {'configuration': lesson['scene'], 'label': lesson['interaction']['content']})
