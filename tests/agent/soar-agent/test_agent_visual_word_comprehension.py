@@ -4,8 +4,6 @@ from agent.soar_interface.soar_agent import soar_agent
 def test_agent_visual_word_comprehension_known_concepts_single_object_on_scene():
     agent = soar_agent(None, headless=True)
     iwriter = agent._input_writer
-    oreader = agent._output_reader
-    agent.run_till_output()
 
     object_list = [
             {
@@ -20,19 +18,51 @@ def test_agent_visual_word_comprehension_known_concepts_single_object_on_scene()
         ]
 
     iwriter.add_objects_to_working_memory(object_list)
-    iwriter._interaction = {'interaction': {'content': 'red sphere ', 'signal': 'verify'}}
 
-    print agent._output_link
-
+    iwriter._interaction = {'content': 'red sphere ', 'signal': 'verify'}
+    iwriter.write_interaction_dictionary_to_input_link()
+    while agent._agent.GetNumberCommands() == 0:
+        agent._agent.RunSelf(1)
     assert agent._agent.GetNumberCommands() == 1
+    commandID = agent._agent.GetCommand(0)
+    assert commandID.GetAttribute() == 'language'
+    assert commandID.GetNumberChildren() == 1
+    parse_command = commandID.GetChild(0)
+    assert parse_command.GetAttribute() == 'parse-content'
+    assert parse_command.GetValueAsString() == 'red sphere '
+    commandID.AddStatusComplete()
+    agent._agent.RunSelf(1)
+    assert agent._agent.GetNumberCommands() == 0
 
-    # create corresponding instruction
+    iwriter._language = {'parses': [['obj', ['prop', 'red'], 'sphere']]}
+    iwriter.write_language_to_input_link()
+    while agent._agent.GetNumberCommands() == 0:
+        agent._agent.RunSelf(1)
+    assert agent._agent.GetNumberCommands() == 1
+    commandID = agent._agent.GetCommand(0)
+    assert commandID.GetAttribute() == 'interaction'
+    assert commandID.GetNumberChildren() == 1
+    parse_command = commandID.GetChild(0)
+    assert parse_command.GetAttribute() == 'response'
+    assert parse_command.GetValueAsString() == 'success'
+    commandID.AddStatusComplete()
+    agent._agent.RunSelf(1)
+    assert agent._agent.GetNumberCommands() == 0
 
-    # create an agent
-
-    # set semantic memory specifically to known items
-
-    # run agent until output
+    iwriter._interaction = {'signal': 'correct'}
+    iwriter.write_interaction_dictionary_to_input_link()
+    while agent._agent.GetNumberCommands() == 0:
+        agent._agent.RunSelf(1)
+    assert agent._agent.GetNumberCommands() == 1
+    commandID = agent._agent.GetCommand(0)
+    assert commandID.GetAttribute() == 'interaction'
+    assert commandID.GetNumberChildren() == 1
+    parse_command = commandID.GetChild(0)
+    assert parse_command.GetAttribute() == 'response'
+    assert parse_command.GetValueAsString() == 'ok'
+    commandID.AddStatusComplete()
+    agent._agent.RunSelf(1)
+    assert agent._agent.GetNumberCommands() == 0
 
     agent.stop()
     agent.shutdown()

@@ -115,7 +115,7 @@ def test_writing_world_info_output_link():
 def test_writing_interaction_to_input_link():
     agent = soar_agent(None)
     iwriter = agent._input_writer
-    iwriter._interaction = {'signal': 'lesson', 'content': 'test_content'}
+    iwriter._interaction = {'signal': 'verify', 'content': 'test_content'}
     iwriter.write_interaction_dictionary_to_input_link()
 
     ilink = iwriter._interaction_link
@@ -127,7 +127,7 @@ def test_writing_interaction_to_input_link():
 
     signal_child = message_child.GetChild(0)
     assert signal_child.GetAttribute() == 'signal'
-    assert signal_child.GetValueAsString() == 'lesson'
+    assert signal_child.GetValueAsString() == 'verify'
 
     content_child = message_child.GetChild(1)
     assert content_child.GetAttribute() == 'content'
