@@ -6,7 +6,7 @@
 ;;;;   Created: November  6, 2019 14:54:11
 ;;;;   Purpose: 
 ;;;; ----------------------------------------------------------------------------
-;;;;  Modified: Tuesday, November 19, 2019 at 14:25:44 by klenk
+;;;;  Modified: Wednesday, November 20, 2019 at 18:26:04 by klenk
 ;;;; ----------------------------------------------------------------------------
 
 (in-package :aileen)
@@ -20,22 +20,26 @@
   (fire:open-or-create-kb
    :kb-path
    (qrg::make-qrg-path "planb" "kbs" "nextkb"))
+  (fire:kr-file->kb (qrg:make-qrg-file-name
+			    (qrg:make-qrg-path ".." "data")
+			    "aileen-mt.krf")
+	       :error-on-bad-exps? t :kb fire::*kb*)
   (fire:in-reasoner (fire:make-reasoner 'concept)))
 
 
 (defun create-reasoning-symbol (symbol)
   (let ((gpool (intern (format nil "~AMt" symbol) :d)))
     (cl-user::nuke-gpool gpool)
-    (cl-user::setup-gpool gpool)  
+    (cl-user::setup-gpool gpool :threshold 0.2 :strategy :gel)  
     (fire:kb-store `d::(genls ,aileen::symbol AileenReasoningSymbol) :mt 'd::BaseKB)
     (fire:kb-store `d::(isa ,aileen::symbol Collection) :mt 'd::BaseKB)
-    (values (length (fire:ask-it `d::(genls ?x AileenReasoningSymbol)))
+    (values (1- (length (fire:ask-it `d::(genls ?x AileenReasoningSymbol)))) ;;due to genls identity
 	    gpool)))
 
 (defun create-reasoning-predicate (pred arity)
   (let ((gpool (intern (format nil "~AMt" (symbol-name pred)) :d)))
     (cl-user::nuke-gpool gpool)
-    (cl-user::setup-gpool gpool)
+    (cl-user::setup-gpool gpool :threshold 0.2 :strategy :gel)  
     (fire:kb-store `d::(isa ,aileen::pred AileenReasoningPredicate) :mt 'd::BaseKB)
     (fire:kb-store `d::(arity ,aileen::pred
 			      ,aileen::arity) :mt 'd::BaseKB)
@@ -45,10 +49,10 @@
 
 ;;; Assumes gpool is aready created
 (defun add-case-to-gpool (facts context gpool)
-  (fire:tell-all facts fire:*reasoner* :assumption context)
-  (fire:tell-it `(d::sageSelectAndGeneralize ,context ,gpool))
-  (values (length (fire:ask-it `(d::gpoolGeneralization ,gpool ?z ?num) :context gpool))
-	  (length (fire:ask-it `(d::gpoolExample ,gpool ?z ?num) :context gpool))) )
+  (store-facts-in-case facts context)
+  (fire:tell-it `(d::sageSelectAndGeneralize ,context ,gpool) :context gpool)
+  (values (length (fire:ask-it `(d::kbOnly (d::gpoolGeneralization ,gpool ?num))))
+	  (length (fire:ask-it `(d::kbOnly (d::gpoolExample ,gpool ?num)) ))) )
 
 (defun store-facts-in-case (facts context)
   (dolist (fact facts)

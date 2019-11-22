@@ -16,5 +16,10 @@
     "input_port": 30000,
     "input_host": "localhost",
     "output_port": 40000
+  },
+  "ConceptLearner":{
+    "hostname": "dubs",
+    "port": 8080,
+    "learner_path": "/home/klenk/code/AILEEN/aileen-agent/agent/concept_learner"
   }
 }
