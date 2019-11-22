@@ -20,6 +20,12 @@ AILEEN_ENV="$(conda config --show envs_dirs | grep -o "/.*" | head -1)/aileen"
 
 (
   cd /tmp;
+  wget http://soar.eecs.umich.edu/downloads/SoarSuite/SoarSuite_9.6.0-Multiplatform_64bit.zip;
+  sudo unzip -d /usr/local SoarSuite_9.6.0-Multiplatform_64bit.zip
+)
+
+(
+  cd /tmp;
   wget http://www.openfst.org/twiki/pub/FST/FstDownload/openfst-1.6.8.tar.gz;
   tar xf openfst-1.6.8.tar.gz;
   cd openfst-1.6.8;
