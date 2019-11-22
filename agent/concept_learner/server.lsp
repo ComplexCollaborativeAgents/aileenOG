@@ -6,7 +6,7 @@
 ;;;;   Created: November 13, 2019 16:14:37
 ;;;;   Purpose: 
 ;;;; ----------------------------------------------------------------------------
-;;;;  Modified: Monday, November 18, 2019 at 15:20:32 by klenk
+;;;;  Modified: Thursday, November 21, 2019 at 09:09:56 by klenk
 ;;;; ----------------------------------------------------------------------------
 
 (load "analogystack/qrgsetup.lsp")
@@ -58,12 +58,14 @@
 (defparameter *str* nil)
 
 (defun create-reasoning-predicate-helper (str)
+  (format t "~%Creating Reasoning Predicate2 ~A" str)
   (let* ((json (cl-json:decode-json-from-string str))
-	 (symbol (str->symbols (cdr (assoc :PREDICATE json)))))
+	 (symbol (str->symbols (cdr (assoc :PREDICATE json))))
+	 (arity (cdr (assoc :arity json))))
     (cond (symbol
 	   (format t "~%Creating Reasoning Predicate ~A" symbol)
 	   (multiple-value-bind (num gpool)
-	       (create-reasoning-predicate symbol)
+	       (create-reasoning-predicate symbol 2)
 	     (cl-json:encode-json-alist-to-string
 	      (pairlis '("numPredicates" "gpool") (list num (symbol-name gpool))))))
 	  (t
@@ -108,27 +110,29 @@
 	       ""))))
 
 (defun filter-scene-by-expression-helper (str)
+  (setq *str* str)
   (format t "~%Checking context against gpool for pattern ~A" str)
   (let* ((json (cl-json:decode-json-from-string str))
 	 (facts (str->symbols (cdr (assoc :FACTS json)))) ;;; all facts in scene
 	 (context (str->symbols (cdr (assoc :CONTEXT json)))) ;;; id for current scene
 	 (gpool (str->symbols (cdr (assoc :GPOOL json)))) ;;; 
 	 (prev-matches (str->symbols (cdr (assoc :PREVQUERIES json)))) ;;; Previous Statements that Constraint Current Query 
-	 (pattern (str->symbols (cdr (assoc :QUERY json))))) ;; Statement with variables
-    (format t "~%Checking context ~A against gpool ~A for pattern ~A" context gpool pattern)
+	 (pattern (str->symbols (cdr (assoc :PATTERN json))))) ;; Statement with variables
+    (format t "~%Checking facts ~A context ~A against gpool ~A for pattern ~A" facts context gpool pattern)
     (cond ((and facts context gpool pattern)
-	   (let ((matches (filter-scene-by-expression facts context gpool prevmatches pattern))) 
+	   (let ((matches (filter-scene-by-expression facts context gpool prev-matches pattern))) 
 	     (format t "~%Found matches ~A" matches)
 	     (cl-json:encode-json-alist-to-string
 	      (pairlis '("matches" "pattern") (list matches pattern))
 					)))
 	      (t
-	       (format t "~%Ill formed match-case-against-gpool-helper request ~A" str)
+	       (format t "~%Ill formed filter scene request ~A" str)
 	       ""))))
 
 
 
 (defun start-server (&key (port 8000))
+  (format t "~% starting server port ~A" port)
   (make-reasoner)
   (let ((rcp (net.xml-rpc:make-xml-rpc-server
 	      :start nil :enable t
