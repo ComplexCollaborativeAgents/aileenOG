@@ -9,8 +9,8 @@ class OutputReader(object):
         self._grammar.use_default_rules()
         self._response = None
 
-        if world_server:
-            self._world_server = world_server
+
+        self._world_server = world_server
 
     def read_output(self):
         number_of_commands = self._soar_agent._agent.GetNumberCommands()

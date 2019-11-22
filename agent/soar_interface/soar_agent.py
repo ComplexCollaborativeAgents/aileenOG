@@ -16,10 +16,10 @@ except ValueError, e:
 
 
 class soar_agent(object):
-    def __init__(self, world_server):
-
+    def __init__(self, world_server, headless=False):
         self.setup_soar_agent(world_server)
         self.init_state_maintenance_data_structures()
+        self._headless = headless
 
         if Configuration.config['RunParams']['svs'] == "true":
             self.execute_command("svs --enable")
@@ -109,7 +109,7 @@ class soar_agent(object):
         logging.info("[soar_agent] :: spun-off agent thread.")
 
         ## start debugger
-        if Configuration.config["RunParams"]["run_mode"] == "debug":
+        if Configuration.config["RunParams"]["run_mode"] == "debug" or not self._headless:
             self.run_soar_java_debugger()
 
     def stop(self):

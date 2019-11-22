@@ -22,8 +22,7 @@ class InputWriter(object):
         self._interaction = None
         self._language = None
 
-        if world_server:
-            self._world_server = world_server
+        self._world_server = world_server
 
         if soar_agent:  # Enable stand alone testing
             self._input_link = soar_agent.get_input_link()
