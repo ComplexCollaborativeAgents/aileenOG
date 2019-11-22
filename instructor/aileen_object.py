@@ -2,9 +2,12 @@ import json
 import os
 import uuid
 from random import choice
+from collections import namedtuple
 
 import constants
 from log_config import logging
+
+Color = namedtuple('Color', ['name', 'rgb'])
 
 class AileenObject:
 
@@ -21,6 +24,12 @@ class AileenObject:
         self._language = None
         logging.debug("[aileen_object] :: created a new object")
 
+    def __eq__(self, other):
+        return self._shape == other._shape and self._color.name == other._color.name
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
     def get_object_description(self):
         description = "Solid {\n"
         description += "   translation {} {} {}\n".format(self._translation[0],
@@ -29,13 +38,13 @@ class AileenObject:
         description += "   children [\n"
         description += "       Shape {\n"
         description += "          appearance PBRAppearance {\n"
-        description += "          baseColor {} {} {}\n".format(self._color[0],
-                                                               self._color[1],
-                                                               self._color[2])
+        description += "          baseColor {} {} {}\n".format(self._color.rgb[0],
+                                                               self._color.rgb[1],
+                                                               self._color.rgb[2])
         description += "          metalness 0\n"
-        description += "          emissiveColor {} {} {}\n".format(self._color[0],
-                                                                   self._color[1],
-                                                                   self._color[2])
+        description += "          emissiveColor {} {} {}\n".format(self._color.rgb[0],
+                                                                   self._color.rgb[1],
+                                                                   self._color.rgb[2])
         description += "        }\n"
         description += "        geometry {}\n".format(self.get_geometry_description())
         description += "        castShadows FALSE\n"
@@ -101,9 +110,10 @@ class AileenObject:
     def generate_random_object():
         scene_object_color = AileenObject.randomizer.get_random_color()
         scene_object_color_vector = AileenObject.randomizer.get_color_vector_sample(scene_object_color)
+        color = Color(scene_object_color, scene_object_color_vector)
         scene_object_shape = AileenObject.randomizer.get_random_shape()
         scene_object = AileenObject(shape=scene_object_shape,
-                                    color=scene_object_color_vector)
+                                    color=color)
         scene_object._language = [scene_object_color, scene_object_shape]
         return scene_object
 
