@@ -4,7 +4,7 @@
     "sleep-time": 0.0001
   },
   "SoarAgent": {
-    "file": "../agent/load.soar",
+    "file": "soar/load.soar",
     "name": "aileen"
   },
   "RunParams": {
