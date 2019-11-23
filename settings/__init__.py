@@ -14,7 +14,6 @@ SOAR_CV = False
 CURRENT_IMAGE_PATH = path.join(ROOT_PATH, 'controllers', 'images', 'current_image.png')
 COLOR_PATH = path.join(ROOT_PATH, 'instructor', 'resources', 'colors.json')
 
-
 # Servers
 WORLD_HOST = 'localhost'
 WORLD_PORT = 30000
