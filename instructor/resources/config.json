@@ -1,8 +1,0 @@
-{
-  "Servers":{
-    "world_port": 30000,
-    "world_host": "localhost",
-    "agent_port": 40000,
-    "agent_host": "localhost"
-  }
-}

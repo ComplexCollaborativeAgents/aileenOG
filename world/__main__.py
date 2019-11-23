@@ -1,24 +1,10 @@
-import json
-import os
-import sys
-
-from log_config import logging
+import settings
 from world.controllers.aileen_supervisor import AileenSupervisor
 from world_server import AileenWorldServer
 
-# read in the config file
-CONFIG_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "config.json")
-
-with open(CONFIG_FILE) as config_file:
-    try:
-        config = json.load(config_file)
-    except ValueError, e:
-        logging.fatal("[aileen_world] :: Invalid json at %s; error = %s" % (CONFIG_FILE, e))
-        sys.exit()
-
 
 def create_and_run_aileen_world_server(controller):
-    server = AileenWorldServer(controller, port=config['Servers']['output_port'])
+    server = AileenWorldServer(controller, port=settings.WORLD_PORT)
     server.run_in_background()
 
 

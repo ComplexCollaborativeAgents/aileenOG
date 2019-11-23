@@ -2,7 +2,7 @@ from threading import Thread
 
 from controller import Supervisor
 
-from world import constants
+import settings
 
 import os
 import xmlrpclib
@@ -27,7 +27,7 @@ class AileenSupervisor(Supervisor):
         self._held_node = None
 
         self._camera = self.getCamera('camera')
-        self._camera.enable(constants.TIME_STEP)
+        self._camera.enable(settings.TIME_STEP)
         logging.info("[aileen_supervisor] :: enabled camera")
 
         self._color_definitions = self.get_colors()
@@ -40,7 +40,7 @@ class AileenSupervisor(Supervisor):
         logging.info("[aileen_supervisor] :: started world thread")
 
     def run_world_loop(self):
-        while self.step(constants.TIME_STEP) != -1:
+        while self.step(settings.TIME_STEP) != -1:
             pass
 
     def set_held_node(self, node):
@@ -154,13 +154,13 @@ class AileenSupervisor(Supervisor):
         logging.debug("[aileen_supervisor] :: processing get_image from client")
         image_string = self._camera.getImage()
         logging.debug("[aileen_supervisor] :: got current image")
-        dir_name = os.path.split(constants.CURRENT_IMAGE_PATH)[0]
+        dir_name = os.path.split(settings.CURRENT_IMAGE_PATH)[0]
         if not os.path.exists(dir_name):
             os.mkdir(dir_name)
-        self._camera.saveImage(constants.CURRENT_IMAGE_PATH, 100)
-        logging.debug("[aileen_supervisor] :: saved current image at {}".format(constants.CURRENT_IMAGE_PATH))
+        self._camera.saveImage(settings.CURRENT_IMAGE_PATH, 100)
+        logging.debug("[aileen_supervisor] :: saved current image at {}".format(settings.CURRENT_IMAGE_PATH))
 
-        with open(constants.CURRENT_IMAGE_PATH, "rb") as handle:
+        with open(settings.CURRENT_IMAGE_PATH, "rb") as handle:
             binary_image = xmlrpclib.Binary(handle.read())
             return binary_image
 
@@ -193,7 +193,6 @@ class AileenSupervisor(Supervisor):
 
     @staticmethod
     def get_colors():
-        color_file = constants.COLOR_FILE_NAME
-        with open(color_file) as f:
+        with open(settings.COLOR_PATH) as f:
             colors = json.load(f)
         return colors

@@ -1,6 +1,5 @@
 from world.log_config import logging
-from world import constants
-
+import settings
 
 class ActionExecutor:
     def __init__(self, supervisor):
@@ -39,7 +38,7 @@ class ActionExecutor:
         node = self._supervisor.getFromId(int(object_id))
         logging.debug("[action_executor] :: picking up object id {}".format(object_id))
         translation = node.getField('translation')
-        translation.setSFVec3f(constants.ROBOT_PLATE_LOCATION)
+        translation.setSFVec3f(settings.ROBOT_PLATE_LOCATION)
         logging.debug("[action_executor] :: object {} moved to {}".format(object_id, node.getPosition()))
         self._supervisor.set_held_node(node)
 
@@ -51,7 +50,7 @@ class ActionExecutor:
             logging.debug("[action_executor] :: currently holding node {}".format(node.getId()))
             if location == 'proxy':
                 translation = node.getField('translation')
-                translation.setSFVec3f(constants.TEST_LOCATION)
+                translation.setSFVec3f(settings.TEST_LOCATION)
             else:
                 translation = node.getField('translation')
                 translation.setSFVec3f(location)
