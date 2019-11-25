@@ -3,11 +3,10 @@ import os
 from agent.log_config import logging
 import xmlrpclib
 from svs_helper import SVSHelper
-from agent.configuration import Configuration
-from agent import constants
 from agent.vision.Detector import Detector
 import cv2
 import numpy as np
+import settings
 
 try:
     from qsrlib.qsrlib import QSRlib, QSRlib_Request_Message
@@ -33,7 +32,7 @@ class InputWriter(object):
             self._language_link = self._input_link.CreateIdWME("language-link")
             self._clean_language_link_flag = False
 
-        if Configuration.config['RunParams']['cv'] == "True":
+        if settings.SOAR_CV:
             # ToDo: Move the input to Detector to the config file.
             self.detector = Detector("aileen_vision_module/aileen.names",
                                      "aileen_vision_module/yolov3-tiny-aileen.cfg",
@@ -48,7 +47,7 @@ class InputWriter(object):
         self._interaction = interaction_dictionary
 
     def generate_input(self):
-        time.sleep(Configuration.config['Soar']['sleep-time'])
+        time.sleep(settings.SOAR_SLEEP_TIME)
 
         if self._clean_interaction_link_flag:
             self.clean_interaction_link()
@@ -63,7 +62,7 @@ class InputWriter(object):
             self.write_language_to_input_link()
 
 
-        if Configuration.config['RunParams']['cv'] == "True":
+        if settings.SOAR_CV:
             binary_image = self.request_server_for_current_state_image()
             self.write_binary_image_to_file(binary_image)
             im = cv2.imdecode(np.fromstring(binary_image.data, dtype=np.uint8), 1)
@@ -73,7 +72,7 @@ class InputWriter(object):
         objects_list = self.request_server_for_objects_info()
         if objects_list is not None:
             self.add_objects_to_working_memory(objects_list)
-            if Configuration.config['RunParams']['svs'] == "true":
+            if settings.SOAR_SVS:
                 self.add_objects_to_svs(objects_list)
 
         qsrs = self.create_qsrs(objects_list)
@@ -185,10 +184,10 @@ class InputWriter(object):
         return binary_image
 
     def write_binary_image_to_file(self, binary_image):
-        dir_name = os.path.split(constants.CURRENT_IMAGE_PATH)[0]
+        dir_name = os.path.split(settings.CURRENT_IMAGE_PATH)[0]
         if not os.path.exists(dir_name):
             os.mkdir(dir_name)
-        with open(constants.CURRENT_IMAGE_PATH, "wb") as handle:
+        with open(settings.CURRENT_IMAGE_PATH, "wb") as handle:
             handle.write(binary_image.data)
 
 

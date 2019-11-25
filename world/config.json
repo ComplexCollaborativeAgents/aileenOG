@@ -1,6 +1,0 @@
-{
-    "Servers":{
-      "output_port": 30000,
-      "input_host": "localhost"
-    }
-}
