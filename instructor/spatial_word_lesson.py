@@ -88,7 +88,7 @@ class SpatialWordLesson:
                 {'configuration': lesson['scene'], 'label': lesson['interaction']['language']})
             logging.info("[aileen_instructor] :: received from world {}".format(scene_acknowledgement))
 
-            language_acknowledgement = agent_server.process_language(lesson['interaction'])
+            language_acknowledgement = agent_server.process_interaction(lesson['interaction'])
             logging.info("[aileen_instructor] :: received from agent {}".format(language_acknowledgement))
 
 
