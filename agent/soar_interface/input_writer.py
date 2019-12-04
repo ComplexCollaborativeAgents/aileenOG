@@ -198,7 +198,7 @@ class InputWriter(object):
             object_id.CreateStringWME('color', w_object['color'])
             object_id.CreateStringWME('shape', w_object['shape'])
             object_id.CreateStringWME('id_name', w_object['id_name'])
-            object_id.CreateStringWME('id_string', str(w_object['id_string']))
+            object_id.CreateStringWME('id_string', w_object['id_string'])
 
     def request_server_for_objects_info(self):
         try:
@@ -237,10 +237,10 @@ class InputWriter(object):
 
     def delete_all_children(self, id):
         index = 0
-        if id.GetNumberChildren is not None:
+        if id.GetNumberChildren() is not None:
             for i in range(0, id.GetNumberChildren()):
                 child = id.GetChild(
-                    index)  # remove the 0th child several times, Soar kernel readjusts the list after an item is deletd
+                    index)  # remove the 0th child several times, Soar kernel readjusts the list after an item is deleted
                 if child is not None:
                     child.DestroyWME()
 
