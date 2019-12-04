@@ -21,6 +21,7 @@ class InputWriter(object):
         self._world_server = world_server
         self._interaction = None
         self._language = None
+        self._concept_memory_status = None
 
         self._world_server = world_server
 
@@ -28,10 +29,15 @@ class InputWriter(object):
             self._input_link = soar_agent.get_input_link()
             self._world_link = self._input_link.CreateIdWME("world")
             self._objects_link = self._world_link.CreateIdWME("objects")
+
             self._interaction_link = self._input_link.CreateIdWME("interaction-link")
             self._clean_interaction_link_flag = False
+
             self._language_link = self._input_link.CreateIdWME("language-link")
             self._clean_language_link_flag = False
+
+            self._concept_memory = self._input_link.CreateIdWME("concept-memory")
+            self._clean_concept_memory_flag = False
 
         if Configuration.config['RunParams']['cv'] == "True":
             # ToDo: Move the input to Detector to the config file.
@@ -40,6 +46,9 @@ class InputWriter(object):
                                      "aileen_vision_module/yolov3-tiny-aileen_900.weights",
                                      'color')
         self._svs_objects = []
+
+    def set_concept_memory_status(self, concept_memory_status_dictionary):
+        self._concept_memory_status = concept_memory_status_dictionary
 
     def set_language(self, language_dictionary):
         self._language = language_dictionary
@@ -55,6 +64,12 @@ class InputWriter(object):
 
         if self._clean_language_link_flag:
             self.clean_language_link()
+
+        if self._clean_concept_memory_flag:
+            self.clean_concept_memory()
+
+        if self._concept_memory_status is not None:
+            self.write_concept_memory_status_to_input_link()
 
         if self._interaction is not None:
             self.write_interaction_dictionary_to_input_link()
@@ -77,6 +92,29 @@ class InputWriter(object):
                 self.add_objects_to_svs(objects_list)
 
         qsrs = self.create_qsrs(objects_list)
+
+    def clean_concept_memory(self):
+        self.delete_all_children(self._concept_memory)
+        self._clean_concept_memory_flag = False
+
+    def write_concept_memory_status_to_input_link(self):
+        new_status_link = self._concept_memory.CreateIdWME("result")
+        logging.debug("[input_writer] :: writing concept memory status to input link")
+
+        if 'status' in self._concept_memory_status:
+            new_status_link.CreateStringWME("status", self._concept_memory_status['status'])
+
+        if 'concept-symbol' in self._concept_memory_status and 'gpool' in self._concept_memory_status:
+            new_status_link.CreateStringWME("concept-symbol", self._concept_memory_status['concept-symbol'])
+            new_status_link.CreateStringWME("gpool", str(self._concept_memory_status['gpool']))
+
+        if 'matches' in self._concept_memory_status:
+            matches_id = new_status_link.CreateIdWME('matches')
+            for item in self._concept_memory_status['matches']:
+                matches_id.CreateStringWME("id_name", str(item))
+
+        self._concept_memory_status = None
+        self._clean_concept_memory_flag = True
 
     def clean_language_link(self):
         self.delete_all_children(self._language_link)
@@ -147,7 +185,7 @@ class InputWriter(object):
         self.delete_all_children(self._objects_link)
         for w_object in objects_list:
             object_id = self._objects_link.CreateIdWME("object")
-            object_id.CreateIntWME('id', w_object['id']),
+            object_id.CreateIntWME('id', w_object['id'])
             position_id = object_id.CreateIdWME('position')
             position_id.CreateFloatWME('x', w_object['position'][0])
             position_id.CreateFloatWME('y', w_object['position'][1])
@@ -156,6 +194,7 @@ class InputWriter(object):
             object_id.CreateStringWME('color', w_object['color'])
             object_id.CreateStringWME('shape', w_object['shape'])
             object_id.CreateStringWME('id_name', w_object['id_name'])
+            object_id.CreateStringWME('id_string', str(w_object['id_string']))
 
     def request_server_for_objects_info(self):
         try:

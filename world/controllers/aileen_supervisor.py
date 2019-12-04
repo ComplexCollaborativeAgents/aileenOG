@@ -65,6 +65,7 @@ class AileenSupervisor(Supervisor):
             if 'Solid' in object_name:
                 object_children = object_node.getField('children')
                 object_dict = {
+                    'id_string': "object{}".format(object_node.getId()),
                     'id': object_node.getId(),
                     'position': object_node.getPosition(),
                     'bounding_box': self.computeBoundingBox(object_node),
@@ -93,7 +94,7 @@ class AileenSupervisor(Supervisor):
             if shape_node.getTypeName() == "Shape":
                 geometry_node = shape_node.getField('geometry').getSFNode()
                 geometry_string = geometry_node.getTypeName()
-                label_string = "cv_{}".format(geometry_string.lower())
+                label_string = "CV{}".format(geometry_string.title())
                 return label_string
 
     def get_object_color(self, object_node):
@@ -106,7 +107,7 @@ class AileenSupervisor(Supervisor):
 
                 for color_def in self._color_definitions.keys():
                     if color_vector in self._color_definitions[color_def]:
-                        return "cv_{}".format(color_def)
+                        return "CV{}".format(color_def.title())
 
                 # appearance_children = appearance_node.get
                 # for j in range(0, appearance_children.getCount()):

@@ -3,6 +3,33 @@
 #
 # @created smohan 20191115
 
+sp {learn-from-object*propose*store-new-concept
+    (state <s>    ^name learn-from-object
+                  ^_params.concepts external
+                  ^new-concept-structure <con-s>)
+    (<con-s>    -^gpool)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name store-new-concept
+             ^concept-structure <con-s>)
+    }
+
+
+sp {learn-from-object*propose*send-instance-to-concept-memory
+    (state <s>    ^name learn-from-object
+                  ^_params.concepts external
+                  ^new-concept-structure <lti>
+                  ^object <obj>
+                  -^stored <obj>) 
+    (<lti>    ^concept <c>
+              ^gpool <g>)
+-->
+    (<s>    ^operator <op> + =)
+    (<op>    ^name send-instance-to-concept-memory
+             ^concept <lti>
+             ^object <obj>)
+    }
+                  
 
 sp {learn-from-object*propose*complete-learn-from-object
     (state <s>    ^name learn-from-object)

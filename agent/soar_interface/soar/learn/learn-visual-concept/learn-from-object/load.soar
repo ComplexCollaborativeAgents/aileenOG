@@ -8,3 +8,8 @@ source "elaborations.soar"
 source "proposals.soar"
 
 source "complete-learn-from-object.soar"
+
+source "send-instance-to-concept-memory.soar"
+
+
+source "store-new-concept.soar"

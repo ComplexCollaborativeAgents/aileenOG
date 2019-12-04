@@ -5,12 +5,26 @@
  
 sp {ground-object-reference*propose*find-object
     (state <s>    ^name ground-object-reference
+                  ^_params.concepts soar
                   ^reference <ref>
                   ^world.objects <objs>
                   -^found.reference <ref>)
 -->
     (<s>    ^operator <op> +)
     (<op>    ^name find-object
+             ^object-set <objs>
+             ^reference <ref>)
+    }
+
+sp {ground-object-reference*propose*find-object-with-concept-learner
+    (state <s>    ^name ground-object-reference
+                  ^_params.concepts external
+                  ^reference <ref>
+                  ^world.objects <objs>
+                  -^found.reference <ref>)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name find-object-with-concept-learner
              ^object-set <objs>
              ^reference <ref>)
     }

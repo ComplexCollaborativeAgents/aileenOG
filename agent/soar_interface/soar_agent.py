@@ -16,8 +16,8 @@ except ValueError, e:
 
 
 class soar_agent(object):
-    def __init__(self, world_server, headless=False):
-        self.setup_soar_agent(world_server)
+    def __init__(self, world_server, headless=False, kernel_port=None):
+        self.setup_soar_agent(world_server, kernel_port)
         self.init_state_maintenance_data_structures()
         self._headless = headless
 
@@ -29,8 +29,8 @@ class soar_agent(object):
         self._agent_thread = None
         self._is_running = False
 
-    def setup_soar_agent(self, world_server):
-        self._kernel = self.create_kernel()
+    def setup_soar_agent(self, world_server, kernel_port):
+        self._kernel = self.create_kernel(kernel_port)
         self._agent = self.create_agent(str(Configuration.config['SoarAgent']['name']))
         self._agentFilepath = str(Configuration.config['SoarAgent']['file'])
         self.load_agent_rules(self._agentFilepath)
@@ -39,8 +39,11 @@ class soar_agent(object):
         self._input_writer = input_writer.InputWriter(self, world_server)
         self._output_reader = output_reader.OutputReader(self, world_server)
 
-    def create_kernel(self):
-        soar_kernel_port = random.randint(40000, 60000)
+    def create_kernel(self, kernel_port):
+        if kernel_port:
+            soar_kernel_port = kernel_port
+        else:
+            soar_kernel_port = random.randint(40000, 60000)
         kernel = sml.Kernel.CreateKernelInNewThread(soar_kernel_port)
         if not kernel or kernel.HadError():
             logging.error("[soar_agent] :: Error creating kernel: " + kernel.GetLastErrorDescription())
@@ -57,7 +60,9 @@ class soar_agent(object):
 
     def load_agent_rules(self, agent_file):
         logging.info("[soar_agent] :: Loading agent at %s" % agent_file)
-        self._agent.LoadProductions(os.path.realpath(agent_file))
+        dirname = os.path.dirname(__file__)
+        path = os.path.join(dirname, agent_file)
+        self._agent.LoadProductions(path)
 
     def run_soar_java_debugger(self):
         self.stop()
@@ -109,7 +114,7 @@ class soar_agent(object):
         logging.info("[soar_agent] :: spun-off agent thread.")
 
         ## start debugger
-        if Configuration.config["RunParams"]["run_mode"] == "debug" or not self._headless:
+        if Configuration.config["RunParams"]["run_mode"] == "debug" and not self._headless:
             self.run_soar_java_debugger()
 
     def stop(self):

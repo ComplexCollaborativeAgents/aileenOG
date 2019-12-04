@@ -20,6 +20,14 @@ sp {topstate*delete*interaction*message
     (<s>    ^message <m> -)
     }
 
+sp {topstate*elaborate*concept-memory*from*input-link
+    :o-support
+    (state <s>    ^name aileen
+                  ^io.input-link.concept-memory.result <cmr>)
+-->
+    (<s>    ^concept-memory.result <cmr>)
+    }
+
 
 #sp {topstate*elaborate*world*from*input-link
 #    (state <s>    ^name aileen

@@ -26,3 +26,5 @@ source "default/load.soar"
 source "verify/load.soar"
 
 source "learn/load.soar"
+
+source "_agent_params.soar"

@@ -1,0 +1,15 @@
+##!
+# @file: 
+#
+# @created smohan 20191122
+
+source "elaborations.soar"
+
+source "proposals.soar"
+
+source "create-candidate-set.soar"
+
+
+source "filter-scene/load.soar"
+
+source "complete-find-object-with-concept-learner.soar"

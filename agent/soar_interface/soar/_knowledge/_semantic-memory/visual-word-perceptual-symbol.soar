@@ -2,26 +2,26 @@
 # @file
 #
 # @created smohan 20191108
-
-smem --add {
-    (<map_blue> ^nl blue ^concept <filter_blue> ^type visual)
-    (<filter_blue>    ^percept cv_blue)
-    
-    (<map_red> ^nl red ^concept <filter_red> ^type visual)
-    (<filter_red>    ^percept cv_red)
-    
-    (<map_green> ^nl green ^concept <filter_green> ^type visual)
-    (<filter_green>    ^percept cv_green)
-    
-    (<map_cone> ^nl cone ^concept <filter_cone> ^type visual)
-    (<filter_cone>    ^percept cv_cone)
-    
-    (<map_cylinder> ^nl cylinder ^concept <filter_cylinder> ^type visual)
-    (<filter_cylinder>    ^percept cv_cylinder)
-    
-    (<map_box> ^nl box ^concept <filter_box> ^type visual)
-    (<filter_box>    ^percept cv_box)
-    
-    (<map_sphere> ^nl sphere ^concept <filter_sphere> ^type visual)
-    (<filter_sphere>    ^percept cv_sphere)
-}
+#
+#smem --add {
+#    (<map_blue> ^nl blue ^concept <filter_blue> ^type visual)
+#    (<filter_blue>    ^percept cv_blue)
+#    
+#    (<map_red> ^nl red ^concept <filter_red> ^type visual)
+#    (<filter_red>    ^percept cv_red)
+#    
+#    (<map_green> ^nl green ^concept <filter_green> ^type visual)
+#    (<filter_green>    ^percept cv_green)
+#    
+#    (<map_cone> ^nl cone ^concept <filter_cone> ^type visual)
+#    (<filter_cone>    ^percept cv_cone)
+#    
+#    (<map_cylinder> ^nl cylinder ^concept <filter_cylinder> ^type visual)
+#    (<filter_cylinder>    ^percept cv_cylinder)
+#    
+#    (<map_box> ^nl box ^concept <filter_box> ^type visual)
+#    (<filter_box>    ^percept cv_box)
+#    
+#    (<map_sphere> ^nl sphere ^concept <filter_sphere> ^type visual)
+#    (<filter_sphere>    ^percept cv_sphere)
+#}
