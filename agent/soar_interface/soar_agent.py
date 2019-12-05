@@ -6,7 +6,7 @@ import time
 import random
 import output_reader
 import input_writer
-from agent.configuration import Configuration
+import settings
 
 try:
     import Python_sml_ClientInterface as sml
@@ -21,7 +21,7 @@ class soar_agent(object):
         self.init_state_maintenance_data_structures()
         self._headless = headless
 
-        if Configuration.config['RunParams']['svs'] == "true":
+        if settings.SOAR_SVS:
             self.execute_command("svs --enable")
 
     def init_state_maintenance_data_structures(self):
@@ -29,10 +29,11 @@ class soar_agent(object):
         self._agent_thread = None
         self._is_running = False
 
+
     def setup_soar_agent(self, world_server, kernel_port):
         self._kernel = self.create_kernel(kernel_port)
-        self._agent = self.create_agent(str(Configuration.config['SoarAgent']['name']))
-        self._agentFilepath = str(Configuration.config['SoarAgent']['file'])
+        self._agent = self.create_agent(settings.SOAR_AGENT_NAME)
+        self._agentFilepath = settings.SOAR_AGENT_PATH
         self.load_agent_rules(self._agentFilepath)
         self._input_link = self._agent.GetInputLink()
         self._output_link = self._agent.GetOutputLink()
@@ -99,7 +100,7 @@ class soar_agent(object):
         self._kernel.CheckForIncomingEvents()
 
     def execute_command(self, command):
-        time.sleep(Configuration.config['Soar']['sleep-time'])
+        time.sleep(settings.SOAR_SLEEP_TIME)
         self._agent.ExecuteCommandLine(command)
 
     def set_time(self, week, day):
@@ -114,7 +115,7 @@ class soar_agent(object):
         logging.info("[soar_agent] :: spun-off agent thread.")
 
         ## start debugger
-        if Configuration.config["RunParams"]["run_mode"] == "debug" and not self._headless:
+        if settings.SOAR_DEBUG or not self._headless:
             self.run_soar_java_debugger()
 
     def stop(self):

@@ -1,7 +1,7 @@
 from random import uniform
 from instructor.log_config import logging
 from shapely.geometry import Point
-from instructor import constants
+import settings
 from instructor.aileen_object import AileenObject
 from instructor.aileen_scene import AileenScene
 from instructor.language_generator import LanguageGenerator
@@ -92,9 +92,9 @@ class SceneRandomizer:
         self.position_index += 1
         position = self.positions[self.position_index % len(self.positions)]
         if (self.position_index >= len(self.positions)):
-            position = [uniform(constants.OBJECT_POSITION_MIN_X, constants.OBJECT_POSITION_MAX_X),
-                        uniform(constants.OBJECT_POSITION_MIN_Y, constants.OBJECT_POSITION_MAX_Y),
-                        uniform(constants.OBJECT_POSITION_MIN_Z, constants.OBJECT_POSITION_MAX_Z)]
+            position = [uniform(settings.OBJECT_POSITION_MIN_X, settings.OBJECT_POSITION_MAX_X),
+                        uniform(settings.OBJECT_POSITION_MIN_Y, settings.OBJECT_POSITION_MAX_Y),
+                        uniform(settings.OBJECT_POSITION_MIN_Z, settings.OBJECT_POSITION_MAX_Z)]
         logging.debug("[scene_randomizer] :: random table position {}".format(position))
         return position
 

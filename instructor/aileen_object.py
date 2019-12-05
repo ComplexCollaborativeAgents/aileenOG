@@ -4,15 +4,15 @@ import uuid
 from random import choice
 from collections import namedtuple
 
-import constants
+import settings
 from log_config import logging
 
 Color = namedtuple('Color', ['name', 'rgb'])
 
 class AileenObject:
 
-    def __init__(self, shape, color, translation=[0, 0, 0], height_y=constants.OBJECT_STANDARD_HEIGHT,
-                 width_x=constants.OBJECT_STANDARD_WIDTH_X, width_z=constants.OBJECT_STANDARD_WIDTH_Z):
+    def __init__(self, shape, color, translation=[0, 0, 0], height_y=settings.OBJECT_STANDARD_HEIGHT,
+                 width_x=settings.OBJECT_STANDARD_WIDTH_X, width_z=settings.OBJECT_STANDARD_WIDTH_Z):
 
         self._shape = shape
         self._color = color
@@ -100,9 +100,7 @@ class AileenObject:
 
     @staticmethod
     def get_colors():
-        root_dir = os.path.dirname(os.path.abspath(__file__))
-        color_file = os.path.join(root_dir, 'resources', constants.COLOR_FILE_NAME)
-        with open(color_file) as f:
+        with open(settings.COLOR_PATH) as f:
             colors = json.load(f)
         return colors
 
@@ -128,7 +126,7 @@ class AileenObject:
             return choice(AileenObject.get_colors()[color_symbol])
 
         def get_random_shape(self):
-            return choice(constants.SHAPE_SET)
+            return choice(settings.SHAPE_SET)
 
         def uuid4(self):
             return uuid.uuid4()

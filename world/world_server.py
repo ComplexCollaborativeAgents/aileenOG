@@ -4,7 +4,7 @@ from SimpleXMLRPCServer import SimpleXMLRPCRequestHandler
 from log_config import logging
 import socket
 from threading import Thread
-import constants
+import settings
 import time
 
 class AileenWorldServer:
@@ -63,7 +63,7 @@ class AileenWorldServer:
             logging.debug("[aileen_world_server] :: serving request {}".format(self._server.handle_request()))
 
     def update_world_in_background(self):
-        while self._aileen_supervisor.step(constants.TIME_STEP) != -1:
+        while self._aileen_supervisor.step(settings.TIME_STEP) != -1:
             time.sleep(0.001)
 
     def run_in_background(self):

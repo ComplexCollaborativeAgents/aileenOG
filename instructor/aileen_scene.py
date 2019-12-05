@@ -1,5 +1,5 @@
 from random import uniform
-import constants
+import settings
 from shapely.geometry import box
 from log_config import logging
 
@@ -33,10 +33,10 @@ class AileenScene:
         reference_object = scene_objects[reference_object_name]
         target_object = scene_objects[target_object_name]
 
-        table = box(constants.OBJECT_POSITION_MIN_X,
-                    constants.OBJECT_POSITION_MIN_Z,
-                    constants.OBJECT_POSITION_MAX_X,
-                    constants.OBJECT_POSITION_MAX_Z)
+        table = box(settings.OBJECT_POSITION_MIN_X,
+                    settings.OBJECT_POSITION_MIN_Z,
+                    settings.OBJECT_POSITION_MAX_X,
+                    settings.OBJECT_POSITION_MAX_Z)
         found_target_object_position = None
         while found_target_object_position is None:
             world = World_State(0.0)
@@ -62,7 +62,7 @@ class AileenScene:
             try:
                 found_target_object_position = AileenScene.randomizer.sample_position_from_region(
                     compute_region_for_relations(world, configuration_definition, qsr_target_object, table))
-                position = [found_target_object_position.x, constants.OBJECT_POSITION_MAX_Y, found_target_object_position.y]
+                position = [found_target_object_position.x, settings.OBJECT_POSITION_MAX_Y, found_target_object_position.y]
                 translations[target_object_name] = position
             except ValueError:
                 point = None
@@ -73,10 +73,10 @@ class AileenScene:
         reference_object = scene_objects[reference_object_name]
         target_object = scene_objects[target_object_name]
 
-        table = box(constants.OBJECT_POSITION_MIN_X,
-                    constants.OBJECT_POSITION_MIN_Z,
-                    constants.OBJECT_POSITION_MAX_X,
-                    constants.OBJECT_POSITION_MAX_Z)
+        table = box(settings.OBJECT_POSITION_MIN_X,
+                    settings.OBJECT_POSITION_MIN_Z,
+                    settings.OBJECT_POSITION_MAX_X,
+                    settings.OBJECT_POSITION_MAX_Z)
 
         found_target_object_position = None
         while found_target_object_position is None:
@@ -100,7 +100,7 @@ class AileenScene:
             try:
                 found_target_object_position = AileenScene.randomizer.sample_position_from_region(
                     compute_region_for_relations(world, configuration_definition, qsr_target_object, table))
-                position = [found_target_object_position.x, constants.OBJECT_POSITION_MAX_Y,
+                position = [found_target_object_position.x, settings.OBJECT_POSITION_MAX_Y,
                             found_target_object_position.y]
             except ValueError:
                 logging.error("[aileen_scene] :: cannot place {} in configuration with {}".format(target_object_name, reference_object_name))
@@ -109,10 +109,10 @@ class AileenScene:
 
     @staticmethod
     def place_three_objects_in_configuration(target_object_name, first_reference_object_name, second_reference_object_name, scene_objects, configuration_definition):
-        table = box(constants.OBJECT_POSITION_MIN_X,
-                    constants.OBJECT_POSITION_MIN_Z,
-                    constants.OBJECT_POSITION_MAX_X,
-                    constants.OBJECT_POSITION_MAX_Z)
+        table = box(settings.OBJECT_POSITION_MIN_X,
+                    settings.OBJECT_POSITION_MIN_Z,
+                    settings.OBJECT_POSITION_MAX_X,
+                    settings.OBJECT_POSITION_MAX_Z)
         first_reference_object = scene_objects[first_reference_object_name]
         second_reference_object = scene_objects[second_reference_object_name]
         target_object = scene_objects[target_object_name]
@@ -152,7 +152,7 @@ class AileenScene:
             try:
                 found_target_object_position = AileenScene.randomizer.sample_position_from_region(
                     compute_region_for_relations(world, configuration_definition, qsr_target_object, table))
-                position = [found_target_object_position.x, constants.OBJECT_POSITION_MAX_Y,
+                position = [found_target_object_position.x, settings.OBJECT_POSITION_MAX_Y,
                             found_target_object_position.y]
                 translations[target_object_name] = position
             except ValueError:
@@ -181,9 +181,9 @@ class AileenScene:
     class Randomizer:
 
         def get_random_position_on_table(self):
-            position = [uniform(constants.OBJECT_POSITION_MIN_X, constants.OBJECT_POSITION_MAX_X),
-                        uniform(constants.OBJECT_POSITION_MIN_Y, constants.OBJECT_POSITION_MAX_Y),
-                        uniform(constants.OBJECT_POSITION_MIN_Z, constants.OBJECT_POSITION_MAX_Z)]
+            position = [uniform(settings.OBJECT_POSITION_MIN_X, settings.OBJECT_POSITION_MAX_X),
+                        uniform(settings.OBJECT_POSITION_MIN_Y, settings.OBJECT_POSITION_MAX_Y),
+                        uniform(settings.OBJECT_POSITION_MIN_Z, settings.OBJECT_POSITION_MAX_Z)]
             return position
 
         def sample_position_from_region(self, region):
