@@ -27,7 +27,8 @@
   (make-reasoner)
   (load-test-flat-files)
   (setq lisp-unit::*print-failures* t lisp-unit::*print-errors* t)
-  (lisp-unit:write-tap-to-file (lisp-unit:run-tests :all :aileen) "concept_test.tap")
+  (lisp-unit:run-tests :all :aileen)
+  ;; (lisp-unit:write-tap-to-file (lisp-unit:run-tests :all :aileen) "concept_test.tap")
   (clean-tests)
   )
 
@@ -37,13 +38,26 @@
 			    "aileen-mt.krf")
 	       :error-on-bad-exps? t :kb fire::*kb*)
   (cl-user::load-flatfiles-in-dir (qrg:make-qrg-path ".." "data")))
-  
+
+(defun create-test-generalizations ()
+  (create-reasoning-symbol 'd::RCube)
+  (multiple-value-bind (gens examples) ;;do I need to add reasoning symbols?
+      (create-gpool *r-cube* *r-cube-context* 'd::RCube)
+    (lisp-unit:assert-equal 1 gens)
+    (lisp-unit:assert-equal 0 examples))
+  (create-reasoning-symbol 'd::RGreen)
+  (multiple-value-bind (gens examples)
+      (create-gpool *r-green* *r-green-context* 'd::RGreen)
+    (lisp-unit:assert-equal 1 gens)
+    (lisp-unit:assert-equal 0 examples)))
 
 (lisp-unit:define-test concept-learner-object-generalization
   (lisp-unit:assert-equal 5 5)
   (make-reasoner)
+  (create-test-generalizations)
   (generalization-of-concepts-aileen)
   (test-object-filter)
+  (test-object-filter2)
   )
 
 (lisp-unit:define-test concept-learner-rel-generalization
@@ -69,22 +83,31 @@
 (defun test-object-filter ()
   ;;;Find the object
   (multiple-value-bind (facts1 obj1)
-      (make-random-object-facts :propositions 'd::((CVCube)(CVBlue)))
+      (make-random-object-facts :propositions 'd::((CVCube)(CVGreen)))
     (multiple-value-bind (facts2 obj2)
 	(make-random-object-facts :propositions 'd::((CVSphere)(CVRed)))
       (let ((objs (filter-scene-by-expression
-		   (append facts1 facts2) (make-random-mt) *r-cube-context* nil 'd::(isa ?obj RCube))))
+		   (append facts1 facts2) (make-random-mt) nil nil 'd::(isa ?obj RCube))))
+	(lisp-unit:assert-equal 1 (length objs))
+	(lisp-unit:assert-true (member obj1 objs))
+	(lisp-unit:assert-false (member obj2 objs))
+       ))))
+
+(defun test-object-filter2 ()
+  ;;;Find the object
+  (multiple-value-bind (facts1 obj1)
+      (make-random-object-facts :propositions 'd::((CVCube)(CVGreen)))
+    (multiple-value-bind (facts2 obj2)
+	(make-random-object-facts :propositions 'd::((CVCube)(CVRed)))
+      (let ((objs (filter-scene-by-expression
+                   (append facts1 facts2) (make-random-mt) nil nil
+                   '(d::and (d::isa d::?obj d::RCube) (d::isa d::?obj d::RGreen)))))
 	(lisp-unit:assert-equal 1 (length objs))
 	(lisp-unit:assert-true (member obj1 objs))
 	(lisp-unit:assert-false (member obj2 objs))
        ))))
 
 (defun generalization-of-concepts-aileen ()
-  (create-reasoning-symbol 'd::RCube)
-  (multiple-value-bind (gens examples) ;;do I need to add reasoning symbols?
-      (create-gpool *r-cube* *r-cube-context*)
-    (lisp-unit:assert-equal 1 gens)
-    (lisp-unit:assert-equal 0 examples))
   (multiple-value-bind (facts obj)
       (make-random-object-facts :propositions 'd::((CVCube)(CVBlue)))
     (lisp-unit:assert-true 
@@ -140,9 +163,11 @@
   (intern (format nil "AileenExp~D" id) :d))
 
 
-(defun create-gpool (ids gpool)
+(defun create-gpool (ids gpool &optional concept)
   (cl-user::nuke-gpool gpool)
   (cl-user::setup-gpool gpool :threshold 0.2 :strategy :gel)  
+  (when concept
+    (fire:tell-it `(d::conceptGPool,concept,gpool)))
   (dolist (id ids)
     (fire:tell-it `(d::sageSelectAndGeneralize
 		    ,(microtheory-by-id id)

@@ -9,6 +9,7 @@
 ;;;;  Modified: Thursday, November 21, 2019 at 09:09:56 by klenk
 ;;;; ----------------------------------------------------------------------------
 
+(in-package :cl-user)
 (load "analogystack/qrgsetup.lsp")
 (require-module "fire" :fire) ;; assumes you already have a KB
 (require-module "rbrowse" :rbrowse) ;; don't need this now

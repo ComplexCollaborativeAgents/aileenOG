@@ -73,11 +73,28 @@
 
 
 (defun filter-scene-by-expression (facts context gpool prevmatches pattern)
-  (cond ((object-filter? pattern)
-	 (filter-scene-by-expression-obj facts context gpool prevmatches pattern))
-	((relation-filter? pattern)
-	 (filter-scene-by-expression-rel facts context gpool prevmatches pattern))
-	(t (assert nil))))
+  (cond
+   ((or (eq (car pattern) 'd::and) (eq (car pattern) 'd::or))
+    ;; boolean operation
+    (let (result sub-result)
+      (loop for item in (cdr pattern) do
+            (setf sub-result (filter-scene-by-expression facts context gpool prevmatches item))
+            (format t "~% sub-result = ~a" sub-result)
+            (cond
+             ((not result)
+              (setf result sub-result))
+             ((eq (car pattern) 'd::and)
+              (setf result (intersection result sub-result)))
+             ((eq (car pattern) 'd::or)
+              (setf result (union result sub-result))))
+            (format t "~% result = ~a" result)
+            (when (not result) (return)))
+      result))
+   ((object-filter? pattern)
+    (filter-scene-by-expression-obj facts context gpool prevmatches pattern))
+   ((relation-filter? pattern)
+    (filter-scene-by-expression-rel facts context gpool prevmatches pattern))
+   (t (error "Unknown pattern: ~a" pattern))))
 
 (defun object-filter? (pattern)
   (and (= (length pattern) 3) 
@@ -89,6 +106,8 @@
 
 (defun filter-scene-by-expression-obj (facts context gpool prevmatches pattern)
   (store-facts-in-case facts context)
+  (when (not gpool)
+    (setf gpool (get-concept-gpool (third pattern))))
   (let* ((collection (third pattern))
 	 (objs
 	  (remove-if-not
@@ -111,6 +130,14 @@
 	       (reverse (objs-in-context context))))))
     (dolist (obj objs objs) ;;;the fact to working memory and return the list of objects
       (fire:tell-it `(d::isa ,obj ,(third pattern)) :context context))))
+
+(defun get-concept-gpool (concept)
+  (let (result gpool)
+    (setf result (fire:ask-it `(d::conceptGPool ,concept ?gpool)))
+    (when result
+      (setf gpool (nth 2 (nth 2 (car result)))))
+    (format t "~% gpool of ~a = ~a" concept gpool)
+    gpool))
 
 (defun filter-scene-by-expression-rel (facts context gpool prevmatches pattern)
   (assert nil)
