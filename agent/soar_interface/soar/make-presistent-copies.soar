@@ -1,0 +1,41 @@
+##!
+# @file
+#
+# @created smohan 20191205
+
+sp {topstate*propose*persistent-copy-message*interaction
+    (state <s>    ^name aileen
+                  ^io.input-link.interaction-link.message <m>
+                  -^message <m>)
+-->
+    (<s>    ^operator <op> + !)
+    (<op>    ^name persistent-copy-message
+             ^message <m>)
+    }
+
+sp {topstate*apply*persistent-copy-message*interaction
+    (state <s>    ^name aileen
+                  ^operator <op>)
+    (<op>    ^name persistent-copy-message
+             ^message <m>)
+-->
+    (<s>    ^message <m>)
+}
+
+sp {topstate*delete*interaction*message
+    :o-support
+    (state <s>    ^name aileen
+                  ^message <m>)
+    (<m>    ^processed true)
+-->
+    (<s>    ^message <m> -)
+    }
+
+sp {topstate*elaborate*concept-memory*from*input-link
+    :o-support
+    (state <s>    ^name aileen
+                  ^operator.name learn
+                  ^io.input-link.concept-memory.result <cmr>)
+-->
+    (<s>    ^concept-memory.result <cmr>)
+    }

@@ -65,7 +65,7 @@ class AileenSupervisor(Supervisor):
             if 'Solid' in object_name:
                 object_children = object_node.getField('children')
                 object_dict = {
-                    'id_string': "object{}".format(object_node.getId()),
+                    'id_string': "ob{}".format(str(object_node.getId())),
                     'id': object_node.getId(),
                     'position': object_node.getPosition(),
                     'bounding_box': self.computeBoundingBox(object_node),

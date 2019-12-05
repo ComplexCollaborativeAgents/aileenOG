@@ -28,3 +28,5 @@ source "verify/load.soar"
 source "learn/load.soar"
 
 source "_agent_params.soar"
+
+source "make-presistent-copies.soar"
