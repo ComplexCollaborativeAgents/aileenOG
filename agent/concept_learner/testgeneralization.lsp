@@ -42,12 +42,12 @@
 (defun create-test-generalizations ()
   (create-reasoning-symbol 'd::RCube)
   (multiple-value-bind (gens examples) ;;do I need to add reasoning symbols?
-      (create-gpool *r-cube* *r-cube-context* 'd::RCube)
+      (create-gpool *r-cube* (get-concept-gpool 'd::RCube))
     (lisp-unit:assert-equal 1 gens)
     (lisp-unit:assert-equal 0 examples))
   (create-reasoning-symbol 'd::RGreen)
   (multiple-value-bind (gens examples)
-      (create-gpool *r-green* *r-green-context* 'd::RGreen)
+      (create-gpool *r-green* (get-concept-gpool 'd::RGreen))
     (lisp-unit:assert-equal 1 gens)
     (lisp-unit:assert-equal 0 examples)))
 
@@ -70,15 +70,10 @@
 ;;; Automated testing
 
 (defparameter *r-cube* '(1 2))
-(defparameter *r-cube-context* 'd::r-cube-gpool)
 (defparameter *r-green* '(2 3))
-(defparameter *r-green-context* 'd::r-green-gpool)
 (defparameter *r-cylinder* '(3 4))
-(defparameter *r-cylinder-context* 'd::r-cylinder-gpool)
 (defparameter *r-left* '(5 6 7))
-(defparameter *r-left-context* 'd::r-left-gpool)
 (defparameter *r-on* '(8 9 10))
-(defparameter *r-on-context* 'd::r-on-gpool)
     
 (defun test-object-filter ()
   ;;;Find the object
@@ -111,11 +106,11 @@
   (multiple-value-bind (facts obj)
       (make-random-object-facts :propositions 'd::((CVCube)(CVBlue)))
     (lisp-unit:assert-true 
-     (match-case-against-gpool facts (make-random-mt) *r-cube-context* `(d::isa ,obj d::RCube))))
+     (match-case-against-gpool facts (make-random-mt) (get-concept-gpool 'd::RCube) `(d::isa ,obj d::RCube))))
   (multiple-value-bind (facts obj)
       (make-random-object-facts :propositions 'd::((CVSphere)(CVBlue)))
     (lisp-unit:assert-false
-     (match-case-against-gpool facts (make-random-mt) *r-cube-context* `(d::isa ,obj d::RCube)))))
+     (match-case-against-gpool facts (make-random-mt) (get-concept-gpool 'd::RCube) `(d::isa ,obj d::RCube)))))
 
 
 (defun generalization-of-rel-concepts-aileen ()
@@ -123,9 +118,9 @@
       (create-reasoning-predicate 'd::rLeft 2)
     (lisp-unit:assert-equal 1 num)
     (multiple-value-bind (gens examples) ;;do I need to add reasoning symbols?
-	(create-gpool *r-left* gpool)
-    (lisp-unit:assert-equal 1 gens)
-    (lisp-unit:assert-equal 0 examples))
+        (create-gpool *r-left* gpool)
+      (lisp-unit:assert-equal 1 gens)
+      (lisp-unit:assert-equal 0 examples))
     (multiple-value-bind (facts objs)
 	(make-random-two-object-facts :relations 'd::((w)(dc)))
       (lisp-unit:assert-true 
@@ -163,11 +158,9 @@
   (intern (format nil "AileenExp~D" id) :d))
 
 
-(defun create-gpool (ids gpool &optional concept)
+(defun create-gpool (ids gpool)
   (cl-user::nuke-gpool gpool)
   (cl-user::setup-gpool gpool :threshold 0.2 :strategy :gel)  
-  (when concept
-    (fire:tell-it `(d::conceptGPool,concept,gpool)))
   (dolist (id ids)
     (fire:tell-it `(d::sageSelectAndGeneralize
 		    ,(microtheory-by-id id)

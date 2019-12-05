@@ -28,7 +28,7 @@
 
 
 (defun create-reasoning-symbol (symbol)
-  (let ((gpool (intern (format nil "~AMt" symbol) :d)))
+  (let ((gpool (get-concept-gpool symbol)))
     (cl-user::nuke-gpool gpool)
     (cl-user::setup-gpool gpool :threshold 0.2 :strategy :gel)  
     (fire:kb-store `d::(genls ,aileen::symbol AileenReasoningSymbol) :mt 'd::BaseKB)
@@ -37,7 +37,7 @@
 	    gpool)))
 
 (defun create-reasoning-predicate (pred arity)
-  (let ((gpool (intern (format nil "~AMt" (symbol-name pred)) :d)))
+  (let ((gpool (get-concept-gpool pred)))
     (cl-user::nuke-gpool gpool)
     (cl-user::setup-gpool gpool :threshold 0.2 :strategy :gel)  
     (fire:kb-store `d::(isa ,aileen::pred AileenReasoningPredicate) :mt 'd::BaseKB)
@@ -79,7 +79,6 @@
     (let (result sub-result)
       (loop for item in (cdr pattern) do
             (setf sub-result (filter-scene-by-expression facts context gpool prevmatches item))
-            (format t "~% sub-result = ~a" sub-result)
             (cond
              ((not result)
               (setf result sub-result))
@@ -87,7 +86,6 @@
               (setf result (intersection result sub-result)))
              ((eq (car pattern) 'd::or)
               (setf result (union result sub-result))))
-            (format t "~% result = ~a" result)
             (when (not result) (return)))
       result))
    ((object-filter? pattern)
@@ -132,12 +130,7 @@
       (fire:tell-it `(d::isa ,obj ,(third pattern)) :context context))))
 
 (defun get-concept-gpool (concept)
-  (let (result gpool)
-    (setf result (fire:ask-it `(d::conceptGPool ,concept ?gpool)))
-    (when result
-      (setf gpool (nth 2 (nth 2 (car result)))))
-    (format t "~% gpool of ~a = ~a" concept gpool)
-    gpool))
+  (intern (format nil "~AMt" (symbol-name concept)) :d))
 
 (defun filter-scene-by-expression-rel (facts context gpool prevmatches pattern)
   (assert nil)
