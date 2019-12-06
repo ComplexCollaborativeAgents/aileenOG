@@ -7,6 +7,7 @@ from agent.vision.Detector import Detector
 import cv2
 import numpy as np
 import settings
+import language_helper
 
 try:
     from qsrlib.qsrlib import QSRlib, QSRlib_Request_Message
@@ -28,6 +29,7 @@ class InputWriter(object):
             self._input_link = soar_agent.get_input_link()
             self._world_link = self._input_link.CreateIdWME("world")
             self._objects_link = self._world_link.CreateIdWME("objects")
+            self._qsrs_link = self._world_link.CreateIdWME("qsrs")
 
             self._interaction_link = self._input_link.CreateIdWME("interaction-link")
             self._clean_interaction_link_flag = False
@@ -77,7 +79,6 @@ class InputWriter(object):
         if self._language is not None:
             self.write_language_to_input_link()
 
-
         if settings.SOAR_CV:
             binary_image = self.request_server_for_current_state_image()
             self.write_binary_image_to_file(binary_image)
@@ -92,6 +93,22 @@ class InputWriter(object):
                 self.add_objects_to_svs(objects_list)
 
         qsrs = self.create_qsrs(objects_list)
+        self.write_qsrs_to_input_link(qsrs)
+
+    def write_qsrs_to_input_link(self, qsrs):
+        self.delete_all_children(self._qsrs_link)
+        for root_obj_id in qsrs:
+            root_obj_qsrs = qsrs[root_obj_id]
+            for target_obj_id in root_obj_qsrs:
+                root_target_qsrs = root_obj_qsrs[target_obj_id]
+                for qsr_type in root_target_qsrs:
+                    qsr_value = root_target_qsrs[qsr_type]
+                    qsr_id = self._qsrs_link.CreateIdWME('qsr')
+                    qsr_id.CreateStringWME("root", root_obj_id)
+                    qsr_id.CreateStringWME("target", target_obj_id)
+                    qsr_id.CreateStringWME(qsr_type, qsr_value)
+
+
 
     def clean_concept_memory(self):
         self.delete_all_children(self._concept_memory)
@@ -130,21 +147,10 @@ class InputWriter(object):
         ## write all parses
         parses = self._language['parses']
         parses_link = new_language_link.CreateIdWME("parses")
-        for parse in parses:
-            parse_link = parses_link.CreateIdWME("parse")
-            item = parse[0]
-            if item == 'obj': ### function is partially written, will only write obj parses to Soar
-                obj_ref_link = parse_link.CreateIdWME("obj-ref")
-                i = 1
-                while isinstance(parse[i], list): ## property
-                    property = parse[i]
-                    assert property[0] == 'prop'
-                    prop_link = obj_ref_link.CreateIdWME('prop')
-                    prop_link.CreateStringWME('tag', property[1])
-                    i = i+1
-                obj_ref_link.CreateStringWME('tag', parse[i])
+        language_helper.translate_to_soar_structure(parses, parses_link)
         self._language = None
         self._clean_language_link_flag = True
+
 
     def clean_interaction_link(self):
         self.delete_all_children(self._interaction_link)
@@ -198,7 +204,7 @@ class InputWriter(object):
             object_id.CreateStringWME('color', w_object['color'])
             object_id.CreateStringWME('shape', w_object['shape'])
             object_id.CreateStringWME('id_string', w_object['id_string'])
-            object_id.CreateStringWME('id_uuid', w_object['id_name'])
+            #object_id.CreateStringWME('id_uuid', w_object['id_name'])
 
     def request_server_for_objects_info(self):
         try:
