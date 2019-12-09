@@ -20,6 +20,9 @@ In agent/config.json there is now the following section
 ## AnalogyStack
 Look at the wiki for helpful commands.
 
+The FIRE reasoning engine supports general-purpose reasoning over large knowledge bases:
+www.qrg.northwestern.edu/nextkb/FIRE_v3_Manual.pdf
+
 One thing that I considered doing was ensuring that we had a fresh knowledge base everytime. You can see that in launch script I wanted to include an optional argument to overwrite the kb each time. Now we can do it manually if necessary.
 
 ## Logs

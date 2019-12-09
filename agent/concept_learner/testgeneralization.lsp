@@ -58,6 +58,7 @@
   (generalization-of-concepts-aileen)
   (test-object-filter)
   (test-object-filter2)
+  (test-object-filter3)
   )
 
 (lisp-unit:define-test concept-learner-rel-generalization
@@ -100,6 +101,20 @@
 	(lisp-unit:assert-equal 1 (length objs))
 	(lisp-unit:assert-true (member obj1 objs))
 	(lisp-unit:assert-false (member obj2 objs))
+       ))))
+
+(defun test-object-filter3 ()
+  ;;;Find the object
+  (multiple-value-bind (facts1 obj1)
+      (make-random-object-facts :propositions 'd::((CVCube)(CVGreen)))
+    (multiple-value-bind (facts2 obj2)
+	(make-random-object-facts :propositions 'd::((CVCube)(CVRed)))
+      (let ((objs (filter-scene-by-expression
+                   (append facts1 facts2) (make-random-mt) nil nil
+                   '(d::and (d::isa d::?obj d::RCube) (d::not (d::isa d::?obj d::RGreen))))))
+	(lisp-unit:assert-equal 1 (length objs))
+	(lisp-unit:assert-false (member obj1 objs))
+	(lisp-unit:assert-true (member obj2 objs))
        ))))
 
 (defun generalization-of-concepts-aileen ()

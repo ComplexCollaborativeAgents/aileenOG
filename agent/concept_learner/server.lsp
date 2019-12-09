@@ -132,9 +132,9 @@
 
 
 
-(defun start-server (&key (port 8000))
+(defun start-server (&key (port 8000) (kbdir "nextkb"))
   (format t "~% starting server port ~A" port)
-  (make-reasoner)
+  (make-reasoner :kbdir kbdir)
   (let ((rcp (net.xml-rpc:make-xml-rpc-server
 	      :start nil :enable t
 	      :publish '(:path "/ConceptLearner")  )))
@@ -149,9 +149,9 @@
      rcp '("add_case_to_gpool" add-case-to-gpool-helper)
      :base64 :base64)
 ;; Klenk: We want to match against the whole scene.
-;;    (net.xml-rpc:export-xml-rpc-method
-;;     rcp '("match_case_against_gpool" match-case-against-gpool-helper)
-;;     :base64 :base64)
+    (net.xml-rpc:export-xml-rpc-method
+     rcp '("match_case_against_gpool" match-case-against-gpool-helper)
+     :base64 :base64)
     (net.xml-rpc:export-xml-rpc-method  
      rcp '("filter_scene_by_expression" filter-scene-by-expression-helper)
      :base64 :base64)

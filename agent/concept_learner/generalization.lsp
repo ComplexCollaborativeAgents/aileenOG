@@ -16,10 +16,10 @@
 
 
 
-(defun make-reasoner ()
+(defun make-reasoner (&key (kbdir "nextkb"))
   (fire:open-or-create-kb
    :kb-path
-   (qrg::make-qrg-path "planb" "kbs" "nextkb"))
+   (qrg::make-qrg-path "planb" "kbs" kbdir))
   (fire:kr-file->kb (qrg:make-qrg-file-name
 			    (qrg:make-qrg-path ".." "data")
 			    "aileen-mt.krf")
@@ -86,8 +86,17 @@
               (setf result (intersection result sub-result)))
              ((eq (car pattern) 'd::or)
               (setf result (union result sub-result))))
-            (when (not result) (return)))
+            (when (and (not result) (eq (car pattern) 'd::and))
+              (return)))
       result))
+   ((eq (car pattern) 'd::not)
+    ;; negation
+    (let (objects negated)
+      (setf objects (objs-in-context context))
+      (setf negated (filter-scene-by-expression facts context gpool prevmatches (nth 1 pattern)))
+      (loop for item in negated do
+            (setf objects (remove item objects)))
+      objects))
    ((object-filter? pattern)
     (filter-scene-by-expression-obj facts context gpool prevmatches pattern))
    ((relation-filter? pattern)
