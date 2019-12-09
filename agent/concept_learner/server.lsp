@@ -112,7 +112,7 @@
 
 (defun filter-scene-by-expression-helper (str)
   (setq *str* str)
-  (format t "~%Checking context against gpool for pattern ~A" str)
+  (format t "~%Checking context against pattern ~A" str)
   (let* ((json (cl-json:decode-json-from-string str))
 	 (facts (str->symbols (cdr (assoc :FACTS json)))) ;;; all facts in scene
 	 (context (str->symbols (cdr (assoc :CONTEXT json)))) ;;; id for current scene
@@ -120,15 +120,19 @@
 	 (prev-matches (str->symbols (cdr (assoc :PREVQUERIES json)))) ;;; Previous Statements that Constraint Current Query 
 	 (pattern (str->symbols (cdr (assoc :PATTERN json))))) ;; Statement with variables
     (format t "~%Checking facts ~A context ~A against gpool ~A for pattern ~A" facts context gpool pattern)
-    (cond ((and facts context gpool pattern)
-	   (let ((matches (filter-scene-by-expression facts context gpool prev-matches pattern))) 
-	     (format t "~%Found matches ~A" matches)
-	     (cl-json:encode-json-alist-to-string
-	      (pairlis '("matches" "pattern") (list matches pattern))
-					)))
-	      (t
-	       (format t "~%Ill formed filter scene request ~A" str)
-	       ""))))
+    (cond ((and facts context pattern)
+           (let ((matches (filter-scene-by-expression facts context gpool prev-matches pattern)))
+             (format t "~%Found matches ~A" matches)
+             (cl-json:encode-json-alist-to-string
+              (pairlis '("matches" "pattern")
+                       (list (loop for item in matches collect
+                                   (if (symbolp item) (symbol-name item) item))
+                             (loop for item in pattern collect
+                                   (if (symbolp item) (symbol-name item) item)))))
+              ))
+          (t
+           (format t "~%Ill formed filter scene request ~A" str)
+           ""))))
 
 
 
