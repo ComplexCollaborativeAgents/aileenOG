@@ -27,7 +27,8 @@ class SpatialWordLesson:
         lesson = {
             'scene': self._scene.generate_scene_description(),
             'interaction': {
-                'language': self._language
+                'signal': 'verify',
+                'content': self._language
             }
         }
         return lesson
@@ -85,7 +86,7 @@ class SpatialWordLesson:
             lesson = SpatialWordLesson().generate_lesson()
 
             scene_acknowledgement = world_server.set_scene(
-                {'configuration': lesson['scene'], 'label': lesson['interaction']['language']})
+                {'configuration': lesson['scene'], 'label': lesson['interaction']['content']})
             logging.info("[aileen_instructor] :: received from world {}".format(scene_acknowledgement))
 
             language_acknowledgement = agent_server.process_interaction(lesson['interaction'])
