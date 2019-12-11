@@ -262,7 +262,7 @@ def test_writing_language_to_input_link_rel():
         child = rel_ref_id.GetChild(i)
         rel_ref_test_values.append(child.GetAttribute())
         if child.GetAttribute() == 'tag':
-            assert child.GetValueAsString() == 'right of'
+            assert child.GetValueAsString() == 'rightof'
         if child.GetAttribute() == 'obj-ref':
             obj_ref_id = child.ConvertToIdentifier()
             for i in range(0, obj_ref_id.GetNumberChildren()):
