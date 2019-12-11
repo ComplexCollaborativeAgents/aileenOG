@@ -1,0 +1,62 @@
+##!
+# @file
+#
+# @created smohan 20191108
+
+sp {comprehension*elaborate*segment
+    (state <s>   ^name comprehension
+                 ^superstate.operator <sop>)
+    (<sop>    ^name comprehension
+              ^segment <seg>)
+-->
+    (<s>    ^segment <seg>)
+    }
+
+sp {comprehension*elaborate*parses
+    (state <s>    ^name comprehension
+                  ^segment <seg>)
+    (<seg>    ^parses <parses>)
+-->
+    (<s>    ^parses <parses>)
+    }
+
+sp {comprehension*elaborate*grounding
+    (state <s>    ^name comprehension
+                  ^segment <seg>)
+    (<seg>    ^grounding <g>)
+-->
+    (<s>    ^grounding <g>)
+    }
+
+
+sp {comprehension*elaborate*object-ref*direct
+    (state <s>    ^name comprehension
+                  ^parses.parse <p>)
+    (<p>    ^obj-ref <ref>)
+-->
+    (<s>    ^obj-ref <ref>)
+    }
+
+sp {comprehension*elaborate*object-ref*in-direct
+    (state <s>    ^name comprehension
+                  ^parses.parse <p>)
+    (<p>    ^<any>.obj-ref <ref>)
+-->
+    (<s>    ^obj-ref <ref>)
+    }
+
+sp {comprehension*elaborate*rel-ref
+    (state <s>    ^name comprehension
+                  ^parses.parse <p>)
+    (<p>    ^rel-ref <ref>)
+    (<ref>    ^tag <tag>)
+-->
+    (<s>    ^rel-ref <tag>)
+    }
+
+sp {comprehension*elaborate*argument
+    (state <s>    ^name comprehension
+                  ^superstate.operator.argument <arg>)
+-->
+    (<s>    ^argument <arg>)
+}

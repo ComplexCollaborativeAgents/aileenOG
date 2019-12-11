@@ -1,0 +1,39 @@
+##!
+# @file
+#
+# @created smohan 20191208
+
+sp {learn-spatial-concept*propose*select-scene-subset
+    (state <s>    ^name learn-spatial-concept
+                  ^world <w>)
+    -{(<s>    ^selected-scene <scene>)
+    (<scene>    ^objects <objs>
+                ^relations <rels>)
+    (<rels>    ^relation <rel>)
+    (<objs>    ^object <obj>)}
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name select-scene-subset)
+    }
+
+sp {learn-spatial-concept*propose*learn-from-scene
+    (state <s>    ^name learn-spatial-concept
+                  ^selected-scene <scene>
+                  ^information <info>
+                  ^topstate._params.spatial-concepts external
+                  -^learned <info>)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name learn-from-scene-external
+             ^information <info>
+             ^scene <scene>)
+    }
+
+sp {learn-spatial-concept*propose*complete-learn-spatial-concept
+    (state <s>    ^name learn-spatial-concept
+                  ^learned <info>)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name complete-learn-spatial-concept)
+    }
+                  

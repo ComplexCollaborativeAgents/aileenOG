@@ -38,4 +38,4 @@ sp {topstate*elaborate*concept-memory*from*input-link
                   ^io.input-link.concept-memory.result <cmr>)
 -->
     (<s>    ^concept-memory.result <cmr>)
-    }
+}

@@ -1,0 +1,58 @@
+##!
+# @file
+#
+# @created smohan 20191206
+
+
+sp {ground-relation-reference*propose*mark-unknown-concept
+    (state <s>    ^name ground-relation-reference
+                  ^smem-query <sq>
+                  ^reference <ref>)
+    (<sq>    ^cue.nl <ref>
+             ^result failure)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name mark-unknown-spatial-concept
+             ^nl <ref>
+             ^type spatial)
+    }
+
+sp {ground-relation-reference*propose*compose-relation-query
+    (state <s>    ^name ground-relation-reference
+                  ^smem-query <sq>
+                  ^reference <ref>)
+    (<sq>    ^cue.nl <ref>
+             ^result {<res> <> failure})
+    -{(<s>    ^relation-query <rel>)
+      (<rel>    ^lfirst <lf>
+                ^lsecond <ls>
+                ^lthird <lt>)}
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name compose-relation-query
+             ^relation <res>)
+    }
+            
+sp {ground-relation-reference*propose*collect-relation-facts
+    (state <s>    ^name ground-relation-reference
+                  ^relation-query <query>
+                  -^facts.relations)
+-->
+    (<s>    ^operator <op> + >)
+    (<op>    ^name collect-relation-facts
+             ^relation-query <query>)
+    }
+
+sp {ground-relation-reference*propose*query-concept-memory
+    (state <s>    ^name ground-relation-reference
+                  ^relation-query <q>
+                  ^facts <f>
+                  -^io.output-link.concept-memory)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name query-concept-memory
+             ^facts <f>
+             ^query <q>)
+    }
+            
+                  

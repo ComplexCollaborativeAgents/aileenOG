@@ -12,7 +12,7 @@ def translate_rel_to_soar_structure(parse_item, parse_link):
     i = 1
     tag_string = ""
     while not isinstance(parse_item[i], list):
-        tag_string = tag_string + parse_item[i] + " "
+        tag_string = tag_string + parse_item[i]
         i = i + 1
     rel_ref_link.CreateStringWME("tag", tag_string.rstrip())
     if isinstance(parse_item[i], list) and parse_item[i][0] == 'obj':

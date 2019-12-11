@@ -4,6 +4,8 @@
 # @created smohan 20191108
 
 
+
+
 sp {comprehension*propose*parse
     (state <s>    ^name comprehension
                   ^segment <seg>)
@@ -15,21 +17,47 @@ sp {comprehension*propose*parse
              ^content <cont>)
     }
 
+sp {comprehension*propose*init-grounding
+    (state <s>    ^name comprehension
+                   ^segment <seg>)
+    (<seg>    -^grounding <g>
+               ^parses <parse>)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name init-grounding
+             ^segment <seg>)
+    }
 
 sp {comprehension*propose*comprehend-object-reference
     (state <s>    ^name comprehension
-                  ^segment <seg>
-                  ^grounding <g>)
-    (<seg>    ^parses.parse <parse>)
-    (<parse>    ^obj-ref <obj-ref>)
+                  ^grounding <g>
+                  ^obj-ref <ref>)
     -{(<g>    ^entity <any>)
-      (<any>    ^_metadata.description <obj-ref>)}
+      (<any>    ^_metadata.description <ref>)}
 -->
     (<s>    ^operator <op> +)
     (<op>    ^name ground-object-reference
-             ^reference <obj-ref>
+             ^reference <ref>
              ^argument entity)
     }
+
+sp {comprehension*propose*comprehend-relation-reference
+    (state <s>    ^name comprehension
+                  ^grounding <g>
+                  ^parses <p>
+                  ^rel-ref <ref>)
+    -{(<g>    ^relation-concept <any>
+      <any>    ^_metadata.description <ref>)}
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name ground-relation-reference
+             ^reference <ref>
+             ^grounding <g>
+             ^parses <p>
+             ^argument relation)
+    }
+
+
 
 sp {comprehension*propose*complete-comprehension
     (state <s>    ^name comprehension

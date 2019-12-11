@@ -1,0 +1,39 @@
+##!
+# @file
+#
+# @created smohan 20191208
+
+sp {learn-spatial-concept*apply*select-scene
+    (state <s>    ^name learn-spatial-concept
+                  ^operator.name select-scene-subset
+                  ^world <w>
+                  ^grounding <g>)
+-->
+    (<s>    ^selected-scene <scene>)
+    (<scene>    ^objects <objects>
+                ^relations <rel>)
+    }
+
+sp {learn-spatial-concept*apply*selected-scene*objects
+    (state <s>    ^name learn-spatial-concept
+                  ^operator.name select-scene-subset
+                  ^grounding.entity.object <obj>
+                  ^world.objects.object <obj>
+                  ^selected-scene.objects <objs>)
+-->
+    (<objs>    ^object <obj>)
+    }
+   
+sp {learn-spatial-concept*apply*selected-scene*relations
+    (state <s>    ^name learn-spatial-concept
+                  ^operator.name select-scene-subset
+                  ^selected-scene <scene>
+                  ^world.relations <wrels>)
+    (<wrels>    ^relation <rel>)
+    (<rel>    ^<< root target >> <obj>)
+    (<objs>    ^object <obj>)
+    (<scene>    ^objects <objs>
+                ^relations <rels>)
+-->
+    (<rels>    ^relation <rel>)
+    }

@@ -1,0 +1,31 @@
+##!
+# @file
+#
+# @created smohan 20191208
+sp {learn-from-scene-external*apply*store-new-concept
+    (state <s>    ^name learn-from-scene-external
+                  ^operator <op>
+                  ^io.output-link <ol>)
+    (<op>    ^name store-new-concept
+             ^concept-structure <lti>)
+    (<lti>    ^concept <con>)
+-->
+    (<ol>    ^concept-memory <cl>)
+    (<cl>    ^learn <le>)
+    (<le>    ^new-concept-symbol <con>)
+    }
+
+sp {learn-from-scene-external*apply*store-new-concept*copy-gpool
+    (state <s>    ^name learn-from-scene-external
+                  ^operator <op>
+                  ^topstate.concept-memory <cl>)
+    (<cl>    ^result <res>)
+    (<res>    ^concept-symbol <con>
+              ^status success
+              ^gpool <gpool>)
+    (<op>    ^name store-new-concept
+             ^concept-structure <lti>)
+-->
+    (<lti>    ^gpool <gpool>)
+    }
+              

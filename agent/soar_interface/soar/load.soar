@@ -30,3 +30,5 @@ source "learn/load.soar"
 source "_agent_params.soar"
 
 source "make-presistent-copies.soar"
+
+source "update-world/load.soar"

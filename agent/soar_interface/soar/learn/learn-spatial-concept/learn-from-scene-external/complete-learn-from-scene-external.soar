@@ -1,0 +1,12 @@
+##!
+# @file
+#
+# @created smohan 20191210
+sp {learn-from-scene-external*apply*complete-learn-from-scene-external
+    (state <s>    ^name learn-from-scene-external
+                  ^operator.name complete-learn-from-scene-external
+                  ^superstate <ss>
+                  ^information <info>)
+--> 
+    (<ss>    ^learned <info>)
+    }

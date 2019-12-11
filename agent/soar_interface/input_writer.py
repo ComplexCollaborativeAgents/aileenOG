@@ -104,8 +104,8 @@ class InputWriter(object):
                 for qsr_type in root_target_qsrs:
                     qsr_value = root_target_qsrs[qsr_type]
                     qsr_id = self._qsrs_link.CreateIdWME('qsr')
-                    qsr_id.CreateStringWME("root", root_obj_id)
-                    qsr_id.CreateStringWME("target", target_obj_id)
+                    qsr_id.CreateIntWME("root", int(root_obj_id))
+                    qsr_id.CreateIntWME("target", int(target_obj_id))
                     qsr_id.CreateStringWME(qsr_type, qsr_value)
 
 

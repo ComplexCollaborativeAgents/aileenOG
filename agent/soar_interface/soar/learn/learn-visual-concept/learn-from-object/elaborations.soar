@@ -47,7 +47,7 @@ sp {learn-from-object*store*visual-word*concept
 ## SM: learn through external concept learner
 sp {external*learn-from-object*store*visual-word*index
     (state <s>    ^name learn-from-object
-                  ^_params.concepts external
+                  ^_params.visual-concepts external
                   ^information <info>)
     (<info>    ^nl <tag>)
 -->
@@ -60,7 +60,7 @@ sp {external*learn-from-object*store*visual-word*index
 sp {external*learn-from-object*invoke-concept-learner*store-gpool
     (state <s>    ^name learn-from-object
                   ^io.input-link.concept-memory <cl>
-                  ^_params.concepts external
+                  ^_params.visual-concepts external
                   ^new-concept-structure <lti>)
     (<lti>    ^concept <con>
               ^type <type>

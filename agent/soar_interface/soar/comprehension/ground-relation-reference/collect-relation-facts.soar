@@ -1,0 +1,19 @@
+##!
+# @file
+#
+# @created smohan 20191211
+
+sp {ground-relation-reference*apply*query-concept-learner
+    (state <s>    ^name ground-relation-reference
+                  ^operator.name collect-relation-facts)
+-->
+    (<s>    ^facts <facts>)}
+
+sp {ground-relation-reference*apply*query-concept-learner*relations
+    (state <s>    ^name ground-relation-reference
+                  ^operator.name collect-relation-facts
+                  ^world.relations <rel>
+                  ^facts <f>)
+-->
+    (<f>    ^relations <rel>)
+    }
