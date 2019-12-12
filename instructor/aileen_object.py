@@ -1,13 +1,14 @@
 import json
-import os
 import uuid
-from random import choice
 from collections import namedtuple
+from random import choice
 
 import settings
+from instructor.aileen_scene import AileenScene
 from log_config import logging
 
 Color = namedtuple('Color', ['name', 'rgb'])
+
 
 class AileenObject:
 
@@ -33,8 +34,8 @@ class AileenObject:
     def get_object_description(self):
         description = "Solid {\n"
         description += "   translation {} {} {}\n".format(self._translation[0],
-                                                   self._translation[1],
-                                                   self._translation[2])
+                                                          self._translation[1],
+                                                          self._translation[2])
         description += "   children [\n"
         description += "       Shape {\n"
         description += "          appearance PBRAppearance {\n"
@@ -115,6 +116,48 @@ class AileenObject:
         scene_object._language = [scene_object_color, scene_object_shape]
         return scene_object
 
+    @staticmethod
+    def generate_random_objects(n):
+        """Generate n random unique objects."""
+        colors = AileenObject.get_colors().keys()
+        shapes = settings.SHAPE_SET
+        objects = []
+        if n > len(colors) * len(shapes):
+            logging.error("[aileen_object] :: Can't generate more than {} unique random objects".format(
+                len(colors) * len(shapes)))
+            return objects
+
+        while n:
+            o = AileenObject.generate_random_object()
+            if o not in objects:
+                o.set_translation(AileenScene.randomizer.get_random_position_on_table())
+                objects.append(o)
+                n -= 1
+        return objects
+
+    @staticmethod
+    def generate_distractors(target, n):
+        """Generate distractors. A distractor is an object that does not have the same color or shape as the target
+        object(s).
+
+        Parameters
+        ----------
+        target : Union[AileenObject, list[AileenObject]]
+        n : int
+        """
+        distractors = []
+        while n:
+            distractor = AileenObject.generate_random_object()
+            if isinstance(target, list) and distractor not in target:
+                distractor.set_translation(AileenScene.randomizer.get_random_position_on_table())
+                distractors.append(distractor)
+                n -= 1
+            elif not isinstance(target, list) and distractor != target:
+                distractor.set_translation(AileenScene.randomizer.get_random_position_on_table())
+                distractors.append(distractor)
+                n -= 1
+        return distractors
+
     # Put randomization code in separate class so that it can be overridden.
     class Randomizer:
 
@@ -122,7 +165,7 @@ class AileenObject:
             colors = AileenObject.get_colors().keys()
             return choice(colors)
 
-        def get_color_vector_sample(self,color_symbol):
+        def get_color_vector_sample(self, color_symbol):
             return choice(AileenObject.get_colors()[color_symbol])
 
         def get_random_shape(self):

@@ -36,8 +36,9 @@ class SpatialWordLesson:
         logging.debug("[action_word_lesson] :: generate the setup for the new lesson")
         objects = self._spatial_configuration_def[settings.SPATIAL_DEF_OBJECTS]
         if len(objects) > 0:
-            for obj in objects:
-                self._scene_objects[obj] = AileenObject.generate_random_object()
+            objs = AileenObject.generate_random_objects(len(objects))
+            for o, obj in zip(objs, objects):
+                self._scene_objects[obj] = o
         self._language = LanguageGenerator.generate_language_from_template(self._scene_objects,
                                                                            self._spatial_configuration_def[
                                                                                settings.SPATIAL_DEF_LANGUAGE_TEMPLATE])
