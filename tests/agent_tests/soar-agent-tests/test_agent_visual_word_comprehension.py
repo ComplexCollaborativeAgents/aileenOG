@@ -1,4 +1,7 @@
 from agent.soar_interface.soar_agent import soar_agent
+from agent.soar_interface.soar_agent import update
+import settings
+
 class TestServer(object):
     def __init__(self, object_list):
         self._object_list = object_list
@@ -6,6 +9,8 @@ class TestServer(object):
 
     def get_all(self):
         return {'objects': self._object_list}
+
+
 
 # def test_agent_visual_word_comprehension_known_concepts_single_object_on_scene_no_concept_memory():
 #     agent = soar_agent(None, headless=True)
@@ -87,14 +92,27 @@ def test_visual_word_learning_single_object_analogy_concept_learner():
             'id_string': "object409"
         }
     ]
+
     server = TestServer(object_list)
-    agent = soar_agent(server, headless=True)
+    agent_params = {
+        'visual-concepts-param': 'external',
+        'spatial-concepts-param': 'soar',
+        'action-concepts-param': 'soar',
+        'preload-visual-concepts-param': 'false'
+    }
+
+    agent = soar_agent(world_server=server, headless=False, kernel_port=40000, agent_params=agent_params)
     iwriter = agent._input_writer
     oreader = agent._output_reader
 
-    iwriter.set_interaction({'content': 'red sphere ', 'signal': 'verify'})
+    agent._agent.RunSelf(20)
 
+    assert agent._agent.GetNumberCommands() == 0
 
+    iwriter.process_interaction({'content': 'red sphere ', 'signal': 'verify'})
+    iwriter.generate_input()
+    agent._agent.RunSelf(1)
+    assert agent._agent.GetNumberCommands() == 0
     run_agent_until_next_output(agent)
 
     ## 1. parse the interaction command
@@ -106,15 +124,23 @@ def test_visual_word_learning_single_object_analogy_concept_learner():
     assert parse_command.GetAttribute() == 'parse-content'
     assert parse_command.GetValueAsString() == 'red sphere '
 
+    iwriter.generate_input()
+    agent._agent.RunSelf(1)
+    assert agent._agent.GetNumberCommands() == 0
     run_agent_until_next_output(agent)
     commandID = agent._agent.GetCommand(0)
-    while commandID.GetAttribute() == 'concept-memory':
-        run_agent_until_next_output(agent)
-        commandID = agent._agent.GetCommand(0)
+    assert commandID.GetAttribute() == 'concept-memory'
 
     # run_agent_until_next_output(agent)
     # commandID = agent._agent.GetCommand(0)
+    #
+    #
+    #
+    # run_agent_until_next_output(agent)
+    # commandID = agent._agent.GetCommand(0)
     # assert commandID.GetAttribute() == 'concept-memory'
+
+
     #
     # run_agent_until_next_output(agent)
     # commandID = agent._agent.GetCommand(0)
@@ -138,23 +164,52 @@ def test_visual_word_learning_single_object_analogy_concept_learner():
 
 
     #run_agent_until_next_output(agent)
-    commandID = agent._agent.GetCommand(0)
-    assert commandID.GetAttribute() == 'interaction'
-    assert commandID.GetNumberChildren() == 1
-    parse_command = commandID.GetChild(0)
-    assert parse_command.GetAttribute() == 'response'
-    assert parse_command.GetValueAsString() == 'success'
+    # commandID = agent._agent.GetCommand(0)
+    # assert commandID.GetAttribute() == 'interaction'
+    # assert commandID.GetNumberChildren() == 1
+    # parse_command = commandID.GetChild(0)
+    # assert parse_command.GetAttribute() == 'response'
+    # assert parse_command.GetValueAsString() == 'success'
 
-    agent.stop()
-    agent.shutdown()
 
 
 def run_agent_until_next_output(agent):
-    oreader = agent._output_reader
-    iwriter = agent._input_writer
-    oreader.read_output()
-    iwriter.generate_input()
+    agent._input_writer.generate_input()
     agent._agent.RunSelf(1)
     while agent._agent.GetNumberCommands() == 0:
-        #iwriter.generate_input()
         agent._agent.RunSelf(1)
+
+def test_update(mid, this_agent, agent, message):
+    if this_agent._agent.GetNumberCommands() > 0:
+        print("output commands")
+        exit()
+    update(mid, this_agent, agent, message)
+
+def test_agent_update():
+    object_list = [
+        {
+            'color': 'CVRed', 'shape': 'CVSphere', 'texture': 't_',
+            'id_name': '6a43b30f-3e84-49cd-85ef-4d62bc773d76',
+            'held': 'false',
+            'bounding_box': [0.685001719931, 0.39980379946355843, -0.0109654541087,
+                             0.7850017199310001, 0.4998037994635584, 0.0890345458913],
+            'position': [0.735001719931, 0.4498037994635584, 0.0390345458913],
+            'id': 409,
+            'id_string': "object409"
+        }
+    ]
+
+    server = TestServer(object_list)
+    agent_params = {
+        'visual-concepts-param': 'external',
+        'spatial-concepts-param': 'soar',
+        'action-concepts-param': 'soar',
+        'preload-visual-concepts-param': 'false'
+    }
+
+    agent = soar_agent(world_server=server, headless=True, agent_params=agent_params)
+    #agent.register_output_callback(test_update, agent)
+    agent._agent.RunSelf(10)
+    agent.start()
+    agent.stop()
+    assert False
