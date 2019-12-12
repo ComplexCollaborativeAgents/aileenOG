@@ -52,27 +52,52 @@
   ;; generalize them
   ;; Match a new scene against it
   (let (res pattern)
-    (setq res (call-test-server
-               "add_case_to_gpool"
-               (pairlis '("facts" "context" "gpool")
+    (setq res (call-test-server "store"
+               (pairlis '("facts" "context" "concept")
                         (list (list (list "isa" "O1" "RRed")
                                     (list "isa" "O1" "CVRed")
                                     (list "isa" "O1" "CVCylinder"))
                               "Test1" ;;Id
-                              "RRedMt"))))
+                              "RRed"))))
     (assert (= (cdr (assoc :NUM-EXAMPLES res)) 1))
     (assert (= (cdr (assoc :NUM-GENERALIZATIONS res)) 0))
 
-    (setq res (call-test-server
-               "add_case_to_gpool"
-               (pairlis '("facts" "context" "gpool")
+    (setq res (call-test-server "store"
+               (pairlis '("facts" "context" "concept")
                         (list (list (list "isa" "O2" "RRed")
                                     (list "isa" "O2" "CVRed")
                                     (list "isa" "O2" "CVSphere"))
                               "Test2" ;;Id
-                              "RRedMt"))))
+                              "RRed"))))
     (assert (= (cdr (assoc :NUM-EXAMPLES res)) 0))
     (assert (= (cdr (assoc :NUM-GENERALIZATIONS res)) 1))
+
+    ;;;PATTERN
+    (setf pattern (list "isa" "O3" "RRed"))
+    (setq res (call-test-server "query"
+               (pairlis '("facts" "pattern")
+                        (list (list (list "isa" "O3" "CVRed")
+                                    (list "isa" "O3" "CVCube"))
+                               pattern))))
+    (assert (= 1 (length (cdr (assoc :MATCHES res)))))
+    (assert (equal "O3" (car (cdr (assoc :MATCHES res)))))
+    (assert (equal pattern (cdr (assoc :PATTERN res))))
+
+    (when nil
+    ;; Test deletion of query facts.
+    (setq res (call-test-server "query"
+               (pairlis '("facts" "pattern")
+                        (list (list (list "isa" "O3" "CVBlue")
+                                    (list "isa" "O3" "CVCube"))
+                               pattern))))
+    (assert (= 0 (length (cdr (assoc :MATCHES res)))))
+
+    ;; REMOVE
+    (setq res (call-test-server
+               "remove"
+               (pairlis (list "concept")
+                        (list "RRed"))))
+    (assert (cdr (assoc :SUCCESS res)))
 
     ;;;PATTERN
     (setf pattern (list "isa" "O3" "RRed"))
@@ -83,9 +108,9 @@
                                     (list "isa" "O3" "CVCube"))
                               "Test3" ;;Id
                               pattern))))
-    (assert (= 1 (length (cdr (assoc :MATCHES res)))))
-    (assert (equal "O3" (car (cdr (assoc :MATCHES res)))))
-    (assert (equal pattern (cdr (assoc :PATTERN res))))
+    (format t "~% filter_scene_by_expression returned ~A" res)
+    (assert (= 0 (length (cdr (assoc :MATCHES res)))))
+    (assert (equal pattern (cdr (assoc :PATTERN res)))))
     ))
 
 (defun clean-tests ()
