@@ -27,8 +27,10 @@ source "verify/load.soar"
 
 source "learn/load.soar"
 
-source "_agent_params.soar"
+source "_agent_params_runtime.soar"
 
 source "make-presistent-copies.soar"
 
 source "update-world/load.soar"
+
+source "initialize-agent/load.soar"

@@ -1,0 +1,11 @@
+##!
+# @file
+#
+# @created smohan 20191211
+sp {initialize-agent*apply*initialize-spatial-knowledge-state*set
+    (state <s>    ^name initialize-agent
+                  ^operator.name initialize-spatial-knowledge-state)
+-->
+    (<s>    ^spatial-knowledge-state set)
+    }
+             

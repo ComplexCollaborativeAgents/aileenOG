@@ -10,5 +10,5 @@ sp {comprehension*apply*complete-comprehension
     (<op>    ^name complete-comprehension
              ^grounding <g>)
 -->
-    (<seg>    ^grounding <g>)
+    (<g>    ^complete true)
     }

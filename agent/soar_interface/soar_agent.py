@@ -16,8 +16,8 @@ except ValueError, e:
 
 
 class soar_agent(object):
-    def __init__(self, world_server, headless=False, kernel_port=None):
-        self.setup_soar_agent(world_server, kernel_port)
+    def __init__(self, world_server, headless=False, kernel_port=None, agent_params={}):
+        self.setup_soar_agent(world_server, kernel_port, agent_params)
         self.init_state_maintenance_data_structures()
         self._headless = headless
 
@@ -30,15 +30,61 @@ class soar_agent(object):
         self._is_running = False
 
 
-    def setup_soar_agent(self, world_server, kernel_port):
+    def setup_soar_agent(self, world_server, kernel_port, agent_params):
         self._kernel = self.create_kernel(kernel_port)
         self._agent = self.create_agent(settings.SOAR_AGENT_NAME)
         self._agentFilepath = settings.SOAR_AGENT_PATH
+        self.set_agent_params(agent_params)
         self.load_agent_rules(self._agentFilepath)
         self._input_link = self._agent.GetInputLink()
         self._output_link = self._agent.GetOutputLink()
         self._input_writer = input_writer.InputWriter(self, world_server)
         self._output_reader = output_reader.OutputReader(self, world_server)
+
+
+    def set_agent_params(self, agent_params):
+        logging.info("[soar-agent] :: setting agent params {}".format(agent_params))
+        if 'visual-concepts-param' in agent_params:
+            visual_concepts_param = agent_params['visual-concepts-param']
+        else:
+            visual_concepts_param = settings.AGENT_VISUAL_CONCEPTS_PARAM
+
+        if 'spatial-concepts-param' in agent_params:
+            spatial_concepts_param = agent_params['spatial-concepts-param']
+        else:
+            spatial_concepts_param = settings.AGENT_SPATIAL_CONCEPTS_PARAM
+
+        if 'action-concepts-param' in agent_params:
+            action_concepts_param = agent_params['action-concepts-param']
+        else:
+            action_concepts_param = settings.AGENT_ACTION_CONCEPTS_PARAM
+
+        if 'preload-visual-concepts-param' in agent_params:
+            preload_visual_concepts_param = agent_params['preload-visual-concepts-param']
+        else:
+            preload_visual_concepts_param = settings.AGENT_PRELOAD_VISUAL_CONCEPTS_PARAM
+
+        params = """sp {{aileen*apply*init-agent*agent_params 
+                    (state <s>    ^operator.name initialize-agent)
+                    -->
+                    (<s>    ^_params <p>)
+                    (<p>    ^visual-concepts {v_param}
+                            ^spatial-concepts {s_param}
+                            ^action-concepts {a_param})
+                    (<p>    ^preload-visual-concepts {pv_param})
+                    (<p>    ^relevant-percept-set <rps>)
+                    (<rps>    ^type color shape id_string)
+                    }}""".format(v_param=visual_concepts_param,
+                                 s_param=spatial_concepts_param,
+                                 a_param=action_concepts_param,
+                                 pv_param=preload_visual_concepts_param)
+
+        logging.debug("[soar-agent] :: updating file with {}".format(params))
+
+        with open(settings.AGENT_PARAM_RUNTIME_FILE, 'w') as agent_params_file:
+            agent_params_file.write(params)
+        agent_params_file.close()
+
 
     def create_kernel(self, kernel_port):
         if kernel_port:

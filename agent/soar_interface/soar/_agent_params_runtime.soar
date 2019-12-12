@@ -1,0 +1,11 @@
+sp {aileen*apply*init-agent*agent_params 
+                    (state <s>    ^operator.name initialize-agent)
+                    -->
+                    (<s>    ^_params <p>)
+                    (<p>    ^visual-concepts external
+                            ^spatial-concepts soar
+                            ^action-concepts soar)
+                    (<p>    ^preload-visual-concepts false)
+                    (<p>    ^relevant-percept-set <rps>)
+                    (<rps>    ^type color shape id_string)
+                    }
