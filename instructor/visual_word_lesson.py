@@ -30,6 +30,7 @@ class VisualWordLesson:
         self._scene.add_object(target)
 
         for distractor in AileenObject.generate_distractors(target, distractors):
+            distractor.set_translation(AileenScene.randomizer.get_random_position_on_table())
             self._scene.add_object(distractor)
 
         self._interaction['signal'] = 'verify'

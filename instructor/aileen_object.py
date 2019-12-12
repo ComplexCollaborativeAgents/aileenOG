@@ -4,7 +4,6 @@ from collections import namedtuple
 from random import choice
 
 import settings
-from instructor.aileen_scene import AileenScene
 from log_config import logging
 
 Color = namedtuple('Color', ['name', 'rgb'])
@@ -130,7 +129,6 @@ class AileenObject:
         while n:
             o = AileenObject.generate_random_object()
             if o not in objects:
-                o.set_translation(AileenScene.randomizer.get_random_position_on_table())
                 objects.append(o)
                 n -= 1
         return objects
@@ -148,12 +146,8 @@ class AileenObject:
         distractors = []
         while n:
             distractor = AileenObject.generate_random_object()
-            if isinstance(target, list) and distractor not in target:
-                distractor.set_translation(AileenScene.randomizer.get_random_position_on_table())
-                distractors.append(distractor)
-                n -= 1
-            elif not isinstance(target, list) and distractor != target:
-                distractor.set_translation(AileenScene.randomizer.get_random_position_on_table())
+            if (isinstance(target, list) and distractor not in target) or \
+                    (not isinstance(target, list) and distractor != target):
                 distractors.append(distractor)
                 n -= 1
         return distractors
