@@ -16,10 +16,10 @@
 
 
 
-(defun make-reasoner ()
+(defun make-reasoner (&key (kbdir "nextkb"))
   (fire:open-or-create-kb
    :kb-path
-   (qrg::make-qrg-path "planb" "kbs" "nextkb"))
+   (qrg::make-qrg-path "planb" "kbs" kbdir))
   (fire:kr-file->kb (qrg:make-qrg-file-name
 			    (qrg:make-qrg-path ".." "data")
 			    "aileen-mt.krf")
@@ -28,7 +28,7 @@
 
 
 (defun create-reasoning-symbol (symbol)
-  (let ((gpool (intern (format nil "~AMt" symbol) :d)))
+  (let ((gpool (get-concept-gpool symbol)))
     (cl-user::nuke-gpool gpool)
     (cl-user::setup-gpool gpool :threshold 0.2 :strategy :gel)  
     (fire:kb-store `d::(genls ,aileen::symbol AileenReasoningSymbol) :mt 'd::BaseKB)
@@ -37,7 +37,7 @@
 	    gpool)))
 
 (defun create-reasoning-predicate (pred arity)
-  (let ((gpool (intern (format nil "~AMt" (symbol-name pred)) :d)))
+  (let ((gpool (get-concept-gpool pred)))
     (cl-user::nuke-gpool gpool)
     (cl-user::setup-gpool gpool :threshold 0.2 :strategy :gel)  
     (fire:kb-store `d::(isa ,aileen::pred AileenReasoningPredicate) :mt 'd::BaseKB)
@@ -73,11 +73,35 @@
 
 
 (defun filter-scene-by-expression (facts context gpool prevmatches pattern)
-  (cond ((object-filter? pattern)
-	 (filter-scene-by-expression-obj facts context gpool prevmatches pattern))
-	((relation-filter? pattern)
-	 (filter-scene-by-expression-rel facts context gpool prevmatches pattern))
-	(t (assert nil))))
+  (cond
+   ((or (eq (car pattern) 'd::and) (eq (car pattern) 'd::or))
+    ;; boolean operation
+    (let (result sub-result)
+      (loop for item in (cdr pattern) do
+            (setf sub-result (filter-scene-by-expression facts context gpool prevmatches item))
+            (cond
+             ((not result)
+              (setf result sub-result))
+             ((eq (car pattern) 'd::and)
+              (setf result (intersection result sub-result)))
+             ((eq (car pattern) 'd::or)
+              (setf result (union result sub-result))))
+            (when (and (not result) (eq (car pattern) 'd::and))
+              (return)))
+      result))
+   ((eq (car pattern) 'd::not)
+    ;; negation
+    (let (objects negated)
+      (setf objects (objs-in-context context))
+      (setf negated (filter-scene-by-expression facts context gpool prevmatches (nth 1 pattern)))
+      (loop for item in negated do
+            (setf objects (remove item objects)))
+      objects))
+   ((object-filter? pattern)
+    (filter-scene-by-expression-obj facts context gpool prevmatches pattern))
+   ((relation-filter? pattern)
+    (filter-scene-by-expression-rel facts context gpool prevmatches pattern))
+   (t (error "Unknown pattern: ~a" pattern))))
 
 (defun object-filter? (pattern)
   (and (= (length pattern) 3) 
@@ -89,6 +113,8 @@
 
 (defun filter-scene-by-expression-obj (facts context gpool prevmatches pattern)
   (store-facts-in-case facts context)
+  (when (not gpool)
+    (setf gpool (get-concept-gpool (third pattern))))
   (let* ((collection (third pattern))
 	 (objs
 	  (remove-if-not
@@ -111,6 +137,9 @@
 	       (reverse (objs-in-context context))))))
     (dolist (obj objs objs) ;;;the fact to working memory and return the list of objects
       (fire:tell-it `(d::isa ,obj ,(third pattern)) :context context))))
+
+(defun get-concept-gpool (concept)
+  (intern (format nil "~AMt" (symbol-name concept)) :d))
 
 (defun filter-scene-by-expression-rel (facts context gpool prevmatches pattern)
   (assert nil)
