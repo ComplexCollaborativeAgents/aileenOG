@@ -6,7 +6,7 @@
 ;;;;   Created: November 13, 2019 16:14:37
 ;;;;   Purpose: 
 ;;;; ----------------------------------------------------------------------------
-;;;;  Modified: Thursday, December 12, 2019 at 12:41:04 by klenk
+;;;;  Modified: Thursday, December 12, 2019 at 13:01:13 by klenk
 ;;;; ----------------------------------------------------------------------------
 
 (in-package :cl-user)
@@ -46,6 +46,7 @@
 	(t (error "str->symbols "))))
 
 (defun create-reasoning-symbol-helper (str)
+  (handler-bind ((error #'print-backtrace))
   (format t "~%Creating Reasoning Symbol2 ~A" str)
   (let* ((json (cl-json:decode-json-from-string str))
 	 (symbol (str->symbols (cdr (assoc :SYMBOL json)))))
@@ -59,7 +60,7 @@
 						  )))
 	  (t
 	   (format t "~%Ill formed create-reasoning-symbol request ~A" str)
-	   ""))))
+	   "")))))
 
 
 (defparameter *str* nil)
