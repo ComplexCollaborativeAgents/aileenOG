@@ -5,3 +5,5 @@
 
 (isa Obj3 CVCylinder)
 (isa Obj3 CVGreen)
+(isa Obj3 RCylinder)
+(isa Obj3 RGreen)
