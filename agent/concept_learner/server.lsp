@@ -131,13 +131,14 @@
   (setq *str* str)
   (format t "Querying ~A~%" str)
   (let* ((json (cl-json:decode-json-from-string str))
-	 (facts (str->symbols (cdr (assoc :FACTS json)))) ;;; all facts in scene
+         (facts (str->symbols (cdr (assoc :FACTS json)))) ;;; all facts in scene
+         (context 'data::query-facts)
 	 (pattern (str->symbols (cdr (assoc :PATTERN json))))) ;; Statement with variables
     (cond ((and facts pattern)
-           (let* ((context 'data::query-facts)
-                  (matches (filter-scene-by-expression facts context nil nil pattern)))
-             ;; Forget the context that we created.
-             (fire:kb-forget (car (fire:retrieve-references context)))
+           ;; Clear previous facts from context.
+           (remove-facts-from-case context)
+           ;; Store facts in context and match query.
+           (let ((matches (filter-scene-by-expression facts context nil nil pattern)))
              (format t "Found matches ~A~%" matches)
              (cl-json:encode-json-alist-to-string
               (pairlis '("matches" "pattern")

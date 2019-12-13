@@ -73,25 +73,34 @@
     (assert (= (cdr (assoc :NUM-GENERALIZATIONS res)) 1))
 
     ;;;PATTERN
-    (setf pattern (list "isa" "O3" "RRed"))
+    (setf pattern (list "isa" "Object4" "RRed"))
     (setq res (call-test-server "query"
                (pairlis '("facts" "pattern")
-                        (list (list (list "isa" "O3" "CVRed")
-                                    (list "isa" "O3" "CVCube"))
-                               pattern))))
-    (assert (= 1 (length (cdr (assoc :MATCHES res)))))
-    (assert (equal "O3" (car (cdr (assoc :MATCHES res)))))
-    (assert (equal pattern (cdr (assoc :PATTERN res))))
-
-    (when nil
-    ;; Test deletion of query facts.
-    (setq res (call-test-server "query"
-               (pairlis '("facts" "pattern")
-                        (list (list (list "isa" "O3" "CVBlue")
-                                    (list "isa" "O3" "CVCube"))
-                               pattern))))
+                        (list (list (list "isa" "Object4" "CVGreen")
+                                    (list "isa" "Object4" "CVPyramid"))
+                              pattern))))
+    (format t "~% query result = ~A" res)
     (assert (= 0 (length (cdr (assoc :MATCHES res)))))
-
+    
+;;;    (setq res (call-test-server "query"
+;;;               (pairlis '("facts" "pattern")
+;;;                        (list (list (list "isa" "O3" "CVRed")
+;;;                                    (list "isa" "O3" "CVCube"))
+;;;                               pattern))))
+;;;    (assert (= 1 (length (cdr (assoc :MATCHES res)))))
+;;;    (assert (equal "O3" (car (cdr (assoc :MATCHES res)))))
+;;;    (assert (equal pattern (cdr (assoc :PATTERN res))))
+;;;
+;;;    ;; Test deletion of query facts.
+;;;    (setq res (call-test-server "query"
+;;;               (pairlis '("facts" "pattern")
+;;;                        (list (list (list "isa" "O3" "CVBlue")
+;;;                                    (list "isa" "O3" "CVPyramid"))
+;;;                              pattern))))
+;;;    (format t "~% query result = ~A" res)
+;;;    (assert (= 0 (length (cdr (assoc :MATCHES res)))))
+    
+    (when nil
     ;; REMOVE
     (setq res (call-test-server
                "remove"

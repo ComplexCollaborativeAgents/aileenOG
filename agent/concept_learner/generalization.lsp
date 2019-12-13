@@ -56,10 +56,18 @@
 
 (defun store-facts-in-case (facts context)
   (dolist (fact facts)
-;    (fire:tell-it fact :context context))
+    ;    (fire:tell-it fact :context context))
     (fire:kb-store fact :mt context)
     (fire:kb-store `(d::isa ,context d::AileenCaseMt) :mt context))
   )
+
+(defun remove-facts-from-case (context)
+  (format t "Removing ~A~%" context)
+  (dolist (fact (fire:ask-it `d::(kbOnly (ist-Information ,aileen::context ?x))
+                  :response 'd::?x))
+    (format t "Forgetting ~A in ~A~%" fact context)
+    (fire:kb-forget fact :mt context))
+  (fire:clear-wm))
   
 ;;; this may go away
 (defun match-case-against-gpool (facts context gpool pattern)
