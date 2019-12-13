@@ -204,7 +204,7 @@ class InputWriter(object):
             object_id.CreateStringWME('color', w_object['color'])
             object_id.CreateStringWME('shape', w_object['shape'])
             object_id.CreateStringWME('id_string', w_object['id_string'])
-            #object_id.CreateStringWME('id_uuid', w_object['id_name'])
+            object_id.CreateStringWME('id_uuid', w_object['id_name'])
 
     def request_server_for_objects_info(self):
         try:

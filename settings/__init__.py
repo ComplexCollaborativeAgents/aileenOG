@@ -67,7 +67,7 @@ AGENT_PARAM_RUNTIME_FILE = path.join(ROOT_PATH, 'agent', 'soar_interface', 'soar
 AGENT_VISUAL_CONCEPTS_PARAM = 'soar'
 AGENT_SPATIAL_CONCEPTS_PARAM = 'soar'
 AGENT_ACTION_CONCEPTS_PARAM = 'soar'
-AGENT_PRELOAD_VISUAL_CONCEPTS_PARAM = 'false'
+AGENT_PRELOAD_VISUAL_CONCEPTS_PARAM = 'true'
 
 try:
     from local_settings import *
