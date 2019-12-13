@@ -58,7 +58,7 @@ class AileenWorldServer:
         self._server.register_function(set_scene, 'set_scene')
 
     def run(self):
-        while not self._quit:
+        while True:
             self._server.handle_request()
             logging.debug("[aileen_world_server] :: serving request {}".format(self._server.handle_request()))
 
@@ -67,12 +67,13 @@ class AileenWorldServer:
             time.sleep(0.001)
 
     def run_in_background(self):
-        self._world_thread = Thread(target=self.update_world_in_background, args=())
+        self._world_thread = Thread(target=self.update_world_in_background)
+        self._world_thread.daemon = True
         self._world_thread.start()
 
-        self._quit = False
         logging.info("[aileen_world_server] :: Starting aileen world server")
-        self._thread = Thread(target=self.run, args=())
+        self._thread = Thread(target=self.run)
+        self._thread.daemon = True
         self._thread.start()
 
     def stop(self):
