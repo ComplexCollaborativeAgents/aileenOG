@@ -6,7 +6,7 @@
 ;;;;   Created: November 13, 2019 16:35:48
 ;;;;   Purpose: 
 ;;;; ----------------------------------------------------------------------------
-;;;;  Modified: Thursday, November 14, 2019 at 10:29:14 by klenk
+;;;;  Modified: Friday, December 13, 2019 at 11:11:36 by klenk
 ;;;; ----------------------------------------------------------------------------
 
 (load "server.lsp")
@@ -76,7 +76,7 @@
     (setf pattern (list "isa" "Object4" "RRed"))
     (setq res (call-test-server "query"
                (pairlis '("facts" "pattern")
-                        (list (list (list "isa" "Object4" "CVGreen")
+                        (list (list (list "isa" "Object4" "CVBlue")
                                     (list "isa" "Object4" "CVPyramid"))
                               pattern))))
     (format t "~% query result = ~A" res)

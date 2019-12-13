@@ -6,7 +6,7 @@
 ;;;;   Created: November  6, 2019 14:54:11
 ;;;;   Purpose: 
 ;;;; ----------------------------------------------------------------------------
-;;;;  Modified: Wednesday, November 20, 2019 at 18:26:04 by klenk
+;;;;  Modified: Friday, December 13, 2019 at 11:12:13 by klenk
 ;;;; ----------------------------------------------------------------------------
 
 (in-package :aileen)
@@ -55,6 +55,7 @@
 	  (length (fire:ask-it `(d::kbOnly (d::gpoolExample ,gpool ?num)) ))) )
 
 (defun store-facts-in-case (facts context)
+  (remove-facts-from-case context)
   (dolist (fact facts)
     ;    (fire:tell-it fact :context context))
     (fire:kb-store fact :mt context)
@@ -66,8 +67,7 @@
   (dolist (fact (fire:ask-it `d::(kbOnly (ist-Information ,aileen::context ?x))
                   :response 'd::?x))
     (format t "Forgetting ~A in ~A~%" fact context)
-    (fire:kb-forget fact :mt context))
-  (fire:clear-wm))
+    (fire:kb-forget fact :mt context)))
   
 ;;; this may go away
 (defun match-case-against-gpool (facts context gpool pattern)
@@ -127,9 +127,10 @@
 	 (objs
 	  (remove-if-not
 	   #'(lambda (obj)
-	       (fire:tell-it `(d::constructCaseInWM (d::MinimalCaseFromMtFn ,obj ,context)))
-	       (fire:tell-it `(d::copyWMCaseToKB (d::MinimalCaseFromMtFn ,obj ,context)
-						 (d::MinimalCaseFromMtFn ,obj ,context)))
+		 (remove-facts-from-case `(d::MinimalCaseFromMtFn ,obj ,context))
+;	       (fire:tell-it `(d::constructCaseInWM (d::MinimalCaseFromMtFn ,obj ,context)))
+;	       (fire:tell-it `(d::copyWMCaseToKB (d::MinimalCaseFromMtFn ,obj ,context)
+;						 (d::MinimalCaseFromMtFn ,obj ,context)))
 	       (fire:ask-it
 		`(d::reverseCIsAllowed
 		  (d::and
