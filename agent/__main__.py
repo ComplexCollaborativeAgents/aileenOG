@@ -1,9 +1,11 @@
+import time
 import xmlrpclib
+
+import settings
+from aileen_agent_server import AileenAgentServer
 from log_config import logging
 from soar_interface import soar_agent
 from soar_interface.soar_agent import update
-import settings
-from aileen_agent_server import AileenAgentServer
 
 
 def create_connection_with_aileen_world():
@@ -20,8 +22,8 @@ if __name__ == '__main__':
     aileen_agent.register_output_callback(update, aileen_agent)
     aileen_agent.start()
     aileen_agent.stop()
-    aileen_agent_server = AileenAgentServer(aileen_agent,  port=settings.AGENT_PORT)
+    aileen_agent_server = AileenAgentServer(aileen_agent, port=settings.AGENT_PORT)
     aileen_agent_server.run_in_background()
 
-    while(True):
-        pass
+    while True:
+        time.sleep(0.001)
