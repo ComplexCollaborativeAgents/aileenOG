@@ -1,8 +1,9 @@
-from SimpleXMLRPCServer import SimpleXMLRPCServer
-from SimpleXMLRPCServer import SimpleXMLRPCRequestHandler
-from log_config import logging
 import socket
+from SimpleXMLRPCServer import SimpleXMLRPCRequestHandler
+from SimpleXMLRPCServer import SimpleXMLRPCServer
 from threading import Thread
+
+from log_config import logging
 
 
 class AileenAgentServer():
@@ -40,7 +41,8 @@ class AileenAgentServer():
     def run_in_background(self):
         self._quit = False
         logging.info("[aileen_world_server] :: Starting aileen world server")
-        self._thread = Thread(target = self.run, args=())
+        self._thread = Thread(target=self.run)
+        self._thread.daemon = True
         self._thread.start()
 
     def stop(self):
