@@ -1,0 +1,48 @@
+##!
+# @file
+#
+# @created smohan 20191115
+
+
+sp {aileen*elaborate*objects*copy
+    :o-support
+    (state <s>    ^name aileen
+                  ^io.input-link <il>
+                  ^world.objects <wobjs>)
+    (<il>    ^world.objects.object <obj>)
+    (<obj>    ^id <id>)
+   -{(<wobjs>    ^object <wobj>)
+    (<wobj>    ^id <id>)}
+-->
+    (<wobjs>    ^object  <obj>)
+    }
+
+sp {aileen*elaborate*objects*remove
+    :o-support
+    (state <s>    ^name aileen
+                  ^io.input-link <il>
+                  ^world.objects <wobjs>)
+    -{(<il>    ^world.objects.object <obj>)
+    (<obj>    ^id <id>)}
+    (<wobjs>    ^object <wobj>)
+    (<wobj>    ^id <id>)
+-->
+    (<wobjs>    ^object  <wobj> -)
+    }
+
+
+sp {aileen*elaborate*objects*update
+    :o-support
+    (state <s>    ^name aileen
+                  ^io.input-link <il>
+                  ^world.objects <wobjs>)
+    (<il>    ^world.objects.object <obj>)
+    (<obj>    ^id <id>
+              ^position <ipose>)
+    (<wobjs>    ^object <wobj>)
+    (<wobj>    ^id <id>
+                ^position <wpose>)
+-->
+    (<wobj>    ^position <wpose> -
+               ^position <ipose>)
+    }

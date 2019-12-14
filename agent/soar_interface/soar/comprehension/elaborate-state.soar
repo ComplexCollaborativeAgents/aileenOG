@@ -1,0 +1,27 @@
+##!
+# @file
+#
+# @created smohan 20191108
+
+sp {comprehension*elaborate*parses
+    (state <s>   ^name comprehension
+                 ^superstate.operator <sop>)
+    (<sop>    ^name comprehension
+              ^segment <seg>)
+-->
+    (<s>    ^segment <seg>)
+    }
+
+sp {comprehension*elaborate*grounding
+    (state <s>    ^name comprehension
+                  ^segment <seg>)
+-->
+    (<s>    ^grounding <g>)
+    }
+
+sp {comprehension*elaborate*argument
+    (state <s>    ^name comprehension
+                  ^superstate.operator.argument <arg>)
+-->
+    (<s>    ^argument <arg>)
+    }

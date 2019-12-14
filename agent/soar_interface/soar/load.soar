@@ -1,0 +1,28 @@
+
+source "wait.soar"
+
+#source "test-actions.soar"
+
+source "primitive-actions/load.soar"
+
+source "elaborations/load.soar"
+
+source "_soar_parameters.soar"
+
+source "interaction/load.soar"
+
+source "init-agent.soar"
+
+source "proposals.soar"
+
+source "comprehension/load.soar"
+
+source "perferences.soar"
+
+source "_knowledge/load.soar"
+
+source "default/load.soar"
+
+source "verify/load.soar"
+
+source "learn/load.soar"

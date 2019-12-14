@@ -1,7 +1,7 @@
 
 from log_config import logging
 import os
-import constants
+import settings
 import json
 from random import choice
 from aileen_object import AileenObject
@@ -20,31 +20,31 @@ class ActionWordLesson:
         self._initial_scene = AileenScene()
         self._scene_objects = OrderedDict()
         self._scene_relations = {}
-        self._trace_action_list = self._action_definition[constants.ACTION_DEF_TRACE_ACTIONS]
-        self._lesson_state = constants.ACTION_LESSON_STATE_START
+        self._trace_action_list = self._action_definition[settings.ACTION_DEF_TRACE_ACTIONS]
+        self._lesson_state = settings.ACTION_LESSON_STATE_START
         self._action_trace_index = 0
         self._language = None
         self.generate_setup()
 
     def generate_setup(self):
         logging.debug("[action_word_lesson] :: generating the initial scene for action word learning")
-        objects = self._action_definition[constants.ACTION_DEF_OBJECTS]
+        objects = self._action_definition[settings.ACTION_DEF_OBJECTS]
         if len(objects) > 0:
             for obj in objects:
                 self._scene_objects[obj] = AileenObject.generate_random_object()
 
-        relations = self._action_definition[constants.ACTION_DEF_RELATIONS]
+        relations = self._action_definition[settings.ACTION_DEF_RELATIONS]
         if relations is not None and len(relations) > 0:
             for rel in relations:
                 self._scene_relations[rel] = SpatialWordLesson.get_spatial_configurations_set()[rel]
 
-        language_template = self._action_definition[constants.ACTION_DEF_LANGUAGE]
+        language_template = self._action_definition[settings.ACTION_DEF_LANGUAGE]
         self._language = LanguageGenerator.generate_language_from_template(self._scene_objects, language_template)
         logging.debug("[action_word_lesson] :: generated language for action: {}".format(self._language))
 
 
     def generate_initial_state(self):
-        initial_state_description = self._action_definition[constants.ACTION_DEF_INIT_CONFIG]
+        initial_state_description = self._action_definition[settings.ACTION_DEF_INIT_CONFIG]
         print len(initial_state_description)
         if len(initial_state_description) < 1 and len(self._scene_objects) <= 2:
             for scene_object_name in self._scene_objects.keys():
@@ -64,14 +64,14 @@ class ActionWordLesson:
             logging.error("[action_word_lesson] :: don't know how to interpret the initial state description")
 
     def advance_lesson_state(self):
-        if self._lesson_state == constants.ACTION_LESSON_STATE_START:
-            self._lesson_state = constants.ACTION_LESSON_STATE_TRACE
+        if self._lesson_state == settings.ACTION_LESSON_STATE_START:
+            self._lesson_state = settings.ACTION_LESSON_STATE_TRACE
             return
-        if self._lesson_state == constants.ACTION_LESSON_STATE_TRACE:
-            self._lesson_state = constants.ACTION_LESSON_STATE_END
+        if self._lesson_state == settings.ACTION_LESSON_STATE_TRACE:
+            self._lesson_state = settings.ACTION_LESSON_STATE_END
             return
-        if self._lesson_state == constants.ACTION_LESSON_STATE_END:
-            self._lesson_state = constants.ACTION_LESSON_STATE_COMPLETE
+        if self._lesson_state == settings.ACTION_LESSON_STATE_END:
+            self._lesson_state = settings.ACTION_LESSON_STATE_COMPLETE
             return
 
 
@@ -80,7 +80,7 @@ class ActionWordLesson:
         segment = {
             'scene': self._initial_scene.generate_scene_description(),
             'interaction': {
-                'marker': constants.ACTION_LESSON_STATE_START,
+                'marker': settings.ACTION_LESSON_STATE_START,
                 'language': self._language
             }
         }
@@ -98,7 +98,7 @@ class ActionWordLesson:
         scene_object1 = self._scene_objects[trace_action['argument1']]
         scene_object2 = self._scene_objects[trace_action['argument2']]
         relation_def = SpatialWordLesson.get_spatial_configurations_set()[trace_action['relation']]
-        relation_qsr = relation_def[constants.SPATIAL_DEF_DEFINITION]
+        relation_qsr = relation_def[settings.SPATIAL_DEF_DEFINITION]
         logging.debug("[action_word_lesson] :: attempting to place objects in configuration {}".format(relation_qsr))
         try:
             position = AileenScene.place_object_in_configuration_with(target_object_name=trace_action['argument1'],
@@ -128,7 +128,7 @@ class ActionWordLesson:
 
     def get_segment_for_lesson_end(self):
         segment = {
-            'interaction':{'marker': constants.ACTION_LESSON_STATE_END,
+            'interaction':{'marker': settings.ACTION_LESSON_STATE_END,
                            'interaction': ""}
         }
         self.advance_lesson_state()
@@ -136,15 +136,15 @@ class ActionWordLesson:
 
 
     def get_next_segment(self):
-        if self._lesson_state == constants.ACTION_LESSON_STATE_START:
+        if self._lesson_state == settings.ACTION_LESSON_STATE_START:
             return self.get_segment_for_lesson_start()
-        if self._lesson_state == constants.ACTION_LESSON_STATE_TRACE:
+        if self._lesson_state == settings.ACTION_LESSON_STATE_TRACE:
             return self.get_segment_for_lesson_action_trace()
-        if self._lesson_state == constants.ACTION_LESSON_STATE_END:
+        if self._lesson_state == settings.ACTION_LESSON_STATE_END:
             self.get_segment_for_lesson_end()
 
     def deliver_action_lesson_segment(self, world_server, agent_server):
-        if self._lesson_state == constants.ACTION_LESSON_STATE_START:
+        if self._lesson_state == settings.ACTION_LESSON_STATE_START:
             logging.debug("[action_word_lesson] :: setting up the initial state configuration of action")
             segment = self.get_next_segment()
             scene_acknowledgement = world_server.set_scene(
@@ -152,7 +152,7 @@ class ActionWordLesson:
             interaction_acknowledgement = agent_server.process_language(segment['interaction'])
             return
 
-        if self._lesson_state == constants.ACTION_LESSON_STATE_TRACE:
+        if self._lesson_state == settings.ACTION_LESSON_STATE_TRACE:
             logging.debug("[action_word_lesson] :: providing the next step in action trace")
             segment = self.get_next_segment()
             logging.debug("[action_word_lesson] :: received action trace {}".format(segment))
@@ -161,13 +161,13 @@ class ActionWordLesson:
                 interaction_acknowledgement = agent_server.process_language(segment['interaction'])
             return
 
-        if self._lesson_state == constants.ACTION_LESSON_STATE_END:
+        if self._lesson_state == settings.ACTION_LESSON_STATE_END:
             logging.debug("[action_word_lesson] :: communicating the terminal state configuration of action")
             segment = self.get_next_segment()
             interaction_acknowledgement = agent_server.process_language({'marker':'end'})
             return
 
-        if self._lesson_state == constants.ACTION_LESSON_STATE_BAD:
+        if self._lesson_state == settings.ACTION_LESSON_STATE_BAD:
             logging.debug("[action_word_lesson] :: communicating that the generated action trace is bad")
             interaction_acknowledgement = agent_server.process_language({'marker':'bad'})
 
@@ -178,7 +178,7 @@ class ActionWordLesson:
             raw_input("Press any key to generate the next action word lesson...")
             lesson = ActionWordLesson()
             logging.info("[action_word_lesson] :: generated a lesson for new action word")
-            while lesson._lesson_state is not constants.ACTION_LESSON_STATE_COMPLETE:
+            while lesson._lesson_state is not settings.ACTION_LESSON_STATE_COMPLETE:
                 raw_input("Press any key to deliver the next action lesson segment...")
                 lesson.deliver_action_lesson_segment(world_server, agent_server)
                 logging.debug("[action_word_lesson] :: action lesson state is: {}".format(lesson._lesson_state))
@@ -188,7 +188,7 @@ class ActionWordLesson:
     def get_action_definition_set():
         root_dir = os.path.dirname(os.path.abspath(__file__))
         action_definition_file = os.path.join(root_dir, 'resources',
-                                              constants.ACTION_DEFINITION_FILE_NAME)
+                                              settings.ACTION_DEFINITION_FILE_NAME)
         with open(action_definition_file) as f:
             action_definitions = json.load(f)
         return action_definitions

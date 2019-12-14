@@ -1,0 +1,19 @@
+##!
+# @file
+#
+# @created smohan 20191115
+
+
+sp {learn*propose*learn-visual-concept
+    (state <s>    ^name learn
+                  ^segment <seg>)
+    (<seg>    ^information <info>
+              ^purpose <p>
+              -^learned <info>)
+    (<p>    ^type learn
+            ^concept visual)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name learn-visual-concept
+             ^information <info>)
+    }

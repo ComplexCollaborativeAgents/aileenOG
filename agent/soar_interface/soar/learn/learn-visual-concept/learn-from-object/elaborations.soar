@@ -1,0 +1,41 @@
+##!
+# @file
+#
+# @created smohan 20191115
+
+sp {learn-from-object*elaborate*state 
+    (state <s>    ^name learn-from-object
+                  ^superstate.operator <sop>)
+    (<sop>    ^name learn-from-object
+              ^object <obj>
+              ^relevant-percept-set <set>
+              ^information <info>)
+-->
+    (<s>    ^object <obj>
+            ^relevant-percept-set <set>
+            ^information <info>)
+    }
+
+sp {learn-from-object*store*visual-word*index
+    (state <s>    ^name learn-from-object
+                  ^information <info>)
+    (<info>    ^nl <tag>)
+-->
+    (<s>    ^store-concept <index>)
+    (<index>     ^concept <con>
+                 ^type visual
+                 ^nl <tag>)
+    }
+
+sp {learn-from-object*store*visual-word*concept
+    (state <s>    ^name learn-from-object
+                  ^stored <lti>
+                  ^object <obj>
+                  ^relevant-percept-set <set>)
+    (<set>    ^type <type>)
+    (<obj>    ^<type> <percept>)
+    (<lti>    ^concept <concept>)
+-->
+    (<s>    ^store-concept <concept>)
+    (<concept>    ^percept <percept>)
+    }

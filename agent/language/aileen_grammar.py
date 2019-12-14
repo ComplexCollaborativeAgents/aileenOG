@@ -1,4 +1,4 @@
-from log_config import logging
+from agent.log_config import logging
 import pynini
 
 class AileenGrammar:
@@ -38,7 +38,7 @@ class AileenGrammar:
 
     def use_default_rules(self):
         """Create a grammar with default rules."""
-        self.object_names = ["box", "block", "cylinder", "pyramid", "sphere"]
+        self.object_names = ["box", "block", "cylinder", "pyramid", "sphere", "cone"]
         self.object_rules = ["[obj_name]",
                              "[obj_name] [rel]",
                              "[prop] [obj_name]",

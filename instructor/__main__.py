@@ -2,27 +2,24 @@ import xmlrpclib
 import sys
 
 from log_config import logging
-from configuration import Configuration
 
 from visual_word_lesson import VisualWordLesson
 from generate_training_images import TrainingImage
 from spatial_word_lesson import SpatialWordLesson
 from action_word_lesson import ActionWordLesson
-
+import settings
 
 def create_connection_with_aileen_world():
-    url = 'http://{}:{}'.format(Configuration.config['Servers']['world_host'],
-                                Configuration.config['Servers']['world_port'])
+    url = 'http://{}:{}'.format(settings.WORLD_HOST, settings.WORLD_PORT)
     server = xmlrpclib.ServerProxy(url)
     logging.info("[aileen_instructor] :: created a connection with the world server at: {}".format(url))
     return server
 
 
 def create_connection_with_aileen_agent():
-    url = 'http://{}:{}'.format(Configuration.config['Servers']['agent_host'],
-                                Configuration.config['Servers']['agent_port'])
+    url = 'http://{}:{}'.format(settings.AGENT_HOST, settings.AGENT_PORT)
     server = xmlrpclib.ServerProxy(url)
-    logging.info("[aileen_instructor] :: created a connection with the world server at: {}".format(url))
+    logging.info("[aileen_instructor] :: created a connection with the agent: {}".format(url))
     return server
 
 

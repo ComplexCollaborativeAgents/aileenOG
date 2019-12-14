@@ -1,0 +1,16 @@
+##!
+# @file
+#
+# @created smohan 20191113
+
+
+sp {ground-object-reference*apply*complete-ground-object-reference
+    (state <s>    ^name ground-object-reference
+                  ^operator.name complete-ground-object-reference
+                  ^grounding <g>
+                  ^superstate <ss>
+                  ^argument <arg>)
+    (<ss>    ^grounding <sg>)
+-->
+    (<sg>    ^<arg>    <g>)
+}

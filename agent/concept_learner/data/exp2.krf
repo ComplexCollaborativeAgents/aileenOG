@@ -1,0 +1,9 @@
+
+;;example 2 Green Cube
+(in-microtheory AileenExp2)
+(isa AileenExp2 AileenCaseMt)
+
+(isa Obj2 CVCube)
+(isa Obj2 CVGreen)
+(isa Obj2 RCube)
+(isa Obj2 RGreen)

@@ -1,0 +1,36 @@
+##!
+# @file
+#
+# @created smohan 20191113
+
+
+sp {find-objects*propose*create-filter
+    (state <s>    ^name find-object
+                  -^filter <filt>
+                   ^reference <ref>)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name create-filter
+             ^reference <ref>)
+    }
+ 
+sp {find-objects*propose*apply-filter
+    (state <s>    ^name find-object
+                  ^filter <filt>
+                  ^object-set <obj-set>
+                  ^found.objects <fobjs>)
+    (<fobjs>    -^object <any>)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name apply-filter
+             ^filter <filt>
+             ^object-set <obj-set>)
+    }
+
+sp {find-objects*propose*complete-find-object
+    (state <s>    ^name find-object)
+-->
+    (<s>    ^operator <op> + <)
+    (<op>    ^name complete-find-object)
+    }
+

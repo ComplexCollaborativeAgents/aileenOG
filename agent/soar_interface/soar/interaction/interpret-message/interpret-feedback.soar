@@ -1,0 +1,20 @@
+##!
+# @file
+#
+# @created smohan 20191114
+
+sp {interpret-message*apply*interpret-feedback
+    (state <s>    ^name interpret-message
+                  ^operator <op>
+                  ^superstate <ss>
+                  ^io.output-link <ol>)
+    (<op>    ^name interpret-feedback
+             ^message <m>)
+    (<seg>    ^purpose.type verify)
+    (<ss>    ^interaction.stack.segment <seg>)
+    (<m>    ^signal correct)
+-->
+    (<ss>    ^terminate-segment <seg>)
+    (<seg>    ^message <m>)
+    (<ol>    ^interaction.response ok)
+    }

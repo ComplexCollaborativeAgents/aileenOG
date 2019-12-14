@@ -1,0 +1,45 @@
+##!
+# @file
+#
+# @created smohan 20190828
+
+sp {all*elaborate*name
+   (state <s> ^superstate.operator.name <name>)
+-->
+   (<s> ^name <name>)
+}
+
+
+sp {all*elaborate*topstate
+    (state <s> ^superstate.topstate <ts>)
+-->
+    (<s> ^topstate <ts>)
+ }
+
+sp {all*elaborate*io
+    (state <s>    ^superstate.io <io>)
+-->
+    (<s>    ^io <io>)
+    }
+
+sp {topstate*elaborate*world
+    (state <s>    ^name aileen)
+-->
+    (<s>    ^world <world>)
+    (<world>    ^objects <obj>)
+    }
+                 
+
+sp {all*elaborate*world
+    (state <s>    ^superstate.world <w>
+                  ^io <io>)
+-->
+    (<s>    ^world <w>)
+    }
+
+sp {topstate*elaborate*topstate
+    (state <s>    ^superstate nil)
+-->
+    (<s>    ^topstate <s>)
+    }
+

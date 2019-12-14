@@ -1,0 +1,15 @@
+
+;;example 5 red Cylinder left of blue box
+(in-microtheory AileenExp5)
+(isa AileenExp5 AileenCaseMt)
+
+(isa Obj5A CVCylinder)
+(isa Obj5A CVRed)
+
+(isa Obj5B CVCube)
+(isa Obj5B CVBlue)
+
+(w Obj5A Obj5B)
+(dc Obj5A Obj5B)
+
+(rLeft Obj5A Obj5B)

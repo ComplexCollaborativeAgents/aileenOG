@@ -1,0 +1,14 @@
+##!
+# @file: 
+#
+# @created smohan 20191108
+
+source "proposals.soar"
+
+source "elaborations.soar"
+
+source "find-object/load.soar"
+
+source "resolve-grounding.soar"
+
+source "complete-ground-object-reference.soar"

@@ -1,8 +1,9 @@
-from SimpleXMLRPCServer import SimpleXMLRPCServer
-from SimpleXMLRPCServer import SimpleXMLRPCRequestHandler
-from log_config import logging
 import socket
+from SimpleXMLRPCServer import SimpleXMLRPCRequestHandler
+from SimpleXMLRPCServer import SimpleXMLRPCServer
 from threading import Thread
+
+from log_config import logging
 
 
 class AileenAgentServer():
@@ -24,13 +25,12 @@ class AileenAgentServer():
 
         self._server.register_introspection_functions()
 
-        def process_language(language_dict):
-            acknowledgement = True
-            print language_dict
-            #aileen_agent.process_language(language_dict['language'])
-            return acknowledgement
+        def process_interaction(interaction_dict):
+            logging.debug("[agent_server] :: received process interaction request: {}".format(interaction_dict))
+            response = aileen_agent.process_interaction(interaction_dict)
+            return response
 
-        self._server.register_function(process_language, 'process_language')
+        self._server.register_function(process_interaction, 'process_interaction')
 
     def run(self):
         while not self._quit:
@@ -41,7 +41,8 @@ class AileenAgentServer():
     def run_in_background(self):
         self._quit = False
         logging.info("[aileen_world_server] :: Starting aileen world server")
-        self._thread = Thread(target = self.run, args=())
+        self._thread = Thread(target=self.run)
+        self._thread.daemon = True
         self._thread.start()
 
     def stop(self):

@@ -1,0 +1,37 @@
+##!
+# @file
+#
+# @created smohan 20191108
+ 
+sp {ground-object-reference*propose*find-object
+    (state <s>    ^name ground-object-reference
+                  ^reference <ref>
+                  ^world.objects <objs>
+                  -^found.reference <ref>)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name find-object
+             ^object-set <objs>
+             ^reference <ref>)
+    }
+
+sp {ground-object-reference*propose*resolve-grounding
+    (state <s>    ^name ground-object-reference
+                  ^grounding <g>
+                  ^resolution <res>
+                  ^found.objects <objs>)
+    (<g>    -^object <any>)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name resolve-grounding
+             ^grounding <g>
+             ^resolution <res>
+             ^objects <objs>)
+    }
+
+sp {ground-object-reference*propose*complete-index-entity
+    (state <s>    ^name ground-object-reference)
+-->
+    (<s>    ^operator <op> + <)
+    (<op>    ^name complete-ground-object-reference)
+    }

@@ -1,15 +1,18 @@
 import json
-import os
 import uuid
+from collections import namedtuple
 from random import choice
 
-import constants
+import settings
 from log_config import logging
+
+Color = namedtuple('Color', ['name', 'rgb'])
+
 
 class AileenObject:
 
-    def __init__(self, shape, color, translation=[0, 0, 0], height_y=constants.OBJECT_STANDARD_HEIGHT,
-                 width_x=constants.OBJECT_STANDARD_WIDTH_X, width_z=constants.OBJECT_STANDARD_WIDTH_Z):
+    def __init__(self, shape, color, translation=[0, 0, 0], height_y=settings.OBJECT_STANDARD_HEIGHT,
+                 width_x=settings.OBJECT_STANDARD_WIDTH_X, width_z=settings.OBJECT_STANDARD_WIDTH_Z):
 
         self._shape = shape
         self._color = color
@@ -21,24 +24,30 @@ class AileenObject:
         self._language = None
         logging.debug("[aileen_object] :: created a new object")
 
+    def __eq__(self, other):
+        return self._shape == other._shape and self._color.name == other._color.name
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
     def get_object_description(self):
         description = "Solid {\n"
         description += "   recognitionColors {} {} {}\n".format(self._color[0],
                                                                 self._color[1],
                                                                 self._color[2])
         description += "   translation {} {} {}\n".format(self._translation[0],
-                                                   self._translation[1],
-                                                   self._translation[2])
+                                                          self._translation[1],
+                                                          self._translation[2])
         description += "   children [\n"
         description += "       Shape {\n"
         description += "          appearance PBRAppearance {\n"
-        description += "          baseColor {} {} {}\n".format(self._color[0],
-                                                               self._color[1],
-                                                               self._color[2])
+        description += "          baseColor {} {} {}\n".format(self._color.rgb[0],
+                                                               self._color.rgb[1],
+                                                               self._color.rgb[2])
         description += "          metalness 0\n"
-        description += "          emissiveColor {} {} {}\n".format(self._color[0],
-                                                                   self._color[1],
-                                                                   self._color[2])
+        description += "          emissiveColor {} {} {}\n".format(self._color.rgb[0],
+                                                                   self._color.rgb[1],
+                                                                   self._color.rgb[2])
         description += "        }\n"
         description += "        geometry {}\n".format(self.get_geometry_description())
         description += "        castShadows FALSE\n"
@@ -94,9 +103,7 @@ class AileenObject:
 
     @staticmethod
     def get_colors():
-        root_dir = os.path.dirname(os.path.abspath(__file__))
-        color_file = os.path.join(root_dir, 'resources', constants.COLOR_FILE_NAME)
-        with open(color_file) as f:
+        with open(settings.COLOR_PATH) as f:
             colors = json.load(f)
         return colors
 
@@ -104,11 +111,49 @@ class AileenObject:
     def generate_random_object():
         scene_object_color = AileenObject.randomizer.get_random_color()
         scene_object_color_vector = AileenObject.randomizer.get_color_vector_sample(scene_object_color)
+        color = Color(scene_object_color, scene_object_color_vector)
         scene_object_shape = AileenObject.randomizer.get_random_shape()
         scene_object = AileenObject(shape=scene_object_shape,
-                                    color=scene_object_color_vector)
+                                    color=color)
         scene_object._language = [scene_object_color, scene_object_shape]
         return scene_object
+
+    @staticmethod
+    def generate_random_objects(n):
+        """Generate n random unique objects."""
+        colors = AileenObject.get_colors().keys()
+        shapes = settings.SHAPE_SET
+        objects = []
+        if n > len(colors) * len(shapes):
+            logging.error("[aileen_object] :: Can't generate more than {} unique random objects".format(
+                len(colors) * len(shapes)))
+            return objects
+
+        while n:
+            o = AileenObject.generate_random_object()
+            if o not in objects:
+                objects.append(o)
+                n -= 1
+        return objects
+
+    @staticmethod
+    def generate_distractors(target, n):
+        """Generate distractors. A distractor is an object that does not have the same color or shape as the target
+        object(s).
+
+        Parameters
+        ----------
+        target : Union[AileenObject, list[AileenObject]]
+        n : int
+        """
+        distractors = []
+        while n:
+            distractor = AileenObject.generate_random_object()
+            if (isinstance(target, list) and distractor not in target) or \
+                    (not isinstance(target, list) and distractor != target):
+                distractors.append(distractor)
+                n -= 1
+        return distractors
 
     # Put randomization code in separate class so that it can be overridden.
     class Randomizer:
@@ -117,11 +162,11 @@ class AileenObject:
             colors = AileenObject.get_colors().keys()
             return choice(colors)
 
-        def get_color_vector_sample(self,color_symbol):
+        def get_color_vector_sample(self, color_symbol):
             return choice(AileenObject.get_colors()[color_symbol])
 
         def get_random_shape(self):
-            return choice(constants.SHAPE_SET)
+            return choice(settings.SHAPE_SET)
 
         def uuid4(self):
             return uuid.uuid4()

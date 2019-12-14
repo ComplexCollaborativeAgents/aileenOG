@@ -1,0 +1,34 @@
+1. Ensure you have an account on dubs that you can ssh to without a password
+https://askubuntu.com/questions/46930/how-can-i-set-up-password-less-ssh-login#46935
+
+2. Clone the repo somewhere in your home directory
+
+3. Setup configuration file
+In agent/config.json there is now the following section
+  "ConceptLearner":{
+    "hostname": "dubs",
+    "port": 8080,
+    "learner_path": "/home/klenk/code/AILEEN/aileen-agent/agent/concept_learner"
+  }
+
+  Update the port to a new one (to avoid collisions with CI and other users), and update learner_path to your directory
+
+4. pytests tests.test_concept_learner should now work.
+
+# Troubleshooting
+
+## AnalogyStack
+Look at the wiki for helpful commands.
+
+The FIRE reasoning engine supports general-purpose reasoning over large knowledge bases:
+www.qrg.northwestern.edu/nextkb/FIRE_v3_Manual.pdf
+
+One thing that I considered doing was ensuring that we had a fresh knowledge base everytime. You can see that in launch script I wanted to include an optional argument to overwrite the kb each time. Now we can do it manually if necessary.
+
+## Logs
+In the learner_path directory, there is a concept.log file that takes stdout from the allegroserve. This is useful for tracking things down.
+
+## Automated lisp testing
+When developing on the server side it is best to write and run tests in lisp.
+/usr/local/acl10.1.64/mlisp8 -batch -L testgeneralization.lsp -e "(aileen::run-tests)" -kill
+

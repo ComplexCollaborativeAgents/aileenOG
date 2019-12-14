@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import unittest
-from log_config import logging
-from language_learner import LanguageLearner
+from agent.log_config import logging
+from agent.language.language_learner import LanguageLearner
 
 class LanguageLearnerTest(unittest.TestCase):
 

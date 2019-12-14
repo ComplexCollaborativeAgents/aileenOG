@@ -1,0 +1,75 @@
+##!
+# @file
+#
+# @created smohan 20191113
+
+sp {create-filter*elaborate*object-ref
+    (state <s>    ^name create-filter
+                  ^superstate.operator <sop>)
+    (<sop>    ^name create-filter
+              ^reference <oref>)
+-->
+    (<s>    ^reference <oref>)
+    }
+
+
+sp {create-filter*elaborate*visual-words*object*tag
+    (state <s>    ^name create-filter
+                  ^reference <oref>)
+    (<oref>    ^tag    <nl-tag>)
+-->
+    (<s>    ^visual-word <nl-tag>)
+    }
+
+sp {create-filter*elaborate*visual-words*prop*tag
+    (state <s>    ^name create-filter
+                  ^reference <oref>)
+    (<oref>    ^prop.tag <tag>)
+-->
+    (<s>    ^visual-word <tag>)
+    }
+
+
+sp {create-filter*elaborate*filter
+    (state <s>    ^name create-filter)
+-->
+    (<s>    ^filter <f>)
+    }
+
+sp {create-filter*query*smem
+    (state <s>    ^name create-filter
+                  ^visual-word <tag>)
+-->
+    (<s>    ^smem-query <sq>)
+    (<sq>    ^cue <cue>)
+    (<cue>    ^nl <tag>)
+    }
+
+
+sp {create-filter*retrieve*concept
+    (state <s>    ^name create-filter
+                  ^visual-word <tag>)
+    (<s>    ^smem-query <sq>)
+    (<sq>    ^result <res>)
+    (<res>    ^nl <tag>
+              ^concept <con>)
+-->
+    (<s>    ^smem-retrieve.identifier <con>)
+    }
+
+sp {create-filter*elaborate*filter*percepts
+    (state <s>    ^name create-filter
+                  ^filter <filter>
+                  ^visual-word <tag>
+                  ^smem-query <sq>
+                  ^smem-retrieve <sret>)
+    (<sq>    ^result <res>)
+    (<res>    ^nl <tag>
+              ^concept <con>)
+    (<sret>    ^identifier <con>
+               ^retrieved-lti <ncon>)
+    (<ncon>    ^percept <p>)
+-->
+    (<filter>    ^percept <p>)
+    }
+    

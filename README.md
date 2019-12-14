@@ -3,51 +3,47 @@
 
 ## Contributing
 
-### Prerequisites
-- [Anaconda](https://www.anaconda.com/)
-- [Soar 9.6.0](https://soar.eecs.umich.edu/)
-- [Qhull](http://www.qhull.org/) (required for `svs_viewer`; Ubuntu: `sudo apt install qhull-bin`)
-- [Webots](https://cyberbotics.com/)
-- [Darknet](https://pjreddie.com/darknet/)
-
-1. Download [Soar 9.6.0](https://soar.eecs.umich.edu/) and extract the files to 
+### Development environment setup
+1. Install [Qhull](http://www.qhull.org/), required for `svs_viewer`:
+   ```bash
+   sudo apt install qhull-bin
+   ```
+2. Download [Soar 9.6.0](https://soar.eecs.umich.edu/) and extract the files to 
    `/usr/local/SoarSuite_9.6.0-Multiplatform_64bit`:
    ```bash
    wget http://soar.eecs.umich.edu/downloads/SoarSuite/SoarSuite_9.6.0-Multiplatform_64bit.zip
    sudo unzip -d /usr/local SoarSuite_9.6.0-Multiplatform_64bit.zip 
    ```
-2. Download and install [Webots](https://cyberbotics.com/):
+3. Download and install [Webots](https://cyberbotics.com/):
    ```bash
    wget https://github.com/cyberbotics/webots/releases/download/R2019b-rev1/webots_2019b-rev1_amd64.deb
    sudo dpkg -i webots_2019b-rev1_amd64.deb
    ```
-3. Clone this repository and its submodules:
+4. Clone this repository and its submodules:
    ```bash
    git clone --recurse-submodules git@gitlab-external.parc.com:aileen/aileen-agent.git
    ``` 
-4. Download and build [Darknet](https://pjreddie.com/darknet/) using `pyyolo`:
+5. Run the `bootstrap.sh` script to set up the Conda environment and build the Python dependencies, such as 
+   [Pynini](http://www.openfst.org/twiki/bin/view/GRM/Pynini) and [Darknet](https://pjreddie.com/darknet/):
    ```bash
-   cd agent/vision
-   GPU=0 OPENCV=0 REBUILD=1 python2 setup.py build_ext
+   ./bootstrap.sh
    ```
+   > Note: This script creates a Conda environment, called `aileen`. To activate the environment:
+   > ```bash
+   > conda activate aileen
+   > ```
+   > Whenever a new dependency is added to `environment.yml`, the environment can be updated using:
+   > ```bash
+   > conda env update -f environment.yml
+   > ```
 
-### Development environment setup
-Create a Conda environment:
-```bash
-conda env create -f environment.yml
-```
-Whenever a new dependency is added to `environment.yml`, the environment can be updated using:
-```bash
-conda env update -f environment.yml
-```
-   
 ### Run
 1. Open Webots and load the world: "File", "Open World...", and select `world/data/aileen_world.wbt`.
 2. Run the world server:
    ```bash
    export WEBOTS_HOME="/usr/local/webots"
-   export PYTHONPATH="/usr/local/webots/lib/python27:$PYTHONPATH"
-   export LD_LIBRARY_PATH=/usr/local/webots/lib
+   export PYTHONPATH="$WEBOTS_HOME/lib/python27:$PYTHONPATH"
+   export LD_LIBRARY_PATH="$WEBOTS_HOME/lib"
    conda activate aileen
    (aileen) python world
    ```

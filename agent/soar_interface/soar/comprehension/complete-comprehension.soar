@@ -1,0 +1,14 @@
+##!
+# @file
+#
+# @created smohan 20191114
+
+sp {comprehension*apply*complete-comprehension
+    (state <s>    ^name comprehension
+                  ^segment <seg>
+                  ^operator <op>)
+    (<op>    ^name complete-comprehension
+             ^grounding <g>)
+-->
+    (<seg>    ^grounding <g>)
+    }

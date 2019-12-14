@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<soaragent>
+  <startfile path="load.soar" />
+  <members>
+    <member path="primitive-actions" />
+    <member path="primitive-actions/pick-up" />
+    <member path="_soar_parameters.soar" />
+    <member path="load.soar" />
+    <member path="wait.soar" />
+    <member path="elaborations/elaborate-state.soar" />
+    <member path="elaborations/load.soar" />
+    <member path="_knowledge" />
+    <member path="_knowledge/_semantic-memory" />
+    <member path="default" />
+    <member path="default/smem-operators" />
+    <member path="interaction/elaborations.soar" />
+    <member path="interaction/load.soar" />
+    <member path="interaction/proposals.soar" />
+    <member path="comprehension/elaborate-state.soar" />
+    <member path="comprehension/load.soar" />
+    <member path="comprehension/parse-content.soar" />
+    <member path="comprehension/proposals.soar" />
+    <member path="comprehension/ground-object-reference/elaborations.soar" />
+    <member path="comprehension/ground-object-reference/load.soar" />
+    <member path="comprehension/ground-object-reference/proposals.soar" />
+  </members>
+</soaragent>
+

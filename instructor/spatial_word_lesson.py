@@ -2,7 +2,7 @@ import json
 import os
 from random import choice
 
-import constants
+import settings
 from aileen_object import AileenObject
 from aileen_scene import AileenScene
 from language_generator import LanguageGenerator
@@ -21,9 +21,9 @@ class SpatialWordLesson:
         self._scene = AileenScene()
         self._language = None
 
-    def generate_lesson(self):
+    def generate_lesson(self, distractors=0):
         self.generate_setup()
-        self.generate_scene()
+        self.generate_scene(distractors)
         lesson = {
             'scene': self._scene.generate_scene_description(),
             'interaction': {
@@ -34,22 +34,23 @@ class SpatialWordLesson:
 
     def generate_setup(self):
         logging.debug("[action_word_lesson] :: generate the setup for the new lesson")
-        objects = self._spatial_configuration_def[constants.SPATIAL_DEF_OBJECTS]
+        objects = self._spatial_configuration_def[settings.SPATIAL_DEF_OBJECTS]
         if len(objects) > 0:
-            for obj in objects:
-                self._scene_objects[obj] = AileenObject.generate_random_object()
+            objs = AileenObject.generate_random_objects(len(objects))
+            for o, obj in zip(objs, objects):
+                self._scene_objects[obj] = o
         self._language = LanguageGenerator.generate_language_from_template(self._scene_objects,
                                                                            self._spatial_configuration_def[
-                                                                               constants.SPATIAL_DEF_LANGUAGE_TEMPLATE])
+                                                                               settings.SPATIAL_DEF_LANGUAGE_TEMPLATE])
 
-    def generate_scene(self):
+    def generate_scene(self, distractors):
         logging.debug("[aileen_spatial_word_lesson] :: generating a new scene for spatial word learning")
         if len(self._scene_objects) == 2:
             translations = AileenScene.place_two_objects_in_configuration(
                 target_object_name=self._scene_objects.items()[0][0],
                 reference_object_name=self._scene_objects.items()[1][0],
                 scene_objects=self._scene_objects,
-                configuration_definition=self._spatial_configuration_def[constants.SPATIAL_DEF_DEFINITION])
+                configuration_definition=self._spatial_configuration_def[settings.SPATIAL_DEF_DEFINITION])
             for scene_object_name in self._scene_objects.keys():
                 scene_object = self._scene_objects[scene_object_name]
                 scene_object.set_translation(translations[scene_object_name])
@@ -62,17 +63,21 @@ class SpatialWordLesson:
                 first_reference_object_name=self._scene_objects.items()[0][0],
                 second_reference_object_name=self._scene_objects.items()[1][0],
                 scene_objects=self._scene_objects,
-                configuration_definition=self._spatial_configuration_def[constants.SPATIAL_DEF_DEFINITION])
+                configuration_definition=self._spatial_configuration_def[settings.SPATIAL_DEF_DEFINITION])
             for scene_object_name in self._scene_objects.keys():
                 scene_object = self._scene_objects[scene_object_name]
                 scene_object.set_translation(translations[scene_object_name])
                 self._scene.add_object(scene_object)
 
+        for distractor in AileenObject.generate_distractors(self._scene_objects.values(), distractors):
+            distractor.set_translation(AileenScene.randomizer.get_random_position_on_table())
+            self._scene.add_object(distractor)
+
     @staticmethod
     def get_spatial_configurations_set():
         root_dir = os.path.dirname(os.path.abspath(__file__))
         spatial_configuration_file = os.path.join(root_dir, 'resources',
-                                                  constants.SPATIAL_CONFIGURATION_FILE_NAME)
+                                                  settings.SPATIAL_CONFIGURATION_FILE_NAME)
         with open(spatial_configuration_file) as f:
             spatial_configurations = json.load(f)
         return spatial_configurations
@@ -82,7 +87,7 @@ class SpatialWordLesson:
         while True:
             raw_input("Press any key to generate the next spatial word lesson...")
 
-            lesson = SpatialWordLesson().generate_lesson()
+            lesson = SpatialWordLesson().generate_lesson(distractors=0)
 
             scene_acknowledgement = world_server.set_scene(
                 {'configuration': lesson['scene'], 'label': lesson['interaction']['language']})

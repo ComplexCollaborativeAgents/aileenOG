@@ -1,0 +1,13 @@
+##!
+# @file: 
+#
+# @created smohan 20191108
+
+source "elaborate-state.soar"
+
+source "proposals.soar"
+
+source "ground-object-reference/load.soar"
+
+source "parse-content.soar"
+source "complete-comprehension.soar"
