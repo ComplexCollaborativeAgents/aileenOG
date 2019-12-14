@@ -6,7 +6,7 @@
 ;;;;   Created: November  6, 2019 14:54:11
 ;;;;   Purpose: 
 ;;;; ----------------------------------------------------------------------------
-;;;;  Modified: Friday, December 13, 2019 at 11:12:13 by klenk
+;;;;  Modified: Saturday, December 14, 2019 at 11:05:17 by klenk
 ;;;; ----------------------------------------------------------------------------
 
 (in-package :aileen)
@@ -57,15 +57,13 @@
 (defun store-facts-in-case (facts context)
   (remove-facts-from-case context)
   (dolist (fact facts)
-    ;    (fire:tell-it fact :context context))
     (fire:kb-store fact :mt context)
     (fire:kb-store `(d::isa ,context d::AileenCaseMt) :mt context))
   )
 
 (defun remove-facts-from-case (context)
   (format t "Removing ~A~%" context)
-  (dolist (fact (fire:ask-it `d::(kbOnly (ist-Information ,aileen::context ?x))
-                  :response 'd::?x))
+  (dolist (fact (fire:retrieve-it '?x :context context :response '?x))
     (format t "Forgetting ~A in ~A~%" fact context)
     (fire:kb-forget fact :mt context)))
   
@@ -81,6 +79,8 @@
 
 
 (defun filter-scene-by-expression (facts context gpool prevmatches pattern)
+  (fire:clear-wm)
+  (fire:clear-dgroup-caches)
   (cond
    ((or (eq (car pattern) 'd::and) (eq (car pattern) 'd::or))
     ;; boolean operation
@@ -127,10 +127,11 @@
 	 (objs
 	  (remove-if-not
 	   #'(lambda (obj)
-		 (remove-facts-from-case `(d::MinimalCaseFromMtFn ,obj ,context))
-;	       (fire:tell-it `(d::constructCaseInWM (d::MinimalCaseFromMtFn ,obj ,context)))
-;	       (fire:tell-it `(d::copyWMCaseToKB (d::MinimalCaseFromMtFn ,obj ,context)
-;						 (d::MinimalCaseFromMtFn ,obj ,context)))
+	       (remove-facts-from-case `(d::MinimalCaseFromMtFn ,obj ,context))
+	       (fire:clear-dgroup-caches)	       
+	       (fire:tell-it `(d::constructCaseInWM (d::MinimalCaseFromMtFn ,obj ,context)))
+	       (fire:tell-it `(d::copyWMCaseToKB (d::MinimalCaseFromMtFn ,obj ,context)
+						 (d::MinimalCaseFromMtFn ,obj ,context)))
 	       (fire:ask-it
 		`(d::reverseCIsAllowed
 		  (d::and

@@ -6,7 +6,7 @@
 ;;;;   Created: November 13, 2019 16:35:48
 ;;;;   Purpose: 
 ;;;; ----------------------------------------------------------------------------
-;;;;  Modified: Friday, December 13, 2019 at 11:11:36 by klenk
+;;;;  Modified: Saturday, December 14, 2019 at 11:06:26 by klenk
 ;;;; ----------------------------------------------------------------------------
 
 (load "server.lsp")
@@ -51,6 +51,7 @@
   ;; Add two cases for RRed to the RRedMT gpool
   ;; generalize them
   ;; Match a new scene against it
+  ;; verifies that removing facts works.
   (let (res pattern)
     ;; TEST STORE
     (setq res (call-test-server "store"
@@ -83,7 +84,7 @@
     (assert (= 0 (length (cdr (assoc :MATCHES res)))))
     
     (setq res (call-test-server "query"
-               (pairlis '("facts" "pattern")
+				(pairlis '("facts" "pattern")
                         (list (list (list "isa" "Object3" "CVRed")
                                     (list "isa" "Object3" "CVCube"))
                                pattern))))
