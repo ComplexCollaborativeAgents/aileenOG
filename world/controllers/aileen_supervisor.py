@@ -26,8 +26,9 @@ class AileenSupervisor(Supervisor):
         self._held_node = None
 
         self._camera = self.getCamera('camera')
+
         self._camera.enable(constants.TIME_STEP)
-        self._camera.recognitionEnable(constants.TIME_STEP)
+        # self._camera.recognitionEnable(constants.TIME_STEP)
         self.resX = self._camera.getWidth()
         self.resY = self._camera.getHeight()
 
@@ -56,10 +57,6 @@ class AileenSupervisor(Supervisor):
 
     def get_all(self):
 
-        image_objects = self._camera.getRecognitionObjects()
-        logging.debug("Retrieving objects in camera")
-        logging.debug(image_objects)
-
         logging.debug("[aileen_supervisor] :: processing get_all from client")
         num_children = self._children.getCount()
         logging.debug("[aileen_supervisor] :: world contains {} nodes".format(num_children))
@@ -69,24 +66,21 @@ class AileenSupervisor(Supervisor):
             object_node = self._children.getMFNode(i)
             object_name = object_node.getTypeName()
             if 'Solid' in object_name:
-                im_bbox = [0.0, 0.0, 0.0, 0.0]
-                im_colors = [0, 0, 0]
-                for j in range(0, self._camera.getRecognitionNumberOfObjects()):
-                    if object_node.getId() == image_objects[j].get_id():
-                        x, y = image_objects[j].get_position_on_image()[0:2]
-                        w, h = image_objects[j].get_size_on_image()[0:2]
-                        im_bbox = [float(x) / float(self.resX),
-                                   float(y) / float(self.resY),
-                                   float(w) / float(self.resX),
-                                   float(h) / float(self.resY)]
-                        im_colors = image_objects[j].get_colors()
+
+                world_bbox = self.computeBoundingBox(object_node)
+                w_x1 = world_bbox[0]
+                w_y1 = world_bbox[1]
+                w_x2 = world_bbox[3]
+                w_y2 = world_bbox[4]
+                im_x1, im_y1 = self.coord_world2im(w_x1, w_y1)
+                im_x2, im_y2 = self.coord_world2im(w_x2, w_y2)
+
                 object_children = object_node.getField('children')
                 object_dict = {
                     'id': object_node.getId(),
                     'position': object_node.getPosition(),
                     'bounding_box': self.computeBoundingBox(object_node),
-                    'bounding_box_camera': im_bbox,
-                    'colors_camera': im_colors,
+                    'bounding_box_camera': [im_x1, im_y1, im_x2, im_y2],
                     'shape': self.get_object_shape(object_node),
                     'color': self.get_object_color(object_node),
                     'texture': self.get_object_texture(object_node),
@@ -98,6 +92,7 @@ class AileenSupervisor(Supervisor):
                 objects.append(object_dict)
 
         output_dict = {'objects': objects}
+
         return output_dict
 
     def get_object_shape(self, object_node):
@@ -168,6 +163,27 @@ class AileenSupervisor(Supervisor):
 
         self.setLabel(1, label, 0.4, 0.1, 0.1, 0x000000, 0, "Arial")
         return True
+
+    @staticmethod
+    def coord_im2world(x, y):
+
+        # Due to some difficulty getting camera parameters from webots, we use a simple linear regression
+        # to map im coordinates to world coordinates, and vice-versa.
+        # Eventually, solve rotation matrix for camera and use transform matrix
+        w_x = x * 1.3910 + 0.1639
+        w_y = y * 1.3719 - 0.4558
+        w_z = 0.399802  # pretty much every object has this height in the training data.
+        return w_x, w_y, w_z
+
+    @staticmethod
+    def coord_world2im(x, y):
+        # Due to some difficulty getting camera parameters from webots, we use a simple linear regression
+        # to map im coordinates to world coordinates, and vice-versa.
+        # Eventually, solve rotation matrix for camera and use transform matrix
+        im_x = x * 0.7167 - 0.1165
+        im_y = y * 0.7269 + 0.3323
+
+        return im_x, im_y
 
     def clean_scene(self):
         logging.debug("[aileen_supervisor] :: cleaning objects from the scene")

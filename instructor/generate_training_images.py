@@ -14,7 +14,8 @@ import random
 import os
 
 # create output folder if it does not exist
-os.makedirs(constants.TRAINING_DATA_FOLDER)
+if not os.path.isdir(constants.TRAINING_DATA_FOLDER):
+    os.makedirs(constants.TRAINING_DATA_FOLDER)
 
 
 class TrainingImage:
@@ -56,9 +57,16 @@ class TrainingImage:
             for j in range(0, len(meta['objects'])):
                 obj = meta['objects'][j]
                 bb = obj['bounding_box_camera']
+                bbw = obj['bounding_box']
                 shape = obj['shape'].split('s_')[1]
+                # Temp removing, for calculating transform between 2D and 3D:
                 with open(constants.TRAINING_DATA_FOLDER + '/frame_' + "{:0>6d}".format(counter) + '.txt', 'a+') as f:
                     f.write("%d %f %f %f %f\n" % (constants.SHAPE_SET.index(shape), bb[0], bb[1], bb[2], bb[3]))
+
+                with open(constants.TRAINING_DATA_FOLDER + '/allcoords.txt', 'a+') as f:
+                    f.write("%d %f %f %f %f %f %f %f %f %f %f\n" % (constants.SHAPE_SET.index(shape), bb[0], bb[1],
+                                                                    bb[2], bb[3], bbw[0], bbw[1], bbw[2], bbw[3],
+                                                                    bbw[4], bbw[5]))
 
             # Split the training/validation data 80/20
             if random.randint(0, 100) < 80:
