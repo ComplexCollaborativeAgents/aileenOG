@@ -6,7 +6,7 @@
 ;;;;   Created: November 13, 2019 16:14:37
 ;;;;   Purpose: 
 ;;;; ----------------------------------------------------------------------------
-;;;;  Modified: Thursday, November 21, 2019 at 09:09:56 by klenk
+;;;;  Modified: Saturday, December 14, 2019 at 11:56:48 by klenk
 ;;;; ----------------------------------------------------------------------------
 
 (in-package :cl-user)
@@ -38,6 +38,7 @@
 	((consp lst)
 	 (cons (str->symbols (car lst))(str->symbols (cdr lst))))
 	(t (error "str->symbols "))))
+
 
 (defun create-reasoning-symbol-helper (str)
   (let* ((json (cl-json:decode-json-from-string str))
