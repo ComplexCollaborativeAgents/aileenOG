@@ -61,6 +61,8 @@ ACTION_LESSON_STATE_END = 'end'
 ACTION_LESSON_STATE_COMPLETE = 'complete'
 ACTION_LESSON_STATE_BAD = 'bad'
 
+TRAINING_DATA_FOLDER = './vision_training_data'
+
 try:
     from local_settings import *
 except ImportError:

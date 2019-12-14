@@ -59,7 +59,7 @@ class TrainingImage:
                 bb = obj['bounding_box_camera']
                 bbw = obj['bounding_box']
                 shape = obj['shape'].split('s_')[1]
-                # Temp removing, for calculating transform between 2D and 3D:
+                # for calculating transform between 2D and 3D:
                 with open(constants.TRAINING_DATA_FOLDER + '/frame_' + "{:0>6d}".format(counter) + '.txt', 'a+') as f:
                     f.write("%d %f %f %f %f\n" % (constants.SHAPE_SET.index(shape), bb[0], bb[1], bb[2], bb[3]))
 
