@@ -6,7 +6,7 @@
 ;;;;   Created: November 13, 2019 16:35:48
 ;;;;   Purpose: 
 ;;;; ----------------------------------------------------------------------------
-;;;;  Modified: Saturday, December 14, 2019 at 17:54:13 by klenk
+;;;;  Modified: Sunday, December 15, 2019 at 08:32:09 by klenk
 ;;;; ----------------------------------------------------------------------------
 
 (load "server.lsp")
@@ -194,20 +194,12 @@
     ))
 
 (defun clean-tests ()
-  (fire:kb-forget (car(fire:retrieve-references 'd::RRed)))
-  (fire:kb-forget (car(fire:retrieve-references 'd::rRight)))
-  
+  (cl-user::nuke-gpool 'd::rRightMt)
+  (cl-user::nuke-gpool 'd::rOnMt)
   )
 	
   
-(defun symbols->strs (lst)
-  (cond ((null lst) nil)
-	((symbolp lst)
-	 (symbol-name lst))
-	((numberp lst) lst)
-	((consp lst)
-	 (cons (symbols->strs (car lst))(symbols->strs (cdr lst))))
-	(t (error "str->symbols "))))
+
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
