@@ -6,7 +6,7 @@
 ;;;;   Created: November 13, 2019 16:35:48
 ;;;;   Purpose: 
 ;;;; ----------------------------------------------------------------------------
-;;;;  Modified: Sunday, December 15, 2019 at 08:32:09 by klenk
+;;;;  Modified: Sunday, December 15, 2019 at 08:48:24 by klenk
 ;;;; ----------------------------------------------------------------------------
 
 (load "server.lsp")
@@ -18,6 +18,7 @@
   (test-reasoning-symbols)
   (test-generalization-obj)
   (test-generalization-rel)
+  
   (clean-tests))
 
 (defun call-test-server (function arguments)
@@ -154,7 +155,8 @@
   ;; Match a new scene against it
   ;; verifies that removing facts works.
   (make-test-gen-rel-gpool)
-  (query-test-gen-rel-gpool))
+  (query-test-gen-rel-gpool)
+  (query-test-gen-rel-var-gpool))
 
 (defun query-test-gen-rel-gpool ()
   (let (res pattern)
@@ -191,6 +193,62 @@
                               pattern))))
     (assert (= 0 (length (cdr (assoc :MATCHES res)))))
 
+    ))
+
+
+(defun query-test-gen-rel-var-gpool ()
+  ;; tests with multiple bindings
+  (let (res pattern)
+    (setf pattern (list "rRight" "Obj10A" "?Obj"))
+    (setq res (call-test-server "query"
+				(pairlis '("facts" "pattern")
+                        (list '(("isa" "Obj10A" "CVPyramid") ("isa" "Obj10A" "CVBlue")
+				("isa" "Obj10B" "CVCube") ("isa" "Obj10B" "CVGreen")
+				("s" "Obj10A" "Obj10B") ("dc" "Obj10A" "Obj10B")
+				("isa" "Obj10C" "CVPyramid") ("isa" "Obj10C" "CVBlue")
+				("s" "Obj10A" "Obj10C") ("dc" "Obj10A" "Obj10C")
+				("s" "Obj10B" "Obj10C") ("po" "Obj10B" "Obj10C")
+				)
+                              pattern))))
+    (assert (= 0 (length (cdr (assoc :MATCHES res)))))
+
+    (setf pattern (list "rRight" "Obj10A" "?Obj"))
+    (setq res (call-test-server "query"
+				(pairlis '("facts" "pattern")
+                        (list '(("isa" "Obj10A" "CVPyramid") ("isa" "Obj10A" "CVBlue")
+				("isa" "Obj10B" "CVCube") ("isa" "Obj10B" "CVGreen")
+				("n" "Obj10A" "Obj10B") ("dc" "Obj10A" "Obj10B")
+				("isa" "Obj10C" "CVPyramid") ("isa" "Obj10C" "CVBlue")
+				("n" "Obj10A" "Obj10C") ("dc" "Obj10A" "Obj10C")
+				("s" "Obj10B" "Obj10C") ("po" "Obj10B" "Obj10C")
+				)
+                               pattern))))
+    (assert (= 2 (length (cdr (assoc :MATCHES res)))))  
+    (assert (find '("rRight" "Obj10A" "Obj10B")
+		  (cdr (assoc :MATCHES res)) :test #'equal))
+    (assert (find '("rRight" "Obj10A" "Obj10C")
+		   (cdr (assoc :MATCHES res)) :test #'equal))
+    
+
+    ;;; test both variables
+    (setf pattern (list "rRight" "?Obj1" "?Obj2"))
+    (setq res (call-test-server "query"
+               (pairlis '("facts" "pattern")
+                        (list '(("isa" "Obj10A" "CVPyramid") ("isa" "Obj10A" "CVBlue")
+				("isa" "Obj10B" "CVCube") ("isa" "Obj10B" "CVGreen")
+				("n" "Obj10A" "Obj10B") ("dc" "Obj10A" "Obj10B")
+				("isa" "Obj10C" "CVPyramid") ("isa" "Obj10C" "CVBlue")
+				("n" "Obj10A" "Obj10C") ("dc" "Obj10A" "Obj10C")
+				("n" "Obj10B" "Obj10C") ("po" "Obj10B" "Obj10C")
+				)
+                              pattern))))
+    (assert (= 3 (length (cdr (assoc :MATCHES res)))))
+    (assert (find '("rRight" "Obj10A" "Obj10B")
+		  (cdr (assoc :MATCHES res)) :test #'equal))
+    (assert (find '("rRight" "Obj10A" "Obj10C")
+		  (cdr (assoc :MATCHES res)) :test #'equal))
+    (assert (find '("rRight" "Obj10B" "Obj10C")
+		   (cdr (assoc :MATCHES res)) :test #'equal))
     ))
 
 (defun clean-tests ()

@@ -6,7 +6,7 @@
 ;;;;   Created: November  6, 2019 14:54:11
 ;;;;   Purpose: 
 ;;;; ----------------------------------------------------------------------------
-;;;;  Modified: Saturday, December 14, 2019 at 17:52:43 by klenk
+;;;;  Modified: Sunday, December 15, 2019 at 09:57:48 by klenk
 ;;;; ----------------------------------------------------------------------------
 
 (in-package :aileen)
@@ -170,7 +170,9 @@
 	       (fire::substitute-bindings pattern blist))
 	   (make-possible-blists
 	    (vars-in-expr pattern)
-	    (objs-in-context context)))))))
+	    (remove-if #'(lambda (obj)
+			   (find obj pattern))
+		       (objs-in-context context))))))))
 
 
 (defun make-case-term (context objs)
@@ -181,21 +183,25 @@
 		objs)))
 
 (defun match-query-against-gpool (context gpool pattern)
-  (let* ((objs (objs-in-context context))
-	 (case-term (make-case-term context (remove-if-not
-					     #'(lambda (e) (find e objs))
-					     pattern) )))
+  (let* ((objs (remove-if-not
+		#'(lambda (e) (find e (objs-in-context context)))
+		pattern))
+	 (case-term (make-case-term context objs)))
     (remove-facts-from-case case-term)
     (fire:clear-dgroup-caches)	       
     (fire:tell-it `(d::constructCaseInWM ,case-term))
     (fire:tell-it `(d::copyWMCaseToKB ,case-term ,case-term)) ;;could have an explicit query context here for easier clean up?
+    (dolist (obj objs) ;; analogy control predicates
+      (fire:kb-store `(d::sageRequireInMapping ,obj) :mt case-term))
     (fire:ask-it
      `(d::reverseCIsAllowed
        (d::and
 	(d::sageSelect ,case-term ,gpool ?ret ?mapping)
 	(d::reverseCandidateInferenceOf ?ci ?mapping)
 	(d::candidateInferenceContent ?ci ,pattern)))
-     :context gpool)))
+     :context gpool)
+      
+      ))
 
 (defun make-possible-blists (vars objs &optional blist)
   (cond ((null vars) (list blist))
