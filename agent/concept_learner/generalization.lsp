@@ -6,7 +6,7 @@
 ;;;;   Created: November  6, 2019 14:54:11
 ;;;;   Purpose: 
 ;;;; ----------------------------------------------------------------------------
-;;;;  Modified: Saturday, December 14, 2019 at 11:05:17 by klenk
+;;;;  Modified: Saturday, December 14, 2019 at 17:52:43 by klenk
 ;;;; ----------------------------------------------------------------------------
 
 (in-package :aileen)
@@ -152,9 +152,64 @@
   (intern (format nil "~AMt" (symbol-name concept)) :d))
 
 (defun filter-scene-by-expression-rel (facts context gpool prevmatches pattern)
-  (assert nil)
-  )
+  (assert (null prevmatches))
+  (assert (and (listp pattern) (every #'atom pattern))) ;; no nested lists in pattern.
+  (store-facts-in-case facts context)
+  (when (not gpool)
+    (setf gpool (get-concept-gpool (car pattern))))
+  (cond ((null (vars-in-expr pattern))
+	 (if (match-query-against-gpool context gpool pattern)
+	     (list pattern)
+	     nil))
+	((vars-in-expr pattern)
+	 (remove-if-not
+	  #'(lambda (bound-pattern)
+	      (match-query-against-gpool context gpool bound-pattern))
+	  (mapcar 
+	   #'(lambda (blist)
+	       (fire::substitute-bindings pattern blist))
+	   (make-possible-blists
+	    (vars-in-expr pattern)
+	    (objs-in-context context)))))))
 
+
+(defun make-case-term (context objs)
+  ;;; Union of all the minimal case fns
+  (cons 'd::CaseUnionFn
+	(mapcar #'(lambda (obj)
+		    `(d::MinimalCaseFromMtFn ,obj ,context))
+		objs)))
+
+(defun match-query-against-gpool (context gpool pattern)
+  (let* ((objs (objs-in-context context))
+	 (case-term (make-case-term context (remove-if-not
+					     #'(lambda (e) (find e objs))
+					     pattern) )))
+    (remove-facts-from-case case-term)
+    (fire:clear-dgroup-caches)	       
+    (fire:tell-it `(d::constructCaseInWM ,case-term))
+    (fire:tell-it `(d::copyWMCaseToKB ,case-term ,case-term)) ;;could have an explicit query context here for easier clean up?
+    (fire:ask-it
+     `(d::reverseCIsAllowed
+       (d::and
+	(d::sageSelect ,case-term ,gpool ?ret ?mapping)
+	(d::reverseCandidateInferenceOf ?ci ?mapping)
+	(d::candidateInferenceContent ?ci ,pattern)))
+     :context gpool)))
+
+(defun make-possible-blists (vars objs &optional blist)
+  (cond ((null vars) (list blist))
+	((null objs) (assert nil))
+	(t
+	 (mapcan #'(lambda (obj)
+		     (make-possible-blists
+		      (cdr vars)
+		      (remove obj objs)
+		      (cons (cons (car vars) obj) blist)))
+		 objs))))
+  
+(defun vars-in-expr (expr)
+  (remove-if-not #'fire:variable? expr))
 
 (defun objs-in-context (context)
   (fire::ask-it `d::(and (isa ?col AileenCVSymbol)

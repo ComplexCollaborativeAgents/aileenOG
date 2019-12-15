@@ -6,7 +6,7 @@
 ;;;;   Created: November 13, 2019 16:35:48
 ;;;;   Purpose: 
 ;;;; ----------------------------------------------------------------------------
-;;;;  Modified: Saturday, December 14, 2019 at 12:13:23 by klenk
+;;;;  Modified: Saturday, December 14, 2019 at 17:54:13 by klenk
 ;;;; ----------------------------------------------------------------------------
 
 (load "server.lsp")
@@ -122,11 +122,7 @@
 ;;;    (assert (equal pattern (cdr (assoc :PATTERN res))))
     ))
 
-(defun test-generalization-rel ()
-  ;; Add two cases for rRight to the rRightMT gpool
-  ;; generalize them
-  ;; Match a new scene against it
-  ;; verifies that removing facts works.
+(defun make-test-gen-rel-gpool ()
   (let (res pattern)
     ;; TEST STORE
     (setq res (call-test-server "store"
@@ -149,12 +145,23 @@
                               "Test9" ;;Id
                               "rRight"))))
     (assert (= (cdr (assoc :NUM-EXAMPLES res)) 0))
-    (assert (= (cdr (assoc :NUM-GENERALIZATIONS res)) 1))
+    (assert (= (cdr (assoc :NUM-GENERALIZATIONS res)) 1))))
 
+
+(defun test-generalization-rel ()
+  ;; Add two cases for rRight to the rRightMT gpool
+  ;; generalize them
+  ;; Match a new scene against it
+  ;; verifies that removing facts works.
+  (make-test-gen-rel-gpool)
+  (query-test-gen-rel-gpool))
+
+(defun query-test-gen-rel-gpool ()
+  (let (res pattern)
     ;; TEST QUERY Should not match
     (setf pattern (list "rRight" "Obj10A" "Obj10B"))
     (setq res (call-test-server "query"
-               (pairlis '("facts" "pattern")
+				(pairlis '("facts" "pattern")
                         (list '(("isa" "Obj10A" "CVPyramid") ("isa" "Obj10A" "CVBlue")
 				("isa" "Obj10B" "CVCube") ("isa" "Obj10B" "CVGreen")
 				("s" "Obj10A" "Obj10B") ("dc" "Obj10A" "Obj10B")
@@ -170,7 +177,8 @@
 				)
                                pattern))))
     (assert (= 1 (length (cdr (assoc :MATCHES res)))))  
-    (assert (equal "Object3" (car (cdr (assoc :MATCHES res)))))  ;;unclear how to match this one
+    (assert (equal '("rRight" "Obj10A" "Obj10B")
+		   (car (cdr (assoc :MATCHES res)))))  ;;unclear how to match this one
     (assert (equal pattern (cdr (assoc :PATTERN res))))
 
     ;; Test deletion of query facts.

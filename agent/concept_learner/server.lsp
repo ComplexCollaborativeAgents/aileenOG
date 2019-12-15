@@ -6,7 +6,7 @@
 ;;;;   Created: November 13, 2019 16:14:37
 ;;;;   Purpose: 
 ;;;; ----------------------------------------------------------------------------
-;;;;  Modified: Saturday, December 14, 2019 at 11:56:48 by klenk
+;;;;  Modified: Saturday, December 14, 2019 at 18:00:34 by klenk
 ;;;; ----------------------------------------------------------------------------
 
 (in-package :cl-user)
@@ -21,6 +21,7 @@
 
 (require :aserve)
 (require :xml-rpc)
+(require :autozoom)
 
 (defpackage :aileen
   (:use :common-lisp :cl-user :excl))
@@ -28,6 +29,11 @@
 (load "generalization.lsp")
 
 (in-package :aileen)
+
+(defun print-backtrace (condition)
+  (format t "error condition: ~A~%"  condition)
+  (top-level.debug::zoom cl-user::*standard-output* :all nil :relative t :count 30)
+  )
 
 (defun str->symbols (lst)
   (cond ((null lst) nil)
@@ -39,8 +45,19 @@
 	 (cons (str->symbols (car lst))(str->symbols (cdr lst))))
 	(t (error "str->symbols "))))
 
+(defun symbols->strs (lst)
+  (cond ((null lst) nil)
+	((symbolp lst)
+	 (symbol-name lst))
+	((numberp lst) lst)
+	((consp lst)
+	 (cons (symbols->strs (car lst))(symbols->strs (cdr lst))))
+	(t (error "symbols->strs "))))
+
 
 (defun create-reasoning-symbol-helper (str)
+  (handler-bind ((error #'print-backtrace))
+  (format t "~%Creating Reasoning Symbol2 ~A" str)
   (let* ((json (cl-json:decode-json-from-string str))
 	 (symbol (str->symbols (cdr (assoc :SYMBOL json)))))
     (cond (symbol
@@ -52,12 +69,13 @@
 						  )))
 	  (t
 	   (format t "Ill formed create-reasoning-symbol request ~A~%" str)
-	   ""))))
+	   "")))))
 
 
 (defparameter *str* nil)
 
 (defun create-reasoning-predicate-helper (str)
+  (handler-bind ((error #'print-backtrace))
   (let* ((json (cl-json:decode-json-from-string str))
 	 (symbol (str->symbols (cdr (assoc :PREDICATE json))))
 	 (arity (cdr (assoc :arity json))))
@@ -69,9 +87,10 @@
 	      (pairlis '("numPredicates" "gpool") (list num (symbol-name gpool))))))
 	  (t
 	   (format t "Ill formed create-reasoning-predicate request ~A~%" str)
-	   ""))))
+	   "")))))
 
 (defun add-case-to-gpool-helper (str)
+  (handler-bind ((error #'print-backtrace))
   (setq *str* str)
   (let* ((json (cl-json:decode-json-from-string str))
 	 (facts (str->symbols (cdr (assoc :FACTS json))))
@@ -85,7 +104,7 @@
 	      (pairlis '("numGeneralizations" "numExamples") (list num-gen num-exp)))))
 	  (t
 	   (format t "Ill formed add-case-to-gpool request ~A~%" str)
-    ""))))
+    "")))))
 
 (defun store-helper (str)
   (format t "Storing ~A~%" str)
@@ -129,6 +148,7 @@
             (pairlis '("success") (list nil)))))))
 
 (defun query-helper (str)
+  (handler-bind ((error #'print-backtrace))
   (setq *str* str)
   (format t "Querying ~A~%" str)
   (let* ((json (cl-json:decode-json-from-string str))
@@ -143,17 +163,15 @@
              (format t "Found matches ~A~%" matches)
              (cl-json:encode-json-alist-to-string
               (pairlis '("matches" "pattern")
-                       (list (loop for item in matches collect
-                                   (if (symbolp item) (symbol-name item) item))
-                             (loop for item in pattern collect
-                                   (if (symbolp item) (symbol-name item) item)))))
-              ))
+                       (list (symbols->strs matches)
+			     (symbols->strs pattern))))))
           (t
            (format t "Ill formed filter scene request ~A~%" str)
            (cl-json:encode-json-alist-to-string
-              (pairlis '("matches" "pattern") '(nil nil)))))))
+              (pairlis '("matches" "pattern") '(nil nil))))))))
 
 (defun match-case-against-gpool-helper (str)
+  (assert nil) ;;this is not used anymore
   (format t "Checking context against gpool for pattern ~A~%" str)
   (setq *str* str)
   (pprint str)
@@ -174,31 +192,31 @@
 	       ""))))
 
 (defun filter-scene-by-expression-helper (str)
-  (setq *str* str)
-  (format t "Checking context against pattern ~A~%" str)
-  (let* ((json (cl-json:decode-json-from-string str))
-	 (facts (str->symbols (cdr (assoc :FACTS json)))) ;;; all facts in scene
-	 (context (str->symbols (cdr (assoc :CONTEXT json)))) ;;; id for current scene
-	 (gpool (str->symbols (cdr (assoc :GPOOL json)))) ;;; 
-	 (prev-matches (str->symbols (cdr (assoc :PREVQUERIES json)))) ;;; Previous Statements that Constraint Current Query 
-	 (pattern (str->symbols (cdr (assoc :PATTERN json))))) ;; Statement with variables
-    (format t "Checking facts ~A context ~A against gpool ~A for pattern ~A~%" facts context gpool pattern)
-    (cond ((and facts context pattern)
-           (let ((matches (filter-scene-by-expression facts context gpool prev-matches pattern)))
-             (format t "Found matches ~A~%" matches)
-             (cl-json:encode-json-alist-to-string
-              (pairlis '("matches" "pattern")
-                       (list (loop for item in matches collect
-                                   (if (symbolp item) (symbol-name item) item))
-                             (loop for item in pattern collect
-                                   (if (symbolp item) (symbol-name item) item)))))
-              ))
-          (t
-           (format t "Ill formed filter scene request ~A~%" str)
-           ""))))
+  (handler-bind ((error #'print-backtrace))
+    (setq *str* str)
+    (format t "Checking context against pattern ~A~%" str)
+    (let* ((json (cl-json:decode-json-from-string str))
+	   (facts (str->symbols (cdr (assoc :FACTS json)))) ;;; all facts in scene
+	   (context (str->symbols (cdr (assoc :CONTEXT json)))) ;;; id for current scene
+	   (gpool (str->symbols (cdr (assoc :GPOOL json)))) ;;;
+	   (prev-matches (str->symbols (cdr (assoc :PREVQUERIES json)))) ;;; Previous Statements that Constraint Current Query
+	   (pattern (str->symbols (cdr (assoc :PATTERN json))))) ;; Statement with variables
+      (format t "Checking facts ~A context ~A against gpool ~A for pattern ~A~%" facts context gpool pattern)
+      (cond ((and facts context pattern)
+	     (let ((matches (filter-scene-by-expression facts context gpool prev-matches pattern)))
+	       (format t "Found matches ~A~%" matches)
+	       (cl-json:encode-json-alist-to-string
+		(pairlis '("matches" "pattern")
+			 (list (loop for item in matches collect
+				    (if (symbolp item) (symbol-name item) item))
+			       (loop for item in pattern collect
+				    (if (symbolp item) (symbol-name item) item)))))
+	       ))
+	    (t
+	     (format t "Ill formed filter scene request ~A~%" str)
+	     "")))))
 
-
-
+  
 (defun start-server (&key (port 8000) (kbdir "nextkb"))
   (format t "~% starting server port ~A" port)
   (make-reasoner :kbdir kbdir)
@@ -231,7 +249,6 @@
     (net.xml-rpc:export-xml-rpc-method  
      rcp '("filter_scene_by_expression" filter-scene-by-expression-helper)
      :base64 :base64)
-    				       
     (net.aserve:start :port port)
     ))
   

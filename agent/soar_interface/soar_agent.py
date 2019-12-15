@@ -101,10 +101,11 @@ class soar_agent(object):
         self._input_writer.set_time = {'week': week, 'day': day}
 
     def start(self):
-        if (self._is_running):
+        if self._is_running:
             return
         self._is_running = True
         self._agent_thread = Thread(target=self.execute_command, args=("run",))
+        self._agent_thread.daemon = True
         self._agent_thread.start()
         logging.info("[soar_agent] :: spun-off agent thread.")
 
