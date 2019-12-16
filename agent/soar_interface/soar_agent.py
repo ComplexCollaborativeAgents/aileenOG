@@ -1,27 +1,20 @@
-import os
-import sys
 import logging
-from threading import Thread
-import time
-import random
-import output_reader
-import input_writer
-import settings
+import os
 import socket
+import sys
+import time
 from contextlib import closing
+from threading import Thread
+
+import input_writer
+import output_reader
+import settings
 
 try:
     import Python_sml_ClientInterface as sml
 except ValueError, e:
     logging.fatal("[soar_agent] :: Cannot find local soar installation")
     sys.exit()
-
-
-def find_free_port():
-    with closing(socket.socket(socket.AF_INET, socket.SOCK_STREAM)) as s:
-        s.bind(('', 0))
-        s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        return s.getsockname()[1]
 
 
 class soar_agent(object):
@@ -146,7 +139,16 @@ class soar_agent(object):
         self._output_reader._response = None
         return response
 
+
 def update(mid, this_agent, agent, message):
     this_agent.stop_agent_if_requested()
     this_agent._output_reader.read_output()
     this_agent._input_writer.generate_input()
+
+
+def find_free_port():
+    """Source: https://stackoverflow.com/a/45690594."""
+    with closing(socket.socket(socket.AF_INET, socket.SOCK_STREAM)) as s:
+        s.bind(('', 0))
+        s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        return s.getsockname()[1]
