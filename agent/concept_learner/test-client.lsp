@@ -6,15 +6,17 @@
 ;;;;   Created: November 13, 2019 16:35:48
 ;;;;   Purpose: 
 ;;;; ----------------------------------------------------------------------------
-;;;;  Modified: Sunday, December 15, 2019 at 08:48:24 by klenk
+;;;;  Modified: Monday, December 16, 2019 at 08:33:34 by klenk
 ;;;; ----------------------------------------------------------------------------
 
 (load "server.lsp")
 
 (in-package :aileen)
 
+(defparameter *test-port* 7000)
+
 (defun test-concept-learner-server ()
-  (start-server :port 7000) ;; needs to match port in call-test-server.
+  (start-server :port *test-port*) ;; needs to match port in call-test-server.
   (test-reasoning-symbols)
   (test-generalization-obj)
   (test-generalization-rel)
@@ -29,7 +31,7 @@
      (net.xml-rpc:make-xml-rpc-encoding
       (cl-json::encode-json-alist-to-string arguments)
       :base64))
-    :url "http://dubs:7000/ConceptLearner"
+    :url (format nil "http://dubs:~A/ConceptLearner" *test-port*)
     )))
 
 (defun test-reasoning-symbols ()
