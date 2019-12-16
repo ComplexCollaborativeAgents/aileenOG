@@ -69,7 +69,6 @@ class soar_agent(object):
         self._agent.LoadProductions(os.path.realpath(agent_file))
 
     def run_soar_java_debugger(self):
-        self.stop()
         self._agent.SpawnDebugger(self._kernel.GetListenerPort())
 
     def register_output_callback(self, function, caller_object=None):
