@@ -7,12 +7,21 @@ import random
 import output_reader
 import input_writer
 import settings
+import socket
+from contextlib import closing
 
 try:
     import Python_sml_ClientInterface as sml
 except ValueError, e:
     logging.fatal("[soar_agent] :: Cannot find local soar installation")
     sys.exit()
+
+
+def find_free_port():
+    with closing(socket.socket(socket.AF_INET, socket.SOCK_STREAM)) as s:
+        s.bind(('', 0))
+        s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        return s.getsockname()[1]
 
 
 class soar_agent(object):
@@ -40,7 +49,7 @@ class soar_agent(object):
         self._output_reader = output_reader.OutputReader(self, world_server)
 
     def create_kernel(self):
-        soar_kernel_port = random.randint(40000, 60000)
+        soar_kernel_port = find_free_port()
         kernel = sml.Kernel.CreateKernelInNewThread(soar_kernel_port)
         if not kernel or kernel.HadError():
             logging.error("[soar_agent] :: Error creating kernel: " + kernel.GetLastErrorDescription())
