@@ -29,7 +29,8 @@ class VisualWordLesson:
         target.set_translation(AileenScene.randomizer.get_random_position_on_table())
         self._scene.add_object(target)
 
-        for distractor in self._generate_distractors(target, distractors):
+        for distractor in AileenObject.generate_distractors(target, distractors):
+            distractor.set_translation(AileenScene.randomizer.get_random_position_on_table())
             self._scene.add_object(distractor)
 
         self._interaction['signal'] = 'verify'
@@ -38,16 +39,6 @@ class VisualWordLesson:
     def evaluate_agent_response(self, agent_response):
         if agent_response['status'] == 'success':
             return {'signal': 'correct'}
-
-    def _generate_distractors(self, target, n):
-        distractors = []
-        while n:
-            distractor = AileenObject.generate_random_object()
-            if distractor != target:
-                distractor.set_translation(AileenScene.randomizer.get_random_position_on_table())
-                distractors.append(distractor)
-                n -= 1
-        return distractors
 
     @staticmethod
     def administer_curriculum(world_server, agent_server):

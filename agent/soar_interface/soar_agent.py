@@ -1,11 +1,13 @@
-import os
-import sys
 import logging
-from threading import Thread
+import os
+import socket
+import sys
 import time
-import random
-import output_reader
+from contextlib import closing
+from threading import Thread
+
 import input_writer
+import output_reader
 import settings
 
 try:
@@ -44,7 +46,7 @@ class soar_agent(object):
         if kernel_port:
             soar_kernel_port = kernel_port
         else:
-            soar_kernel_port = random.randint(40000, 60000)
+            soar_kernel_port = find_free_port()
         kernel = sml.Kernel.CreateKernelInNewThread(soar_kernel_port)
         if not kernel or kernel.HadError():
             logging.error("[soar_agent] :: Error creating kernel: " + kernel.GetLastErrorDescription())
@@ -66,7 +68,6 @@ class soar_agent(object):
         self._agent.LoadProductions(path)
 
     def run_soar_java_debugger(self):
-        self.stop()
         self._agent.SpawnDebugger(self._kernel.GetListenerPort())
 
     def register_output_callback(self, function, caller_object=None):
@@ -107,10 +108,11 @@ class soar_agent(object):
         self._input_writer.set_time = {'week': week, 'day': day}
 
     def start(self):
-        if (self._is_running):
+        if self._is_running:
             return
         self._is_running = True
         self._agent_thread = Thread(target=self.execute_command, args=("run",))
+        self._agent_thread.daemon = True
         self._agent_thread.start()
         logging.info("[soar_agent] :: spun-off agent thread.")
 
@@ -143,7 +145,16 @@ class soar_agent(object):
         self._output_reader._response = None
         return response
 
+
 def update(mid, this_agent, agent, message):
     this_agent.stop_agent_if_requested()
     this_agent._output_reader.read_output()
     this_agent._input_writer.generate_input()
+
+
+def find_free_port():
+    """Source: https://stackoverflow.com/a/45690594."""
+    with closing(socket.socket(socket.AF_INET, socket.SOCK_STREAM)) as s:
+        s.bind(('', 0))
+        s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        return s.getsockname()[1]
