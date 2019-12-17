@@ -7,12 +7,9 @@ class LanguageGenerator:
 
     @staticmethod
     def generate_language_for_object(aileen_object):
-        object_phrase = ""
         ## SM: removing this because the default rules in the language parser do not accept any arbitrary order.
         #LanguageGenerator.randomizer.shuffle_string(aileen_object._language)
-        for visual_word in aileen_object._language:
-            object_phrase += visual_word + " "
-        return object_phrase
+        return ' '.join(aileen_object._language)
 
     @staticmethod
     def generate_language_for_spatial_relation(arg1, arg2, relation):
