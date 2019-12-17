@@ -46,8 +46,8 @@ sp {comprehension*propose*comprehend-relation-reference
                   ^grounding <g>
                   ^parses <p>
                   ^rel-ref <ref>)
-    -{(<g>    ^relation-concept <any>
-      <any>    ^_metadata.description <ref>)}
+    -{(<g>    ^relation <any>)
+      (<any>    ^_metadata.description <ref>)}
 -->
     (<s>    ^operator <op> +)
     (<op>    ^name ground-relation-reference

@@ -35,7 +35,7 @@ class soar_agent(object):
         self._kernel = self.create_kernel(kernel_port)
         self._agent = self.create_agent(settings.SOAR_AGENT_NAME)
         self._agentFilepath = settings.SOAR_AGENT_PATH
-        #self.set_agent_params(agent_params)
+        self.set_agent_params(agent_params)
         self.load_agent_rules(self._agentFilepath)
         self._input_link = self._agent.GetInputLink()
         self._output_link = self._agent.GetOutputLink()
@@ -94,11 +94,8 @@ class soar_agent(object):
                                  ps_param=preload_spatial_concepts_param,
                                  pa_param=preload_action_concepts_param)
 
-        logging.debug("[soar-agent] :: updating file with {}".format(params))
-
-        with open(settings.AGENT_PARAM_RUNTIME_FILE, 'w') as agent_params_file:
-            agent_params_file.write(params)
-        agent_params_file.close()
+        #logging.debug("[soar-agent] :: loading params into agent")
+        self.execute_command(params)
 
 
     def create_kernel(self, kernel_port):
@@ -206,20 +203,20 @@ class soar_agent(object):
         return response
 
     def delete_all_children(self, id):
-        logging.debug("[input_writer] :: deleting children of {}".format(id.GetValueAsString()))
+        #logging.debug("[input_writer] :: deleting children of {}".format(id.GetValueAsString()))
         if id.GetNumberChildren() is not None:
             for i in range(0, id.GetNumberChildren()):
                 child = id.GetChild(i)
                 self._wmes_to_delete.append(child)
-                logging.debug(
-                    "[soar_agent] :: added {} {} {} child wme to destroy list".format(i, child.GetAttribute(),child.GetValueAsString()))
+                # logging.debug(
+                #     "[soar_agent] :: added {} {} {} child wme to destroy list".format(i, child.GetAttribute(),child.GetValueAsString()))
 
     def destroy_wme_on_list(self):
-        logging.debug("[soar_agent] :: wmes to be destroyed {}".format(self._wmes_to_delete))
+        #logging.debug("[soar_agent] :: wmes to be destroyed {}".format(self._wmes_to_delete))
         if len(self._wmes_to_delete) > 0:
             for wme in self._wmes_to_delete:
                 if wme is not None:
-                    logging.debug("[soar_agent] :: destroying wme {}".format(wme.GetValueAsString()))
+                    #logging.debug("[soar_agent] :: destroying wme {}".format(wme.GetValueAsString()))
                     self._agent.DestroyWME(wme)
             self._wmes_to_delete = []
 

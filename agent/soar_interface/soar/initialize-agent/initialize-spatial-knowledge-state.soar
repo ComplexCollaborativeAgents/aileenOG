@@ -2,6 +2,22 @@
 # @file
 #
 # @created smohan 20191211
+sp {initialize-agent*apply*initialize-spatial-knowledge-state
+    (state <s>    ^name initialize-agent
+                  ^operator.name initialize-visual-knowledge-state
+                  ^_params <params>
+                  ^smem.command <scomm>)
+    (<params>    ^spatial-concepts soar
+                 ^preload-spatial-concepts true)
+-->
+    (<scomm>    ^store <map-left> <map-right> <con-left> <con-right>)
+    (<map-left>    ^concept <con-left>    ^nl leftof ^type spatial)
+    (<con-left>    ^cardir s  ^rcc8 dc)
+    (<map-right>    ^concept <con-right>  ^nl rightof ^type spatial)
+    (<con-right>    ^cardir n  ^rcc8 dc)
+}
+
+
 sp {initialize-agent*apply*initialize-spatial-knowledge-state*set
     (state <s>    ^name initialize-agent
                   ^operator.name initialize-spatial-knowledge-state)

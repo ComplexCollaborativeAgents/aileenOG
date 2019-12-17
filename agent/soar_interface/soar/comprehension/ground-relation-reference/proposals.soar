@@ -17,42 +17,46 @@ sp {ground-relation-reference*propose*mark-unknown-concept
              ^type spatial)
     }
 
-sp {ground-relation-reference*propose*compose-relation-query
+sp {ground-relation-reference*propose*compose-with-semantic-memory
     (state <s>    ^name ground-relation-reference
                   ^smem-query <sq>
-                  ^reference <ref>)
+                  ^reference <ref>
+                  ^_params.spatial-concepts soar
+                  -^relation <rel>)
     (<sq>    ^cue.nl <ref>
-             ^result {<res> <> failure})
-    -{(<s>    ^relation-query <rel>)
-      (<rel>    ^lfirst <lf>
-                ^lsecond <ls>
-                ^lthird <lt>)}
+             ^result {<res>    <> failure})
 -->
     (<s>    ^operator <op> +)
-    (<op>    ^name compose-relation-query
-             ^relation <res>)
-    }
-            
-sp {ground-relation-reference*propose*collect-relation-facts
-    (state <s>    ^name ground-relation-reference
-                  ^relation-query <query>
-                  -^facts.relations)
--->
-    (<s>    ^operator <op> + >)
-    (<op>    ^name collect-relation-facts
-             ^relation-query <query>)
+    (<op>    ^name compose-with-semantic-memory
+             ^reference <ref>
+             ^map <res>)
     }
 
-sp {ground-relation-reference*propose*query-concept-memory
+sp {ground-relation-reference*propose*compose-with-concept-learner
     (state <s>    ^name ground-relation-reference
-                  ^relation-query <q>
-                  ^facts <f>
-                  -^io.output-link.concept-memory)
+                  ^smem-query <sq>
+                  ^referenece <ref>
+                  ^_params.spatial-concepts external
+                  ^relation <rel>)
+    (<sq>    ^cue.nl <ref>
+             ^result {<res>    <> failure})
 -->
     (<s>    ^operator <op> +)
-    (<op>    ^name query-concept-memory
-             ^facts <f>
-             ^query <q>)
+    (<op>    ^name compose-with-concept-learner
+             ^reference <ref>
+             ^map <res>)
     }
-            
+
+sp {ground-relation-reference*propose*complete-ground-reference
+    (state <s>    ^name ground-relation-reference
+                  ^relation <rel>)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name complete-ground-relation-reference
+             ^relation <rel>)
+    }
+                  
+             
+
+
                   

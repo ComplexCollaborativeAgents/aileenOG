@@ -8,3 +8,6 @@ source "report-correct.soar"
 source "elaborations.soar"
 
 source "proposals.soar"
+
+
+source "verify-relation/load.soar"
