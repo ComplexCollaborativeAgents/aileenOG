@@ -7,16 +7,22 @@ if [ "$1" == "" ]; then
   exit 1
 fi
 echo "concept learner port number = $1"
+# Clean up from last run.
+rm concept.log
+pid=`pidof mlisp8`
+if [ "$pid" != "" ]; then
+  echo "Killing existing lisps ($pid)"
+  sudo kill $pid
+fi
 # Process kbdir.
 kbdir=$2
+rm -rf analogystack/planb/kbs/nextkb/*
 if [ "$kbdir" == "" ]; then
-  kbdir="nextkb"
-  echo "Initializing default kb."
-  rm -rf analogystack/planb/kbs/nextkb/*
+  kbdir="analogystack/planb/kbs/nextkb.zip"
   unzip analogystack/planb/kbs/nextkb.zip -d analogystack/planb/kbs/nextkb/
+else
+  cp -r $kbdir/* analogystack/planb/kbs/nextkb/
 fi
-echo "concept learner kbdir = $kbdir (in analogystack/planb/kbs)"
+echo "concept learner initialized from $kbdir"
 # Run Lisp.
-kill `pidof mlisp8`
-rm concept.log
-/usr/local/acl10.1.64/mlisp8 -q -L server.lsp -e "(progn (aileen::start-server :port $1 :kbdir \"$kbdir\") (do ()(nil nil)(sleep 10)))" > concept.log
+/usr/local/acl10.1.64/mlisp8 -q -L server.lsp -e "(progn (aileen::start-server :port $1 :kbdir \"nextkb\") (do ()(nil nil)(sleep 10)))" > concept.log
