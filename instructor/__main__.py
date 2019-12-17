@@ -4,7 +4,7 @@ import sys
 from log_config import logging
 
 from visual_word_lesson import VisualWordLesson
-from generate_training_images import TrainingImage
+# from generate_training_images import TrainingImage
 from spatial_word_lesson import SpatialWordLesson
 from action_word_lesson import ActionWordLesson
 import settings
