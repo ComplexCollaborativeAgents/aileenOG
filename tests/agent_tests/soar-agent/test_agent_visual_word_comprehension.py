@@ -1,4 +1,4 @@
-from agent.soar_interface.soar_agent import soar_agent
+from agent.soar_interface.soar_agent import SoarAgent
 class TestServer(object):
     def __init__(self, object_list):
         self._object_list = object_list
@@ -88,7 +88,7 @@ def test_visual_word_learning_single_object_analogy_concept_learner():
         }
     ]
     server = TestServer(object_list)
-    agent = soar_agent(server, headless=True)
+    agent = SoarAgent(server, headless=True)
     iwriter = agent._input_writer
     oreader = agent._output_reader
 
