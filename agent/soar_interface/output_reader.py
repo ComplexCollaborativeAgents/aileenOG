@@ -10,6 +10,7 @@ class OutputReader(object):
         self._grammar.use_default_rules()
         self._response = None
         self._concept_learner = ConceptLearner()
+        self._context_counter = 0
 
 
         self._world_server = world_server
@@ -141,7 +142,9 @@ class OutputReader(object):
             if child.GetAttribute() == "gpool":
                 request['gpool'] = child.GetValueAsString()
             if child.GetAttribute() == "context":
-                request['context'] = "episode{}".format(child.GetValueAsString())
+                #request['context'] = "episode{}".format(child.GetValueAsString())
+                request['context'] = "episode{}".format(self._context_counter)
+                self._context_counter = self._context_counter + 1
             if child.GetAttribute() == "concept":
                 request['pattern'] = ["isa", "?Obj", "{}".format(child.GetValueAsString())]
             if child.GetAttribute() == "scene":
@@ -171,7 +174,9 @@ class OutputReader(object):
             if child.GetAttribute() == "gpool":
                 request['gpool'] = child.GetValueAsString()
             if child.GetAttribute() == "context":
-                request['context'] = "episode{}".format(child.GetValueAsString())
+                #request['context'] = "episode{}".format(child.GetValueAsString())
+                request['context'] = "episode{}".format(self._context_counter)
+                self._context_counter = self._context_counter + 1
             if child.GetAttribute() == "object":
                 child_id = child.ConvertToIdentifier()
                 facts = []
