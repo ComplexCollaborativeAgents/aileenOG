@@ -9,11 +9,6 @@ fi
 echo "concept learner port number = $1"
 # Clean up from last run.
 rm concept.log
-pid=`pidof mlisp8`
-if [ "$pid" != "" ]; then
-  echo "Killing existing lisps ($pid)"
-  sudo kill $pid
-fi
 # Process kbdir.
 kbdir=$2
 rm -rf analogystack/planb/kbs/nextkb/*
