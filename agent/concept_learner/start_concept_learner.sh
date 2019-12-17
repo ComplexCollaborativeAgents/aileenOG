@@ -10,12 +10,12 @@ echo "concept learner port number = $1"
 # Process kbdir.
 kbdir=$2
 if [ "$kbdir" == "" ]; then
-  set kbdir="nextkb"
+  kbdir="nextkb"
   echo "Initializing default kb."
   rm -rf analogystack/planb/kbs/nextkb/*
   unzip analogystack/planb/kbs/nextkb.zip -d analogystack/planb/kbs/nextkb/
 fi
-echo "concept learner kbdir = $2 (in analogystack/planb/kbs)"
+echo "concept learner kbdir = $kbdir (in analogystack/planb/kbs)"
 # Run Lisp.
 kill `pidof mlisp8`
 rm concept.log

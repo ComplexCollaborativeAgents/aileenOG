@@ -21,9 +21,9 @@ class SpatialWordLesson:
         self._scene = AileenScene()
         self._language = None
 
-    def generate_lesson(self):
+    def generate_lesson(self, distractors=0):
         self.generate_setup()
-        self.generate_scene()
+        self.generate_scene(distractors)
         lesson = {
             'scene': self._scene.generate_scene_description(),
             'interaction': {
@@ -37,13 +37,14 @@ class SpatialWordLesson:
         logging.debug("[action_word_lesson] :: generate the setup for the new lesson")
         objects = self._spatial_configuration_def[settings.SPATIAL_DEF_OBJECTS]
         if len(objects) > 0:
-            for obj in objects:
-                self._scene_objects[obj] = AileenObject.generate_random_object()
+            objs = AileenObject.generate_random_objects(len(objects))
+            for o, obj in zip(objs, objects):
+                self._scene_objects[obj] = o
         self._language = LanguageGenerator.generate_language_from_template(self._scene_objects,
                                                                            self._spatial_configuration_def[
                                                                                settings.SPATIAL_DEF_LANGUAGE_TEMPLATE])
 
-    def generate_scene(self):
+    def generate_scene(self, distractors):
         logging.debug("[aileen_spatial_word_lesson] :: generating a new scene for spatial word learning")
         if len(self._scene_objects) == 2:
             translations = AileenScene.place_two_objects_in_configuration(
@@ -69,6 +70,10 @@ class SpatialWordLesson:
                 scene_object.set_translation(translations[scene_object_name])
                 self._scene.add_object(scene_object)
 
+        for distractor in AileenObject.generate_distractors(self._scene_objects.values(), distractors):
+            distractor.set_translation(AileenScene.randomizer.get_random_position_on_table())
+            self._scene.add_object(distractor)
+
     @staticmethod
     def get_spatial_configurations_set():
         root_dir = os.path.dirname(os.path.abspath(__file__))
@@ -88,7 +93,8 @@ class SpatialWordLesson:
             raw_input("Press any key to generate the next spatial word lesson...")
 
             lesson_object = SpatialWordLesson()
-            lesson = lesson_object.generate_lesson()
+            lesson = lesson_object.generate_lesson(distractors=0)
+
 
             scene_acknowledgement = world_server.set_scene(
                 {'configuration': lesson['scene'], 'label': lesson['interaction']['content']})
