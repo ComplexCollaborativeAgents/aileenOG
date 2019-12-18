@@ -52,6 +52,7 @@
    conda activate aileen
    (aileen) python agent
    ```
+   > Note: To suppress the GTK3 warnings: `export SWT_GTK3=0`.
 4. Run the instructor in another shell instance:
    ```bash
    conda activate aileen
