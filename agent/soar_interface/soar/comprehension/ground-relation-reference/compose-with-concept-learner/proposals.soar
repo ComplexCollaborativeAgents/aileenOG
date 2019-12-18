@@ -1,0 +1,42 @@
+##!
+# @file
+#
+# @created smohan 20191217
+
+sp {compose-with-concept-learner*propose*compose-relation-query
+    (state <s>    ^name compose-with-concept-learner
+                  ^map <res>)
+    -{(<s>    ^relation-query <rel>)
+      (<rel>    ^lfirst <lf>
+                ^lsecond <ls>
+                ^lthird <lt>)}
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name compose-relation-query
+             ^relation <res>)
+    }
+            
+sp {compose-with-concept-learner*propose*collect-relation-facts
+    (state <s>    ^name compose-with-concept-learner
+                  ^relation-query <query>
+                  -^facts.relations)
+    (<query>    ^lfirst
+                ^lsecond
+                ^lthird)
+-->
+    (<s>    ^operator <op> + >)
+    (<op>    ^name collect-relation-facts
+             ^relation-query <query>)
+    }
+
+sp {compose-with-concept-learner*propose*query-concept-memory
+    (state <s>    ^name compose-with-concept-learner
+                  ^relation-query <q>
+                  ^facts <f>
+                  -^io.output-link.concept-memory)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name query-concept-memory
+             ^facts <f>
+             ^query <q>)
+    }

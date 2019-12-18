@@ -2,3 +2,13 @@
 # @file: 
 #
 # @created smohan 20191213
+
+source "proposals.soar"
+
+source "elaborations.soar"
+
+source "compose-relation-query.soar"
+
+source "collect-relation-facts.soar"
+
+source "query-concept-memory.soar"

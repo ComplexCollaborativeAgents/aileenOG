@@ -3,8 +3,8 @@
 #
 # @created smohan 20191211
 
-sp {ground-relation-reference*compose-relation-query
-    (state <s>    ^name ground-relation-reference
+sp {compose-with-concept-learner*compose-relation-query
+    (state <s>    ^name compose-with-concept-learner
                   ^operator <op>)
     (<op>    ^name compose-relation-query
              ^relation <rel>)
@@ -14,8 +14,8 @@ sp {ground-relation-reference*compose-relation-query
     (<query>    ^lfirst <con>)
     }
 
-sp {ground-relation-reference*compose-relation-query*objects*first
-    (state <s>    ^name ground-relation-reference
+sp {compose-with-concept-learner*compose-relation-query*objects*first
+    (state <s>    ^name compose-with-concept-learner
                   ^operator <op>
                   ^grounding <g>
                   ^parses.temporal <t>
@@ -29,8 +29,8 @@ sp {ground-relation-reference*compose-relation-query*objects*first
     (<query>    ^lsecond <id>)
     }
 
-sp {ground-relation-reference*compose-relation-query*objects*second
-    (state <s>    ^name ground-relation-reference
+sp {compose-with-concept-learner*compose-relation-query*objects*second
+    (state <s>    ^name compose-with-concept-learner
                   ^operator <op>
                   ^grounding <g>
                   ^parses.temporal <t>

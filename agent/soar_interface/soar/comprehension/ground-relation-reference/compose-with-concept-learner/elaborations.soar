@@ -1,0 +1,24 @@
+##!
+# @file
+#
+# @created smohan 20191217
+
+sp {compose-with-concept-learner*elaborate*state
+    (state <s>    ^name compose-with-concept-learner
+                  ^superstate.operator <sop>)
+    (<sop>    ^name compose-with-concept-learner
+              ^map <map>)
+-->
+    (<s>    ^map <map>)
+    }
+
+sp {compose-with-concept-learner*elaborate*grounding*parses
+    (state <s>    ^name compose-with-concept-learner
+                  ^superstate <ss>)
+    (<ss>    ^grounding <g>
+             ^parses <p>)
+-->
+    (<s>    ^grounding <g>
+            ^parses <p>)
+    }
+    
