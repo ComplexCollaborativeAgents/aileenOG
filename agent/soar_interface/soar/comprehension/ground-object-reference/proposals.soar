@@ -5,7 +5,7 @@
  
 sp {ground-object-reference*propose*find-object
     (state <s>    ^name ground-object-reference
-                  ^_params.concepts soar
+                  ^_params.visual-concepts soar
                   ^reference <ref>
                   ^world.objects <objs>
                   -^found.reference <ref>)
@@ -18,7 +18,7 @@ sp {ground-object-reference*propose*find-object
 
 sp {ground-object-reference*propose*find-object-with-concept-learner
     (state <s>    ^name ground-object-reference
-                  ^_params.concepts external
+                  ^_params.visual-concepts external
                   ^reference <ref>
                   ^world.objects <objs>
                   -^found.reference <ref>)

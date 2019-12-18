@@ -1,0 +1,24 @@
+##!
+# @file
+#
+# @created smohan 20191205
+
+sp {comprehension*prefer*ground-object-reference*equal
+    (state <s>    ^name comprehension
+                  ^operator <op1> +
+                  ^operator <op2> +)
+    (<op1>    ^name ground-object-reference)
+    (<op2>    ^name ground-object-reference)
+-->
+    (<s>    ^operator <op1> = <op2>)
+    }
+
+sp {comprehension*prefer*ground-object-reference*higher*ground-relation-reference
+    (state <s>    ^name comprehension
+                  ^operator <op1> +
+                  ^operator <op2> +)
+    (<op1>    ^name ground-object-reference)
+    (<op2>    ^name ground-relation-reference)
+-->
+    (<s>    ^operator <op1> > <op2>)
+    }

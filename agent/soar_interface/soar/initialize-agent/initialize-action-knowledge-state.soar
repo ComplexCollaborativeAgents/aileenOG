@@ -1,0 +1,11 @@
+##!
+# @file
+#
+# @created smohan 20191211
+
+sp {initialize-agent*apply*initialize-action-knowledge-state*set
+    (state <s>    ^name initialize-agent
+                  ^operator.name initialize-action-knowledge-state)
+-->
+    (<s>    ^action-knowledge-state set)
+    }

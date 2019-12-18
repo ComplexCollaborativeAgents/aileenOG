@@ -1,0 +1,23 @@
+##!
+# @file
+#
+# @created smohan 20191208
+
+
+sp {learn-spatial-concept*elaborate*state
+    (state <s>    ^name learn-spatial-concept
+                  ^superstate.operator <sop>)
+    (<sop>    ^name learn-spatial-concept
+              ^information <info>)
+-->
+    (<s>   ^information <info>)
+    }
+
+
+sp {learn-spatial-concept*elaborate*grounding
+    (state <s>    ^name learn-spatial-concept
+                  ^information <info>)
+    (<info>    ^grounding <g>)
+-->
+    (<s>    ^grounding <g>)
+    }

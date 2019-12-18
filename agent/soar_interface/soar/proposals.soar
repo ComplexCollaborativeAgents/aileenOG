@@ -47,8 +47,9 @@ sp {aileen*propose*interaction*processing-status
 sp {aileen*propose*comprehension
     (state <s>    ^name aileen
                   ^interaction.stack.segment <seg>)
-    (<seg>    ^message <m>
-              -^grounding <any>)
+    (<seg>    ^message <m>)
+    -{(<seg>    ^grounding <g>)
+      (<g>    ^complete true)}
     -{(<s>    ^processing-status <ps>)
       (<ps>    ^source comprehension)}
 -->
@@ -63,6 +64,7 @@ sp {aileen*propose*verify
     (<seg>    ^purpose <p>)
     (<p>    -^completed)
     (<seg>    ^grounding <g>)
+    (<g>    ^complete true)
     
 -->
     (<s>    ^operator <op> +)

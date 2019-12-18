@@ -19,7 +19,7 @@ WORLD_HOST = 'localhost'
 WORLD_PORT = 30000
 AGENT_HOST = 'localhost'
 AGENT_PORT = 40000
-CONCEPT_LEARNER_HOST = 'dubs'
+CONCEPT_LEARNER_HOST = 'dubs.parc.xerox.com'
 CONCEPT_LEARNER_PORT = 8080
 
 # World
@@ -60,6 +60,17 @@ ACTION_LESSON_STATE_TRACE = 'trace'
 ACTION_LESSON_STATE_END = 'end'
 ACTION_LESSON_STATE_COMPLETE = 'complete'
 ACTION_LESSON_STATE_BAD = 'bad'
+
+## Agent
+AGENT_PARAM_RUNTIME_FILE = path.join(ROOT_PATH, 'agent', 'soar_interface', 'soar', '_agent_params_runtime.soar')
+AGENT_VISUAL_CONCEPTS_PARAM = 'soar'
+AGENT_PRELOAD_VISUAL_CONCEPTS_PARAM = 'true'
+
+AGENT_SPATIAL_CONCEPTS_PARAM = 'soar'
+AGENT_PRELOAD_SPATIAL_CONCEPTS_PARAM = 'true'
+
+AGENT_ACTION_CONCEPTS_PARAM = 'soar'
+AGENT_PRELOAD_ACTION_CONCEPTS_PARAM = 'true'
 
 try:
     from local_settings import *

@@ -1,0 +1,16 @@
+##!
+# @file: 
+#
+# @created smohan 20191208
+
+source "elaborations.soar"
+
+source "proposals.soar"
+
+source "store-new-concept.soar"
+
+source "send-instance-to-concept-memory.soar"
+
+source "augment-scene-with-concept.soar"
+
+source "complete-learn-from-scene-external.soar"

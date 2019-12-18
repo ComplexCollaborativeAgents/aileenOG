@@ -8,7 +8,7 @@ sp {learn-from-object*apply*send-instance-to-concept-memory
     (state <s>    ^name learn-from-object
                   ^operator <op>
                   ^epmem.present-id <pid>
-                  ^_params.concepts external
+                  ^_params.visual-concepts external
                   ^io.output-link <ol>)
     (<op>    ^name send-instance-to-concept-memory
              ^concept <lti>
@@ -27,7 +27,7 @@ sp {learn-from-object*apply*send-instance-to-concept-memory
 sp {learn-from-object*apply*send-instance-to-concept-memory*object-attributes
     (state <s>    ^name learn-from-object
                   ^operator <op>
-                  ^_params.concepts external
+                  ^_params.visual-concepts external
                   ^io.output-link <ol>
                   ^topstate._params.relevant-percept-set <set>)
     (<op>    ^name send-instance-to-concept-memory

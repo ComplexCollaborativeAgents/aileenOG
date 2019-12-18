@@ -15,7 +15,7 @@ class LanguageGenerator:
     def generate_language_for_spatial_relation(arg1, arg2, relation):
         object_phrase1 = LanguageGenerator.generate_language_for_object(arg1)
         object_phrase2 = LanguageGenerator.generate_language_for_object(arg2)
-        return object_phrase1 + relation + " " + object_phrase2
+        return object_phrase1 + " " + relation + " " + object_phrase2
 
     @staticmethod
     def generate_language_from_template(scene_objects, language_template):

@@ -1,0 +1,17 @@
+##!
+# @file
+#
+# @created smohan 20191216
+
+sp {ground-relation-reference*apply*complete-ground-relation-reference
+    (state <s>    ^name ground-relation-reference
+                  ^operator.name complete-ground-relation-reference
+                  ^relation <rel>
+                  ^grounding <g>
+                  ^reference <ref>)
+-->
+    (<g>    ^relation <rel-new>)
+    (<rel-new>    ^_metadata.description <ref>
+                  ^relation <rel>)
+    }
+                  
