@@ -1,0 +1,33 @@
+##!
+# @file
+#
+# @created smohan 20191208
+
+sp {learn-from-scene-external*apply*send-instance-to-concept-memory
+    (state <s>    ^name learn-from-scene-external
+                  ^operator <op>
+                  ^epmem.present-id <pid>
+                  ^io.output-link <ol>)
+    (<op>    ^name send-instance-to-concept-memory
+             ^concept <lti>
+             ^scene.relations <rels>)
+    (<lti>    ^gpool <gpool>
+              ^concept <con>)
+-->
+    (<ol>    ^concept-memory <cm>)
+    (<cm>    ^store-instance <si>)
+    (<si>    ^gpool <gpool>
+             ^relations <rels>
+             ^context <pid>)
+    }
+   
+sp {learn-from-scene-external*apply*send-instance-to-concept-memory*status
+    (state <s>    ^name learn-from-scene-external
+                  ^operator <op>
+                  ^io.output-link.concept-memory.store-instance.gpool <gpool>)
+    (<op>    ^name send-instance-to-concept-memory
+             ^scene <scene>)
+-->
+    (<s>    ^stored <scene>)
+    }
+                  

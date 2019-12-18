@@ -1,0 +1,14 @@
+##!
+# @file: 
+#
+# @created smohan 20191213
+
+source "elaborations.soar"
+
+source "proposals.soar"
+
+source "proposals.soar"
+
+source "compose-concept-grounding-parse.soar"
+
+source "complete-concept-grounding-with-semantic-memory.soar"

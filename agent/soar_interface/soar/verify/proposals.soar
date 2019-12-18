@@ -9,8 +9,8 @@
 sp {verify*propose*report-success
     (state <s>    ^name verify
                   ^segment <seg>)
-    (<seg>    ^grounding <g>
-              ^parses.parse.obj-ref <oref>)
+    (<seg>    ^parses.parse.obj-ref <oref>
+              ^grounding <g>)
     (<g>    ^entity <g-entity>)
     (<g-entity>    ^_metadata.description <oref>
                    ^object <obj>)
@@ -19,3 +19,13 @@ sp {verify*propose*report-success
     (<op>    ^name report-success)
     }
                   
+
+sp {verify*propose*verify-relation-refence
+    (state <s>    ^name verify
+                  ^grounding.relation <rel>
+                  -^verified <rel>)
+-->
+    (<s>    ^operator <op> + > =)
+    (<op>    ^name verify-relation
+             ^relation <rel>)
+    }

@@ -4,7 +4,10 @@ from os import path
 OS_ROOT_PATH = path.abspath(os.sep)
 ROOT_PATH = path.join(path.dirname(path.dirname(path.abspath(__file__))))
 CONCEPT_LEARNER_PATH = path.join(ROOT_PATH, 'agent', 'concept_learner')
-SOAR_PATH = path.join(OS_ROOT_PATH, 'usr', 'local', 'SoarSuite_9.6.0-Multiplatform_64bit', 'bin', 'linux64')
+#SOAR_PATH = path.join("/home/smohan/soar/soar9.6/bin")
+SOAR_PATH = path.join("/home/smohan/soar/SoarSuite_9.6.0-Multiplatform_64bit/bin")
+#SOAR_PATH = path.join(OS_ROOT_PATH, 'usr', 'local', 'SoarSuite_9.6.0-Multipjlatform_64bit', 'bin', 'linux64')
+#SOAR_PATH = path.join(OS_ROOT_PATH, 'usr', 'local', 'SoarSuite_9.6.0-Multiplatform_64bit', 'bin')
 SOAR_AGENT_PATH = path.join(ROOT_PATH, 'agent', 'soar_interface', 'soar', 'load.soar')
 SOAR_AGENT_NAME = 'aileen'
 SOAR_SLEEP_TIME = 0.0001
@@ -19,7 +22,7 @@ WORLD_HOST = 'localhost'
 WORLD_PORT = 30000
 AGENT_HOST = 'localhost'
 AGENT_PORT = 40000
-CONCEPT_LEARNER_HOST = 'dubs'
+CONCEPT_LEARNER_HOST = 'dubs.parc.xerox.com'
 CONCEPT_LEARNER_PORT = 8080
 
 # World
@@ -60,6 +63,17 @@ ACTION_LESSON_STATE_TRACE = 'trace'
 ACTION_LESSON_STATE_END = 'end'
 ACTION_LESSON_STATE_COMPLETE = 'complete'
 ACTION_LESSON_STATE_BAD = 'bad'
+
+## Agent
+AGENT_PARAM_RUNTIME_FILE = path.join(ROOT_PATH, 'agent', 'soar_interface', 'soar', '_agent_params_runtime.soar')
+AGENT_VISUAL_CONCEPTS_PARAM = 'soar'
+AGENT_PRELOAD_VISUAL_CONCEPTS_PARAM = 'true'
+
+AGENT_SPATIAL_CONCEPTS_PARAM = 'soar'
+AGENT_PRELOAD_SPATIAL_CONCEPTS_PARAM = 'true'
+
+AGENT_ACTION_CONCEPTS_PARAM = 'soar'
+AGENT_PRELOAD_ACTION_CONCEPTS_PARAM = 'true'
 
 try:
     from local_settings import *

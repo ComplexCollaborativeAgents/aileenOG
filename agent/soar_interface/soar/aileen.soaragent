@@ -16,7 +16,6 @@
     <member path="interaction/elaborations.soar" />
     <member path="interaction/load.soar" />
     <member path="interaction/proposals.soar" />
-    <member path="comprehension/elaborate-state.soar" />
     <member path="comprehension/load.soar" />
     <member path="comprehension/parse-content.soar" />
     <member path="comprehension/proposals.soar" />

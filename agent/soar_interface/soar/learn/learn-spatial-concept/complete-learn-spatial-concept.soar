@@ -1,0 +1,22 @@
+##!
+# @file
+#
+# @created smohan 20191210
+
+sp {learn-spatial-concept*apply*complete-learn-spatial-concept
+    (state <s>    ^name learn-spatial-concept
+                  ^superstate.segment <seg>
+                  ^information <info>
+                  ^operator.name complete-learn-spatial-concept)
+-->
+    (<seg>    ^learned <info>)
+    }
+
+sp {learn-spatial-concept*clear*concept-memory*topstate
+    (state <s>    ^name learn-spatial-concept
+                  ^topstate <ts>
+                  ^operator.name complete-learn-spatial-concept)
+    (<ts>    ^concept-memory <cm>)
+-->
+    (<ts>    ^concept-memory <cm> -)
+    }

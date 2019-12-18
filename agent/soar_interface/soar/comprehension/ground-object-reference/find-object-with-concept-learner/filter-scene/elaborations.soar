@@ -1,0 +1,45 @@
+##!
+# @file
+#
+# @created smohan 20191202
+
+sp {filter-scene*elaborate*state
+    (state <s>    ^name filter-scene
+                  ^superstate.operator <sop>)
+    (<sop>    ^name filter-scene
+              ^visual-word <w>
+              ^candidate-set <cs>)
+-->
+    (<s>    ^visual-word <w>
+            ^candidate-set <cs>)
+    }
+
+sp {filter-scene*query*smem
+    (state <s>    ^name filter-scene
+                  ^visual-word <tag>)
+-->
+    (<s>    ^smem-query <sq>)
+    (<sq>    ^cue <cue>)
+    (<cue>    ^nl <tag>)
+    }
+
+sp {filter-scene*elaborate*retrieved-concept
+    (state <s>    ^name filter-scene
+                  ^visual-word <tag>
+                  ^smem-query.result <res>)
+    (<res>    ^nl <tag>)
+-->
+    (<s>    ^retrieved-concept-lti <res>)
+    }
+
+sp {filter-scene*propose*complete-filter-scene
+    (state <s>    ^name filter-scene
+                  ^visual-word <tag>
+                  ^retrieved-concept-lti <lti>
+                  ^filtered-with <concept>
+                  ^superstate <ss>)
+    (<lti>    ^concept <concept>
+              ^nl <tag>)
+-->
+    (<ss>    ^filtered-with <tag>)
+    }

@@ -1,0 +1,27 @@
+##!
+# @file
+#
+# @created smohan 20191204
+
+sp {find-object-with-concept-learner*apply*complete-find-object-with-concept-learner
+    (state <s>    ^name find-object-with-concept-learner
+                  ^operator <op>
+                  ^superstate <ss>
+                  ^reference <ref>)
+    (<op>    ^name complete-find-object-with-concept-learner
+             ^candidate-set <cs>)
+-->
+    (<ss>    ^found <f>)
+    (<f>    ^objects <cs>
+            ^reference <ref>)
+    }
+
+sp {find-object-with-concept-learner*apply*cleanup*topstate*concept-memory    
+    (state <s>    ^name find-object-with-concept-learner
+                  ^operator.name complete-find-object-with-concept-learner
+                  ^topstate <ts>)
+    (<ts>    ^concept-memory <cm>)
+-->
+    (<ts>    ^concept-memory <cm> -)
+    }
+                  

@@ -20,7 +20,7 @@ class AileenObject:
         self._width_x = width_x
         self._width_z = width_z
         self._translation = translation
-        self._name = "{}".format(AileenObject.randomizer.uuid4())
+        self._name = "object{}".format(AileenObject.randomizer.uuid4().node)
         self._language = None
         logging.debug("[aileen_object] :: created a new object")
 

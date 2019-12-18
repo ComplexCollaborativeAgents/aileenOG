@@ -1,0 +1,20 @@
+##!
+# @file
+#
+# @created smohan 20191202
+
+sp {find-object-with-concept-learner*apply*create-candidate-set
+    (state <s>    ^name find-object-with-concept-learner
+                  ^world <w>
+                  ^operator.name create-candidate-set)
+-->
+    (<s>    ^candidate-set <cs>)
+    }
+
+sp {find-object-with-concept-learner*apply*create-candidate-set*copy-objects
+    (state <s>    ^name find-object-with-concept-learner
+                  ^world.objects.object <obj>
+                  ^candidate-set <cs>)
+-->
+    (<cs>    ^object <obj>)
+    }

@@ -3,7 +3,7 @@
 #
 # @created smohan 20191108
 
-source "elaborate-state.soar"
+source "elaborations.soar"
 
 source "proposals.soar"
 
@@ -11,3 +11,9 @@ source "ground-object-reference/load.soar"
 
 source "parse-content.soar"
 source "complete-comprehension.soar"
+
+source "preferences.soar"
+
+source "ground-relation-reference/load.soar"
+
+source "init-grounding.soar"

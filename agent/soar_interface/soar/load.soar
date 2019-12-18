@@ -26,3 +26,9 @@ source "default/load.soar"
 source "verify/load.soar"
 
 source "learn/load.soar"
+
+source "make-presistent-copies.soar"
+
+source "update-world/load.soar"
+
+source "initialize-agent/load.soar"

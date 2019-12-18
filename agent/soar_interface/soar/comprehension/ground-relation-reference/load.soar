@@ -1,0 +1,22 @@
+##!
+# @file: 
+#
+# @created smohan 20191206
+
+source "elaborations.soar"
+
+source "proposals.soar"
+
+source "mark-unknown-spatial-concept.soar"
+
+source "compose-relation-query.soar"
+
+source "collect-relation-facts.soar"
+
+source "query-concept-memory.soar"
+
+source "complete-ground-relation-reference.soar"
+
+source "compose-with-semantic-memory/load.soar"
+
+source "compose-with-concept-learner/load.soar"
