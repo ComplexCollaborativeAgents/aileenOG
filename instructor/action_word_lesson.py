@@ -80,8 +80,9 @@ class ActionWordLesson:
         segment = {
             'scene': self._initial_scene.generate_scene_description(),
             'interaction': {
+                'signal': 'verify',
                 'marker': settings.ACTION_LESSON_STATE_START,
-                'language': self._language
+                'content': self._language
             }
         }
         self.advance_lesson_state()
@@ -149,7 +150,8 @@ class ActionWordLesson:
             segment = self.get_next_segment()
             scene_acknowledgement = world_server.set_scene(
                 {'configuration': segment['scene'], 'label': "{}".format(self._language)})
-            interaction_acknowledgement = agent_server.process_language(segment['interaction'])
+            logging.debug([""])
+            #agent_response = agent_server.process_interaction(segment['interaction'])
             return
 
         if self._lesson_state == settings.ACTION_LESSON_STATE_TRACE:
@@ -158,18 +160,18 @@ class ActionWordLesson:
             logging.debug("[action_word_lesson] :: received action trace {}".format(segment))
             if segment['action'] is not None:
                 scene_acknowledgement = world_server.apply_action(segment['action'])
-                interaction_acknowledgement = agent_server.process_language(segment['interaction'])
+                #interaction_acknowledgement = agent_server.process_interaction(segment['interaction'])
             return
 
         if self._lesson_state == settings.ACTION_LESSON_STATE_END:
             logging.debug("[action_word_lesson] :: communicating the terminal state configuration of action")
             segment = self.get_next_segment()
-            interaction_acknowledgement = agent_server.process_language({'marker':'end'})
+            #interaction_acknowledgement = agent_server.process_interaction({'marker':'end'})
             return
 
         if self._lesson_state == settings.ACTION_LESSON_STATE_BAD:
             logging.debug("[action_word_lesson] :: communicating that the generated action trace is bad")
-            interaction_acknowledgement = agent_server.process_language({'marker':'bad'})
+            #interaction_acknowledgement = agent_server.process_language({'marker':'bad'})
 
 
     @staticmethod
