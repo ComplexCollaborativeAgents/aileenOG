@@ -6,7 +6,7 @@
 ;;;;   Created: November 13, 2019 16:35:48
 ;;;;   Purpose: 
 ;;;; ----------------------------------------------------------------------------
-;;;;  Modified: Wednesday, December 18, 2019 at 16:35:00 by klenk
+;;;;  Modified: Thursday, December 19, 2019 at 14:40:04 by klenk
 ;;;; ----------------------------------------------------------------------------
 
 (load "server.lsp")
@@ -93,7 +93,7 @@
                                     (list "isa" "Object3" "CVCube"))
                                pattern))))
     (assert (= 1 (length (cdr (assoc :MATCHES res)))))
-    (assert (equal "Object3" (car (cdr (assoc :MATCHES res)))))
+    (assert (equal (list "isa" "Object3" "RRed") (car (cdr (assoc :MATCHES res)))))
     (assert (equal pattern (cdr (assoc :PATTERN res))))
 
     ;; Test deletion of query facts.

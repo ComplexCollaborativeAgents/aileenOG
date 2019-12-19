@@ -6,7 +6,7 @@
 ;;;;   Created: November  6, 2019 14:54:11
 ;;;;   Purpose: 
 ;;;; ----------------------------------------------------------------------------
-;;;;  Modified: Thursday, December 19, 2019 at 12:21:04 by klenk
+;;;;  Modified: Thursday, December 19, 2019 at 14:34:38 by klenk
 ;;;; ----------------------------------------------------------------------------
 
 (in-package :aileen)
@@ -183,8 +183,7 @@
 		     (> normalized-score *normalized-threshold*) ;; Out of floating point concerns
 		     ))))
 	   (reverse (objs-in-context context)))))
-    (dolist (obj objs objs) ;;;the fact to working memory and return the list of objects
-      (fire:tell-it `(d::isa ,obj ,(third pattern)) :context context))))
+    (mapcar #'(lambda (obj) (list 'd::isa obj (third pattern))) objs)))
 
 (defun remove-rel-from-dgroup (dgroup rel)
   (let ((expr
