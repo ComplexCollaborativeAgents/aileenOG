@@ -1,4 +1,4 @@
-from agent.soar_interface.soar_agent import soar_agent
+from agent.soar_interface.soar_agent import SoarAgent
 from agent.soar_interface.soar_agent import update
 import settings
 
@@ -13,7 +13,7 @@ class TestServer(object):
 
 
 # def test_agent_visual_word_comprehension_known_concepts_single_object_on_scene_no_concept_memory():
-#     agent = soar_agent(None, headless=True)
+#     agent = SoarAgent(None, headless=True)
 #     iwriter = agent._input_writer
 #
 #     object_list = [
@@ -101,7 +101,7 @@ class TestServer(object):
 #         'preload-visual-concepts-param': 'false'
 #     }
 #
-#     agent = soar_agent(world_server=server, headless=False, kernel_port=40000, agent_params=agent_params)
+#     agent = SoarAgent(world_server=server, headless=False, kernel_port=40000, agent_params=agent_params)
 #     iwriter = agent._input_writer
 #     oreader = agent._output_reader
 #
@@ -207,7 +207,7 @@ class TestServer(object):
 #         'preload-visual-concepts-param': 'false'
 #     }
 #
-#     agent = soar_agent(world_server=server, headless=True, agent_params=agent_params)
+#     agent = SoarAgent(world_server=server, headless=True, agent_params=agent_params)
 #     #agent.register_output_callback(test_update, agent)
 #     agent._agent.RunSelf(10)
 #     agent.start()

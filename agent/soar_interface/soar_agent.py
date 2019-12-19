@@ -17,7 +17,7 @@ except ValueError, e:
     sys.exit()
 
 
-class soar_agent(object):
+class SoarAgent(object):
     def __init__(self, world_server, headless=False, kernel_port=None, agent_params={}):
         self.setup_soar_agent(world_server, kernel_port, agent_params)
         self.init_state_maintenance_data_structures()
