@@ -173,6 +173,8 @@ class ActionWordLesson:
             logging.debug("[action_word_lesson] :: communicating that the generated action trace is bad")
             #interaction_acknowledgement = agent_server.process_language({'marker':'bad'})
 
+    def
+
 
     @staticmethod
     def administer_curriculum(world_server, agent_server):
