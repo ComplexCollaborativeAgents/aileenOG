@@ -11,7 +11,7 @@ def test_square():
 
 
 # Functional test that creates a generalization and then matches against it
-@pytest.mark.skip(reason='SSH in CI is not correctly set up yet.')
+#@pytest.mark.skip(reason='SSH in CI is not correctly set up yet.')
 def test_concept_learner_server():
 
     cmd = 'ssh {} {}/start_concept_learner.sh {}'.format(settings.CONCEPT_LEARNER_HOST,
@@ -62,7 +62,7 @@ def test_concept_learner_server():
     r = server.query(xmlrpclib.Binary(json.dumps(data)))
     res = json.loads(r.data)
     assert len(res['matches']) == 1
-    assert res['matches'] == ['O3']
+    assert res['matches'] == [['isa', 'O3', 'RRed']]
 
 #Relations
     r = server.create_reasoning_predicate(xmlrpclib.Binary(json.dumps({'predicate':'rRight'})))
