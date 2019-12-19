@@ -7,6 +7,7 @@ from agent.vision.Detector import Detector
 import cv2
 import numpy as np
 import settings
+import language_helper
 
 try:
     from qsrlib.qsrlib import QSRlib, QSRlib_Request_Message
@@ -21,6 +22,7 @@ class InputWriter(object):
         self._world_server = world_server
         self._interaction = None
         self._language = None
+        self._concept_memory_status = None
 
         self._world_server = world_server
 
@@ -28,10 +30,16 @@ class InputWriter(object):
             self._input_link = soar_agent.get_input_link()
             self._world_link = self._input_link.CreateIdWME("world")
             self._objects_link = self._world_link.CreateIdWME("objects")
+            self._qsrs_link = self._world_link.CreateIdWME("qsrs")
+
             self._interaction_link = self._input_link.CreateIdWME("interaction-link")
             self._clean_interaction_link_flag = False
+
             self._language_link = self._input_link.CreateIdWME("language-link")
             self._clean_language_link_flag = False
+
+            self._concept_memory = self._input_link.CreateIdWME("concept-memory")
+            self._clean_concept_memory_flag = False
 
         if settings.SOAR_CV:
             # ToDo: Move the input to Detector to the config file.
@@ -39,7 +47,9 @@ class InputWriter(object):
                                      settings.CV_CONFIGURATION,
                                      settings.CV_WEIGHTS,
                                      'color')
-        self._svs_objects = []
+
+    def set_concept_memory_status(self, concept_memory_status_dictionary):
+        self._concept_memory_status = concept_memory_status_dictionary
 
     def set_language(self, language_dictionary):
         self._language = language_dictionary
@@ -56,12 +66,17 @@ class InputWriter(object):
         if self._clean_language_link_flag:
             self.clean_language_link()
 
+        if self._clean_concept_memory_flag:
+            self.clean_concept_memory()
+
+        if self._concept_memory_status is not None:
+            self.write_concept_memory_status_to_input_link()
+
         if self._interaction is not None:
             self.write_interaction_dictionary_to_input_link()
 
         if self._language is not None:
             self.write_language_to_input_link()
-
 
         if settings.SOAR_CV:
             binary_image = self.request_server_for_current_state_image()
@@ -73,13 +88,52 @@ class InputWriter(object):
         objects_list = self.request_server_for_objects_info()
         if objects_list is not None:
             self.add_objects_to_working_memory(objects_list)
-            if settings.SOAR_SVS:
-                self.add_objects_to_svs(objects_list)
-
         qsrs = self.create_qsrs(objects_list)
+        self.write_qsrs_to_input_link(qsrs)
+        self._soar_agent.commit()
+
+    def write_qsrs_to_input_link(self, qsrs):
+        self._soar_agent.delete_all_children(self._qsrs_link)
+        for root_obj_id in qsrs:
+            root_obj_qsrs = qsrs[root_obj_id]
+            for target_obj_id in root_obj_qsrs:
+                root_target_qsrs = root_obj_qsrs[target_obj_id]
+                for qsr_type in root_target_qsrs:
+                    qsr_value = root_target_qsrs[qsr_type]
+                    qsr_id = self._qsrs_link.CreateIdWME('qsr')
+                    qsr_id.CreateIntWME("root", int(root_obj_id))
+                    qsr_id.CreateIntWME("target", int(target_obj_id))
+                    qsr_id.CreateStringWME(qsr_type, qsr_value)
+
+    def clean_concept_memory(self):
+        self._soar_agent.delete_all_children(self._concept_memory)
+        self._clean_concept_memory_flag = False
+
+    def write_concept_memory_status_to_input_link(self):
+        new_status_link = self._concept_memory.CreateIdWME("result")
+        logging.debug("[input_writer] :: writing concept memory status to input link")
+
+        if 'status' in self._concept_memory_status:
+            new_status_link.CreateStringWME("status", self._concept_memory_status['status'])
+            logging.debug("[input-writer] :: wrote status {}".format(self._concept_memory_status['status']))
+
+        if 'concept-symbol' in self._concept_memory_status and 'gpool' in self._concept_memory_status:
+            new_status_link.CreateStringWME("concept-symbol", self._concept_memory_status['concept-symbol'])
+            new_status_link.CreateStringWME("gpool", str(self._concept_memory_status['gpool']))
+            logging.debug("[input-writer] :: wrote concept symbol {} and gpool {}".format(self._concept_memory_status['concept-symbol'], self._concept_memory_status['gpool']))
+
+        if 'matches' in self._concept_memory_status:
+            matches_id = new_status_link.CreateIdWME('matches')
+            for item in self._concept_memory_status['matches']:
+                matches_id.CreateStringWME("id_name", str(item))
+            logging.debug(
+                "[input-writer] :: wrote matches {}".format(self._concept_memory_status['status']))
+
+        self._concept_memory_status = None
+        self._clean_concept_memory_flag = True
 
     def clean_language_link(self):
-        self.delete_all_children(self._language_link)
+        self._soar_agent.delete_all_children(self._language_link)
         self._clean_language_link_flag = False
 
     def write_language_to_input_link(self):
@@ -88,24 +142,12 @@ class InputWriter(object):
         ## write all parses
         parses = self._language['parses']
         parses_link = new_language_link.CreateIdWME("parses")
-        for parse in parses:
-            parse_link = parses_link.CreateIdWME("parse")
-            item = parse[0]
-            if item == 'obj': ### function is partially written, will only write obj parses to Soar
-                obj_ref_link = parse_link.CreateIdWME("obj-ref")
-                i = 1
-                while isinstance(parse[i], list): ## property
-                    property = parse[i]
-                    assert property[0] == 'prop'
-                    prop_link = obj_ref_link.CreateIdWME('prop')
-                    prop_link.CreateStringWME('tag', property[1])
-                    i = i+1
-                obj_ref_link.CreateStringWME('tag', parse[i])
+        language_helper.translate_to_soar_structure(parses, parses_link)
         self._language = None
         self._clean_language_link_flag = True
 
     def clean_interaction_link(self):
-        self.delete_all_children(self._interaction_link)
+        self._soar_agent.delete_all_children(self._interaction_link)
         self._clean_interaction_link_flag = False
 
     def write_interaction_dictionary_to_input_link(self):
@@ -114,11 +156,9 @@ class InputWriter(object):
         if 'signal' in self._interaction:
             signal = str(self._interaction['signal'])
             new_interaction_link.CreateStringWME('signal', signal)
-
         if 'content' in self._interaction:
             content = str(self._interaction['content'])
-            new_interaction_link.CreateStringWME('content', content)
-
+            new_interaction_link.CreateStringWME('content', content.replace(" ", "-"))
         self._interaction = None
         self._clean_interaction_link_flag = True
 
@@ -126,36 +166,20 @@ class InputWriter(object):
         logging.debug("[input_writer] :: received training string: {}".format(interaction_dict))
         self._interaction = interaction_dict
 
-    ## SM: both these methods need to be rewritten to maintain the list of objects properly
-    def add_objects_to_svs(self, objects_list):
-        logging.info("[input_writer] :: writing objects to SVS")
-        for w_object in objects_list:
-            object_id = "object{}".format(w_object['id'])
-            if object_id in self._svs_objects:
-                svs_command = SVSHelper.get_svs_command_for_change_position(object_id,
-                                                                            w_object['position'])
-            else:
-                svs_command = SVSHelper.get_svs_command_for_add_box(object_id,
-                                                                    position=w_object['position'],
-                                                                    bounding_box=w_object['bounding_box'])
-                self._svs_objects.append(object_id)
-
-            self._soar_agent._agent.SendSVSInput(svs_command)
-            logging.debug("[input_writer] :: updating svs with {}".format(svs_command))
-
     def add_objects_to_working_memory(self, objects_list):
-        self.delete_all_children(self._objects_link)
+        self._soar_agent.delete_all_children(self._objects_link)
         for w_object in objects_list:
             object_id = self._objects_link.CreateIdWME("object")
-            object_id.CreateIntWME('id', w_object['id']),
-            position_id = object_id.CreateIdWME('position')
-            position_id.CreateFloatWME('x', w_object['position'][0])
-            position_id.CreateFloatWME('y', w_object['position'][1])
-            position_id.CreateFloatWME('z', w_object['position'][2])
+            object_id.CreateIntWME('id', w_object['id'])
+            #position_id = object_id.CreateIdWME('position')
+            # position_id.CreateFloatWME('x', w_object['position'][0])
+            # position_id.CreateFloatWME('y', w_object['position'][1])
+            # position_id.CreateFloatWME('z', w_object['position'][2])
             object_id.CreateStringWME('held', w_object['held'])
             object_id.CreateStringWME('color', w_object['color'])
             object_id.CreateStringWME('shape', w_object['shape'])
-            object_id.CreateStringWME('id_name', w_object['id_name'])
+            object_id.CreateStringWME('id_string', w_object['id_string'])
+            object_id.CreateStringWME('id_uuid', w_object['id_name'])
 
     def request_server_for_objects_info(self):
         try:
@@ -190,17 +214,6 @@ class InputWriter(object):
             os.mkdir(dir_name)
         with open(settings.CURRENT_IMAGE_PATH, "wb") as handle:
             handle.write(binary_image.data)
-
-
-    def delete_all_children(self, id):
-        index = 0
-        if id.GetNumberChildren is not None:
-            for i in range(0, id.GetNumberChildren()):
-                child = id.GetChild(
-                    index)  # remove the 0th child several times, Soar kernel readjusts the list after an item is deletd
-                if child is not None:
-                    child.DestroyWME()
-
 
 
     def create_qsrs(self, objects):

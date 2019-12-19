@@ -1,0 +1,56 @@
+##!
+# @file
+#
+# @created smohan 20191216
+
+sp {compose-with-semantic-memory*apply*compose-concept-grounding-parse*relation
+    (state <s>    ^name compose-with-semantic-memory
+                  ^operator <op>)
+    (<op>    ^name compose-concept-grounding-parse
+             ^concept <con>)
+-->
+    (<s>    ^relation <rel>)
+    (<rel>    ^primitives <prime>
+              ^root <root>
+              ^target <target>)
+}
+
+sp {compose-with-semantic-memory*apply*compose-concept-grounding-parse*relation*primitives
+    (state <s>    ^name compose-with-semantic-memory
+                  ^operator <op>
+                  ^relation.primitives <prime>)
+    (<op>    ^name compose-concept-grounding-parse
+             ^concept <con>)
+    (<con>    ^<type>    <p>)
+-->
+    (<prime>    ^<type>  <p>)
+}
+
+sp {compose-with-semantic-memory*apply*compose-concept-grounding-parse*relation*first-object
+    (state <s>    ^name compose-with-semantic-memory
+                  ^relation <rel>
+                  ^grounding <g>
+                  ^parses.temporal.order <order>)
+    (<order>    ^first <obj-ref>)
+    (<g>    ^entity <entity>)
+    (<entity> ^_metadata.description <obj-ref>
+            ^object <obj>)
+    (<rel>    ^root <root>)
+-->
+    (<root>    ^object <obj>)
+    }
+
+sp {compose-with-semantic-memory*apply*compose-concept-grounding-parse*relation*second-object
+    (state <s>    ^name compose-with-semantic-memory
+                  ^relation <rel>
+                  ^grounding <g>
+                  ^parses.temporal.order <order>)
+    (<order>    ^second <obj-ref>)
+    (<g>    ^entity <entity>)
+    (<entity>    ^_metadata.description <obj-ref>
+            ^object <obj>)
+    (<rel>    ^target <target>)
+-->
+    (<target>    ^object <obj>)
+    }
+                  

@@ -1,0 +1,29 @@
+##!
+# @file
+#
+# @created smohan 20191216
+
+sp {compose-with-semantic-memory*propose*compose-concept-grounding-parse
+    (state <s>    ^name compose-with-semantic-memory
+                  ^smem-retrieve.retrieved-lti <concept>)
+    -{(<s>    ^relation <rel>)
+      (<rel>    ^primitives
+                ^root.object
+                ^target.object)}
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name compose-concept-grounding-parse
+             ^concept <concept>)
+    }
+                  
+sp {compose-with-semantic-memory*propose*complete*compose-with-semantic-memory
+    (state <s>    ^name compose-with-semantic-memory
+                  ^relation <rel>)
+    (<rel>    ^primitives
+              ^root
+              ^target)
+-->
+    (<s>    ^operator <op> + <)
+    (<op>    ^name complete-compose-with-semantic-memory
+             ^relation <rel>)
+    }

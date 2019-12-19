@@ -1,0 +1,53 @@
+##!
+# @file
+#
+# @created smohan 20191122
+
+
+sp {learn-from-object*apply*send-instance-to-concept-memory
+    (state <s>    ^name learn-from-object
+                  ^operator <op>
+                  ^epmem.present-id <pid>
+                  ^_params.visual-concepts external
+                  ^io.output-link <ol>)
+    (<op>    ^name send-instance-to-concept-memory
+             ^concept <lti>
+             ^object <obj>)
+    (<lti>    ^gpool <gpool>
+              ^concept <con>)
+-->
+    (<ol>    ^concept-memory <cm>)
+    (<cm>    ^store-instance <si>)
+    (<si>    ^gpool <gpool>
+             ^object <obj-new>
+             ^context <pid>)
+    (<obj-new>    ^isa <con>)
+    } 
+
+sp {learn-from-object*apply*send-instance-to-concept-memory*object-attributes
+    (state <s>    ^name learn-from-object
+                  ^operator <op>
+                  ^_params.visual-concepts external
+                  ^io.output-link <ol>
+                  ^topstate._params.relevant-percept-set <set>)
+    (<op>    ^name send-instance-to-concept-memory
+             ^concept <lti>
+             ^object <obj>)
+    (<ol>    ^concept-memory <cm>)
+    (<cm>    ^store-instance <si>)
+    (<si>    ^object <obj-new>)
+    (<set>    ^type <type>)
+    (<obj>    ^<type> <symbol>)
+-->
+    (<obj-new>    ^<type> <symbol>)
+    }
+
+sp {learn-from-object*apply*send-instance*status
+    (state <s>    ^name learn-from-object
+                  ^operator <op> 
+                  ^io.output-link.concept-memory.store-instance.object.isa <con>)
+    (<op>    ^name send-instance-to-concept-memory
+             ^object <obj>)
+-->
+    (<s>    ^stored <obj>)
+    }

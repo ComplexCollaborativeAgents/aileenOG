@@ -6,7 +6,7 @@
 ;;;;   Created: November 13, 2019 16:14:37
 ;;;;   Purpose: 
 ;;;; ----------------------------------------------------------------------------
-;;;;  Modified: Thursday, December 12, 2019 at 13:01:13 by klenk
+;;;;  Modified: Saturday, December 14, 2019 at 18:00:34 by klenk
 ;;;; ----------------------------------------------------------------------------
 
 (in-package :cl-user)
@@ -45,21 +45,30 @@
 	 (cons (str->symbols (car lst))(str->symbols (cdr lst))))
 	(t (error "str->symbols "))))
 
+(defun symbols->strs (lst)
+  (cond ((null lst) nil)
+	((symbolp lst)
+	 (symbol-name lst))
+	((numberp lst) lst)
+	((consp lst)
+	 (cons (symbols->strs (car lst))(symbols->strs (cdr lst))))
+	(t (error "symbols->strs "))))
+
+
 (defun create-reasoning-symbol-helper (str)
   (handler-bind ((error #'print-backtrace))
   (format t "~%Creating Reasoning Symbol2 ~A" str)
   (let* ((json (cl-json:decode-json-from-string str))
 	 (symbol (str->symbols (cdr (assoc :SYMBOL json)))))
-    (format t "~% json ~A symbol ~A" json symbol)
     (cond (symbol
-	   (format t "~%Creating Reasoning Symbol ~A" symbol)
+	   (format t "Creating Reasoning Symbol ~A~%" symbol)
 	   (multiple-value-bind (num gpool)
 	       (create-reasoning-symbol symbol)
 	     (cl-json:encode-json-alist-to-string (pairlis '("numSymbols" "gpool")
 							   (list num (symbol-name gpool)))
 						  )))
 	  (t
-	   (format t "~%Ill formed create-reasoning-symbol request ~A" str)
+	   (format t "Ill formed create-reasoning-symbol request ~A~%" str)
 	   "")))))
 
 
@@ -67,86 +76,147 @@
 
 (defun create-reasoning-predicate-helper (str)
   (handler-bind ((error #'print-backtrace))
-    (format t "~%Creating Reasoning Predicate2 ~A" str)
-    (let* ((json (cl-json:decode-json-from-string str))
-	   (symbol (str->symbols (cdr (assoc :PREDICATE json))))
-	   (arity (cdr (assoc :arity json))))
-      (cond (symbol
-	     (format t "~%Creating Reasoning Predicate ~A" symbol)
-	     (multiple-value-bind (num gpool)
-		 (create-reasoning-predicate symbol 2)
-	       (cl-json:encode-json-alist-to-string
-		(pairlis '("numPredicates" "gpool") (list num (symbol-name gpool))))))
-	    (t
-	     (format t "~%Ill formed create-reasoning-predicate request ~A" str)
-	     "")))))
+  (let* ((json (cl-json:decode-json-from-string str))
+	 (symbol (str->symbols (cdr (assoc :PREDICATE json))))
+	 (arity (cdr (assoc :arity json))))
+    (cond (symbol
+	   (format t "Creating Reasoning Predicate ~A~%" symbol)
+	   (multiple-value-bind (num gpool)
+	       (create-reasoning-predicate symbol 2)
+	     (cl-json:encode-json-alist-to-string
+	      (pairlis '("numPredicates" "gpool") (list num (symbol-name gpool))))))
+	  (t
+	   (format t "Ill formed create-reasoning-predicate request ~A~%" str)
+	   "")))))
 
 (defun add-case-to-gpool-helper (str)
   (handler-bind ((error #'print-backtrace))
-    (setq *str* str)
-    (let* ((json (cl-json:decode-json-from-string str))
-	   (facts (str->symbols (cdr (assoc :FACTS json))))
-	   (context (str->symbols (cdr (assoc :CONTEXT json))))
-	   (gpool (str->symbols (cdr (assoc :GPOOL json)))))
-      (cond ((and facts context gpool)
-	     (multiple-value-bind (num-gen num-exp)
-		 (add-case-to-gpool facts context gpool)
-	       (format t "~%Gpool ~A has ~a generalizations and ~A examples" gpool num-gen num-exp)
-	       (cl-json:encode-json-alist-to-string
-		(pairlis '("numGeneralizations" "numExamples") (list num-gen num-exp)))))
-	    (t
-	     (format t "~%Ill formed add-case-to-gpool request ~A" str)
-	     "")))))
+  (setq *str* str)
+  (let* ((json (cl-json:decode-json-from-string str))
+	 (facts (str->symbols (cdr (assoc :FACTS json))))
+	 (context (str->symbols (cdr (assoc :CONTEXT json))))
+	 (gpool (str->symbols (cdr (assoc :GPOOL json)))))
+    (cond ((and facts context gpool)
+ 	   (multiple-value-bind (num-gen num-exp)
+	       (add-case-to-gpool facts context gpool)
+	     (format t "Gpool ~A has ~a generalizations and ~A examples~%" gpool num-gen num-exp)
+	     (cl-json:encode-json-alist-to-string
+	      (pairlis '("numGeneralizations" "numExamples") (list num-gen num-exp)))))
+	  (t
+	   (format t "Ill formed add-case-to-gpool request ~A~%" str)
+    "")))))
 
+(defun store-helper (str)
+  (format t "Storing ~A~%" str)
+  (let* ((json (cl-json:decode-json-from-string str))
+         (facts (str->symbols (cdr (assoc :FACTS json))))
+         (context (str->symbols (cdr (assoc :CONTEXT json))))
+         (concept (str->symbols (cdr (assoc :CONCEPT json)))))
+    (cond ((and facts context concept)
+	   (multiple-value-bind (num-gen num-exp)
+	       (add-case-to-gpool facts context (get-concept-gpool concept))
+	     (format t "Gpool for ~A has ~a generalizations and ~A examples~%" concept num-gen num-exp)
+	     (cl-json:encode-json-alist-to-string
+	      (pairlis '("numGeneralizations" "numExamples") (list num-gen num-exp)))))
+          (t
+           (format t "Ill formed store request ~A~%" str)
+           (cl-json:encode-json-alist-to-string
+            (pairlis '("numGeneralizations" "numExamples") (list 0 0)))))
+    ))
+
+(defun remove-helper (str)
+  (format t "Removing ~A~%" str)
+  (let* ((json (cl-json:decode-json-from-string str))
+         (context (str->symbols (cdr (assoc :CONTEXT json))))
+         (concept (str->symbols (cdr (assoc :CONCEPT json)))))
+    (cond ((and concept (not context))
+           ;; Remove the given concept and its concept pool.
+           ;; TODO: Does this delete all of the instances from the concept pool?
+           (fire:kb-forget (car(fire:retrieve-references concept)))
+           (fire:kb-forget (car(fire:retrieve-references (get-concept-gpool concept))))
+           (format t "Done removing ~A and ~A~%" concept (get-concept-gpool concept))
+           (cl-json:encode-json-alist-to-string
+            (pairlis '("success") (list t))))
+          ((and concept context)
+           ;; Forget the given instance.
+           (fire:kb-forget (car(fire:retrieve-references context)))
+           (cl-json:encode-json-alist-to-string
+            (pairlis '("success") (list t))))
+          (t
+	   (format t "Ill formed remove request ~A~%" str)
+           (cl-json:encode-json-alist-to-string
+            (pairlis '("success") (list nil)))))))
+
+(defun query-helper (str)
+  (handler-bind ((error #'print-backtrace))
+  (setq *str* str)
+  (format t "Querying ~A~%" str)
+  (let* ((json (cl-json:decode-json-from-string str))
+         (facts (str->symbols (cdr (assoc :FACTS json)))) ;;; all facts in scene
+         (context 'data::query-facts)
+	 (pattern (str->symbols (cdr (assoc :PATTERN json))))) ;; Statement with variables
+    (cond ((and facts pattern)
+           ;; Clear previous facts from context.
+           (remove-facts-from-case context)
+           ;; Store facts in context and match query.
+           (let ((matches (filter-scene-by-expression facts context nil nil pattern)))
+             (format t "Found matches ~A~%" matches)
+             (cl-json:encode-json-alist-to-string
+              (pairlis '("matches" "pattern")
+                       (list (symbols->strs matches)
+			     (symbols->strs pattern))))))
+          (t
+           (format t "Ill formed filter scene request ~A~%" str)
+           (cl-json:encode-json-alist-to-string
+              (pairlis '("matches" "pattern") '(nil nil))))))))
 
 (defun match-case-against-gpool-helper (str)
-    (handler-bind ((error #'print-backtrace))
-      (format t "~%Checking context against gpool for pattern ~A" str)
-      (setq *str* str)
-      (pprint str)
-      (let* ((json (cl-json:decode-json-from-string str))
-	     (facts (str->symbols (cdr (assoc :FACTS json))))
-	     (context (str->symbols (cdr (assoc :CONTEXT json))))
-	     (gpool (str->symbols (cdr (assoc :GPOOL json))))
-	     (pattern (str->symbols (cdr (assoc :PATTERN json)))))
-	(format t "~%Checking context ~A against gpool ~A for pattern ~A" context gpool pattern)
-	(cond ((and facts context gpool pattern)
-	       (let ((matches (match-case-against-gpool facts context gpool pattern))) 
-		 (format t "~%Found matches ~A" matches)
-		 (cl-json:encode-json-alist-to-string
-		  (pairlis '("matches" "pattern") (list matches pattern))
-		  )))
+  (assert nil) ;;this is not used anymore
+  (format t "Checking context against gpool for pattern ~A~%" str)
+  (setq *str* str)
+  (pprint str)
+  (let* ((json (cl-json:decode-json-from-string str))
+	(facts (str->symbols (cdr (assoc :FACTS json))))
+	(context (str->symbols (cdr (assoc :CONTEXT json))))
+	(gpool (str->symbols (cdr (assoc :GPOOL json))))
+	(pattern (str->symbols (cdr (assoc :PATTERN json)))))
+    (format t "Checking context ~A against gpool ~A for pattern ~A~%" context gpool pattern)
+    (cond ((and facts context gpool pattern)
+	   (let ((matches (match-case-against-gpool facts context gpool pattern))) 
+	     (format t "Found matches ~A~%" matches)
+	     (cl-json:encode-json-alist-to-string
+	      (pairlis '("matches" "pattern") (list matches pattern))
+					)))
 	      (t
-	       (format t "~%Ill formed match-case-against-gpool-helper request ~A" str)
-	       "")))))
+	       (format t "Ill formed match-case-against-gpool-helper request ~A~%" str)
+	       ""))))
 
 (defun filter-scene-by-expression-helper (str)
   (handler-bind ((error #'print-backtrace))
     (setq *str* str)
-    (format t "~%Checking context against pattern ~A" str)
-  (let* ((json (cl-json:decode-json-from-string str))
-	 (facts (str->symbols (cdr (assoc :FACTS json)))) ;;; all facts in scene
-	 (context (str->symbols (cdr (assoc :CONTEXT json)))) ;;; id for current scene
-	 (gpool (str->symbols (cdr (assoc :GPOOL json)))) ;;; 
-	 (prev-matches (str->symbols (cdr (assoc :PREVQUERIES json)))) ;;; Previous Statements that Constraint Current Query 
-	 (pattern (str->symbols (cdr (assoc :PATTERN json))))) ;; Statement with variables
-    (format t "~%Checking facts ~A context ~A against gpool ~A for pattern ~A" facts context gpool pattern)
-    (cond ((and facts context pattern)
-           (let ((matches (filter-scene-by-expression facts context gpool prev-matches pattern)))
-             (format t "~%Found matches ~A" matches)
-             (cl-json:encode-json-alist-to-string
-              (pairlis '("matches" "pattern")
-                       (list (loop for item in matches collect
-                                   (if (symbolp item) (symbol-name item) item))
-                             (loop for item in pattern collect
-                                   (if (symbolp item) (symbol-name item) item)))))
-              ))
-          (t
-           (format t "~%Ill formed filter scene request ~A" str)
-           "")))))
+    (format t "Checking context against pattern ~A~%" str)
+    (let* ((json (cl-json:decode-json-from-string str))
+	   (facts (str->symbols (cdr (assoc :FACTS json)))) ;;; all facts in scene
+	   (context (str->symbols (cdr (assoc :CONTEXT json)))) ;;; id for current scene
+	   (gpool (str->symbols (cdr (assoc :GPOOL json)))) ;;;
+	   (prev-matches (str->symbols (cdr (assoc :PREVQUERIES json)))) ;;; Previous Statements that Constraint Current Query
+	   (pattern (str->symbols (cdr (assoc :PATTERN json))))) ;; Statement with variables
+      (format t "Checking facts ~A context ~A against gpool ~A for pattern ~A~%" facts context gpool pattern)
+      (cond ((and facts context pattern)
+	     (let ((matches (filter-scene-by-expression facts context gpool prev-matches pattern)))
+	       (format t "Found matches ~A~%" matches)
+	       (cl-json:encode-json-alist-to-string
+		(pairlis '("matches" "pattern")
+			 (list (loop for item in matches collect
+				    (if (symbolp item) (symbol-name item) item))
+			       (loop for item in pattern collect
+				    (if (symbolp item) (symbol-name item) item)))))
+	       ))
+	    (t
+	     (format t "Ill formed filter scene request ~A~%" str)
+	     "")))))
 
-
-
+  
 (defun start-server (&key (port 8000) (kbdir "nextkb"))
   (format t "~% starting server port ~A" port)
   (make-reasoner :kbdir kbdir)
@@ -162,6 +232,15 @@
      :base64 :base64)
     (net.xml-rpc:export-xml-rpc-method
      rcp '("add_case_to_gpool" add-case-to-gpool-helper)
+     :base64 :base64)
+    (net.xml-rpc:export-xml-rpc-method
+     rcp '("store" store-helper)
+     :base64 :base64)
+    (net.xml-rpc:export-xml-rpc-method
+     rcp '("remove" remove-helper)
+     :base64 :base64)
+    (net.xml-rpc:export-xml-rpc-method
+     rcp '("query" query-helper)
      :base64 :base64)
 ;; Klenk: We want to match against the whole scene.
     (net.xml-rpc:export-xml-rpc-method

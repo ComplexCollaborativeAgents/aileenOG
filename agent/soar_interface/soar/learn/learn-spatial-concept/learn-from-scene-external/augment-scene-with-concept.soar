@@ -1,0 +1,51 @@
+##!
+# @file
+#
+# @created smohan 20191209
+
+
+sp {learn-from-scene-external*apply*augment-scene-with-concept
+    (state <s>    ^name learn-from-scene-external
+                  ^operator <op>)
+    (<op>    ^name augment-scene-with-concept
+             ^scene <scene>
+             ^concept <c>)
+    (<scene>    ^relations <rels>)
+-->
+    (<rels>    ^relation <rel-new>)
+    (<rel-new>    ^internal <c>)
+    }
+
+sp {learn-from-scene-external*apply*augment-scene-with-concept*objects
+    (state <s>    ^name learn-from-scene-external
+                  ^operator <op>
+                  ^parses.temporal <t>
+                  ^grounding <g>)
+    (<op>    ^name augment-scene-with-concept
+             ^scene <scene>
+             ^concept <c>)
+    (<scene>    ^relations.relation <rel>)
+    (<rel>    ^internal <c>)
+    (<t>    ^order.{<< first second >> <order>} <ref>)
+    (<g>    ^entity <ent>)
+    (<ent>    ^_metadata.description <ref>
+              ^object <obj>)
+-->
+    (<rel>    ^<order> <obj>)
+    }
+
+sp {learn-from-scene-external*apply*augment-scene-with-concepts*object*complete
+    (state <s>    ^name learn-from-scene-external
+                  ^operator <op>)
+    (<op>    ^name augment-scene-with-concept
+             ^scene <scene>
+             ^concept <c>)
+    (<scene>    ^relations.relation <rel>)
+    (<rel>    ^internal <c>
+              ^<order> <obj>)
+-->
+    (<s>    ^augmented-with <c>)
+    }
+                  
+             
+                  

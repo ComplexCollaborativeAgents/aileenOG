@@ -1,0 +1,13 @@
+##!
+# @file
+#
+# @created smohan 20191211
+
+sp {comprehension*apply*init-grounding
+    (state <s>    ^name comprehension
+                  ^operator <op>)
+    (<op>    ^name init-grounding
+             ^segment <seg>)
+-->
+    (<seg>    ^grounding <g>)
+    }

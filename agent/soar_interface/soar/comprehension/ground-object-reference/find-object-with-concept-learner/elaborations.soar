@@ -1,0 +1,43 @@
+##!
+# @file
+#
+# @created smohan 20191122
+
+sp {find-object-with-concept-learner*elaborate*state
+    (state <s>    ^name find-object-with-concept-learner
+                  ^superstate.operator <sop>)
+    (<sop>    ^name find-object-with-concept-learner
+              ^reference <ref>)
+-->
+    (<s>    ^reference <ref>
+            ^found <f>
+            ^objects <fo>
+            ^visual <vw>)
+    } 
+
+sp {find-object-with-concept-learner*elaborate*object-set
+    (state <s>    ^name find-object-with-concept-learner
+                  ^superstate.operator <sop>)
+    (<sop>    ^object-set <os>)
+-->
+    (<s>    ^object-set <os>)
+    }
+
+sp {find-object-with-concept-learner*elaborate*visual-word*tag
+    (state <s>    ^name find-object-with-concept-learner
+                  ^reference <ref>
+                  ^visual <vw>)
+    (<ref>    ^tag <tag>)
+-->
+    (<vw>    ^word <tag>)
+    }
+
+
+sp {find-object-with-concept-learner*elaborate*visual-word*prop*tag
+    (state <s>    ^name find-object-with-concept-learner
+                  ^reference <ref>
+                  ^visual <vw>)
+    (<ref>    ^prop.tag <tag>)
+-->
+    (<vw>    ^word <tag>)
+    }

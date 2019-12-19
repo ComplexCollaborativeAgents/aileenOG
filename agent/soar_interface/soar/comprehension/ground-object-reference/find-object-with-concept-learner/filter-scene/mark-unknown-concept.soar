@@ -1,0 +1,20 @@
+##!
+# @file
+#
+# @created smohan 20191202
+
+
+sp {filter-scene*apply*mark-unknown-concept
+    (state <s>    ^name filter-scene
+                  ^operator <op>
+                  ^topstate <ts>)
+    (<op>    ^name mark-unknown-visual-concept
+             ^type <type>
+             ^nl <nl>)
+-->
+    (<ts>    ^processing-status <ps>)
+    (<ps>    ^type unknown-visual-concept
+             ^information <info>
+             ^source comprehension)
+    (<info>    ^nl <nl>)
+    }

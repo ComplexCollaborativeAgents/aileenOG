@@ -1,0 +1,24 @@
+##!
+# @file
+#
+# @created smohan 20191206
+
+sp {ground-relation-reference*apply*mark-unknown-concept
+    (state <s>    ^name ground-relation-reference
+                  ^operator <op>
+                  ^topstate <ts>
+                  ^superstate <ss>)
+    (<op>    ^name mark-unknown-spatial-concept
+             ^type <type>
+             ^nl <nl>)
+    (<ss>    ^grounding <g>
+             ^segment.parses <parses>)
+-->
+    (<ts>    ^processing-status <ps>)
+    (<ps>    ^type unknown-spatial-concept
+             ^information <info>
+             ^source comprehension)
+    (<info>    ^nl <nl>
+               ^grounding <g>
+               ^parses <parses>)
+    }

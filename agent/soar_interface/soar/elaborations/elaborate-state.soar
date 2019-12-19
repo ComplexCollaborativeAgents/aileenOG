@@ -26,7 +26,8 @@ sp {topstate*elaborate*world
     (state <s>    ^name aileen)
 -->
     (<s>    ^world <world>)
-    (<world>    ^objects <obj>)
+    (<world>    ^objects <obj>
+                ^relations <rel>)
     }
                  
 

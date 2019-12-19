@@ -1,0 +1,65 @@
+##!
+# @file
+#
+# @created smohan 20191216
+
+sp {verify-relation*elaborate*relation
+    (state <s>    ^name verify-relation
+                  ^superstate.operator <sop>)
+    (<sop>    ^name verify-relation
+              ^relation <rel>)
+-->
+    (<s>    ^g-relation <rel>)
+    }
+
+sp {verify-relation*elaborate*pairs
+    (state <s>    ^name verify-relation
+                  ^g-relation.relation <rel>)
+    (<rel>    ^root.object <robj>
+              ^target.object <tobj>
+              ^primitives <p>)
+-->
+    (<s>    ^pair <pair>)
+    (<pair>    ^root <robj>
+            ^target <tobj>
+            ^primitives <p>)
+    }
+
+sp {verify-relation*elaborate*world*match
+    (state <s>    ^name verify-relation
+                  ^world.relations <rels>
+                  ^pair <p>)
+    (<rels>    ^relation <rel>)
+    (<rel>    ^{<type> << cardir rcc8 >>} <qsr>
+              ^root <robj>
+              ^target <tobj>)
+    (<p>    ^root <robj>
+            ^target <tobj>
+            ^primitives.<type> <qsr>)
+-->
+    (<p>    ^matched <qsr>)
+}
+
+sp {verify-relation*report*verified
+    (state <s>    ^name verify-relation
+                  ^pair <p>
+                  ^g-relation <rel>
+                  ^superstate <ss>)
+    -{(<p>    ^primitives.{<type> << cardir rcc8 >>} <qsr>)
+      (<p>   -^matched <qsr>)}
+-->
+    (<ss>    ^verified <rel>)
+    }
+
+sp {verify-relation*report*success
+    (state <s>    ^name verify-relation
+                  ^pair <p>
+                  ^superstate <ss>)
+    -{(<p>    ^primitives.{<type> << cardir rcc8 >>} <qsr>)
+      (<p>   -^matched <qsr>)}
+-->
+    (<ss>    ^operator <op> + !)
+    (<op>    ^name report-success)
+    }
+    
+                  

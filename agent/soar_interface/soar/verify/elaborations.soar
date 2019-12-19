@@ -12,3 +12,10 @@ sp {verify*elaborate*segment
 -->
     (<s>    ^segment <seg>)
     }
+
+sp {verify*elaborate*grounding
+    (state <s>    ^name verify
+                  ^segment.grounding <g>)
+-->
+    (<s>    ^grounding <g>)
+    }
