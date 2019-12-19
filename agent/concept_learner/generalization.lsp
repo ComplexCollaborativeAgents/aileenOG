@@ -6,7 +6,7 @@
 ;;;;   Created: November  6, 2019 14:54:11
 ;;;;   Purpose: 
 ;;;; ----------------------------------------------------------------------------
-;;;;  Modified: Wednesday, December 18, 2019 at 16:37:51 by klenk
+;;;;  Modified: Thursday, December 19, 2019 at 12:21:04 by klenk
 ;;;; ----------------------------------------------------------------------------
 
 (in-package :aileen)
@@ -62,6 +62,12 @@
   (fire:kb-forget `(d::gpoolAssimilationThreshold ,gpool ?x) :mt gpool)
   (fire:kb-store `(d::gpoolAssimilationThreshold ,gpool ,*assimilation-threshold*) :mt gpool)
   (fire:tell-it `(d::sageSelectAndGeneralize ,context ,gpool) :context gpool)
+  (multiple-value-bind (rbrowse full url) (rbrowse::browse-sme sme::*sme*)
+		   (format t "~% rbrowse-sme: ~A base:~A target: ~A url: ~A "
+			   sme::*sme*
+			   context
+			   gpool
+			   full))
   (values (length (fire:ask-it `(d::kbOnly (d::gpoolGeneralization ,gpool ?num))))
 	  (length (fire:ask-it `(d::kbOnly (d::gpoolExample ,gpool ?num)) ))) )
 
@@ -157,6 +163,12 @@
 			 (d::reverseCandidateInferenceOf ?ci ?mapping)
 			 (d::candidateInferenceContent ?ci (d::isa ,obj ,collection))))
 		      :context gpool)
+		 (multiple-value-bind (rbrowse full url) (rbrowse::browse-sme sme::*sme*)
+		   (format t "~% rbrowse-sme: ~A base:~A target: ~A url: ~A"
+			   sme::*sme*
+			   `(d::MinimalCaseFromMtFn ,obj ,context)
+			   gpool
+			   full))
 		 (let ((score (sme::score (car (sme::mappings  sme::*sme*))))
 		       (sme sme::*sme*))
 		   (sme::clone-current-sme)
@@ -251,6 +263,12 @@
 	   :context gpool)
       (let ((score (sme::score (car (sme::mappings  sme::*sme*))))
 	    (sme sme::*sme*))
+	(multiple-value-bind (rbrowse full url) (rbrowse::browse-sme sme::*sme*)
+		   (format t "~% rbrowse-sme: ~A base: ~A target: ~A url: ~A"
+			   sme::*sme*
+			   case-term
+			   gpool
+			   full))
 	(sme::clone-current-sme)
 	(format t "~% ~A" (sme::expressions (sme::target sme::*sme*)))
 	(dolist (rel (aileen-symbols-in-pattern pattern))
