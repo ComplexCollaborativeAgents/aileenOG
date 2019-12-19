@@ -168,10 +168,10 @@ class ActionWordLesson:
             logging.debug("[action_word_lesson] :: communicating that the generated action trace is bad")
             # interaction_acknowledgement = agent_server.process_language({'marker':'bad'})
 
-    def deliver_action_comprehension_test(self, world_server, agent_server):
+    def deliver_action_reaction_test(self, world_server, agent_server):
         logging.debug("[action_word_lesson] :: testing action learning with a comprehension test")
         segment = self.get_segment_for_lesson_start()
-        segment['signal'] = 'comprehend'
+        segment['interaction']['signal'] = 'react'
         scene_acknowledgement = world_server.set_scene(
             {'configuration': segment['scene'], 'label': "{}:{}".format(segment['interaction']['signal'], segment['interaction']['content'])})
         agent_response = agent_server.process_interaction(segment['interaction'])
@@ -181,7 +181,7 @@ class ActionWordLesson:
         while True:
             raw_input("Press any key to generate the next action word lesson...")
             lesson = ActionWordLesson()
-            lesson.deliver_action_comprehension_test()
+            lesson.deliver_action_reaction_test(world_server, agent_server)
             # logging.info("[action_word_lesson] :: generated a lesson for new action word")
             # while lesson._lesson_state is not settings.ACTION_LESSON_STATE_COMPLETE:
             #     raw_input("Press any key to deliver the next action lesson segment...")
