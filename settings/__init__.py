@@ -4,10 +4,7 @@ from os import path
 OS_ROOT_PATH = path.abspath(os.sep)
 ROOT_PATH = path.join(path.dirname(path.dirname(path.abspath(__file__))))
 CONCEPT_LEARNER_PATH = path.join(ROOT_PATH, 'agent', 'concept_learner')
-#SOAR_PATH = path.join("/home/smohan/soar/soar9.6/bin")
-SOAR_PATH = path.join("/home/smohan/soar/SoarSuite_9.6.0-Multiplatform_64bit/bin")
-#SOAR_PATH = path.join(OS_ROOT_PATH, 'usr', 'local', 'SoarSuite_9.6.0-Multipjlatform_64bit', 'bin', 'linux64')
-#SOAR_PATH = path.join(OS_ROOT_PATH, 'usr', 'local', 'SoarSuite_9.6.0-Multiplatform_64bit', 'bin')
+SOAR_PATH = path.join(OS_ROOT_PATH, 'usr', 'local', 'SoarSuite_9.6.0-Multiplatform_64bit', 'bin', 'linux64')
 SOAR_AGENT_PATH = path.join(ROOT_PATH, 'agent', 'soar_interface', 'soar', 'load.soar')
 SOAR_AGENT_NAME = 'aileen'
 SOAR_SLEEP_TIME = 0.0001
