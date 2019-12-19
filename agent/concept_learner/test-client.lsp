@@ -6,7 +6,7 @@
 ;;;;   Created: November 13, 2019 16:35:48
 ;;;;   Purpose: 
 ;;;; ----------------------------------------------------------------------------
-;;;;  Modified: Monday, December 16, 2019 at 08:33:34 by klenk
+;;;;  Modified: Wednesday, December 18, 2019 at 16:35:00 by klenk
 ;;;; ----------------------------------------------------------------------------
 
 (load "server.lsp")
@@ -125,6 +125,31 @@
 ;;;    (assert (equal pattern (cdr (assoc :PATTERN res))))
     ))
 
+(defun add-case-to-gen-rel-gpool ()
+ (let (res)
+    ;;; Add two cases without cubes to remove cubes from the generalization
+    (setq res (call-test-server "store"
+               (pairlis '("facts" "context" "concept")
+                        (list '(("isa" "Obj11A" "CVCylinder") ("isa" "Obj11A" "CVGreen")
+				("isa" "Obj11B" "CVCylinder") ("isa" "Obj11B" "CVBlue")
+				("n" "Obj11A" "Obj11B") ("ec" "Obj11A" "Obj11B")
+				("rRight" "Obj11A" "Obj11B"))
+                              "Test11" ;;Id
+                              "rRight"))))
+    (assert (= (cdr (assoc :NUM-EXAMPLES res)) 0))
+    (assert (= (cdr (assoc :NUM-GENERALIZATIONS res)) 1)) ;;;still one generalization
+    (setq res (call-test-server "store"
+               (pairlis '("facts" "context" "concept")
+                        (list '(("isa" "Obj12A" "CVPyramid") ("isa" "Obj12A" "CVGreen")
+				("isa" "Obj12B" "CVCylinder") ("isa" "Obj12B" "CVBlue")
+				("n" "Obj12A" "Obj12B") ("dc" "Obj12A" "Obj12B")
+				("rRight" "Obj12A" "Obj12B"))
+                              "Test12" ;;Id
+                              "rRight"))))
+    (assert (= (cdr (assoc :NUM-EXAMPLES res)) 0))
+    (assert (= (cdr (assoc :NUM-GENERALIZATIONS res)) 1)) ;;;still one generalization
+  ))
+
 (defun make-test-gen-rel-gpool ()
   (let (res pattern)
     ;; TEST STORE
@@ -141,8 +166,8 @@
 
     (setq res (call-test-server "store"
                (pairlis '("facts" "context" "concept")
-                        (list '(("isa" "Obj9A" "CVCube") ("isa" "Obj9A" "CVBlue")
-				("isa" "Obj9B" "CVPyramid") ("isa" "Obj9B" "CVGreen")
+                        (list '(("isa" "Obj9A" "CVCube") ("isa" "Obj9A" "CVRed")
+				("isa" "Obj9B" "CVCube") ("isa" "Obj9B" "CVGreen")
 				("n" "Obj9A" "Obj9B") ("dc" "Obj9A" "Obj9B")
 				("rRight" "Obj9A" "Obj9B"))
                               "Test9" ;;Id
@@ -156,9 +181,38 @@
   ;; generalize them
   ;; Match a new scene against it
   ;; verifies that removing facts works.
-  (make-test-gen-rel-gpool)
-  (query-test-gen-rel-gpool)
+  (make-test-gen-rel-gpool)  ;;; an almost perfect generalization (requires the second argument to be cube)
+  (query-test-gen-rel-gpool-1) ;;; does not find the generalization
+  (add-case-to-gen-rel-gpool) ;;; add an example where it is not a cube
+  (query-test-gen-rel-gpool) ;;; does not find the generalization
   (query-test-gen-rel-var-gpool))
+
+(defun query-test-gen-rel-gpool-1 ()
+  (let (res pattern)
+    ;; TEST QUERY Should not match
+    (setf pattern (list "rRight" "Obj10A" "Obj10B"))
+    (setq res (call-test-server "query"
+				(pairlis '("facts" "pattern")
+                        (list '(("isa" "Obj10A" "CVPyramid") ("isa" "Obj10A" "CVBlue")
+				("isa" "Obj10B" "CVPyramid") ("isa" "Obj10B" "CVGreen")
+				("n" "Obj10A" "Obj10B") ("dc" "Obj10A" "Obj10B")
+				)
+                              pattern))))
+    (assert (= 0 (length (cdr (assoc :MATCHES res))))) ;;verify the concept is over specific
+    (setf pattern (list "rRight" "Obj10A" "Obj10B"))
+    (setq res (call-test-server "query"
+				(pairlis '("facts" "pattern")
+                        (list '(("isa" "Obj10A" "CVPyramid") ("isa" "Obj10A" "CVRed")
+				("isa" "Obj10B" "CVCube") ("isa" "Obj10B" "CVGreen")
+				("n" "Obj10A" "Obj10B") ("dc" "Obj10A" "Obj10B")
+				)
+                              pattern))))
+;;    (assert (= 1 (length (cdr (assoc :MATCHES res)))))
+;;;This test should match, but greedy merge is missing the CVCube fact
+;;;A simple fix would be to extend the match any reverse candidate inferences that are already true, but I'm not sure all the things that work for it
+    ;; also exhaustive-sme works, but it can't be used with filters
+    ;; 12/18 I have emailed Ken and Tom
+    ))
 
 (defun query-test-gen-rel-gpool ()
   (let (res pattern)
