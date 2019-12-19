@@ -32,3 +32,5 @@ source "make-presistent-copies.soar"
 #source "update-world/load.soar"
 
 source "initialize-agent/load.soar"
+
+#source "action.soar"

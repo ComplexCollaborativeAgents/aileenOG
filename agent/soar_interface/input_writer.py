@@ -158,6 +158,9 @@ class InputWriter(object):
         if 'content' in self._interaction:
             content = str(self._interaction['content'])
             new_interaction_link.CreateStringWME('content', content.replace(" ", "-"))
+        if 'marker' in self._interaction:
+            marker = str(self._interaction['marker'])
+            new_interaction_link.CreateStringWME('marker', marker)
         self._interaction = None
         self._clean_interaction_link_flag = True
 

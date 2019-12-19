@@ -46,7 +46,7 @@ class soar_agent(object):
 
 
     def set_agent_params(self, agent_params):
-        logging.info("[soar-agent] :: setting agent params {}".format(agent_params))
+        #logging.info("[soar-agent] :: setting agent params {}".format(agent_params))
         if 'visual-concepts-param' in agent_params:
             visual_concepts_param = agent_params['visual-concepts-param']
         else:
@@ -106,6 +106,7 @@ class soar_agent(object):
         else:
             soar_kernel_port = find_free_port()
         kernel = sml.Kernel.CreateKernelInNewThread(soar_kernel_port)
+        #kernel = sml.Kernel.CreateKernelInCurrentThread()
         if not kernel or kernel.HadError():
             logging.error("[soar_agent] :: Error creating kernel: " + kernel.GetLastErrorDescription())
             exit(1)
