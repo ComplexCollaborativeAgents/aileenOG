@@ -1,4 +1,4 @@
-from agent.soar_interface.soar_agent import soar_agent
+from agent.soar_interface.soar_agent import SoarAgent
 import settings
 
 def test_set_agent_params():
@@ -21,7 +21,7 @@ def test_set_agent_params():
                     (<rps>    ^type color shape id_string)
                     }"""
 
-    agent = soar_agent(world_server=None, headless=True, agent_params=agent_params)
+    agent = SoarAgent(world_server=None, headless=True, agent_params=agent_params)
     agent.shutdown()
     with open(settings.AGENT_PARAM_RUNTIME_FILE, 'r') as agent_params_file:
         param_string = agent_params_file.read()

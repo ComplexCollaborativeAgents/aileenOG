@@ -1,7 +1,7 @@
-from agent.soar_interface.soar_agent import soar_agent
+from agent.soar_interface.soar_agent import SoarAgent
 
 def test_process_language_command():
-    agent = soar_agent(None)
+    agent = SoarAgent(None)
     oreader = agent._output_reader
     olink = agent._input_link
 
