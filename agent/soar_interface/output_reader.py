@@ -2,14 +2,13 @@ from agent.log_config import logging
 import xmlrpclib
 from agent.language.aileen_grammar import AileenGrammar
 
+
 class OutputReader(object):
     def __init__(self, soar_agent, world_server):
         self._soar_agent = soar_agent
         self._grammar = AileenGrammar()
         self._grammar.use_default_rules()
         self._response = None
-
-
         self._world_server = world_server
 
     def read_output(self):
@@ -27,7 +26,6 @@ class OutputReader(object):
             if commandName == 'interaction':
                 self.process_repsonse(commandID)
             commandID.AddStatusComplete()
-
 
     def process_action_description(self, commandID):
         action_dict = {}

@@ -35,9 +35,9 @@ class InputWriter(object):
 
         if settings.SOAR_CV:
             # ToDo: Move the input to Detector to the config file.
-            self.detector = Detector("agent/vision/aileen.names",
-                                     "agent/vision/yolov3-tiny-aileen-test.cfg",
-                                     "agent/vision/yolov3-tiny-aileen_session2.weights",
+            self.detector = Detector(settings.CV_NAMES,
+                                     settings.CV_CONFIGURATION,
+                                     settings.CV_WEIGHTS,
                                      'color')
         self._svs_objects = []
 

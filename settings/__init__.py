@@ -10,9 +10,13 @@ SOAR_AGENT_NAME = 'aileen'
 SOAR_SLEEP_TIME = 0.0001
 SOAR_DEBUG = True
 SOAR_SVS = False
-SOAR_CV = True
+SOAR_CV = False
 CURRENT_IMAGE_PATH = path.join(ROOT_PATH, 'world', 'controllers', 'images', 'current_image.png')
 COLOR_PATH = path.join(ROOT_PATH, 'instructor', 'resources', 'colors.json')
+CV_NAMES = path.join(ROOT_PATH, 'agent', 'vision', 'aileen.names')  # TODO: This should be changed to setting.SHAPE_SET.
+CV_CONFIGURATION = path.join(ROOT_PATH, 'agent', 'vision', 'yolov3-tiny-aileen-test.cfg')
+CV_WEIGHTS = path.join(ROOT_PATH, 'agent', 'vision', 'yolov3-tiny-aileen_session2.weights')
+
 
 # Servers
 WORLD_HOST = 'localhost'
@@ -61,7 +65,7 @@ ACTION_LESSON_STATE_END = 'end'
 ACTION_LESSON_STATE_COMPLETE = 'complete'
 ACTION_LESSON_STATE_BAD = 'bad'
 
-TRAINING_DATA_FOLDER = './vision_training_data'
+TRAINING_DATA_FOLDER = path.join(ROOT_PATH, 'vision_training_data')
 
 try:
     from local_settings import *

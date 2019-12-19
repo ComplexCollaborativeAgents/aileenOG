@@ -4,7 +4,6 @@ import sys
 from log_config import logging
 
 from visual_word_lesson import VisualWordLesson
-# from generate_training_images import TrainingImage
 from spatial_word_lesson import SpatialWordLesson
 from action_word_lesson import ActionWordLesson
 import settings
@@ -28,9 +27,10 @@ if __name__ == '__main__':
     agent_server = create_connection_with_aileen_agent()
 
     if len(sys.argv) > 1:
-        if str(sys.argv[1]).__contains__('--train-vision'):
+        if '--train-vision' in str(sys.argv[1]):
             # run vision training scripts
             print ('Generating images that will train vision system.')
+            from generate_training_images import TrainingImage
             TrainingImage.generate_scenes(world_server, agent_server)
     else:
         VisualWordLesson.administer_curriculum(world_server, agent_server)
