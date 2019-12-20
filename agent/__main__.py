@@ -4,8 +4,7 @@ import xmlrpclib
 import settings
 from aileen_agent_server import AileenAgentServer
 from log_config import logging
-from soar_interface import soar_agent
-from soar_interface.soar_agent import update
+from soar_interface.soar_agent import SoarAgent, update
 
 
 def create_connection_with_aileen_world():
@@ -17,7 +16,7 @@ def create_connection_with_aileen_world():
 
 if __name__ == '__main__':
     world_server = create_connection_with_aileen_world()
-    aileen_agent = soar_agent.soar_agent(world_server)
+    aileen_agent = SoarAgent(world_server)
     logging.info("[aileen] :: Created aileen agent")
     aileen_agent.register_output_callback(update, aileen_agent)
     aileen_agent.start()
