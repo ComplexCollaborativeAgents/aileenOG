@@ -1,6 +1,7 @@
 ;;;;  Modified: Thursday, November  7, 2019 at 11:03:13 by klenk
 ;;;; File name: alieen-mt.krf
 
+
 (in-microtheory AileenMt)
 
 ;; Collections to facilitate control
@@ -94,3 +95,7 @@
 (arg1Isa ec Thing)
 (arg2Isa ec Thing)
 (comment ec "arg2 is RCC8-ec of arg1")
+
+
+(in-microtheory BaseKB)
+(notForAnalogy AileenCaseMt)
