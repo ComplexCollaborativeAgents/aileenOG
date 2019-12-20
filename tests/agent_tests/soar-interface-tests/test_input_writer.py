@@ -148,6 +148,7 @@ def test_writing_qsrs_to_input_link():
 
 
 
+
 def test_writing_interaction_to_input_link():
     agent = soar_agent(None)
     iwriter = agent._input_writer
@@ -282,6 +283,26 @@ def test_writing_language_to_input_link_rel():
     assert iwriter._language is None
     agent.stop()
     agent.shutdown()
+
+def test_writing_language_to_input_link_rel():
+    agent = soar_agent(None)
+    iwriter = agent._input_writer
+    iwriter._language = {'parses': [['action', 'pick', 'up', ['obj', ['prop', 'blue'], 'box']]]}
+    iwriter.write_language_to_input_link()
+
+    llink = iwriter._language_link
+
+    language_link_WME = llink.GetChild(0)
+    assert language_link_WME.GetAttribute() == "language"
+
+    language_link = language_link_WME.ConvertToIdentifier()
+
+    parses_link = language_link.GetChild(0).ConvertToIdentifier()
+    assert parses_link.GetAttribute() == 'parses'
+
+    parse_link = parses_link.GetChild(0).ConvertToIdentifier()
+    assert parse_link.GetAttribute() == 'parse'
+
 
 
 def test_qsr_input_writer():
