@@ -1,0 +1,27 @@
+##!
+# @file
+#
+# @created smohan 20191206
+
+
+sp {ground-relation-reference*elaborate*state
+    (state <s>    ^name ground-relation-reference
+                  ^superstate.operator <sop>)
+    (<sop>    ^name ground-relation-reference
+              ^reference <ref>
+              ^grounding <g>
+              ^parses <p>)
+-->
+    (<s>    ^reference <ref>
+            ^grounding <g>
+            ^parses <p>)
+    }
+
+sp {ground-relation-reference*elaborate*smem-query
+    (state <s>    ^name ground-relation-reference
+                  ^reference <ref>)
+-->
+    (<s>    ^smem-query <query>)
+    (<query>    ^cue <cue>)
+    (<cue>    ^nl <ref>)
+    }

@@ -1,0 +1,49 @@
+##!
+# @file
+#
+# @created smohan 20191208
+
+sp {learn-from-scene-external*elaborate*state
+    (state <s>    ^name learn-from-scene-external
+                  ^superstate.operator <sop>)
+    (<sop>    ^name learn-from-scene-external
+              ^information <info>
+              ^scene <scene>)
+-->
+    (<s>    ^scene <scene>
+            ^information <info>)
+    }
+sp {learn-from-scene-external*elaborate*parses*grounding
+    (state <s>    ^name learn-from-scene-external
+                  ^information <info>)
+    (<info>    ^grounding <g>
+               ^parses <p>
+               ^nl <nl>)
+-->
+    (<s>    ^grounding <g>
+            ^parses <p>
+            ^nl <nl>)
+    }
+
+sp {learn-from-scene-external*store*spatial-word*index
+    (state <s>    ^name learn-from-scene-external
+                  ^nl <tag>)
+-->
+    (<s>    ^new-concept-structure <index>)
+    (<index>    ^concept    (make-constant-symbol r_ <tag>)
+                ^type spatial
+                ^nl <tag>)
+    }
+
+sp {learn-from-scene-external*store*store-gpool
+    (state <s>    ^name learn-from-scene-external
+                  ^io.input-link.concept-memory <cl>
+                  ^new-concept-structure <struct>)
+    (<struct>    ^concept <con>
+                 ^type <type>
+                 ^nl <nl>
+                 ^gpool <gpool>)
+-->
+    (<s>    ^store-concept <struct>)
+    }
+

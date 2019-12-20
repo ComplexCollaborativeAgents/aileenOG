@@ -1,0 +1,41 @@
+##!
+# @file
+#
+# @created smohan 20191211
+
+sp {initialize-agent*propose*initialize-visual-knowledge-state
+    (state <s>    ^name initialize-agent
+                  -^visual-knowledge-state set)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name initialize-visual-knowledge-state)
+    }
+
+sp {initialize-agent*propose*initialize-spatial-knowledge-state
+    (state <s>    ^name initialize-agent
+                  ^visual-knowledge-state set
+                  -^spatial-knowledge-state set)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name initialize-spatial-knowledge-state)
+    }
+
+sp {initialize-agent*propose*initialize-action-knowledge-state
+    (state <s>    ^name initialize-agent
+                  ^visual-knowledge-state set
+                  ^spatial-knowledge-state set
+                  -^action-knowledge-state set)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name initialize-action-knowledge-state)
+    }
+
+sp {initialize-agent*report*initialization*complete
+    (state <s>    ^name initialize-agent
+                  ^visual-knowledge-state set
+                  ^spatial-knowledge-state set
+                  ^action-knowledge-state set
+                  ^superstate <ss>)
+-->
+    (<ss>    ^initialization complete)
+    }

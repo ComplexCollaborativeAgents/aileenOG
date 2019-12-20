@@ -8,7 +8,6 @@ sp {learn-from-object*elaborate*state
                   ^superstate.operator <sop>)
     (<sop>    ^name learn-from-object
               ^object <obj>
-              ^relevant-percept-set <set>
               ^information <info>)
 -->
     (<s>    ^object <obj>
@@ -16,8 +15,12 @@ sp {learn-from-object*elaborate*state
             ^information <info>)
     }
 
+
+### SM: learn through soar's semantic memory only
+
 sp {learn-from-object*store*visual-word*index
     (state <s>    ^name learn-from-object
+                  ^_params.concept soar
                   ^information <info>)
     (<info>    ^nl <tag>)
 -->
@@ -29,9 +32,10 @@ sp {learn-from-object*store*visual-word*index
 
 sp {learn-from-object*store*visual-word*concept
     (state <s>    ^name learn-from-object
+                  ^_params.concept soar
                   ^stored <lti>
                   ^object <obj>
-                  ^relevant-percept-set <set>)
+                  ^topstate._params.relevant-percept-set <set>)
     (<set>    ^type <type>)
     (<obj>    ^<type> <percept>)
     (<lti>    ^concept <concept>)
@@ -39,3 +43,30 @@ sp {learn-from-object*store*visual-word*concept
     (<s>    ^store-concept <concept>)
     (<concept>    ^percept <percept>)
     }
+
+## SM: learn through external concept learner
+sp {external*learn-from-object*store*visual-word*index
+    (state <s>    ^name learn-from-object
+                  ^_params.visual-concepts external
+                  ^information <info>)
+    (<info>    ^nl <tag>)
+-->
+    (<s>    ^new-concept-structure <index>)
+    (<index>    ^concept (make-constant-symbol r_ <tag>)
+                ^type visual
+                ^nl <tag>)
+    }
+
+sp {external*learn-from-object*invoke-concept-learner*store-gpool
+    (state <s>    ^name learn-from-object
+                  ^io.input-link.concept-memory <cl>
+                  ^_params.visual-concepts external
+                  ^new-concept-structure <lti>)
+    (<lti>    ^concept <con>
+              ^type <type>
+              ^nl <nl>
+              ^gpool <gpool>)
+-->
+    (<s>    ^store-concept <lti>)
+    }
+    

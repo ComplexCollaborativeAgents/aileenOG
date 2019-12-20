@@ -1,0 +1,13 @@
+##!
+# @file: 
+#
+# @created smohan 20191211
+
+
+source "proposals.soar"
+
+source "initialize-visual-knowledge-state.soar"
+
+source "initialize-spatial-knowledge-state.soar"
+
+source "initialize-action-knowledge-state.soar"

@@ -3,28 +3,26 @@
 #
 # @created smohan 20191107
 
-sp {topstate*elaborate*interaction*from*input-link
-    :o-support
-    (state <s>    ^name aileen
-                  ^io.input-link.interaction-link.message <m>)
--->
-    (<s>    ^message <m>)
-    }
-
-sp {topstate*delete*interaction*message
-    :o-support
-    (state <s>    ^name aileen
-                  ^message <m>)
-    (<m>    ^processed true)
--->
-    (<s>    ^message <m> -)
-    }
-
-
-#sp {topstate*elaborate*world*from*input-link
+#sp {topstate*elaborate*interaction*from*input-link
 #    (state <s>    ^name aileen
-#                  ^topstate <s>
-#                  ^io.input-link.world <w>)
+#                  ^io.input-link.interaction-link.message <m>)
 #-->
-#    (<s>    ^world <w>)
+#    (<s>    ^message <m>)
+#    }
+#
+#sp {topstate*delete*interaction*message
+#    :o-support
+#    (state <s>    ^name aileen
+#                  ^message <m>)
+#    (<m>    ^processed true)
+#-->
+#    (<s>    ^message <m> -)
+#    }
+#
+#sp {topstate*elaborate*concept-memory*from*input-link
+#    :o-support
+#    (state <s>    ^name aileen
+#                  ^io.input-link.concept-memory.result <cmr>)
+#-->
+#    (<s>    ^concept-memory.result <cmr>)
 #    }

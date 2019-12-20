@@ -1,0 +1,59 @@
+##!
+# @file
+#
+# @created smohan 20191208
+
+sp {learn-from-scene-external*propose*store-new-concept
+    (state <s>    ^name learn-from-scene-external
+                  ^new-concept-structure <con-s>)
+    (<con-s>    -^gpool)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name store-new-concept
+             ^concept-structure <con-s>)
+    }
+
+sp {learn-from-scene-external*propose*augment-scene-with-concept
+    (state <s>    ^name learn-from-scene-external
+                  ^new-concept-structure <lti>
+                  ^scene <scene>
+                  ^parses <p>
+                  ^grounding <g>
+                  -^augmented-with <c>)
+    (<lti>    ^concept <c>
+              ^gpool <gpool>)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name augment-scene-with-concept
+             ^concept <c>
+             ^scene <scene>)
+    }
+             
+
+sp {learn-from-scene-external*propose*send-instance-to-concept-memory
+    (state <s>    ^name learn-from-scene-external
+                  ^new-concept-structure <lti>
+                  ^scene <scene>
+                  -^stored <scene>
+                   ^augmented-with <c>)
+    (<lti>    ^concept <c>
+              ^gpool <g>)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name send-instance-to-concept-memory
+             ^concept <lti>
+             ^scene <scene>)
+    }
+
+sp {learn-from-scene-external*propose*complete-learn-from-scene-external
+    (state <s>    ^name learn-from-scene-external
+                  ^new-concept-structure <lti>
+                  ^scene <scene>
+                  ^stored <scene>
+                  ^augmented-with <c>)
+    (<lti>    ^concept <c>)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name complete-learn-from-scene-external)
+    }
+             

@@ -46,3 +46,83 @@ sp {aileen*elaborate*objects*update
     (<wobj>    ^position <wpose> -
                ^position <ipose>)
     }
+
+sp {aileen*elaborate*add*qsrs
+    :o-support
+    (state <s>    ^name aileen
+                  ^io.input-link <il>
+                  ^world <w>)
+    (<w>    ^objects <objs>
+            ^relations <rels>)
+    (<il>    ^world.qsrs.qsr <qsr>)
+    (<qsr>    ^root <root-num>
+              ^target <target-num>
+              ^{<type> << cardir rcc8 >>} <val>)
+    (<objs>    ^object <root-obj>
+                 ^object <target-obj>)
+    (<root-obj>    ^id <root-num>)
+    (<target-obj>    ^id <target-num>)
+    -{(<rels>    ^relation <rel>)
+      (<rel>    ^root <root-obj>
+                ^target <target-obj>
+                ^<type> <val>)
+      }
+-->
+    (<rels>    ^relation <rel-new>)
+    (<rel-new>    ^root <root-obj>
+                  ^target <target-obj>
+                  ^<type> <val>)
+    }
+
+sp {aileen*elaborate*remove*qsrs*no-root-object
+    :o-support
+    (state <s>    ^name aileen
+                  ^world <w>)
+    (<w>    ^objects <objs>
+            ^relations <rels>)
+    (<rels>    ^relation <rel>)
+    (<rel>    ^root <root-obj>
+              ^target <target-obj>
+              ^<< cardir rcc8 >> <val>)
+    (<objs>    -^object <root-obj>)
+-->
+    (<rels>    ^relation <rel> -)
+    }
+
+sp {aileen*elaborate*remove*qsrs*no-target-object
+    :o-support
+    (state <s>    ^name aileen
+                  ^world <w>)
+    (<w>    ^objects <objs>
+            ^relations <rels>)
+    (<rels>    ^relation <rel>)
+    (<rel>    ^root <root-obj>
+              ^target <target-obj>
+              ^<< cardir rcc8 >> <val>)
+    (<objs>    -^object <target-obj>)
+-->
+    (<rels>    ^relation <rel> -)
+    }
+
+sp {aileen*elaborate*remove*qsrs*no-qsr
+    :o-support
+    (state <s>    ^name aileen
+                  ^world <w>
+                  ^io.input-link.world.relations <irel>)
+    (<w>    ^objects <objs>
+            ^relations <rels>)
+    (<rels>    ^relation <rel>)
+    (<rel>    ^root <root-obj>
+              ^target <target-obj>
+              ^{<< cardir rcc8 >> <type>} <val>)
+    (<objs>    ^object <target-obj> <root-obj>)
+    (<irel>    ^root <root-num>
+               ^target <target-num>
+               ^<type> <> <val>)
+    (<root-obj>    ^id <root-num>)
+    (<target-obj>    ^id <target-num>)
+-->
+    (<rels>    ^relation <rel> -)
+    }
+      
+              
