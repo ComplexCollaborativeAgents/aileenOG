@@ -57,6 +57,22 @@ sp {comprehension*propose*comprehend-relation-reference
              ^argument relation)
     }
 
+sp {comprehension*propose*comprehend-action-reference
+    (state <s>    ^name comprehension
+                  ^grounding <g>
+                  ^parses <p>
+                  ^action-ref <ref>)
+    -{(<g>    ^action <any>)
+      (<any>    ^_metadata.description <ref>)}
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name ground-action-reference
+             ^reference <ref>
+             ^grounding <g>
+             ^parses <p>
+             ^argument action)
+    }
+
 
 
 sp {comprehension*propose*complete-comprehension

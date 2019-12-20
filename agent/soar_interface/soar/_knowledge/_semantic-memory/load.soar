@@ -4,3 +4,5 @@
 # @created smohan 20191108
 
 #source "visual-word-perceptual-symbol.soar"
+
+source "primitive-actions.soar"

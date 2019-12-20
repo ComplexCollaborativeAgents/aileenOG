@@ -8,7 +8,7 @@ sp {topstate*propose*persistent-copy-message*interaction
                   ^io.input-link.interaction-link.message <m>
                   -^message <m>)
 -->
-    (<s>    ^operator <op> + !)
+    (<s>    ^operator <op> +)
     (<op>    ^name persistent-copy-message
              ^message <m>)
     }
