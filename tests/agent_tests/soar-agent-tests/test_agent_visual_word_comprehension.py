@@ -2,15 +2,15 @@ from agent.soar_interface.soar_agent import SoarAgent
 from agent.soar_interface.soar_agent import update
 import settings
 
-class TestServer(object):
-    def __init__(self, object_list):
-        self._object_list = object_list
-        pass
-
-    def get_all(self):
-        return {'objects': self._object_list}
-
-
+# class TestServer(object):
+#     def __init__(self, object_list):
+#         self._object_list = object_list
+#         pass
+#
+#     def get_all(self):
+#         return {'objects': self._object_list}
+#
+#
 
 # def test_agent_visual_word_comprehension_known_concepts_single_object_on_scene_no_concept_memory():
 #     agent = SoarAgent(None, headless=True)
