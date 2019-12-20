@@ -46,21 +46,22 @@ class ActionWordLesson:
         print len(initial_state_description)
         if len(initial_state_description) < 1 and len(self._scene_objects) <= 2:
             for scene_object_name in self._scene_objects.keys():
-                position = AileenScene.get_random_position_on_table()
+                position = AileenScene.randomizer.get_random_position_on_table()
                 self._scene_objects[scene_object_name].set_translation(position)
                 self._initial_scene.add_object(self._scene_objects[scene_object_name])
-        if len(initial_state_description) <= 2 and len(self._scene_objects) <= 2:
-            positions = AileenScene.place_two_objects_in_configuration(
-                target_object_name=self._scene_objects.items()[0][0],
-                reference_object_name=self._scene_objects.items()[1][0],
-                scene_objects=self._scene_objects,
-                configuration_definition=initial_state_description)
-            for object_name in positions.keys():
-                scene_object = self._scene_objects[object_name]
-                scene_object.set_translation(positions[object_name])
-                self._initial_scene.add_object(scene_object)
         else:
-            logging.error("[action_word_lesson] :: don't know how to interpret the initial state description")
+            if len(initial_state_description) <= 2 and len(self._scene_objects) <= 2:
+                positions = AileenScene.place_two_objects_in_configuration(
+                    target_object_name=self._scene_objects.items()[0][0],
+                    reference_object_name=self._scene_objects.items()[1][0],
+                    scene_objects=self._scene_objects,
+                    configuration_definition=initial_state_description)
+                for object_name in positions.keys():
+                    scene_object = self._scene_objects[object_name]
+                    scene_object.set_translation(positions[object_name])
+                    self._initial_scene.add_object(scene_object)
+            else:
+                logging.error("[action_word_lesson] :: don't know how to interpret the initial state description")
 
     def advance_lesson_state(self):
         if self._lesson_state == settings.ACTION_LESSON_STATE_START:
