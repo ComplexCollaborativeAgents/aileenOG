@@ -6,7 +6,7 @@
 ;;;;   Created: November 13, 2019 16:14:37
 ;;;;   Purpose: 
 ;;;; ----------------------------------------------------------------------------
-;;;;  Modified: Saturday, December 14, 2019 at 18:00:34 by klenk
+;;;;  Modified: Tuesday, December 17, 2019 at 15:57:16 by klenk
 ;;;; ----------------------------------------------------------------------------
 
 (in-package :cl-user)
@@ -107,6 +107,8 @@
     "")))))
 
 (defun store-helper (str)
+  (handler-bind ((error #'print-backtrace))
+  (setq *str* str)
   (format t "Storing ~A~%" str)
   (let* ((json (cl-json:decode-json-from-string str))
          (facts (str->symbols (cdr (assoc :FACTS json))))
@@ -122,9 +124,11 @@
            (format t "Ill formed store request ~A~%" str)
            (cl-json:encode-json-alist-to-string
             (pairlis '("numGeneralizations" "numExamples") (list 0 0)))))
-    ))
+    )))
 
 (defun remove-helper (str)
+  (handler-bind ((error #'print-backtrace))
+    (setq *str* str)
   (format t "Removing ~A~%" str)
   (let* ((json (cl-json:decode-json-from-string str))
          (context (str->symbols (cdr (assoc :CONTEXT json))))
@@ -145,7 +149,7 @@
           (t
 	   (format t "Ill formed remove request ~A~%" str)
            (cl-json:encode-json-alist-to-string
-            (pairlis '("success") (list nil)))))))
+            (pairlis '("success") (list nil))))))))
 
 (defun query-helper (str)
   (handler-bind ((error #'print-backtrace))
