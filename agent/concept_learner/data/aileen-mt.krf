@@ -1,5 +1,5 @@
-;;;;  Modified: Thursday, November  7, 2019 at 11:03:13 by klenk
-;;;; File name: alieen-mt.krf
+;;;;  Modified: Sunday, January  5, 2020 at 15:13:08 by klenk
+;;;; File name: aileen-mt.krf
 
 
 (in-microtheory AileenMt)
@@ -11,6 +11,12 @@
 
 (isa AileenReasoningPredicate Collection)
 (comment AileenReasoningPredicate "These are symbols that are created by aileen to refer to sets of objects")
+
+(isa AileenReasoningAction Collection)
+(comment AileenReasoningAction "These are symbols that are created by aileen to refer to actions over time")
+
+(isa AileenActionStartTime Collection)
+(comment AileenActionStartTime "These are temporal things that denote the start of an action")
 
 (isa AileenGPoolMt Collection)
 (comment AileenGPoolMt "These correspond to each AileenReasoningSymbol/Relation for controlling SAGE")

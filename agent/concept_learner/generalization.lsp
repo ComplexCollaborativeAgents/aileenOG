@@ -6,7 +6,7 @@
 ;;;;   Created: November  6, 2019 14:54:11
 ;;;;   Purpose: 
 ;;;; ----------------------------------------------------------------------------
-;;;;  Modified: Thursday, December 19, 2019 at 14:34:38 by klenk
+;;;;  Modified: Sunday, January  5, 2020 at 16:33:49 by klenk
 ;;;; ----------------------------------------------------------------------------
 
 (in-package :aileen)
@@ -35,7 +35,7 @@
     (cl-user::nuke-gpool gpool)
     (dolist (fact (fire:retrieve-it '?x :context gpool :response '?x))
       (format t "Forgetting ~A in ~A~%" fact gpool)
-      (fire:kb-forget fact :mt context))
+      (fire:kb-forget fact :mt gpool))
     (cl-user::setup-gpool gpool  :strategy :gel )  
     (fire:kb-store `d::(genls ,aileen::symbol AileenReasoningSymbol) :mt 'd::BaseKB)
     (fire:kb-store `d::(isa ,aileen::symbol Collection) :mt 'd::BaseKB)
@@ -55,21 +55,38 @@
     (values (length (fire:ask-it `d::(isa ?x AileenReasoningPredicate)))
 	    gpool)))
 
+;;; Not davidsonian...
+(defun create-reasoning-action (action arity)
+  (let ((gpool (get-concept-gpool action)))
+    (cl-user::nuke-gpool gpool)
+    (dolist (fact (fire:retrieve-it '?x :context gpool :response '?x))
+      (format t "Forgetting ~A in ~A~%" fact gpool)
+      (fire:kb-forget fact :mt gpool))
+    (cl-user::setup-gpool gpool :strategy :gel )  
+    (fire:kb-store `d::(isa ,aileen::action AileenReasoningAction) :mt 'd::BaseKB)
+    (fire:kb-store `d::(arity ,aileen::action ,aileen::arity) :mt 'd::BaseKB)
+    (values (length (fire:ask-it `d::(isa ?x AileenReasoningAction)))
+	    gpool)))
+
 
 ;;; Assumes gpool is aready created
-(defun add-case-to-gpool (facts context gpool)
-  (store-facts-in-case facts context)
-  (fire:kb-forget `(d::gpoolAssimilationThreshold ,gpool ?x) :mt gpool)
-  (fire:kb-store `(d::gpoolAssimilationThreshold ,gpool ,*assimilation-threshold*) :mt gpool)
-  (fire:tell-it `(d::sageSelectAndGeneralize ,context ,gpool) :context gpool)
-  (multiple-value-bind (rbrowse full url) (rbrowse::browse-sme sme::*sme*)
-		   (format t "~% rbrowse-sme: ~A base:~A target: ~A url: ~A "
-			   sme::*sme*
-			   context
-			   gpool
-			   full))
-  (values (length (fire:ask-it `(d::kbOnly (d::gpoolGeneralization ,gpool ?num))))
-	  (length (fire:ask-it `(d::kbOnly (d::gpoolExample ,gpool ?num)) ))) )
+(defun add-case-to-gpool (facts context concept)
+  (let ((gpool (get-concept-gpool concept)))
+    (store-facts-in-case facts context)
+    ;;    Does not work as expected
+    ;;    (fire:kb-store `d::(sageRequireInMapping ,aileen::concept) :mt context) 
+    (fire:kb-forget `(d::gpoolAssimilationThreshold ,gpool ?x) :mt gpool)
+    (fire:kb-store `(d::gpoolAssimilationThreshold ,gpool ,*assimilation-threshold*) :mt gpool)
+    (fire:tell-it `(d::sageSelectAndGeneralize ,context ,gpool) :context gpool)
+    (multiple-value-bind (rbrowse full url) (rbrowse::browse-sme sme::*sme*)
+      (declare (ignore url rbrowse))
+      (format t "~% rbrowse-sme: ~A base:~A target: ~A url: ~A "
+	      sme::*sme*
+	      context
+	      gpool
+	      full))
+    (values (length (fire:ask-it `(d::kbOnly (d::gpoolGeneralization ,gpool ?num))))
+	    (length (fire:ask-it `(d::kbOnly (d::gpoolExample ,gpool ?num)) ))) ))
 
 (defun store-facts-in-case (facts context)
   (remove-facts-from-case context)
@@ -129,7 +146,10 @@
     (filter-scene-by-expression-obj facts context gpool prevmatches pattern))
    ((relation-filter? pattern)
     (filter-scene-by-expression-rel facts context gpool prevmatches pattern))
+   ((action-filter? pattern)
+    (filter-scene-by-expression-act facts context gpool prevmatches pattern))
    (t (error "Unknown pattern: ~a" pattern))))
+
 
 (defun object-filter? (pattern)
   (and (= (length pattern) 3) 
@@ -138,6 +158,9 @@
 
 (defun relation-filter? (pattern)
   (fire:ask-it `(d::isa ,(car pattern) d::AileenReasoningPredicate)))
+
+(defun action-filter? (pattern)
+  (fire:ask-it `(d::isa ,(car pattern) d::AileenReasoningAction)))
 
 (defun filter-scene-by-expression-obj (facts context gpool prevmatches pattern)
   (assert (null prevmatches))
@@ -155,36 +178,38 @@
 	       (fire:tell-it `(d::constructCaseInWM (d::MinimalCaseFromMtFn ,obj ,context)))
 	       (fire:tell-it `(d::copyWMCaseToKB (d::MinimalCaseFromMtFn ,obj ,context)
 						 (d::MinimalCaseFromMtFn ,obj ,context)))
-	       (when (fire:ask-it
+	       (let ((ci-found? (fire:ask-it
 		      `(d::reverseCIsAllowed
 			(d::and
 			 (d::sageSelect (d::MinimalCaseFromMtFn ,obj ,context)
 					,gpool ?ret ?mapping)
 			 (d::reverseCandidateInferenceOf ?ci ?mapping)
 			 (d::candidateInferenceContent ?ci (d::isa ,obj ,collection))))
-		      :context gpool)
+		      :context gpool)))
 		 (multiple-value-bind (rbrowse full url) (rbrowse::browse-sme sme::*sme*)
+		   (declare (ignore url rbrowse))
 		   (format t "~% rbrowse-sme: ~A base:~A target: ~A url: ~A"
 			   sme::*sme*
 			   `(d::MinimalCaseFromMtFn ,obj ,context)
 			   gpool
 			   full))
-		 (let ((score (sme::score (car (sme::mappings  sme::*sme*))))
-		       (sme sme::*sme*))
-		   (sme::clone-current-sme)
-		   (format t "~% ~A" (sme::expressions (sme::target sme::*sme*)))
-		   (remove-rel-from-dgroup (sme::target sme::*sme*) collection)
-		   (format t "~% ~A" (sme::expressions (sme::target sme::*sme*)))
-		   (let ((normalized-score (/ score
-					      (sme::self-score-dgroup (sme::target sme::*sme*)
-								      (sme::mapping-parameters sme::*sme*)))))
-		     (format t "~% ~A score: ~A normalized score: ~A" sme score normalized-score)
-		     (sme::in-sme sme)
-		     (> normalized-score *normalized-threshold*) ;; Out of floating point concerns
-		     ))))
-	   (reverse (objs-in-context context)))))
-    (mapcar #'(lambda (obj) (list 'd::isa obj (third pattern))) objs)))
-
+		 (when ci-found? 
+		   (let ((score (sme::score (car (sme::mappings  sme::*sme*))))
+			 (sme sme::*sme*))
+		     (sme::clone-current-sme)
+		     (format t "~% ~A" (sme::expressions (sme::target sme::*sme*)))
+		     (remove-rel-from-dgroup (sme::target sme::*sme*) collection)
+		     (format t "~% ~A" (sme::expressions (sme::target sme::*sme*)))
+		     (let ((normalized-score (/ score
+						(sme::self-score-dgroup (sme::target sme::*sme*)
+									(sme::mapping-parameters sme::*sme*)))))
+		       (format t "~% ~A score: ~A normalized score: ~A" sme score normalized-score)
+		       (sme::in-sme sme)
+		       (> normalized-score *normalized-threshold*) ;; Out of floating point concerns
+		       )))))
+	       (reverse (objs-in-context context)))))
+	 (mapcar #'(lambda (obj) (list 'd::isa obj (third pattern))) objs)))
+  
 (defun remove-rel-from-dgroup (dgroup rel)
   (let ((expr
 	 (find rel (sme::expressions dgroup)
@@ -198,6 +223,7 @@
 
 (defun get-concept-gpool (concept)
   (intern (format nil "~AMt" (symbol-name concept)) :d))
+
 
 (defun filter-scene-by-expression-rel (facts context gpool prevmatches pattern)
   (assert (null prevmatches))
@@ -223,18 +249,47 @@
 		       (objs-in-context context))))))))
 
 
+;; Just match the entire set of facts against the gpool and then check if the pattern
+;; matches one of the reverse candidate inferences
+(defun filter-scene-by-expression-act (facts context gpool prevmatches pattern)
+  (assert (null prevmatches))
+  (store-facts-in-case facts context)
+  (when (not gpool)
+    (setf gpool (get-concept-gpool (car pattern))))
+  (cond ((null (vars-in-expr pattern))
+	 (if (match-query-against-gpool context gpool pattern)
+	     (list pattern)
+	     nil))
+	((vars-in-expr pattern)
+	 (remove-if-not
+	  #'(lambda (bound-pattern)
+	      (match-query-against-gpool context gpool bound-pattern))
+	  (mapcar 
+	   #'(lambda (blist)
+	       (fire::substitute-bindings pattern blist))
+	   (make-possible-blists
+	    (vars-in-expr pattern)
+	    (remove-if #'(lambda (obj)
+			   (find obj pattern))
+		       (objs-in-context context))))))))
+
+
 (defun make-case-term (context objs)
   ;;; Union of all the minimal case fns
-  (cons 'd::CaseUnionFn
-	(mapcar #'(lambda (obj)
-		    `(d::MinimalCaseFromMtFn ,obj ,context))
-		objs)))
+  (cond ((null objs) ;; no objs, in event cases
+	 (list 'd::KBCaseFn context))
+	(t 
+	 (cons 'd::CaseUnionFn
+	       (mapcar #'(lambda (obj)
+			   `(d::MinimalCaseFromMtFn ,obj ,context))
+		       objs)))))
 
 (defun aileen-symbols-in-pattern (pattern)
   (remove-if-not
    #'(lambda (entity)
        (fire:ask-it `d::(or (isa ,aileen::entity AileenReasoningSymbol)
-			    (isa ,aileen::entity AileenReasoningPredicate))))
+			    (isa ,aileen::entity AileenReasoningPredicate)
+			    (isa ,aileen::entity AileenReasoningAction))))
    pattern))
 
 (defun match-query-against-gpool (context gpool pattern)
@@ -253,33 +308,35 @@
     (fire:tell-it `(d::copyWMCaseToKB ,case-term ,case-term)) ;;could have an explicit query context here for easier clean up?
     (dolist (obj objs) ;; analogy control predicates
       (fire:kb-store `(d::sageRequireInMapping ,obj) :mt case-term))
-    (when (fire:ask-it
+    (let ((ci-found? (fire:ask-it
 	   `(d::reverseCIsAllowed
 	     (d::and
 	      (d::sageSelect ,case-term ,gpool ?ret ?mapping)
 	      (d::reverseCandidateInferenceOf ?ci ?mapping)
 	      (d::candidateInferenceContent ?ci ,pattern)))
-	   :context gpool)
-      (let ((score (sme::score (car (sme::mappings  sme::*sme*))))
-	    (sme sme::*sme*))
-	(multiple-value-bind (rbrowse full url) (rbrowse::browse-sme sme::*sme*)
-		   (format t "~% rbrowse-sme: ~A base: ~A target: ~A url: ~A"
-			   sme::*sme*
-			   case-term
-			   gpool
-			   full))
-	(sme::clone-current-sme)
-	(format t "~% ~A" (sme::expressions (sme::target sme::*sme*)))
-	(dolist (rel (aileen-symbols-in-pattern pattern))
-	  (remove-rel-from-dgroup (sme::target sme::*sme*) rel))
-	(format t "~% ~A" (sme::expressions (sme::target sme::*sme*)))
-	(let ((normalized-score (/ score
-				   (sme::self-score-dgroup (sme::target sme::*sme*)
-							   (sme::mapping-parameters sme::*sme*)))))
-	  (format t "~% ~A score: ~A normalized score: ~A" sme score normalized-score)
-	  (sme::in-sme sme)
-	  (> normalized-score *normalized-threshold*) ;; Out of floating point concerns
-	  ))))))
+	   :context gpool)))
+      (multiple-value-bind (rbrowse full url) (rbrowse::browse-sme sme::*sme*)
+	(declare (ignore rbrowse url))
+	(format t "~% rbrowse-sme: ~A base: ~A target: ~A url: ~A"
+		sme::*sme*
+		case-term
+		gpool
+		full))
+      (when ci-found?
+	(let ((score (sme::score (car (sme::mappings  sme::*sme*))))
+	      (sme sme::*sme*))
+	  (sme::clone-current-sme)
+	  (format t "~% ~A" (sme::expressions (sme::target sme::*sme*)))
+	  (dolist (rel (aileen-symbols-in-pattern pattern))
+	    (remove-rel-from-dgroup (sme::target sme::*sme*) rel))
+	  (format t "~% ~A" (sme::expressions (sme::target sme::*sme*)))
+	  (let ((normalized-score (/ score
+				     (sme::self-score-dgroup (sme::target sme::*sme*)
+							     (sme::mapping-parameters sme::*sme*)))))
+	    (format t "~% ~A score: ~A normalized score: ~A" sme score normalized-score)
+	    (sme::in-sme sme)
+	    (> normalized-score *normalized-threshold*) ;; Out of floating point concerns
+	    )))))))
 
 
 (defun make-possible-blists (vars objs &optional blist)
@@ -301,6 +358,55 @@
 			 (ist-Information ,aileen::context
 					  (isa ?x ?col)))
 	         :response 'd::?x))
+
+
+
+(defun determine-state-correspondences (context gpool)
+  (assert (= (length (fire:ask-it `(d::gpoolGeneralization ,gpool ?x) :response '?x)) 1))
+  (let* ((generalization (car (fire:ask-it `(d::gpoolGeneralization ,gpool ?x) :response '?x)))
+	 (init-probe (car (fire::ask-it `d::(isa ?x AileenActionStartTime)
+					:context context :response `d::?x)))
+	 (init-gen (car (fire::ask-it `d::(isa ?x AileenActionStartTime)
+				      :context generalization :response `d::?x))))
+    (assert (and init-probe init-gen))
+    (list (list init-probe init-gen ))))
+
+  
+
+(defun project-state-for-action (facts context action)
+  (store-facts-in-case facts context)
+  (fire:clear-wm)
+  (fire:clear-dgroup-caches)
+  (let* ((case-term `(d::KBCaseFn ,context))
+	 (gpool (get-concept-gpool action))
+	 (correspondences (determine-state-correspondences context gpool)))
+    (fire:kb-forget `(d::gpoolAssimilationThreshold ,gpool ?x):mt gpool)
+    (fire:kb-store `(d::gpoolAssimilationThreshold ,gpool ,*match-threshold*) :mt gpool) ;; This might have to be a lot lower
+    (remove-facts-from-case case-term)
+    (fire:clear-dgroup-caches)	       
+    (fire:tell-it `(d::constructCaseInWM ,case-term))
+    (fire:tell-it `(d::copyWMCaseToKB ,case-term ,case-term)) ;;could have an explicit query context here for easier clean up?
+    (dolist (cor correspondences)
+      (fire:kb-store `(d::sageRequireCorrespondence ,(first cor) ,(second cor) )
+		     :mt case-term))
+    (let ((cis (fire:ask-it
+		`(d::reverseCIsAllowed
+		  (d::and
+		   (d::sageSelect ,case-term ,gpool ?ret ?mapping)
+		   (d::reverseCandidateInferenceOf ?ci ?mapping)
+		   (d::candidateInferenceContent ?ci ?ci-context)))
+		:context gpool :response '?ci-context)))
+      ;; Should we verify anything?
+      ;; What kind of score should be required?
+      (multiple-value-bind (rbrowse full url) (rbrowse::browse-sme sme::*sme*)
+	(declare (ignore url rbrowse))
+	(format t "~% rbrowse-sme: ~A base:~A target: ~A url: ~A"
+		sme::*sme*
+		case-term
+		gpool
+		full))
+      cis)))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Testing code
