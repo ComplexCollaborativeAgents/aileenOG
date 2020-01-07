@@ -6,7 +6,7 @@
 ;;;;   Created: November 13, 2019 16:35:48
 ;;;;   Purpose: 
 ;;;; ----------------------------------------------------------------------------
-;;;;  Modified: Monday, January  6, 2020 at 10:52:07 by klenk
+;;;;  Modified: Tuesday, January  7, 2020 at 09:08:51 by klenk
 ;;;; ----------------------------------------------------------------------------
 
 (load "server.lsp")
@@ -15,13 +15,13 @@
 
 (defparameter *test-port* 7000)
 
-(defun test-concept-learner-server ()
+(defun test-concept-learner-server (&key (clean? t))
   (start-server :port *test-port*) ;; needs to match port in call-test-server.
   (test-reasoning-symbols)
   (test-generalization-obj)
   (test-generalization-rel)
   (test-generalization-action)
-  (clean-tests)
+  (when clean? (clean-tests))
   )
 
 (defun call-test-server (function arguments)
