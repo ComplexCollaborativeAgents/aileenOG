@@ -6,7 +6,7 @@
 ;;;;   Created: November  6, 2019 14:54:11
 ;;;;   Purpose: 
 ;;;; ----------------------------------------------------------------------------
-;;;;  Modified: Sunday, January  5, 2020 at 16:33:49 by klenk
+;;;;  Modified: Tuesday, January  7, 2020 at 11:20:24 by klenk
 ;;;; ----------------------------------------------------------------------------
 
 (in-package :aileen)
@@ -371,7 +371,15 @@
     (assert (and init-probe init-gen))
     (list (list init-probe init-gen ))))
 
-  
+
+(defparameter *constraints-mt* 'd::ProjectionConstraintsMt)
+
+(defun setup-constraints (case-term correspondences)
+  (remove-facts-from-case *constraints-mt*)
+  (fire:kb-store `(d::matchConstraintsMtFor ,case-term ,*constraints-mt*) :mt case-term)
+  (dolist (cor correspondences)
+    (fire:kb-store `(d::requiredCorrespondence ,(car cor) ,(second cor))
+		   :mt *constraints-mt*)))
 
 (defun project-state-for-action (facts context action)
   (store-facts-in-case facts context)
@@ -386,9 +394,7 @@
     (fire:clear-dgroup-caches)	       
     (fire:tell-it `(d::constructCaseInWM ,case-term))
     (fire:tell-it `(d::copyWMCaseToKB ,case-term ,case-term)) ;;could have an explicit query context here for easier clean up?
-    (dolist (cor correspondences)
-      (fire:kb-store `(d::sageRequireCorrespondence ,(first cor) ,(second cor) )
-		     :mt case-term))
+    (setup-constraints case-term correspondences)
     (let ((cis (fire:ask-it
 		`(d::reverseCIsAllowed
 		  (d::and
