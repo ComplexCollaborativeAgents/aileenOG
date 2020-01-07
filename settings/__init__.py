@@ -4,17 +4,20 @@ from os import path
 OS_ROOT_PATH = path.abspath(os.sep)
 ROOT_PATH = path.join(path.dirname(path.dirname(path.abspath(__file__))))
 CONCEPT_LEARNER_PATH = path.join(ROOT_PATH, 'agent', 'concept_learner')
-SOAR_PATH = path.join(OS_ROOT_PATH, 'usr', 'local', 'SoarSuite_9.6.0-Multiplatform_64bit', 'bin')
-if "GITLAB_CI" in os.environ:
-    SOAR_PATH = path.join(OS_ROOT_PATH, 'usr', 'local', 'SoarSuite_9.6.0-Multiplatform_64bit', 'bin', 'linux64')
+CI = 'GITLAB_CI' in os.environ
+SOAR_PATH = path.join(OS_ROOT_PATH, 'usr', 'local', 'SoarSuite_9.6.0-Multiplatform_64bit', 'bin',
+                      'linux64' if CI else '')
 SOAR_AGENT_PATH = path.join(ROOT_PATH, 'agent', 'soar_interface', 'soar', 'load.soar')
 SOAR_AGENT_NAME = 'aileen'
 SOAR_SLEEP_TIME = 0.0001
 SOAR_DEBUG = True
 SOAR_SVS = False
 SOAR_CV = False
-CURRENT_IMAGE_PATH = path.join(ROOT_PATH, 'controllers', 'images', 'current_image.png')
+CURRENT_IMAGE_PATH = path.join(ROOT_PATH, 'world', 'controllers', 'images', 'current_image.png')
 COLOR_PATH = path.join(ROOT_PATH, 'instructor', 'resources', 'colors.json')
+CV_NAMES = path.join(ROOT_PATH, 'agent', 'vision', 'aileen.names')  # TODO: This should be changed to setting.SHAPE_SET.
+CV_CONFIGURATION = path.join(ROOT_PATH, 'agent', 'vision', 'yolov3-tiny-aileen-test.cfg')
+CV_WEIGHTS = path.join(ROOT_PATH, 'agent', 'vision', 'yolov3-tiny-aileen_session2.weights')
 
 # Servers
 WORLD_HOST = 'localhost'

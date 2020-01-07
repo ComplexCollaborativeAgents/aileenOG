@@ -1,4 +1,6 @@
 import xmlrpclib
+import sys
+
 from log_config import logging
 
 from visual_word_lesson import VisualWordLesson
@@ -24,7 +26,15 @@ if __name__ == '__main__':
     world_server = create_connection_with_aileen_world()
     agent_server = create_connection_with_aileen_agent()
 
-    #VisualWordLesson.administer_curriculum(world_server, agent_server)
-    SpatialWordLesson.administer_curriculum(world_server, agent_server)
-    #ActionWordLesson.administer_curriculum(world_server, agent_server)
+    if len(sys.argv) > 1:
+        if '--train-vision' in str(sys.argv[1]):
+            # run vision training scripts
+            print ('Generating images that will train vision system.')
+            from generate_training_images import TrainingImage
+            TrainingImage.generate_scenes(world_server, agent_server)
+    else:
+        VisualWordLesson.administer_curriculum(world_server, agent_server)
+        # SpatialWordLesson.administer_curriculum(world_server, agent_server)
+        # ActionWordLesson.administer_curriculum(world_server, agent_server)
+
 

@@ -32,6 +32,9 @@ class AileenObject:
 
     def get_object_description(self):
         description = "Solid {\n"
+        description += "   recognitionColors {} {} {}\n".format(self._color.rgb[0],
+                                                                self._color.rgb[1],
+                                                                self._color.rgb[2])
         description += "   translation {} {} {}\n".format(self._translation[0],
                                                           self._translation[1],
                                                           self._translation[2])

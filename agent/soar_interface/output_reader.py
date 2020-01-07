@@ -3,6 +3,7 @@ import xmlrpclib
 from agent.language.aileen_grammar import AileenGrammar
 from agent.concept_learner.concept_learner import ConceptLearner
 
+
 class OutputReader(object):
     def __init__(self, soar_agent, world_server):
         self._soar_agent = soar_agent
@@ -11,8 +12,6 @@ class OutputReader(object):
         self._response = None
         self._concept_learner = ConceptLearner()
         self._context_counter = 0
-
-
         self._world_server = world_server
 
     def read_output(self):
@@ -32,7 +31,6 @@ class OutputReader(object):
 
             if commandName == 'concept-memory':
                 self.process_concept_learner_request(commandID)
-
 
 
     def process_action_description(self, commandID):
