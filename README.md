@@ -71,8 +71,42 @@ conda activate aileen
 2. Under "Testing", set the default test runner to "pytest".
 
 
+## Interactive Instructor
+The instructor can be controlled in two ways: REPL and JSON file.
 
+### REPL
+When the REPL is started, we can input individual lessons that together form a curriculum.
+```python
+>>> { 'lesson': 'visual', 'color': 'red', 'shape': 'cube' }
+>>> { 'lesson': 'visual', 'color': 'red', 'shape': 'cube', 'position': [0, 0.5, 0] }
+>>> { 'lesson': 'visual', 'color': 'red', 'shape': 'cube', 'distractors': 3 }
+>>> { 'lesson': 'spatial', 'language': [ { 'color': 'red', 'shape': 'cube', 'position': [0, 0.5, 0] },
+                                         'left-of',
+                                         { 'color': 'red', 'shape': 'cone', 'position': [0, 1, 0] } ],
+      'distractors': 2 }
+>>> { 'lesson': 'action', 'language': [ 'move',
+                                        { 'color': 'red', 'shape': 'cube', 'position': [0, 0.5, 0] },
+                                        'left-of',
+                                        { 'color': 'red', 'shape': 'cone', 'position': [0, 1, 0] } ] }
+```
 
+### JSON File
+A curriculum can also be put together as a JSON file and then be used as input for the instructor.
+```json
+[
+{ "lesson": "visual", "color": "red", "shape": "cube" },
+{ "lesson": "visual", "color": "red", "shape": "cube", "position": [0, 0.5, 0] },
+{ "lesson": "visual", "color": "red", "shape": "cube", "distractors": 3 },
+{ "lesson": "spatial", "language": [ { "color": "red", "shape": "cube", "position": [0, 0.5, 0] },
+                                     "left-of",
+                                     { "color": "red", "shape": "cone", "position": [0, 1, 0] } ],
+  "distractors": 2 },
+{ "lesson": "action", "language": [ "move",
+                                    { "color": "red", "shape": "cube", "position": [0, 0.5, 0] },
+                                    "left-of",
+                                    { "color": "red", "shape": "cone", "position": [0, 1, 0] } ] }
+]
+```
 
 
 
