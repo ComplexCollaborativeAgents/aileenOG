@@ -8,6 +8,7 @@ from action_executor import ActionExecutor
 from world.log_config import logging
 import json
 
+
 class AileenSupervisor(Supervisor):
 
     def __init__(self):
@@ -24,9 +25,7 @@ class AileenSupervisor(Supervisor):
         self._held_node = None
 
         self._camera = self.getCamera('camera')
-
         self._camera.enable(settings.TIME_STEP)
-        # self._camera.recognitionEnable(constants.TIME_STEP)
         self.resX = self._camera.getWidth()
         self.resY = self._camera.getHeight()
         logging.info("[aileen_supervisor] :: enabled camera")
@@ -55,7 +54,6 @@ class AileenSupervisor(Supervisor):
         return self._held_node
 
     def get_all(self):
-
         logging.debug("[aileen_supervisor] :: processing get_all from client")
         num_children = self._children.getCount()
         logging.debug("[aileen_supervisor] :: world contains {} nodes".format(num_children))
@@ -76,6 +74,7 @@ class AileenSupervisor(Supervisor):
 
                 object_children = object_node.getField('children')
                 object_dict = {
+                    'id_string': "ob{}".format(str(object_node.getId())),
                     'id': object_node.getId(),
                     'position': object_node.getPosition(),
                     'bounding_box': self.computeBoundingBox(object_node),
@@ -106,7 +105,7 @@ class AileenSupervisor(Supervisor):
             if shape_node.getTypeName() == "Shape":
                 geometry_node = shape_node.getField('geometry').getSFNode()
                 geometry_string = geometry_node.getTypeName()
-                label_string = "cv_{}".format(geometry_string.lower())
+                label_string = "CV{}".format(geometry_string.title())
                 return label_string
 
     def get_object_color(self, object_node):
@@ -119,7 +118,7 @@ class AileenSupervisor(Supervisor):
 
                 for color_def in self._color_definitions.keys():
                     if color_vector in self._color_definitions[color_def]:
-                        return "cv_{}".format(color_def)
+                        return "CV{}".format(color_def.title())
 
                 # appearance_children = appearance_node.get
                 # for j in range(0, appearance_children.getCount()):
@@ -129,7 +128,6 @@ class AileenSupervisor(Supervisor):
                 #     label_string = "cv_"
                 #     return label_string
         return "cv_"
-
 
     def get_object_texture(self, object_node):
         return "t_"
@@ -234,3 +232,22 @@ class AileenSupervisor(Supervisor):
         with open(settings.COLOR_PATH) as f:
             colors = json.load(f)
         return colors
+
+
+def coord_im2world(x, y):
+    # Due to some difficulty getting camera parameters from webots, we use a simple linear regression
+    # to map im coordinates to world coordinates, and vice-versa.
+    # Eventually, solve rotation matrix for camera and use transform matrix
+    w_x = x * 1.3910 + 0.1639
+    w_y = y * 1.3719 - 0.4558
+    w_z = 0.399802  # pretty much every object has this height in the training data.
+    return w_x, w_y, w_z
+
+
+def coord_world2im(x, y):
+    # Due to some difficulty getting camera parameters from webots, we use a simple linear regression
+    # to map im coordinates to world coordinates, and vice-versa.
+    # Eventually, solve rotation matrix for camera and use transform matrix
+    im_x = x * 0.7167 - 0.1165
+    im_y = y * 0.7269 + 0.3323
+    return im_x, im_y

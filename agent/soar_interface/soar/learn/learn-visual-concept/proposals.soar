@@ -17,14 +17,12 @@ sp {learn-visual-concept*propose*learn-from-object
     (state <s>    ^name learn-visual-concept
                   ^information <info>
                   ^selected-object <obj>
-                  ^relevant-percept-set <set>
                   -^learned <info>)
 -->
     (<s>    ^operator <op> +)
     (<op>    ^name learn-from-object
              ^object <obj>
-             ^information <info>
-             ^relevant-percept-set <set>)
+             ^information <info>)
     }
 
 sp {learn-visual-concept*propose*complete-learn-visual-concept

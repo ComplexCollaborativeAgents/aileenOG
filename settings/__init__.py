@@ -4,22 +4,27 @@ from os import path
 OS_ROOT_PATH = path.abspath(os.sep)
 ROOT_PATH = path.join(path.dirname(path.dirname(path.abspath(__file__))))
 CONCEPT_LEARNER_PATH = path.join(ROOT_PATH, 'agent', 'concept_learner')
-SOAR_PATH = path.join(OS_ROOT_PATH, 'usr', 'local', 'SoarSuite_9.6.0-Multiplatform_64bit', 'bin')
+CI = 'GITLAB_CI' in os.environ
+SOAR_PATH = path.join(OS_ROOT_PATH, 'usr', 'local', 'SoarSuite_9.6.0-Multiplatform_64bit', 'bin',
+                      'linux64' if CI else '')
 SOAR_AGENT_PATH = path.join(ROOT_PATH, 'agent', 'soar_interface', 'soar', 'load.soar')
 SOAR_AGENT_NAME = 'aileen'
 SOAR_SLEEP_TIME = 0.0001
 SOAR_DEBUG = True
 SOAR_SVS = False
-SOAR_CV = True
+SOAR_CV = False
 CURRENT_IMAGE_PATH = path.join(ROOT_PATH, 'world', 'controllers', 'images', 'current_image.png')
 COLOR_PATH = path.join(ROOT_PATH, 'instructor', 'resources', 'colors.json')
+CV_NAMES = path.join(ROOT_PATH, 'agent', 'vision', 'aileen.names')  # TODO: This should be changed to setting.SHAPE_SET.
+CV_CONFIGURATION = path.join(ROOT_PATH, 'agent', 'vision', 'yolov3-tiny-aileen-test.cfg')
+CV_WEIGHTS = path.join(ROOT_PATH, 'agent', 'vision', 'yolov3-tiny-aileen_session2.weights')
 
 # Servers
 WORLD_HOST = 'localhost'
 WORLD_PORT = 30000
 AGENT_HOST = 'localhost'
 AGENT_PORT = 40000
-CONCEPT_LEARNER_HOST = 'dubs'
+CONCEPT_LEARNER_HOST = 'dubs.parc.xerox.com'
 CONCEPT_LEARNER_PORT = 8080
 
 # World
@@ -64,6 +69,18 @@ ACTION_LESSON_STATE_BAD = 'bad'
 TRAINING_DATA_FOLDER = './vision_training_data'
 TRAIN_FILES = TRAINING_DATA_FOLDER + '/train_files.txt'
 TEST_FILES = TRAINING_DATA_FOLDER + '/test_files.txt'
+
+## Agent
+AGENT_PARAM_RUNTIME_FILE = path.join(ROOT_PATH, 'agent', 'soar_interface', 'soar', '_agent_params_runtime.soar')
+AGENT_VISUAL_CONCEPTS_PARAM = 'soar'
+AGENT_PRELOAD_VISUAL_CONCEPTS_PARAM = 'true'
+
+AGENT_SPATIAL_CONCEPTS_PARAM = 'soar'
+AGENT_PRELOAD_SPATIAL_CONCEPTS_PARAM = 'true'
+
+AGENT_ACTION_CONCEPTS_PARAM = 'soar'
+AGENT_PRELOAD_ACTION_CONCEPTS_PARAM = 'true'
+
 
 try:
     from local_settings import *

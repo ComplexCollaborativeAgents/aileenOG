@@ -50,7 +50,8 @@ class AileenWorldServer:
 
         def set_scene(scene_specification):
             logging.info("[aileen_world_server] :: received set_scene from instructor client")
-            acknowledgement = aileen_supervisor.set_scene(scene_specification['configuration'], scene_specification['label'])
+            acknowledgement = aileen_supervisor.set_scene(scene_specification['configuration'],
+                                                          scene_specification['label'])
             logging.debug("[aileen_world_server] :: sending acknowledgement")
             return acknowledgement
 

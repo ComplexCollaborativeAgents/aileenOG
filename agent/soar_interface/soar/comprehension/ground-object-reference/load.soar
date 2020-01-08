@@ -12,3 +12,5 @@ source "find-object/load.soar"
 source "resolve-grounding.soar"
 
 source "complete-ground-object-reference.soar"
+
+source "find-object-with-concept-learner/load.soar"

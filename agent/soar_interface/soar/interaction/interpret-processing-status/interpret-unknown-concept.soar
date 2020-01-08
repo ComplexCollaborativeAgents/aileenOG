@@ -9,7 +9,7 @@ sp {interpret-processing-status*apply*interpret-unknown-concept
                   ^superstate <ss>)
     (<op>    ^name interpret-unknown-concept
              ^information <info>
-             ^concept visual)
+             ^concept <con>)
 -->
     (<ss>    ^new-segment <segment>)
     (<segment>    ^purpose <p>
@@ -17,5 +17,5 @@ sp {interpret-processing-status*apply*interpret-unknown-concept
                   ^originator agent
                   ^_metadata <met>)
     (<p>    ^type learn
-            ^concept visual)
+            ^concept <con>)
     }

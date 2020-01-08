@@ -1,0 +1,41 @@
+##!
+# @file
+#
+# @created smohan 20191202
+
+sp {filter-scene*propose*mark-unknown-concept
+    (state <s>    ^name filter-scene
+                  ^visual-word <tag>
+                  ^smem-query <query>
+                  ^topstate <ts>)
+    (<query>    ^cue <cue>
+                ^result failure)
+    (<cue>    ^nl <tag>)
+-->
+    (<s>    ^operator <op> + >)
+    (<op>    ^name mark-unknown-visual-concept
+             ^nl <tag>
+             ^type visual)
+   }
+
+
+sp {filter-scene*propose*filter-with-gpool
+    (state <s>    ^name filter-scene
+                  ^visual-word <tag>
+                  ^retrieved-concept-lti <res>
+                  ^candidate-set <cs>
+                  -^filtered-with <concept>)
+    (<res>    ^nl <tag>
+              ^gpool <gpool>
+              ^concept <concept>)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name filter-with-gpool
+             ^gpool <gpool>
+             ^candidate-set <cs>
+             ^concept <concept>)
+    }
+
+
+                  
+    

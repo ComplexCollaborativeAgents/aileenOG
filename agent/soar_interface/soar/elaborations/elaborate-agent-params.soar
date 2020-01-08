@@ -1,0 +1,12 @@
+##!
+# @file
+#
+# @created smohan 20191122
+
+
+sp {all*elaborate*agent-params
+    (state <s>    ^superstate <ss>)
+    (<ss>    ^_params <p>)
+-->
+    (<s>    ^_params <p>)
+    }

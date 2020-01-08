@@ -1,0 +1,33 @@
+##!
+# @file
+#
+# @created smohan 20191216
+
+sp {compose-with-semantic-memory*elaborate*state
+    (state <s>    ^name compose-with-semantic-memory
+                  ^superstate.operator <sop>)
+    (<sop>    ^name compose-with-semantic-memory
+              ^reference <nl>
+              ^map <def>)
+-->
+    (<s>    ^reference <nl>
+            ^map <def>)
+    }
+
+sp {compose-with-semantic-memory*retrieve*concept
+    (state <s>    ^name compose-with-semantic-memory
+                  ^map.concept <con>)
+-->
+    (<s>    ^smem-retrieve.identifier <con>)
+    }
+
+sp {compose-with-semantic-memory*copy*grounding*parses
+    (state <s>    ^name compose-with-semantic-memory
+                  ^superstate <ss> )
+    (<ss>    ^grounding <g>
+              ^parses <p>)
+-->
+    (<s>    ^grounding <g>
+            ^parses <p>)
+    }
+

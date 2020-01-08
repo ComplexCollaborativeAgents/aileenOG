@@ -9,10 +9,11 @@
    sudo apt install qhull-bin
    ```
 2. Download [Soar 9.6.0](https://soar.eecs.umich.edu/) and extract the files to 
-   `/usr/local/SoarSuite_9.6.0-Multiplatform_64bit`:
+   `/usr/local/SoarSuite_9.6.0-Multiplatform_64bit` and run `SoarJavaDebugger.sh` once:
    ```bash
    wget http://soar.eecs.umich.edu/downloads/SoarSuite/SoarSuite_9.6.0-Multiplatform_64bit.zip
-   sudo unzip -d /usr/local SoarSuite_9.6.0-Multiplatform_64bit.zip 
+   sudo unzip -d /usr/local SoarSuite_9.6.0-Multiplatform_64bit.zip
+   /usr/local/SoarSuite_9.6.0-Multiplatform_64bit/SoarJavaDebugger.sh
    ```
 3. Download and install [Webots](https://cyberbotics.com/):
    ```bash
@@ -52,6 +53,7 @@
    conda activate aileen
    (aileen) python agent
    ```
+   > Note: To suppress the GTK3 warnings: `export SWT_GTK3=0`.
 4. Run the instructor in another shell instance:
    ```bash
    conda activate aileen

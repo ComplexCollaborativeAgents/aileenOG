@@ -12,3 +12,13 @@ sp {learn-visual-concept*apply*complete-learn-visual-concept
 -->
     (<seg>    ^learned <info>)
     }
+
+sp {learn-visual-concept*clear*concept-memory*topstate
+    (state <s>    ^name learn-visual-concept
+                  ^topstate <ts>
+                  ^operator.name complete-learn-visual-concept)
+    (<ts>    ^concept-memory <cm>)
+-->
+    (<ts>    ^concept-memory <cm> -)
+    }
+    

@@ -27,7 +27,8 @@ class SpatialWordLesson:
         lesson = {
             'scene': self._scene.generate_scene_description(),
             'interaction': {
-                'language': self._language
+                'signal': 'verify',
+                'content': self._language
             }
         }
         return lesson
@@ -82,20 +83,29 @@ class SpatialWordLesson:
             spatial_configurations = json.load(f)
         return spatial_configurations
 
+    def evaluate_agent_response(self, agent_response):
+        if agent_response['status'] == 'success':
+            return {'signal': 'correct'}
+
     @staticmethod
     def administer_curriculum(world_server, agent_server):
         while True:
             raw_input("Press any key to generate the next spatial word lesson...")
 
-            lesson = SpatialWordLesson().generate_lesson(distractors=0)
+            lesson_object = SpatialWordLesson()
+            lesson = lesson_object.generate_lesson(distractors=0)
+
 
             scene_acknowledgement = world_server.set_scene(
-                {'configuration': lesson['scene'], 'label': lesson['interaction']['language']})
+                {'configuration': lesson['scene'], 'label': lesson['interaction']['content']})
             logging.info("[aileen_instructor] :: received from world {}".format(scene_acknowledgement))
 
-            language_acknowledgement = agent_server.process_language(lesson['interaction'])
-            logging.info("[aileen_instructor] :: received from agent {}".format(language_acknowledgement))
+            agent_response = agent_server.process_interaction(lesson['interaction'])
+            logging.info("[aileen_instructor] :: received from agent {}".format(agent_response))
 
+            evaluation = lesson_object.evaluate_agent_response(agent_response)
+            agent_response = agent_server.process_interaction(evaluation)
+            logging.info("[aileen_instructor] :: provided feedback to agent")
 
     class Randomizer:
 

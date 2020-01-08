@@ -8,3 +8,4 @@
 
 # enable smem for aileen
 smem --enable
+epmem --enable
