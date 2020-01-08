@@ -12,7 +12,7 @@ SOAR_AGENT_NAME = 'aileen'
 SOAR_SLEEP_TIME = 0.0001
 SOAR_DEBUG = True
 SOAR_SVS = False
-SOAR_CV = False
+SOAR_CV = True
 CURRENT_IMAGE_PATH = path.join(ROOT_PATH, 'world', 'controllers', 'images', 'current_image.png')
 COLOR_PATH = path.join(ROOT_PATH, 'instructor', 'resources', 'colors.json')
 CV_NAMES = path.join(ROOT_PATH, 'agent', 'vision', 'aileen.names')  # TODO: This should be changed to setting.SHAPE_SET.
@@ -47,6 +47,8 @@ OBJECT_STANDARD_WIDTH_X = 0.1
 OBJECT_STANDARD_WIDTH_Z = 0.1
 
 SHAPE_SET = ['cone', 'box', 'cylinder', 'sphere']
+COLOR_LABELS = ['blue', 'red']
+COLOR_VALUES = [[255, 0, 0], [0, 0, 255]]
 
 SPATIAL_CONFIGURATION_FILE_NAME = 'spatial_configuration.json'
 SPATIAL_DEF_OBJECTS = 'objects'

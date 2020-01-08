@@ -44,7 +44,7 @@ class TrainingImage:
         # iw = input_writer.InputWriter(agent_server, world_server)
         counter = 1
         while True:
-            num_obj = random.randint(1,6)
+            num_obj = random.randint(1, 6)
             lesson = TrainingImage().generate_lesson(num_obj)
             scene_acknowledgement = world_server.set_scene(
                 {'configuration': lesson['scene'], 'label': lesson['interaction']})
@@ -55,32 +55,66 @@ class TrainingImage:
             meta = world_server.get_all()
 
             for j in range(0, len(meta['objects'])):
+
                 obj = meta['objects'][j]
                 bb = obj['bounding_box_camera']
                 bbw = obj['bounding_box']
-                shape = obj['shape'].split('cv_')[1]
-                color = obj['color']
+                shape = obj['shape'].split('CV')[1]
+                shape = shape.lower()
+                color = obj['color'].split('CV')[1]
+                color = color.lower()
+                
                 # for calculating transform between 2D and 3D:
+
+                # Debugging
+                # cv2.rectangle(im,
+                #               (int(512 * bb[0]), int(512 * bb[1])),
+                #               (int(512 * bb[2]), int(512 * bb[3])),
+                #               (0, 255, 0), 1)
+                #
+                # cx = (bb[0] + bb[2]) / 2.0
+                # cy = (bb[1] + bb[3]) / 2.0
+                # w = bb[2] - bb[0]
+                # h = bb[3] - bb[1]
+                #
+                # bb = [cx-w/2, cy-h/2, cx+w/2, cy+h/2]
+                #
+                # cv2.rectangle(im,
+                #               (int(512 * bb[0])+5, int(512 * bb[1])+5),
+                #               (int(512 * bb[2])+5, int(512 * bb[3])+5),
+                #               (0, 255, 0), 1)
+                #
+                # cv2.imshow('Frame', im)
+                # cv2.waitKey(0)
+                # cv2.destroyAllWindows()
+
+                # Bounding box is written out as (centroid_x, centroid_y, width, height)
                 with open(settings.TRAINING_DATA_FOLDER + '/frame_' + "{:0>6d}".format(counter) + '.txt', 'a+') as f:
                     f.write("%d %f %f %f %f\n" % (settings.SHAPE_SET.index(shape),
-                                                  (bb[0]+bb[2])/2.0,
-                                                  (bb[1]+bb[3])/2.0,
+                                                  (bb[0] + bb[2]) / 2.0,
+                                                  (bb[1] + bb[3]) / 2.0,
                                                   abs(bb[2]-bb[0]),
-                                                  abs(bb[3]-bb[1])))
+                                                  abs(bb[3]-bb[1])
+                                                  )
+                            )
 
+                # Bounding box is written out as (centroid_x, centroid_y, width, height)
                 with open(settings.TRAINING_DATA_FOLDER + '/frame_' + "{:0>6d}".format(counter) + '_allgt.txt', 'a+') as f:
                     f.write("%d %f %f %f %f %s\n" % (settings.SHAPE_SET.index(shape),
                                                      (bb[0] + bb[2]) / 2.0,
                                                      (bb[1] + bb[3]) / 2.0,
                                                      abs(bb[2] - bb[0]),
                                                      abs(bb[3] - bb[1]),
-                                                     color))
+                                                     color
+                                                     )
+                            )
 
                 with open(settings.TRAINING_DATA_FOLDER + '/allcoords.txt', 'a+') as f:
                     f.write("%d %f %f %f %f %f %f %f %f %f %f\n" % (settings.SHAPE_SET.index(shape),
                                                                     (bb[0] + bb[2]) / 2.0,
                                                                     (bb[1] + bb[3]) / 2.0,
-                                                                    abs(bb[2] - bb[0]), abs(bb[3] - bb[1]),
+                                                                    abs(bb[2] - bb[0]),
+                                                                    abs(bb[3] - bb[1]),
                                                                     bbw[0], bbw[1],
                                                                     bbw[2], bbw[3],
                                                                     bbw[4], bbw[5]))

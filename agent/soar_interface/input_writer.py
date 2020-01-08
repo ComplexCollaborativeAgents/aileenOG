@@ -83,14 +83,37 @@ class InputWriter(object):
             self.write_binary_image_to_file(binary_image)
             im = cv2.imdecode(np.fromstring(binary_image.data, dtype=np.uint8), 1)
             cv_detections = self.detector.run(im)
-            print cv_detections
+            # these will be used to map UUID, ID, and held status to CV detections
+            objects_list = self.request_server_for_objects_info()
+            objects_list = self.align_cv_detections_to_world(cv_detections, objects_list)
+        else:
+            objects_list = self.request_server_for_objects_info()
 
-        objects_list = self.request_server_for_objects_info()
         if objects_list is not None:
             self.add_objects_to_working_memory(objects_list)
         qsrs = self.create_qsrs(objects_list)
         self.write_qsrs_to_input_link(qsrs)
         self._soar_agent.commit()
+
+    @staticmethod
+    def align_cv_detections_to_world(cv_detections, objects_list):
+        detections = cv_detections['objects']
+        world = objects_list
+
+        for i in range(len(detections)):
+            for w in world:
+                d = detections[i]
+                bbox1 = d['bounding_box_camera']
+                bbox2 = w['bounding_box_camera']
+                if Detector.bb_iou(bbox1, bbox2) > .85:
+                    # Match
+                    detections[i]['id'] = w['id']
+                    detections[i]['id_name'] = w['id_name']
+                    detections[i]['id_string'] = w['id_string']
+                    detections[i]['held'] = w['held']
+                    break
+
+        return detections
 
     def write_qsrs_to_input_link(self, qsrs):
         self._soar_agent.delete_all_children(self._qsrs_link)
