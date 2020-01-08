@@ -62,6 +62,8 @@ ACTION_LESSON_STATE_COMPLETE = 'complete'
 ACTION_LESSON_STATE_BAD = 'bad'
 
 TRAINING_DATA_FOLDER = './vision_training_data'
+TRAIN_FILES = TRAINING_DATA_FOLDER + '/train_files.txt'
+TEST_FILES = TRAINING_DATA_FOLDER + '/test_files.txt'
 
 try:
     from local_settings import *

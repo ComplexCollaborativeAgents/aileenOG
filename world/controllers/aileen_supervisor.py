@@ -68,9 +68,9 @@ class AileenSupervisor(Supervisor):
 
                 world_bbox = self.computeBoundingBox(object_node)
                 w_x1 = world_bbox[0]
-                w_y1 = world_bbox[1]
+                w_y1 = world_bbox[2]
                 w_x2 = world_bbox[3]
-                w_y2 = world_bbox[4]
+                w_y2 = world_bbox[5]
                 im_x1, im_y1 = self.coord_world2im(w_x1, w_y1)
                 im_x2, im_y2 = self.coord_world2im(w_x2, w_y2)
 
@@ -192,9 +192,11 @@ class AileenSupervisor(Supervisor):
         # Due to some difficulty getting camera parameters from webots, we use a simple linear regression
         # to map im coordinates to world coordinates, and vice-versa.
         # Eventually, solve rotation matrix for camera and use transform matrix
-        w_x = x * 1.3910 + 0.1639
-        w_y = y * 1.3719 - 0.4558
+        # w_x = x * 1.3910 + 0.1639
+        # w_y = y * 1.3719 - 0.4558
         w_z = 0.399802  # pretty much every object has this height in the training data.
+        w_x = .6905 * x + .2311
+        w_y = .6907 * y - .3950
         return w_x, w_y, w_z
 
     @staticmethod
@@ -202,8 +204,10 @@ class AileenSupervisor(Supervisor):
         # Due to some difficulty getting camera parameters from webots, we use a simple linear regression
         # to map im coordinates to world coordinates, and vice-versa.
         # Eventually, solve rotation matrix for camera and use transform matrix
-        im_x = x * 0.7167 - 0.1165
-        im_y = y * 0.7269 + 0.3323
+        # im_x = x * 0.7167 - 0.1165
+        # im_y = y * 0.7269 + 0.3323
+        im_x = x * 1.4480 - .3346
+        im_y = y * 1.4478 + .5719
 
         return im_x, im_y
 
