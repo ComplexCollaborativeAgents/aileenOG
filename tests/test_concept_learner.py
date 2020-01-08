@@ -4,14 +4,14 @@ import subprocess
 import time
 import settings
 import pytest
+import os
 
 def test_square():
     num = 7
     assert num*num == 49
 
-
 # Functional test that creates a generalization and then matches against it
-@pytest.mark.skip(reason='SSH in CI is not correctly set up yet.')
+#@pytest.mark.skip(reason='SSH in CI is not correctly set up yet.')
 def test_concept_learner_server():
 
     cmd = 'ssh {} {}/start_concept_learner.sh {}'.format(settings.CONCEPT_LEARNER_HOST,
@@ -23,7 +23,9 @@ def test_concept_learner_server():
     http_str = 'http://{}:{}/ConceptLearner'.format(settings.CONCEPT_LEARNER_HOST,
                                                     settings.CONCEPT_LEARNER_PORT)
     server=xmlrpclib.ServerProxy(http_str)
+
     r = server.create_reasoning_symbol(xmlrpclib.Binary(json.dumps({'symbol':'RRed'})))
+
     res = json.loads(r.data)
     assert res['gpool'] == 'RRedMt'
     assert res['numSymbols'] == 1
@@ -190,5 +192,44 @@ def test_concept_learner_server():
     assert ["rRight","Obj10A","Obj10B"] in res['matches']
     assert ["rRight", "Obj10A", "Obj10C"] in res['matches']
     assert ["rRight", "Obj10B", "Obj10C"] in res['matches']
+
+
+    # Action Learning and Recognition
+    r = server.create_reasoning_action(xmlrpclib.Binary(json.dumps({'action':'rMove',
+                                                                    'arity':2})))
+    res = json.loads(r.data)
+    assert res['numActions'] == 1 #
+
+    with open(os.path.join(os.path.dirname(os.path.abspath(__file__)),'data/action12.json'),
+              'r') as myfile:
+        data = myfile.read()
+    r = server.store(xmlrpclib.Binary(data))
+    res = json.loads(r.data)
+    assert res['numExamples'] == 1
+    assert res['numGeneralizations'] == 0
+
+    with open(os.path.join(os.path.dirname(os.path.abspath(__file__)),'data/action13.json'),
+              'r') as myfile:
+        data = myfile.read()
+    r = server.store(xmlrpclib.Binary(data))
+    res = json.loads(r.data)
+    assert res['numExamples'] == 0
+    assert res['numGeneralizations'] == 1
+
+    with open(os.path.join(os.path.dirname(os.path.abspath(__file__)),'data/action14_1.json'),
+              'r') as myfile:
+        data = myfile.read()
+    r = server.query(xmlrpclib.Binary(data))
+    res = json.loads(r.data)
+    assert len(res['matches']) == 1
+    assert ["rMove", "Obj14B", ["rRight", "Obj14B", "Obj14A"]] in res['matches']
+
+    # no match for other object
+    with open(os.path.join(os.path.dirname(os.path.abspath(__file__)),'data/action14_2.json'),
+              'r') as myfile:
+        data = myfile.read()
+    r = server.query(xmlrpclib.Binary(data))
+    res = json.loads(r.data)
+    assert res['matches'] == None
 
     out.kill() # do we need to do anything more?
