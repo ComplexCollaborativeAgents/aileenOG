@@ -41,6 +41,9 @@ class TrainingImage:
     @staticmethod
     def generate_scenes(world_server, agent_server):
 
+        if not os.path.exists(settings.TRAINING_DATA_FOLDER):
+            os.mkdir(settings.TRAINING_DATA_FOLDER)
+
         # iw = input_writer.InputWriter(agent_server, world_server)
         counter = 1
         while True:
