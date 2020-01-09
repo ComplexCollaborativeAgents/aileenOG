@@ -49,7 +49,7 @@ class OutputReader(object):
         logging.info("[output_reader] :: soar agent output {}".format(action_dict))
 
         try:
-            is_action_applied = self._world.apply_action(action_dict)
+            is_action_applied = self._world_server.apply_action(action_dict)
         except xmlrpclib.ProtocolError as err:
             logging.error("[output_reader] :: protocol error {}".format(err.errmsg))
             return

@@ -62,13 +62,29 @@ sp {aileen*propose*verify
     (state <s>    ^name aileen
                   ^interaction.stack.segment <seg>)
     (<seg>    ^purpose <p>)
-    (<p>    -^completed)
+    (<p>    -^completed
+             ^type verify)
     (<seg>    ^grounding <g>)
     (<g>    ^complete true)
     
 -->
     (<s>    ^operator <op> +)
     (<op>    ^name verify
+             ^segment <seg>)
+    }
+
+sp {aileen*propose*react
+    (state <s>    ^name aileen
+                  ^interaction.stack.segment <seg>)
+    (<seg>    ^purpose <p>)
+    (<p>    -^completed
+             ^type react)
+    (<seg>    ^grounding <g>)
+    (<g>    ^complete true)
+    
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name action
              ^segment <seg>)
     }
 

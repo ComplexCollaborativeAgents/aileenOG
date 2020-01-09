@@ -34,3 +34,5 @@ source "make-presistent-copies.soar"
 source "initialize-agent/load.soar"
 
 #source "action.soar"
+
+source "action/load.soar"
