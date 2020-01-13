@@ -6,7 +6,7 @@
 ;;;;   Created: November 13, 2019 16:35:48
 ;;;;   Purpose: 
 ;;;; ----------------------------------------------------------------------------
-;;;;  Modified: Thursday, December 19, 2019 at 14:40:04 by klenk
+;;;;  Modified: Tuesday, January  7, 2020 at 09:08:51 by klenk
 ;;;; ----------------------------------------------------------------------------
 
 (load "server.lsp")
@@ -15,13 +15,14 @@
 
 (defparameter *test-port* 7000)
 
-(defun test-concept-learner-server ()
+(defun test-concept-learner-server (&key (clean? t))
   (start-server :port *test-port*) ;; needs to match port in call-test-server.
   (test-reasoning-symbols)
   (test-generalization-obj)
   (test-generalization-rel)
-  
-  (clean-tests))
+  (test-generalization-action)
+  (when clean? (clean-tests))
+  )
 
 (defun call-test-server (function arguments)
   (cl-json::decode-json-from-string
@@ -42,6 +43,10 @@
                         '("RRed"))))
     (assert (equal (cdr (assoc :GPOOL res))
                    "RRedMt"))
+    (setq res (call-test-server
+               "create_reasoning_symbol"
+               (pairlis '("symbol")
+                        '("RBox"))))
 
     (setq res (call-test-server
                "create_reasoning_predicate"
@@ -49,6 +54,13 @@
                         '("rRight"))))
     (assert (equal (cdr (assoc :GPOOL res))
 		   "rRightMt"))
+
+        (setq res (call-test-server
+               "create_reasoning_action"
+               (pairlis '("action" "arity")
+                        '("rMove" 2))))
+    (assert (equal (cdr (assoc :GPOOL res))
+		   "rMoveMt"))
     ))
 
 (defun test-generalization-obj ()
@@ -307,9 +319,228 @@
 		   (cdr (assoc :MATCHES res)) :test #'equal))
     ))
 
+
+(defun test-generalization-action ()
+  ;; Add two cases for rMove to the rMoveMt gpool
+  ;; generalize them
+  ;; Match a new scene against it
+  ;; verifies that removing facts works.
+  (make-test-gen-action-gpool)  
+  (query-test-gen-action-gpool)
+  (project-test-gen-action-gpool)
+  )
+
+;; Move the red to the right of the box
+(defparameter *action-test-case-12*
+  'd::((rMove Obj12A (rRight Obj12A Obj12B))
+       (holdsIn Time12_0 (isa Obj12A CVRed))
+       (holdsIn Time12_0 (isa Obj12A RRed))
+       (holdsIn Time12_0 (isa Obj12A CVCone))
+       (holdsIn Time12_0 (isa Obj12B CVBlue))
+       (holdsIn Time12_0 (isa Obj12B CVBox))
+       (holdsIn Time12_0 (isa Obj12B RBox))
+       (holdsIn Time12_0 (ne Obj12A Obj12B))
+       (holdsIn Time12_0 (dc Obj12A Obj12B))
+       (holdsIn Time12_0 (dc Obj12B Obj12A))
+       (holdsIn Time12_1 (isa Obj12A CVRed))
+       (holdsIn Time12_1 (isa Obj12A RRed))
+       (holdsIn Time12_1 (isa Obj12A CVCone))
+       (holdsIn Time12_1 (isa Obj12B CVBlue))
+       (holdsIn Time12_1 (isa Obj12B CVBox))
+       (holdsIn Time12_1 (isa Obj12B RBox))
+       (holdsIn Time12_1 (holdsInHand Aileen1 Obj12A))
+       ;;(holdsIn Time12_1 (dc Obj12A Obj12B)) ;;Do we just remove all spatial relations?
+       (holdsIn Time12_2 (isa Obj12A CVRed))
+       (holdsIn Time12_2 (isa Obj12A RRed))
+       (holdsIn Time12_2 (isa Obj12A CVCone))
+       (holdsIn Time12_2 (isa Obj12B CVBlue))
+       (holdsIn Time12_2 (isa Obj12B CVBox))
+       (holdsIn Time12_2 (isa Obj12B RBox))
+       (holdsIn Time12_2 (n Obj12A Obj12B))
+       (holdsIn Time12_2 (dc Obj12A Obj12B))
+       (holdsIn Time12_2 (dc Obj12B Obj12A))
+       (holdsIn Time12_2 (rRight Obj12A Obj12B))
+       (isa Time12_0 AileenActionStartTime)
+       (startsAfterEndingOf Time12_1 Time12_0)
+       (startsAfterEndingOf Time12_2 Time12_1) ;;Do we want to be explicit about T2 T0 relation, I think not
+       ))
+
+;;; move the box to the right of the cylinder
+(defparameter *action-test-case-13*
+  'd::((rMove Obj13B (rRight Obj13B Obj13A))
+       (holdsIn Time13_0 (isa Obj13A CVBlue))
+       (holdsIn Time13_0 (isa Obj13A CVCylinder))
+       (holdsIn Time13_0 (isa Obj13B CVGreen))
+       (holdsIn Time13_0 (isa Obj13B CVBox))
+       (holdsIn Time13_0 (isa Obj13B RBox))
+       (holdsIn Time13_0 (w Obj13A Obj13B))
+       (holdsIn Time13_0 (dc Obj13A Obj13B))
+       (holdsIn Time13_0 (dc Obj13B Obj13A))
+       (holdsIn Time13_1 (isa Obj13A CVBlue))
+       (holdsIn Time13_1 (isa Obj13A CVCylinder))
+       (holdsIn Time13_1 (isa Obj13B CVGreen))
+       (holdsIn Time13_1 (isa Obj13B CVBox))
+       (holdsIn Time13_1 (isa Obj13B RBox))
+       (holdsIn Time13_1 (holdsInHand Aileen1 Obj13B))
+       ;;(holdsIn Time13_1 (dc Obj13A Obj13B)) ;;Do we just remove all spatial relations?
+       (holdsIn Time13_2 (isa Obj13A CVBlue))
+       (holdsIn Time13_2 (isa Obj13A CVCylinder))
+       (holdsIn Time13_2 (isa Obj13B CVGreen))
+       (holdsIn Time13_2 (isa Obj13B CVBox))
+       (holdsIn Time13_2 (isa Obj13B RBox))
+       (holdsIn Time13_2 (n Obj13B Obj13A))
+       (holdsIn Time13_2 (dc Obj13B Obj13A))
+       (holdsIn Time13_2 (dc Obj13A Obj13B))
+       (holdsIn Time13_2 (rRight Obj13B Obj13A))
+       (isa Time13_0 AileenActionStartTime)
+       (startsAfterEndingOf Time13_1 Time13_0)
+       (startsAfterEndingOf Time13_2 Time13_1) ;;Do we want to be explicit about T2 T0 relation, I think not
+       ))
+
+
+
+(defun make-test-gen-action-gpool ()
+  (let (res )
+    ;; TEST STORE
+    (setq res (call-test-server "store"
+               (pairlis '("facts" "context" "concept")
+                        (list (symbols->strs *action-test-case-12*)
+                              "Test12" ;;Id
+                              "rMove"))))
+    (assert (= (cdr (assoc :NUM-EXAMPLES res)) 1))
+    (assert (= (cdr (assoc :NUM-GENERALIZATIONS res)) 0))
+
+    (setq res (call-test-server "store"
+               (pairlis '("facts" "context" "concept")
+                        (list (symbols->strs *action-test-case-13*)
+                              "Test13" ;;Id
+                              "rMove")))) 
+    (assert (= (cdr (assoc :NUM-EXAMPLES res)) 0))
+    (assert (= (cdr (assoc :NUM-GENERALIZATIONS res)) 1))))
+
+
+;;; Do we include any reasoning symbols? For recognition, not yet
+;;; Or if we are going to include them, we would first try to generate
+;;; reasoning symbols for each object, and each pair of objects, then
+;;; we could match against the gpool
+(defparameter *action-test-case-14*
+  'd::((holdsIn Time14_0 (isa Obj14A CVBlue))
+       (holdsIn Time14_0 (isa Obj14A CVCylinder))
+       (holdsIn Time14_0 (isa Obj14B CVGreen))
+       (holdsIn Time14_0 (isa Obj14B CVPyramid))
+       (holdsIn Time14_0 (nw Obj14A Obj14B))
+       (holdsIn Time14_0 (dc Obj14A Obj14B))
+       (holdsIn Time14_0 (dc Obj14B Obj14A))
+       (holdsIn Time14_1 (isa Obj14A CVBlue))
+       (holdsIn Time14_1 (isa Obj14A CVCylinder))
+       (holdsIn Time14_1 (isa Obj14B CVGreen))
+       (holdsIn Time14_1 (isa Obj14B CVPyramid))
+       (holdsIn Time14_1 (holdsInHand Aileen1 Obj14A))
+       ;;(holdsIn Time14_1 (dc Obj14A Obj14B)) ;;Do we just remove all spatial relations?
+       (holdsIn Time14_2 (isa Obj14A CVBlue))
+       (holdsIn Time14_2 (isa Obj14A CVCylinder))
+       (holdsIn Time14_2 (isa Obj14B CVGreen))
+       (holdsIn Time14_2 (isa Obj14B CVPyramid))
+       (holdsIn Time14_2 (n Obj14B Obj14A))
+       (holdsIn Time14_2 (dc Obj14B Obj14A))
+       (holdsIn Time14_2 (dc Obj14A Obj14B))
+       (holdsIn Time14_2 (rRight Obj14B Obj14A)) ;; spatial relation recognized
+       (isa Time14_0 AileenActionStartTime)
+       (startsAfterEndingOf Time14_1 Time14_0)
+       (startsAfterEndingOf Time14_2 Time14_1)
+       ))
+
+(defun query-test-gen-action-gpool ()
+  (let (res pattern)
+    (setf pattern (list "rMove" "Obj14B" (list "rRight" "Obj14B" "Obj14A")))
+    (setq res (call-test-server "query"
+				(pairlis '("facts" "pattern")
+					 (list (symbols->strs *action-test-case-14*)
+					       pattern))))
+    (assert (= 1 (length (cdr (assoc :MATCHES res)))))
+
+    (setf pattern (list "rMove" "Obj14A" (list "rRight" "Obj14B" "Obj14A")))
+    (setq res (call-test-server "query"
+				(pairlis '("facts" "pattern")
+					 (list (symbols->strs *action-test-case-14*)
+					       pattern))))
+    (assert (= 0 (length (cdr (assoc :MATCHES res)))))
+    ))
+
+
+(defparameter *action-test-case-15*
+  'd::((isa Time15_0 AileenActionStartTime)
+       (holdsIn Time15_0 (isa Obj15A CVBlue))
+       (holdsIn Time15_0 (isa Obj15A CVCylinder))
+       (holdsIn Time15_0 (isa Obj15B CVGreen))
+       (holdsIn Time15_0 (isa Obj15B CVPyramid))
+       (holdsIn Time15_0 (nw Obj15A Obj15B))
+       (holdsIn Time15_0 (dc Obj15A Obj15B))
+       (holdsIn Time15_0 (dc Obj15B Obj15A))
+       (rMove Obj15A (rRight Obj15A Obj15B))
+       ))
+
+(defparameter *action-test-case-15-1*
+  'd::((holdsIn Time15_0 (isa Obj15A CVBlue))
+       (holdsIn Time15_0 (isa Obj15A CVCylinder))
+       (holdsIn Time15_0 (isa Obj15B CVGreen))
+       (holdsIn Time15_0 (isa Obj15B CVPyramid))
+       (holdsIn Time15_0 (nw Obj15A Obj15B))
+       (holdsIn Time15_0 (dc Obj15A Obj15B))
+       (holdsIn Time15_0 (dc Obj15B Obj15A))
+       (holdsIn Time15_1 (isa Obj15A CVBlue))
+       (holdsIn Time15_1 (isa Obj15A CVCylinder))
+       (holdsIn Time15_1 (isa Obj15B CVGreen))
+       (holdsIn Time15_1 (isa Obj15B CVPyramid))
+       (holdsIn Time15_1 (holdsInHand Aileen15 Obj15A))
+       (rMove Obj15A (rRight Obj15A Obj15B))
+       (isa Time15_0 AileenActionStartTime)
+       (startsAfterEndingOf Time15_1 Time15_0)       
+       ))
+
+(defun project-test-gen-action-gpool ()
+  (let (res)
+    (setq res (call-test-server "project"
+				(pairlis '("facts" "action")
+					 (list (symbols->strs *action-test-case-15*)
+					       "rMove"
+					       ))))
+    (let* ((cis (str->symbols (cdr (assoc :CIS res))))
+	   (next-state (second (find 'd::startsAfterEndingOf cis :key #'car)))
+	   (next-state-facts (remove-if-not
+			      #'(lambda (fact)
+				  (and (equal 'd::holdsIn (car fact))
+				       (equalp next-state (second fact))))
+			      cis)))
+      (assert (find `(d::holdsIn ,next-state
+				  (d::holdsInHand (d::AnalogySkolemFn d::Aileen1) d::Obj15A))
+		    next-state-facts :test #'equalp)))
+    (setq res (call-test-server "project"
+				(pairlis '("facts" "action")
+					 (list (symbols->strs *action-test-case-15-1*)
+					       "rMove"
+					       ))))
+    (let* ((cis (str->symbols (cdr (assoc :CIS res))))
+	   (next-state (second (find 'd::startsAfterEndingOf cis :key #'car)))
+	   (next-state-facts (remove-if-not
+			      #'(lambda (fact)
+				  (and (equal 'd::holdsIn (car fact))
+				       (equalp next-state (second fact))))
+			      cis)))
+      (dolist (fact 'd::((dc Obj15B Obj15A)
+			 (rRight Obj15A Obj15B)
+			 (n Obj15A Obj15B)))
+	(assert (find `(d::holdsIn ,next-state ,fact) next-state-facts :test #'equalp)))
+      )))
+
+
+
 (defun clean-tests ()
+  (cl-user::nuke-gpool 'd::rMoveMt)
   (cl-user::nuke-gpool 'd::rRightMt)
   (cl-user::nuke-gpool 'd::rOnMt)
+  (cl-user::nuke-gpool 'd::RRedMt)
+  (cl-user::nuke-gpool 'd::RBoxMt)
   )
 	
   
