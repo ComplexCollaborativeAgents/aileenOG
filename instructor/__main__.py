@@ -24,7 +24,7 @@ if __name__ == '__main__':
     world_server = create_connection_with_aileen_world()
     agent_server = create_connection_with_aileen_agent()
 
-    #VisualWordLesson.administer_curriculum(world_server, agent_server)
-    SpatialWordLesson.administer_curriculum(world_server, agent_server)
+    VisualWordLesson.administer_curriculum(world_server, agent_server)
+    #SpatialWordLesson.administer_curriculum(world_server, agent_server)
     #ActionWordLesson.administer_curriculum(world_server, agent_server)
 

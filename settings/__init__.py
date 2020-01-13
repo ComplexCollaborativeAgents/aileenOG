@@ -21,7 +21,7 @@ COLOR_PATH = path.join(ROOT_PATH, 'instructor', 'resources', 'colors.json')
 WORLD_HOST = 'localhost'
 WORLD_PORT = 30000
 AGENT_HOST = 'localhost'
-AGENT_PORT = 40000
+AGENT_PORT = 40001
 CONCEPT_LEARNER_HOST = 'dubs.parc.xerox.com'
 CONCEPT_LEARNER_PORT = 8080
 
@@ -66,8 +66,8 @@ ACTION_LESSON_STATE_BAD = 'bad'
 
 ## Agent
 AGENT_PARAM_RUNTIME_FILE = path.join(ROOT_PATH, 'agent', 'soar_interface', 'soar', '_agent_params_runtime.soar')
-AGENT_VISUAL_CONCEPTS_PARAM = 'soar'
-AGENT_PRELOAD_VISUAL_CONCEPTS_PARAM = 'true'
+AGENT_VISUAL_CONCEPTS_PARAM = 'external'
+AGENT_PRELOAD_VISUAL_CONCEPTS_PARAM = 'false'
 
 AGENT_SPATIAL_CONCEPTS_PARAM = 'soar'
 AGENT_PRELOAD_SPATIAL_CONCEPTS_PARAM = 'true'

@@ -18,10 +18,15 @@ class ConceptLearner(object):
         time.sleep(5)
         logging.info("[concept_learner] :: started concept_learner server on {}".format(settings.CONCEPT_LEARNER_HOST))
 
-    def create_new_concept(self, concept_symbol):
-        response_json = self._server.create_reasoning_symbol(xmlrpclib.Binary(json.dumps({'symbol': concept_symbol})))
-        response = json.loads(response_json.data)
-        return response
+    def create_new_concept(self, request):
+        if request['type'] == "symbol":
+            response_json = self._server.create_reasoning_symbol(xmlrpclib.Binary(json.dumps({'symbol': request['name']})))
+            response = json.loads(response_json.data)
+            return response
+        if request['type'] == "predicate":
+            response_json = self._server.create_reasoning_predicate(xmlrpclib.Binary(json.dumps({'predicate': request['name'], 'arity': 2})))
+            response = json.loads(response_json.data)
+            return response
 
     def store_instance(self, request):
         response_json = self._server.add_case_to_gpool(xmlrpclib.Binary(json.dumps(request)))

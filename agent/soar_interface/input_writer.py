@@ -116,10 +116,9 @@ class InputWriter(object):
             new_status_link.CreateStringWME("status", self._concept_memory_status['status'])
             logging.debug("[input-writer] :: wrote status {}".format(self._concept_memory_status['status']))
 
-        if 'concept-symbol' in self._concept_memory_status and 'gpool' in self._concept_memory_status:
-            new_status_link.CreateStringWME("concept-symbol", self._concept_memory_status['concept-symbol'])
+        if 'gpool' in self._concept_memory_status:
             new_status_link.CreateStringWME("gpool", str(self._concept_memory_status['gpool']))
-            logging.debug("[input-writer] :: wrote concept symbol {} and gpool {}".format(self._concept_memory_status['concept-symbol'], self._concept_memory_status['gpool']))
+            logging.debug("[input-writer] :: gpool {}".format(self._concept_memory_status['gpool']))
 
         if 'matches' in self._concept_memory_status:
             matches_id = new_status_link.CreateIdWME('matches')

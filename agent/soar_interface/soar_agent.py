@@ -88,7 +88,7 @@ class soar_agent(object):
                             ^preload-spatial-concepts {ps_param}
                             ^preload-action-concepts {pa_param})
                     (<p>    ^relevant-percept-set <rps>)
-                    (<rps>    ^type color shape id_string)
+                    (<rps>    ^type color shape)
                     }}""".format(v_param=visual_concepts_param,
                                  s_param=spatial_concepts_param,
                                  a_param=action_concepts_param,
