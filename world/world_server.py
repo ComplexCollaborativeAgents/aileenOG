@@ -7,6 +7,7 @@ from threading import Thread
 import settings
 import time
 
+
 class AileenWorldServer:
 
     def __init__(self, aileen_supervisor, port=10000):
@@ -33,6 +34,7 @@ class AileenWorldServer:
         def get_all():
             logging.info("[aileen_world_server] :: received get_all from agent client")
             output = aileen_supervisor.get_all()
+
             logging.debug("[aileen_world_server] :: sending response {}".format(output))
             return output
 
@@ -48,7 +50,8 @@ class AileenWorldServer:
 
         def set_scene(scene_specification):
             logging.info("[aileen_world_server] :: received set_scene from instructor client")
-            acknowledgement = aileen_supervisor.set_scene(scene_specification['configuration'], scene_specification['label'])
+            acknowledgement = aileen_supervisor.set_scene(scene_specification['configuration'],
+                                                          scene_specification['label'])
             logging.debug("[aileen_world_server] :: sending acknowledgement")
             return acknowledgement
 

@@ -20,7 +20,7 @@ class AileenObject:
         self._width_x = width_x
         self._width_z = width_z
         self._translation = translation
-        self._name = "object{}".format(AileenObject.randomizer.uuid4().node)
+        self._name = "object{}".format(AileenObject.randomizer.uuid4())
         self._language = None
         logging.debug("[aileen_object] :: created a new object")
 
@@ -32,6 +32,9 @@ class AileenObject:
 
     def get_object_description(self):
         description = "Solid {\n"
+        description += "   recognitionColors {} {} {}\n".format(self._color.rgb[0],
+                                                                self._color.rgb[1],
+                                                                self._color.rgb[2])
         description += "   translation {} {} {}\n".format(self._translation[0],
                                                           self._translation[1],
                                                           self._translation[2])
@@ -166,6 +169,6 @@ class AileenObject:
             return choice(settings.SHAPE_SET)
 
         def uuid4(self):
-            return uuid.uuid4()
+            return uuid.uuid4().node
 
     randomizer = Randomizer()  # Allows unit test to override

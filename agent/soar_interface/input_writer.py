@@ -15,6 +15,7 @@ try:
 except:
     logging.fatal("[input_writer] :: cannot find spatial reasoning library")
 
+
 class InputWriter(object):
     def __init__(self, soar_agent, world_server):
         self._soar_agent = soar_agent
@@ -40,11 +41,11 @@ class InputWriter(object):
             self._concept_memory = self._input_link.CreateIdWME("concept-memory")
             self._clean_concept_memory_flag = False
 
-            if settings.SOAR_CV:
-                # ToDo: Move the input to Detector to the config file.
-                self.detector = Detector("aileen_vision_module/aileen.names",
-                                     "aileen_vision_module/yolov3-tiny-aileen.cfg",
-                                     "aileen_vision_module/yolov3-tiny-aileen_900.weights",
+        if settings.SOAR_CV:
+            # ToDo: Move the input to Detector to the config file.
+            self.detector = Detector(settings.CV_NAMES,
+                                     settings.CV_CONFIGURATION,
+                                     settings.CV_WEIGHTS,
                                      'color')
 
     def set_concept_memory_status(self, concept_memory_status_dictionary):

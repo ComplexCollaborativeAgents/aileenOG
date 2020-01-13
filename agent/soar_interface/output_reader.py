@@ -4,6 +4,7 @@ from agent.language.aileen_grammar import AileenGrammar
 from agent.concept_learner.concept_learner import ConceptLearner
 from agent.soar_interface import concept_learner_helper
 
+
 class OutputReader(object):
     def __init__(self, soar_agent, world_server):
         self._soar_agent = soar_agent
@@ -12,8 +13,6 @@ class OutputReader(object):
         self._response = None
         self._concept_learner = ConceptLearner()
         self._context_counter = 0
-
-
         self._world_server = world_server
 
     def read_output(self):
@@ -35,6 +34,7 @@ class OutputReader(object):
                 response = concept_learner_helper.process_concept_learner_request(commandID, self._concept_learner)
                 self._soar_agent._input_writer.set_concept_memory_status(response)
                 commandID.AddStatusComplete()
+
 
     def process_action_description(self, commandID):
         action_dict = {}

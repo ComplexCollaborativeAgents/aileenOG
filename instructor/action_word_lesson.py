@@ -29,8 +29,9 @@ class ActionWordLesson:
         logging.debug("[action_word_lesson] :: generating the initial scene for action word learning")
         objects = self._action_definition[settings.ACTION_DEF_OBJECTS]
         if len(objects) > 0:
-            for obj in objects:
-                self._scene_objects[obj] = AileenObject.generate_random_object()
+            objs = AileenObject.generate_random_objects(len(objects))
+            for o, obj in zip(objs, objects):
+                self._scene_objects[obj] = o
 
         relations = self._action_definition[settings.ACTION_DEF_RELATIONS]
         if relations is not None and len(relations) > 0:
