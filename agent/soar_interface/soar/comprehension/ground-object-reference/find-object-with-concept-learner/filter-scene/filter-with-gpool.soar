@@ -16,35 +16,29 @@ sp {filter-scene*apply*filter-with-gpool
              ^concept <concept>)
 -->
     (<ol>    ^concept-memory.query <query>)
-    (<query>    ^gpool <gpool>
-                ^concept <concept>
-                ^scene <scene>
-                ^context <pid>)
-    }
-
-sp {filter-scene*apply*filter-with-gpool*object*id
-    (state <s>    ^name filter-scene
-                  ^operator <op>
-                  ^io.output-link <ol>)
-    (<ol>    ^concept-memory.query.scene <scene>)
-    (<op>    ^candidate-set.object <cso>)
--->
-    (<scene>    ^object <obj>)
-    (<s>    ^<cso> <obj>)
+    (<query>    #^gpool <gpool>
+                ^pattern <pat>
+                ^facts <facts>)
+                #^context <pid>)
+    (<pat>    ^lfirst isa
+              ^lsecond ?o
+              ^lthird <concept>)
     }
 
 sp {filter-scene*apply*filter-with-gpool*object*attrs
     (state <s>    ^name filter-scene
                   ^operator <op>
                   ^io.output-link <ol>
-                  ^topstate._params.relevant-percept-set.type <attr>
-                  ^<cso> <obj>)
-    (<ol>    ^concept-memory.query.scene <scene>)
+                  ^topstate._params.relevant-percept-set.type <attr>)
+    (<ol>    ^concept-memory.query.facts <facts>)
     (<op>    ^candidate-set.object <cso>)
-    (<cso>    ^<attr> <val>)
-    (<scene>    ^object <obj>)
+    (<cso>    ^<attr> <val>
+              ^id_string <id_string>)
 -->
-    (<obj>    ^<attr> <val>)
+    (<facts>    ^fact <f>)
+    (<f>    ^lfirst isa
+            ^lsecond <id_string>
+            ^lthird <val>)
     }
 
 sp {filter-scene*apply*filter-with-gpool*object*matches

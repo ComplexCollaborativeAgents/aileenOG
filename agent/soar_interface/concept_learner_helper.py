@@ -53,8 +53,8 @@ def process_store_command(store_command_id, concept_learner):
         if child_id.GetAttribute() == "facts":
             request['facts'] = translate_soar_facts_to_tuple_list(child_id.ConvertToIdentifier())
             added_facts = True
-        if child_id.GetAttribute() == "gpool":
-            request['gpool'] = child_id.GetValueAsString()
+        if child_id.GetAttribute() == "concept":
+            request['concept'] = child_id.GetValueAsString()
             added_concept = True
         if child_id.GetAttribute() == "context":
             request['context'] = "episode{}".format(child_id.GetValueAsString())
@@ -62,7 +62,7 @@ def process_store_command(store_command_id, concept_learner):
 
     if added_facts and added_concept and added_context:
         logging.debug("[concept-learner-helper] :: requesting concept memory {}".format(request))
-        response = concept_learner.store_instance(request)
+        response = concept_learner.store(request)
         logging.debug("[concept-learner-helper] :: response from concept memory {}".format(response))
         return {'status': 'success'}
     else:
@@ -77,30 +77,25 @@ def process_query_command(query_command_id, concept_learner):
     logging.debug("[concept_learner_helper] :: processing query command")
 
     added_facts = None
-    added_context = None
     added_pattern = None
-    added_concept = None
 
     for i in range(0, query_command_id.GetNumberChildren()):
         child_id = query_command_id.GetChild(i)
         if child_id.GetAttribute() == "facts":
             request['facts'] = translate_soar_facts_to_tuple_list(child_id.ConvertToIdentifier())
             added_facts = True
-        if child_id.GetAttribute() == "gpool":
-            request['gpool'] = child_id.GetValueAsString()
-            added_concept = True
-        if child_id.GetAttribute() == "context":
-            request['pattern'] = translate_soar_fact_to_tuple(child_id.ConvertToIdentifier)
+        if child_id.GetAttribute() == "pattern":
+            request['pattern'] = translate_soar_fact_to_tuple(child_id.ConvertToIdentifier())
             added_pattern = True
-        if child_id.GetAttribute == "context":
-            request['context'] = "episode{}".format(child_id.GetValueAsString())
-            added_context = True
 
-    if added_facts and added_concept and added_context:
+    if added_facts and added_pattern:
         logging.debug("[concept_learner_helper] :: request concept memory {}".format(request))
-        response = concept_learner.store_instance(request)
+        response = concept_learner.query(request)
         logging.debug("[concept_learner_helper] :: response from concept memory {}".format(response))
-        return {'status': success}
+        return {'status': 'success', 'matches': response['matches']}
+    else:
+        logging.error("[output_reader] :: incomplete query command. facts:{}, pattern:{}".format(added_facts, added_pattern))
+        return {'status': 'failure'}
 
 
 def translate_soar_facts_to_tuple_list(facts_id):

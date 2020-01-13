@@ -20,6 +20,7 @@ sp {learn-from-object*apply*send-instance-to-concept-memory
     (<ol>    ^concept-memory <cm>)
     (<cm>    ^store <si>)
     (<si>    ^gpool <gpool>
+             ^concept <con>
              ^facts <facts>
              ^context <pid>)
     (<facts>    ^fact <f>)

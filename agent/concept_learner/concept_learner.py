@@ -28,12 +28,12 @@ class ConceptLearner(object):
             response = json.loads(response_json.data)
             return response
 
-    def store_instance(self, request):
-        response_json = self._server.add_case_to_gpool(xmlrpclib.Binary(json.dumps(request)))
+    def store(self, request):
+        response_json = self._server.store(xmlrpclib.Binary(json.dumps(request)))
         response = json.loads(response_json.data)
         return response
 
-    def query_scene(self, request):
-        response_json = self._server.filter_scene_by_expression(xmlrpclib.Binary(json.dumps(request)))
+    def query(self, request):
+        response_json = self._server.query(xmlrpclib.Binary(json.dumps(request)))
         response = json.loads(response_json.data)
         return response
