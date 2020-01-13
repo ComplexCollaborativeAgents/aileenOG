@@ -6,7 +6,7 @@
 ;;;;   Created: November 18, 2019 13:04:34
 ;;;;   Purpose: 
 ;;;; ----------------------------------------------------------------------------
-;;;;  Modified: Wednesday, November 20, 2019 at 18:21:04 by klenk
+;;;;  Modified: Friday, January  3, 2020 at 11:27:28 by klenk
 ;;;; ----------------------------------------------------------------------------
 
 (in-package :cl-user)
@@ -24,6 +24,7 @@
 ;;;; Testing code
 
 (defun run-tests ()
+  (format t "~% WARNING!!!! The prefered test suite for lisp is the test-client.lsp at this point"
   (make-reasoner)
   (load-test-flat-files)
   (setq lisp-unit::*print-failures* t lisp-unit::*print-errors* t)
