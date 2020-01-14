@@ -11,7 +11,7 @@ sp {learn-from-scene-external*apply*store-new-concept
     (<lti>    ^concept <con>)
 -->
     (<ol>    ^concept-memory <cl>)
-    (<cl>    ^learn <le>)
+    (<cl>    ^store <le>)
     (<le>    ^new-concept-symbol <con>)
     }
 
