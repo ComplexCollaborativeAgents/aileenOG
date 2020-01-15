@@ -4,64 +4,23 @@
 # @created smohan 20191202
 
 
-
-sp {filter-scene*apply*filter-with-gpool
+sp {filter-scene*apply*filter-for-concept*object
     (state <s>    ^name filter-scene
-                  ^operator <op>
-                  ^epmem.present-id <pid>
-                  ^io.output-link <ol>)
-    (<op>    ^name filter-with-gpool
-             ^gpool <gpool>
-             ^candidate-set <cs>
-             ^concept <concept>)
--->
-    (<ol>    ^concept-memory.query <query>)
-    (<query>    #^gpool <gpool>
-                ^pattern <pat>
-                ^facts <facts>)
-                #^context <pid>)
-    (<pat>    ^lfirst isa
-              ^lsecond ?o
-              ^lthird <concept>)
-    }
-
-sp {filter-scene*apply*filter-with-gpool*object*attrs
-    (state <s>    ^name filter-scene
-                  ^operator <op>
-                  ^io.output-link <ol>
-                  ^topstate._params.relevant-percept-set.type <attr>)
-    (<ol>    ^concept-memory.query.facts <facts>)
-    (<op>    ^candidate-set.object <cso>)
-    (<cso>    ^<attr> <val>
-              ^id_string <id_string>)
--->
-    (<facts>    ^fact <f>)
-    (<f>    ^lfirst isa
-            ^lsecond <id_string>
-            ^lthird <val>)
-    }
-
-sp {filter-scene*apply*filter-with-gpool*object*matches
-    (state <s>    ^name filter-scene
-                  ^operator <op>
-                  ^io.input-link.concept-memory.result <cm>
-                  ^candidate-set <cs>)
+                  ^candidate-set <cs>
+                  ^operator <op>)
     (<cs>    ^object <obj>)
-    (<obj>    ^id_string <id-name>)
-    -{(<cm>    ^matches <m>)
-    (<m>    ^id_name <id-name>)}
-    (<op>    ^name filter-with-gpool
-             ^concept <concept>)
+    (<op>    ^name filter-for-concept
+             ^concept <con>)
+    (<obj>    -^isa <con>)
 -->
     (<cs>    ^object <obj> -)
-    (<s>    ^filtered-with <concept>)
     }
 
-sp {filter-scene*apply*filter-with-gpool*object*mark-status
+sp {filter-scene*apply*filter-for-concept*object*mark-status
     (state <s>    ^name filter-scene
                   ^operator <op>
-                  ^io.input-link.concept-memory.result <cm>)
-    (<op>    ^name filter-with-gpool
+                  ^candidate-set <cs>)
+    (<op>    ^name filter-for-concept
              ^concept <concept>)
 -->
     (<s>    ^filtered-with <concept>)

@@ -14,10 +14,7 @@ sp {compose-with-concept-learner*apply*query-concept-memory
              ^query <query>)
 -->
     (<ol>    ^concept-memory <cm>)
-    (<cm>    ^facts <f>
-             ^command <command>
-             ^cm-context <con>) ## obsolete with the new api
-    (<command>    ^query <query>)
-    (<con>    ^context <pid>
-              ^gpool <pool>)
+    (<cm>    ^query <q>)
+    (<q>    ^facts <f>
+            ^pattern <query>)
     }

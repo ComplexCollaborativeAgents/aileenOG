@@ -6,3 +6,5 @@
 source "proposals.soar"
 
 source "interpret-unknown-concept.soar"
+
+source "interpret-overspecific-concept.soar"

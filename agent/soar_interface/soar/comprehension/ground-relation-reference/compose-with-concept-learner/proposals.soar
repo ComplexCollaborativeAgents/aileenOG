@@ -19,7 +19,7 @@ sp {compose-with-concept-learner*propose*compose-relation-query
 sp {compose-with-concept-learner*propose*collect-relation-facts
     (state <s>    ^name compose-with-concept-learner
                   ^relation-query <query>
-                  -^facts.relations)
+                  -^facts.fact)
     (<query>    ^lfirst
                 ^lsecond
                 ^lthird)

@@ -11,8 +11,9 @@ sp {learn-from-scene-external*apply*store-new-concept
     (<lti>    ^concept <con>)
 -->
     (<ol>    ^concept-memory <cl>)
-    (<cl>    ^store <le>)
-    (<le>    ^new-concept-symbol <con>)
+    (<cl>    ^create <le>)
+    (<le>    ^type predicate
+             ^name <con>)
     }
 
 sp {learn-from-scene-external*apply*store-new-concept*copy-gpool
@@ -20,8 +21,7 @@ sp {learn-from-scene-external*apply*store-new-concept*copy-gpool
                   ^operator <op>
                   ^topstate.concept-memory <cl>)
     (<cl>    ^result <res>)
-    (<res>    ^concept-symbol <con>
-              ^status success
+    (<res>    ^status success
               ^gpool <gpool>)
     (<op>    ^name store-new-concept
              ^concept-structure <lti>)
