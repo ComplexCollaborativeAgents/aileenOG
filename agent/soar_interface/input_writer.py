@@ -123,10 +123,18 @@ class InputWriter(object):
 
         if 'matches' in self._concept_memory_status:
             matches_id = new_status_link.CreateIdWME('matches')
-            for item in self._concept_memory_status['matches']:
-                matches_id.CreateStringWME("id_name", str(item))
-            logging.debug(
-                "[input-writer] :: wrote matches {}".format(self._concept_memory_status['status']))
+            logging.debug("[input-writer] :: {}".format(self._concept_memory_status))
+            if 'matches' in self._concept_memory_status:
+                if self._concept_memory_status['matches'] is not None and len(self._concept_memory_status['matches']) > 0:
+                    for match in self._concept_memory_status['matches']:
+                        if match is not None:
+                            logging.debug("[input_writer] :: match {}".format(match))
+                            match_id = matches_id.CreateIdWME("match")
+                            match_id.CreateStringWME("first", str(match[0]))
+                            match_id.CreateStringWME("second", str(match[1]))
+                            match_id.CreateStringWME("third", str(match[2]))
+                            logging.debug(
+                                        "[input-writer] :: wrote matches {}".format(self._concept_memory_status['status']))
 
         self._concept_memory_status = None
         self._clean_concept_memory_flag = True
