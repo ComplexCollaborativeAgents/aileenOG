@@ -33,9 +33,14 @@ def process_create_concept_command(create_command_id, concept_learner):
             request['type'] = child_id.GetValueAsString()
             added_type = True
     if added_name and added_type:
+        logging.debug("[concept_learner_helper] :: requesting concept memory {}".format(request))
         response = concept_learner.create_new_concept(request)
         logging.debug("[concept-learner-helper] :: response from concept memory {}".format(response))
-        return {'status': 'success', 'gpool': response['gpool']}
+        if response is not None:
+            return {'status': 'success', 'gpool': response['gpool']}
+        else:
+            logging.error("[concept_learner_helper] :: concept memory returned with nothing. ill-formed command")
+            return {'status': 'failure'}
     else:
         logging.error("[concept-learner-helper] :: create concept command is incompletely specified")
         return {'status':'failure'}
@@ -63,8 +68,12 @@ def process_store_command(store_command_id, concept_learner):
     if added_facts and added_concept and added_context:
         logging.debug("[concept-learner-helper] :: requesting concept memory {}".format(request))
         response = concept_learner.store(request)
-        logging.debug("[concept-learner-helper] :: response from concept memory {}".format(response))
-        return {'status': 'success'}
+        if response is not None:
+            logging.debug("[concept-learner-helper] :: response from concept memory {}".format(response))
+            return {'status': 'success'}
+        else:
+            logging.debug("[concept-learner-helper] :: concept memory returned with nothing. ill-formed request")
+            return {'status':'failure'}
     else:
         logging.error("[output_reader] :: incomplete store command")
         return {'status': 'failure'}
