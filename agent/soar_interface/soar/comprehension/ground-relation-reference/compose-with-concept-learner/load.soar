@@ -12,3 +12,4 @@ source "compose-relation-query.soar"
 source "collect-relation-facts.soar"
 
 source "query-concept-memory.soar"
+source "compose-with-concept-learner.soar"

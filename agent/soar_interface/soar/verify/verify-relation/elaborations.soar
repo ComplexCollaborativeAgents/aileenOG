@@ -51,6 +51,7 @@ sp {verify-relation*report*verified
     (<ss>    ^verified <rel>)
     }
 
+
 sp {verify-relation*report*success
     (state <s>    ^name verify-relation
                   ^pair <p>
@@ -61,5 +62,7 @@ sp {verify-relation*report*success
     (<ss>    ^operator <op> + !)
     (<op>    ^name report-success)
     }
+
+
     
                   

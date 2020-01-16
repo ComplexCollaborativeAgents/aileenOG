@@ -21,4 +21,32 @@ sp {compose-with-concept-learner*elaborate*grounding*parses
     (<s>    ^grounding <g>
             ^parses <p>)
     }
+
+sp {compose-with-concept-learner*elaborate*relations
+    (state <s>    ^name compose-with-concept-learner)
+-->
+    (<s>    ^relations <rels>)
+    }
     
+
+sp {compose-with-concept-learner*generate*relation
+    (state <s>    ^name compose-with-concept-learner
+                  ^io.input-link <il>
+                  ^grounding <g>
+                  ^relations <rels>
+                  ^operator.name query-concept-memory)
+    (<il>    ^concept-memory <cm>)
+    (<cm>    ^result.matches.match <match>)
+    (<match>    ^first <rel-name>
+                ^second <root-obj-id>
+                ^third <target-obj-id>)
+    (<g>    ^entity.object <root-obj>
+            ^entity.object <target-obj>)
+    (<root-obj>    ^id_string <root-obj-id>)
+    (<target-obj>    ^id_string <target-obj-id>)
+-->
+    (<rels>    ^relation <rel>)
+    (<rel>    ^spatial-concept <rel-name>
+              ^root <root-obj>
+              ^target <target-obj>)
+    }

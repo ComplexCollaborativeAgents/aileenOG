@@ -33,10 +33,19 @@ sp {compose-with-concept-learner*propose*query-concept-memory
     (state <s>    ^name compose-with-concept-learner
                   ^relation-query <q>
                   ^facts <f>
-                  -^io.output-link.concept-memory)
+                  -^relations.relation)
 -->
     (<s>    ^operator <op> +)
     (<op>    ^name query-concept-memory
              ^facts <f>
              ^query <q>)
+    }
+
+sp {compose-with-concept-learner*propose*complete-compose-with-concept-learner
+    (state <s>    ^name compose-with-concept-learner
+                  ^relations.relation <rel>)
+-->
+    (<s>    ^operator <op> + < =)
+    (<op>     ^name complete-compose-with-concept-learner
+              ^relation <rel>)
     }
