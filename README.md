@@ -94,7 +94,7 @@ When the REPL is started, we can input individual lessons that together form a c
 A curriculum can also be put together as a JSON file and then be used as input for the instructor.
 ```json
 [
-{ "lesson": "visual", "color": "red", "shape": "cube" },
+{ "lesson": "visual", "color": "red", "shape": "cube", "signal": "verify" },
 { "lesson": "visual", "color": "red", "shape": "cube", "position": [0, 0.5, 0] },
 { "lesson": "visual", "color": "red", "shape": "cube", "distractors": 3 },
 { "lesson": "spatial", "language": [ { "color": "red", "shape": "cube", "position": [0, 0.5, 0] },

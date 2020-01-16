@@ -119,6 +119,14 @@ class AileenObject:
         return scene_object
 
     @staticmethod
+    def generate_object(shape, color):
+        scene_object_color_vector = AileenObject.randomizer.get_color_vector_sample(color)
+        color = Color(color, scene_object_color_vector)
+        scene_object = AileenObject(shape=shape, color=color)
+        scene_object._language = [color.name, shape]
+        return scene_object
+
+    @staticmethod
     def generate_random_objects(n):
         """Generate n random unique objects."""
         colors = AileenObject.get_colors().keys()
