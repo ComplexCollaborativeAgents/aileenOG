@@ -12,18 +12,26 @@ from collections import OrderedDict
 
 class SpatialWordLesson:
 
-    def __init__(self):
+    def __init__(self, configuration=None):
         self._spatial_configurations_set = SpatialWordLesson.get_spatial_configurations_set()
-        self._spatial_configuration = SpatialWordLesson.randomizer.random_spatial_configuration(
-            self._spatial_configurations_set.keys())
+        if configuration:
+            self._spatial_configuration = configuration
+        else:
+            self._spatial_configuration = SpatialWordLesson.randomizer.random_spatial_configuration(
+                self._spatial_configurations_set.keys())
         self._spatial_configuration_def = self._spatial_configurations_set[self._spatial_configuration]
         self._scene_objects = OrderedDict()
         self._scene = AileenScene()
         self._language = None
 
-    def generate_lesson(self, distractors=0):
-        self.generate_setup()
-        self.generate_scene(distractors)
+    def generate_lesson(self, objects=None, distractors=0):
+        self.generate_setup(objects)
+
+        positions = [o.get('position', None) for o in objects]
+        if not all(positions):
+            positions = []
+
+        self.generate_scene(positions, distractors)
         lesson = {
             'scene': self._scene.generate_scene_description(),
             'interaction': {
@@ -33,10 +41,13 @@ class SpatialWordLesson:
         }
         return lesson
 
-    def generate_setup(self):
+    def generate_setup(self, object_descriptions):
         logging.debug("[action_word_lesson] :: generate the setup for the new lesson")
         objects = self._spatial_configuration_def[settings.SPATIAL_DEF_OBJECTS]
-        if len(objects) > 0:
+        if object_descriptions:
+            for o, desc in zip(objects, object_descriptions):
+                self._scene_objects[o] = AileenObject.generate_object(desc['shape'], desc['color'])
+        elif len(objects) > 0:
             objs = AileenObject.generate_random_objects(len(objects))
             for o, obj in zip(objs, objects):
                 self._scene_objects[obj] = o
@@ -44,9 +55,14 @@ class SpatialWordLesson:
                                                                            self._spatial_configuration_def[
                                                                                settings.SPATIAL_DEF_LANGUAGE_TEMPLATE])
 
-    def generate_scene(self, distractors):
+    def generate_scene(self, positions, distractors):
         logging.debug("[aileen_spatial_word_lesson] :: generating a new scene for spatial word learning")
-        if len(self._scene_objects) == 2:
+
+        if len(positions) == len(self._scene_objects):
+            for o, p in zip(self._scene_objects.values(), positions):
+                o.set_translation(p)
+                self._scene.add_object(o)
+        elif len(self._scene_objects) == 2:
             translations = AileenScene.place_two_objects_in_configuration(
                 target_object_name=self._scene_objects.items()[0][0],
                 reference_object_name=self._scene_objects.items()[1][0],
@@ -56,8 +72,7 @@ class SpatialWordLesson:
                 scene_object = self._scene_objects[scene_object_name]
                 scene_object.set_translation(translations[scene_object_name])
                 self._scene.add_object(scene_object)
-
-        if len(self._scene_objects) == 3:
+        elif len(self._scene_objects) == 3:
             print(self._scene_objects.items()[0][0], self._scene_objects.items()[1][0])
             translations = AileenScene.place_three_objects_in_configuration(
                 target_object_name=self._scene_objects.items()[2][0],
