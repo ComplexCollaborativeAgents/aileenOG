@@ -117,17 +117,24 @@ class InputWriter(object):
             new_status_link.CreateStringWME("status", self._concept_memory_status['status'])
             logging.debug("[input-writer] :: wrote status {}".format(self._concept_memory_status['status']))
 
-        if 'concept-symbol' in self._concept_memory_status and 'gpool' in self._concept_memory_status:
-            new_status_link.CreateStringWME("concept-symbol", self._concept_memory_status['concept-symbol'])
+        if 'gpool' in self._concept_memory_status:
             new_status_link.CreateStringWME("gpool", str(self._concept_memory_status['gpool']))
-            logging.debug("[input-writer] :: wrote concept symbol {} and gpool {}".format(self._concept_memory_status['concept-symbol'], self._concept_memory_status['gpool']))
+            logging.debug("[input-writer] :: gpool {}".format(self._concept_memory_status['gpool']))
 
         if 'matches' in self._concept_memory_status:
             matches_id = new_status_link.CreateIdWME('matches')
-            for item in self._concept_memory_status['matches']:
-                matches_id.CreateStringWME("id_name", str(item))
-            logging.debug(
-                "[input-writer] :: wrote matches {}".format(self._concept_memory_status['status']))
+            logging.debug("[input-writer] :: {}".format(self._concept_memory_status))
+            if 'matches' in self._concept_memory_status:
+                if self._concept_memory_status['matches'] is not None and len(self._concept_memory_status['matches']) > 0:
+                    for match in self._concept_memory_status['matches']:
+                        if match is not None:
+                            logging.debug("[input_writer] :: match {}".format(match))
+                            match_id = matches_id.CreateIdWME("match")
+                            match_id.CreateStringWME("first", str(match[0]))
+                            match_id.CreateStringWME("second", str(match[1]))
+                            match_id.CreateStringWME("third", str(match[2]))
+                            logging.debug(
+                                        "[input-writer] :: wrote matches {}".format(self._concept_memory_status['status']))
 
         self._concept_memory_status = None
         self._clean_concept_memory_flag = True
@@ -159,6 +166,9 @@ class InputWriter(object):
         if 'content' in self._interaction:
             content = str(self._interaction['content'])
             new_interaction_link.CreateStringWME('content', content.replace(" ", "-"))
+        if 'marker' in self._interaction:
+            marker = str(self._interaction['marker'])
+            new_interaction_link.CreateStringWME('marker', marker)
         self._interaction = None
         self._clean_interaction_link_flag = True
 

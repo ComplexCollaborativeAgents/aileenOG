@@ -18,22 +18,72 @@ sp {filter-scene*propose*mark-unknown-concept
              ^type visual)
    }
 
+sp {filter-scene*propose*elaborate-with-concept
+    (state <s>    ^name filter-scene
+                  ^visual-word <tag>
+                  ^retrieved-concept-lti <res>
+                  -^elaborated-with <concept>
+                   ^candidate-set <cs>)
+    (<res>    ^nl <tag>
+              ^gpool <gpool>
+              ^concept <concept>)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name elaborate-with-concept
+             ^gpool <gpool>
+             ^candidate-set <cs>
+             ^concept <concept>)
+    }
+              
 
-sp {filter-scene*propose*filter-with-gpool
+
+sp {filter-scene*propose*filter-for-concept
     (state <s>    ^name filter-scene
                   ^visual-word <tag>
                   ^retrieved-concept-lti <res>
                   ^candidate-set <cs>
+                  ^elaborated-with <concept>
                   -^filtered-with <concept>)
     (<res>    ^nl <tag>
               ^gpool <gpool>
               ^concept <concept>)
 -->
     (<s>    ^operator <op> +)
-    (<op>    ^name filter-with-gpool
+    (<op>    ^name filter-for-concept
              ^gpool <gpool>
              ^candidate-set <cs>
              ^concept <concept>)
+    }
+
+sp {filter-scene*propose*complete-filter-scene
+    (state <s>    ^name filter-scene
+                  ^visual-word <tag>
+                  ^retrieved-concept-lti <lti>
+                  ^filtered-with <concept>
+                  ^elaborated-with <concept>
+                  ^candidate-set <cs>)
+    (<lti>    ^concept <concept>
+              ^nl <tag>)
+    (<cs>    ^object)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name complete-filter-scene
+             ^tag <tag>)
+    }
+
+sp {filter-scene*propose*mark-overspecific-visual-concept
+    (state <s>    ^name filter-scene
+                  ^visual-word <tag>
+                  ^retrieved-concept-lti <res>
+                  ^candidate-set <cs>
+                  ^elaborated-with <concept>
+                  ^filtered-with <concept>)
+    (<cs>    -^object)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name mark-overspecific-visual-concept
+             ^concept-structure <res>
+             ^type visual)
     }
 
 

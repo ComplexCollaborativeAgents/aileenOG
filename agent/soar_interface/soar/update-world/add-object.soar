@@ -1,0 +1,57 @@
+##!
+# @file
+#
+# @created smohan 20191218
+sp {aileen*apply*update-world*add-object
+    (state <s>    ^name aileen
+                  ^operator <op1>
+                  ^operator <op2> +
+                  ^world.objects <wobjs>)
+    (<op1>    ^name update-world)
+    (<op2>    ^name update-world
+              ^add-object <obj>)
+    (<obj>    ^color <color>
+              ^shape <shape>
+              ^held <held>
+              ^id <id>
+              ^id_uuid <id-uuid>
+              ^id_string <id-string>)
+-->
+    (<wobjs>    ^object <obj-new>)
+    (<obj-new>    ^color <color>
+                  ^shape <shape>
+                  ^held <held>
+                  ^id <id>
+                  ^id_uuid <id-uuid>
+                  ^id_string <id-string>)
+    }
+           
+
+sp {aileen*apply*update-world*remove-object
+    (state <s>    ^name aileen
+                  ^operator <op1>
+                  ^operator <op2> +
+                  ^world.objects <wobjs>)
+    (<op1>    ^name update-world)
+    (<op2>    ^name update-world
+              ^remove-object <obj>)
+-->
+    (<wobjs>    ^object <obj> -)
+    }   
+
+sp {aileen*apply*update-world*update-attribute
+    (state <s>    ^name aileen
+                  ^operator <op1>
+                  ^operator <op2> +
+                  ^world.objects.object <wobj>)
+    (<op1>    ^name update-world)
+    (<op2>    ^name update-world
+              ^update-attribute <utr>)
+    (<utr>    ^object <wobj>
+               ^attribute <attr>
+               ^old-value <nval>
+               ^new-value <val>)
+-->
+    (<wobj>    ^<attr> <nval> -
+               ^<attr>    <val>)
+    }

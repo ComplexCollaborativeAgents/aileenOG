@@ -1,0 +1,13 @@
+##!
+# @file
+#
+# @created smohan 20191220
+
+sp {ground-action-reference*apply*complete-ground-action-reference
+    (state <s>    ^name ground-action-reference
+                  ^action <a>
+                  ^grounding <g>
+                  ^operator.name complete-ground-action-reference)
+-->
+    (<g>    ^action <a>)
+    }

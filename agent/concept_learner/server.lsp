@@ -6,7 +6,7 @@
 ;;;;   Created: November 13, 2019 16:14:37
 ;;;;   Purpose: 
 ;;;; ----------------------------------------------------------------------------
-;;;;  Modified: Tuesday, December 17, 2019 at 15:57:16 by klenk
+;;;;  Modified: Sunday, January  5, 2020 at 14:43:51 by klenk
 ;;;; ----------------------------------------------------------------------------
 
 (in-package :cl-user)
@@ -78,13 +78,32 @@
   (handler-bind ((error #'print-backtrace))
   (let* ((json (cl-json:decode-json-from-string str))
 	 (symbol (str->symbols (cdr (assoc :PREDICATE json))))
-	 (arity (cdr (assoc :arity json))))
+	 )
     (cond (symbol
 	   (format t "Creating Reasoning Predicate ~A~%" symbol)
 	   (multiple-value-bind (num gpool)
 	       (create-reasoning-predicate symbol 2)
 	     (cl-json:encode-json-alist-to-string
 	      (pairlis '("numPredicates" "gpool") (list num (symbol-name gpool))))))
+	  (t
+	   (format t "Ill formed create-reasoning-predicate request ~A~%" str)
+	   "")))))
+
+;;; assumes action has two arguments
+;;; Long term a davidsonian representation makes more sense.
+(defun create-reasoning-action-helper (str)
+  (handler-bind ((error #'print-backtrace))
+    (setq *str* str)
+    (let* ((json (cl-json:decode-json-from-string str))
+	   (symbol (str->symbols (cdr (assoc :ACTION json))))
+	   (arity (cdr (assoc :ARITY json)))
+	   )
+    (cond ((and symbol arity)
+	   (format t "Creating Reasoning Action  ~A~%" symbol)
+	   (multiple-value-bind (num gpool)
+	       (create-reasoning-action symbol arity) 
+	     (cl-json:encode-json-alist-to-string
+	      (pairlis '("numActions" "gpool") (list num (symbol-name gpool))))))
 	  (t
 	   (format t "Ill formed create-reasoning-predicate request ~A~%" str)
 	   "")))))
@@ -116,7 +135,7 @@
          (concept (str->symbols (cdr (assoc :CONCEPT json)))))
     (cond ((and facts context concept)
 	   (multiple-value-bind (num-gen num-exp)
-	       (add-case-to-gpool facts context (get-concept-gpool concept))
+	       (add-case-to-gpool facts context concept)
 	     (format t "Gpool for ~A has ~a generalizations and ~A examples~%" concept num-gen num-exp)
 	     (cl-json:encode-json-alist-to-string
 	      (pairlis '("numGeneralizations" "numExamples") (list num-gen num-exp)))))
@@ -169,6 +188,29 @@
               (pairlis '("matches" "pattern")
                        (list (symbols->strs matches)
 			     (symbols->strs pattern))))))
+          (t
+           (format t "Ill formed filter scene request ~A~%" str)
+           (cl-json:encode-json-alist-to-string
+	    (pairlis '("matches" "pattern") '(nil nil))))))))
+
+(defun project-helper (str)
+  (handler-bind ((error #'print-backtrace))
+  (setq *str* str)
+  (format t "Projecting ~A~%" str)
+  (let* ((json (cl-json:decode-json-from-string str))
+         (facts (str->symbols (cdr (assoc :FACTS json)))) ;;; all facts in scene
+         (context 'data::project-facts)
+	 (action (str->symbols (cdr (assoc :ACTION json))))) ;; Statement with variables
+    (cond ((and facts action)
+           ;; Clear previous facts from context.
+           (remove-facts-from-case context)
+           ;; Store facts in context and match query.
+           (let ((cis (project-state-for-action facts context  action)))
+             (format t "Found candidate inferences  ~A~%" cis)
+             (cl-json:encode-json-alist-to-string
+              (pairlis '("cis")
+                       (list (symbols->strs cis)
+			     )))))
           (t
            (format t "Ill formed filter scene request ~A~%" str)
            (cl-json:encode-json-alist-to-string
@@ -235,6 +277,9 @@
      rcp '("create_reasoning_predicate" create-reasoning-predicate-helper)
      :base64 :base64)
     (net.xml-rpc:export-xml-rpc-method
+     rcp '("create_reasoning_action" create-reasoning-action-helper)
+     :base64 :base64)
+    (net.xml-rpc:export-xml-rpc-method
      rcp '("add_case_to_gpool" add-case-to-gpool-helper)
      :base64 :base64)
     (net.xml-rpc:export-xml-rpc-method
@@ -245,6 +290,9 @@
      :base64 :base64)
     (net.xml-rpc:export-xml-rpc-method
      rcp '("query" query-helper)
+     :base64 :base64)
+    (net.xml-rpc:export-xml-rpc-method
+     rcp '("project" project-helper)
      :base64 :base64)
 ;; Klenk: We want to match against the whole scene.
     (net.xml-rpc:export-xml-rpc-method

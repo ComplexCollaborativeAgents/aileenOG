@@ -35,9 +35,9 @@ sp {ground-relation-reference*propose*compose-with-semantic-memory
 sp {ground-relation-reference*propose*compose-with-concept-learner
     (state <s>    ^name ground-relation-reference
                   ^smem-query <sq>
-                  ^referenece <ref>
+                  ^reference <ref>
                   ^_params.spatial-concepts external
-                  ^relation <rel>)
+                  -^relation <rel>)
     (<sq>    ^cue.nl <ref>
              ^result {<res>    <> failure})
 -->
@@ -51,7 +51,7 @@ sp {ground-relation-reference*propose*complete-ground-reference
     (state <s>    ^name ground-relation-reference
                   ^relation <rel>)
 -->
-    (<s>    ^operator <op> +)
+    (<s>    ^operator <op> + =)
     (<op>    ^name complete-ground-relation-reference
              ^relation <rel>)
     }

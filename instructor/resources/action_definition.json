@@ -1,20 +1,10 @@
 {
-    "move-right-of": {
-    "objects": ["<obj1>", "<obj2>"],
-    "relations": ["right-of"],
-    "initial_configuration": [[["not","n"], "<obj2>", "<obj1>"], ["dc", "<obj2>", "<obj1>"]],
+    "pick up": {
+    "objects": ["<obj1>"],
+    "relations": [],
+    "initial_configuration": [],
     "trace-actions": [
-      {"name": "pick-up", "argument": "<obj1>"},
-      {"name": "place", "argument1": "<obj1>", "argument2": "<obj2>", "relation": "right-of"}],
-    "language": ["move", "<obj1>", "right-of", "<obj2>"]
-  },
-   "move-left-of": {
-    "objects": ["<obj1>", "<obj2>"],
-    "relations": ["left-of"],
-    "initial_configuration": [[["not","s"], "<obj2>", "<obj1>"], ["dc", "<obj2>", "<obj1>"]],
-    "trace-actions": [
-      {"name": "pick-up", "argument": "<obj1>"},
-      {"name": "place", "argument1": "<obj1>", "argument2": "<obj2>", "relation": "left-of"}],
-    "language": ["move", "<obj1>", "left-of", "<obj2>"]
+      {"name": "pick-up", "argument": "<obj1>"}],
+    "language": ["pick up", "<obj1>"]
   }
 }

@@ -1,0 +1,14 @@
+##!
+# @file
+#
+# @created smohan 20200116
+sp {compose-with-concept-learner*apply*complete-compose-with-concept-learne
+    (state <s>    ^name compose-with-concept-learner
+                  ^operator <op>
+                  ^relations.relation <rel>
+                  ^superstate <ss>)
+    (<op>    ^name complete-compose-with-concept-learner)
+-->
+    (<ss>    ^relation <rel>)
+    }
+        

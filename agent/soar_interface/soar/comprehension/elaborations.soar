@@ -54,6 +54,15 @@ sp {comprehension*elaborate*rel-ref
     (<s>    ^rel-ref <tag>)
     }
 
+sp {comprehension*elaborate*action-ref
+    (state <s>    ^name comprehension
+                  ^parses.parse <p>)
+    (<p>    ^action-ref <ref>)
+    (<ref>    ^tag <tag>)
+-->
+    (<s>    ^action-ref <tag>)
+    }
+
 sp {comprehension*elaborate*argument
     (state <s>    ^name comprehension
                   ^superstate.operator.argument <arg>)

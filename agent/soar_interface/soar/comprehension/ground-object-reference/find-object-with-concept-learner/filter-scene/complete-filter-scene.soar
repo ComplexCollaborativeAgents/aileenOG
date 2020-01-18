@@ -1,0 +1,13 @@
+##!
+# @file
+#
+# @created smohan 20200115
+
+sp {filter-scene*elaborate*complete-filter-scene
+    (state <s>    ^name filter-scene
+                  ^superstate <ss>
+                  ^operator <op>)
+    (<op>    ^tag <tag>)
+-->
+    (<ss>    ^filtered-with <tag>)
+    }

@@ -6,7 +6,7 @@
 
 
 ## verification is successful if there are one or more objects that the object reference can be grounded into
-sp {verify*propose*report-success
+sp {verify*propose*report-success*object
     (state <s>    ^name verify
                   ^segment <seg>)
     (<seg>    ^parses.parse.obj-ref <oref>
@@ -18,6 +18,20 @@ sp {verify*propose*report-success
     (<s>    ^operator <op> +)
     (<op>    ^name report-success)
     }
+
+sp {verify*propose*report-success*relation
+    (state <s>    ^name verify
+                  ^segment <seg>)
+    (<seg>    ^parses.parse.rel-ref.tag <rref>
+              ^grounding <g>)
+    (<g>    ^relation <g-entity>)
+    (<g-entity>    ^_metadata.description <rref>
+                   ^relation <rel>)
+-->
+    (<s>    ^operator <op> + >!)
+    (<op>    ^name report-success)
+    }
+
                   
 
 sp {verify*propose*verify-relation-refence

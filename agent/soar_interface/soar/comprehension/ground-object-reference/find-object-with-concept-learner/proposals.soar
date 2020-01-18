@@ -7,7 +7,7 @@
 sp {find-object-with-concept-learner*propose*create-candidate-set
     (state <s>    ^name find-object-with-concept-learner
                   ^world <w>
-                  -^candidate-set.object <co>)
+                  -^candidate-set <cs>)
 -->
     (<s>    ^operator <op> +)
     (<op>    ^name create-candidate-set)
@@ -17,8 +17,8 @@ sp {find-object-with-concept-learner*propose*create-candidate-set
 sp {find-object-with-concept-learner*propose*filter-scene
     (state <s>    ^name find-object-with-concept-learner
                   ^visual.word <w>
-                  -^filtered-with <w>
-                   ^candidate-set <cs>)
+                  ^candidate-set <cs>
+                  -^filtered-with <w>)
 -->
     (<s>    ^operator <op> + =)
     (<op>    ^name filter-scene

@@ -1,0 +1,23 @@
+##!
+# @file
+#
+# @created smohan 20191220
+
+#sp {action*propose*pick-up
+#    (state <s>    ^name action
+#                  ^world.objects.object <obj>)
+#    (<obj>    ^held false)
+#-->
+#    (<s>    ^operator <op> +)
+#    (<op>    ^name op_pick-up
+#             ^argument1 <obj>)
+#    }
+#
+#sp {action*propose*point
+#    (state <s>    ^name action
+#                  ^world.objects.object <obj>)
+#-->
+#    (<s>    ^operator <op> +)
+#    (<op>    ^name op_point
+#             ^argument1 <obj>)
+#    }

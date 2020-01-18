@@ -9,4 +9,10 @@ source "proposals.soar"
 
 source "mark-unknown-concept.soar"
 
-source "filter-with-gpool.soar"
+source "filter-for-concept.soar"
+
+source "elaborate-with-concept.soar"
+
+source "complete-filter-scene.soar"
+
+source "mark-overspecific-visual-concept.soar"

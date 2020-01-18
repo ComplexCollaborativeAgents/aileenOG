@@ -18,7 +18,7 @@ sp {learn-from-object*propose*store-new-concept
 sp {learn-from-object*propose*send-instance-to-concept-memory
     (state <s>    ^name learn-from-object
                   ^_params.visual-concepts external
-                  ^new-concept-structure <lti>
+                  ^<< new-concept-structure concept-structure >> <lti>
                   ^object <obj>
                   -^stored <obj>) 
     (<lti>    ^concept <c>

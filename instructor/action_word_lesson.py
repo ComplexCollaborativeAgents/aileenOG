@@ -1,4 +1,3 @@
-
 from log_config import logging
 import os
 import settings
@@ -43,26 +42,27 @@ class ActionWordLesson:
         self._language = LanguageGenerator.generate_language_from_template(self._scene_objects, language_template)
         logging.debug("[action_word_lesson] :: generated language for action: {}".format(self._language))
 
-
     def generate_initial_state(self):
         initial_state_description = self._action_definition[settings.ACTION_DEF_INIT_CONFIG]
         print len(initial_state_description)
         if len(initial_state_description) < 1 and len(self._scene_objects) <= 2:
             for scene_object_name in self._scene_objects.keys():
-                position = AileenScene.get_random_position_on_table()
+                position = AileenScene.randomizer.get_random_position_on_table()
                 self._scene_objects[scene_object_name].set_translation(position)
                 self._initial_scene.add_object(self._scene_objects[scene_object_name])
-        if len(initial_state_description) <= 2 and len(self._scene_objects) <= 2:
-            positions = AileenScene.place_two_objects_in_configuration(target_object_name=self._scene_objects.items()[0][0],
-                                                                       reference_object_name=self._scene_objects.items()[1][0],
-                                                                       scene_objects=self._scene_objects,
-                                                                       configuration_definition=initial_state_description)
-            for object_name in positions.keys():
-                scene_object = self._scene_objects[object_name]
-                scene_object.set_translation(positions[object_name])
-                self._initial_scene.add_object(scene_object)
         else:
-            logging.error("[action_word_lesson] :: don't know how to interpret the initial state description")
+            if len(initial_state_description) <= 2 and len(self._scene_objects) <= 2:
+                positions = AileenScene.place_two_objects_in_configuration(
+                    target_object_name=self._scene_objects.items()[0][0],
+                    reference_object_name=self._scene_objects.items()[1][0],
+                    scene_objects=self._scene_objects,
+                    configuration_definition=initial_state_description)
+                for object_name in positions.keys():
+                    scene_object = self._scene_objects[object_name]
+                    scene_object.set_translation(positions[object_name])
+                    self._initial_scene.add_object(scene_object)
+            else:
+                logging.error("[action_word_lesson] :: don't know how to interpret the initial state description")
 
     def advance_lesson_state(self):
         if self._lesson_state == settings.ACTION_LESSON_STATE_START:
@@ -75,21 +75,21 @@ class ActionWordLesson:
             self._lesson_state = settings.ACTION_LESSON_STATE_COMPLETE
             return
 
-
     def get_segment_for_lesson_start(self):
         self.generate_initial_state()
         segment = {
             'scene': self._initial_scene.generate_scene_description(),
             'interaction': {
+                'signal': 'verify',
                 'marker': settings.ACTION_LESSON_STATE_START,
-                'language': self._language
+                'content': self._language
             }
         }
         self.advance_lesson_state()
         return segment
 
     def get_structure_for_pick_up_action(self, trace_action):
-        action_dict = {'name':'pick-up'}
+        action_dict = {'name': 'pick-up'}
         scene_object = self._scene_objects[trace_action['argument']]
         action_dict['uuid'] = scene_object._name
         return action_dict
@@ -111,7 +111,6 @@ class ActionWordLesson:
         except ValueError:
             logging.error("[action_word_lesson] :: bad lesson")
 
-
     def get_segment_for_lesson_action_trace(self):
         trace_action = self._trace_action_list[self._action_trace_index]
         if trace_action['name'] == 'pick-up':
@@ -129,12 +128,11 @@ class ActionWordLesson:
 
     def get_segment_for_lesson_end(self):
         segment = {
-            'interaction':{'marker': settings.ACTION_LESSON_STATE_END,
-                           'interaction': ""}
+            'interaction': {'marker': settings.ACTION_LESSON_STATE_END,
+                            'interaction': ""}
         }
         self.advance_lesson_state()
         return segment
-
 
     def get_next_segment(self):
         if self._lesson_state == settings.ACTION_LESSON_STATE_START:
@@ -150,7 +148,7 @@ class ActionWordLesson:
             segment = self.get_next_segment()
             scene_acknowledgement = world_server.set_scene(
                 {'configuration': segment['scene'], 'label': "{}".format(self._language)})
-            interaction_acknowledgement = agent_server.process_language(segment['interaction'])
+            # agent_response = agent_server.process_interaction(segment['interaction'])
             return
 
         if self._lesson_state == settings.ACTION_LESSON_STATE_TRACE:
@@ -159,31 +157,38 @@ class ActionWordLesson:
             logging.debug("[action_word_lesson] :: received action trace {}".format(segment))
             if segment['action'] is not None:
                 scene_acknowledgement = world_server.apply_action(segment['action'])
-                interaction_acknowledgement = agent_server.process_language(segment['interaction'])
+                # interaction_acknowledgement = agent_server.process_interaction(segment['interaction'])
             return
 
         if self._lesson_state == settings.ACTION_LESSON_STATE_END:
             logging.debug("[action_word_lesson] :: communicating the terminal state configuration of action")
             segment = self.get_next_segment()
-            interaction_acknowledgement = agent_server.process_language({'marker':'end'})
+            # interaction_acknowledgement = agent_server.process_interaction({'marker':'end'})
             return
 
         if self._lesson_state == settings.ACTION_LESSON_STATE_BAD:
             logging.debug("[action_word_lesson] :: communicating that the generated action trace is bad")
-            interaction_acknowledgement = agent_server.process_language({'marker':'bad'})
+            # interaction_acknowledgement = agent_server.process_language({'marker':'bad'})
 
+    def deliver_action_reaction_test(self, world_server, agent_server):
+        logging.debug("[action_word_lesson] :: testing action learning with a comprehension test")
+        segment = self.get_segment_for_lesson_start()
+        segment['interaction']['signal'] = 'react'
+        scene_acknowledgement = world_server.set_scene(
+            {'configuration': segment['scene'], 'label': "{}:{}".format(segment['interaction']['signal'], segment['interaction']['content'])})
+        agent_response = agent_server.process_interaction(segment['interaction'])
 
     @staticmethod
     def administer_curriculum(world_server, agent_server):
         while True:
             raw_input("Press any key to generate the next action word lesson...")
             lesson = ActionWordLesson()
-            logging.info("[action_word_lesson] :: generated a lesson for new action word")
-            while lesson._lesson_state is not settings.ACTION_LESSON_STATE_COMPLETE:
-                raw_input("Press any key to deliver the next action lesson segment...")
-                lesson.deliver_action_lesson_segment(world_server, agent_server)
-                logging.debug("[action_word_lesson] :: action lesson state is: {}".format(lesson._lesson_state))
-
+            lesson.deliver_action_reaction_test(world_server, agent_server)
+            # logging.info("[action_word_lesson] :: generated a lesson for new action word")
+            # while lesson._lesson_state is not settings.ACTION_LESSON_STATE_COMPLETE:
+            #     raw_input("Press any key to deliver the next action lesson segment...")
+            #     lesson.deliver_action_lesson_segment(world_server, agent_server)
+            #     logging.debug("[action_word_lesson] :: action lesson state is: {}".format(lesson._lesson_state))
 
     @staticmethod
     def get_action_definition_set():
@@ -193,7 +198,6 @@ class ActionWordLesson:
         with open(action_definition_file) as f:
             action_definitions = json.load(f)
         return action_definitions
-
 
     class Randomizer:
 

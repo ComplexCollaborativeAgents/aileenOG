@@ -1,0 +1,32 @@
+##!
+# @file
+#
+# @created smohan 20191220
+
+sp {action*elaborate*state
+    (state <s>    ^name action
+                  ^superstate.operator <sop>)
+    (<sop>    ^name action
+              ^segment <seg>)
+-->
+    (<s>    ^segment <seg>)
+    }
+
+sp {action*elaborate*state
+    (state <s>    ^name action
+                  ^segment <seg>)
+    (<seg>    ^grounding.action <act>)
+-->
+    (<s>    ^action <act>)
+    }
+
+sp {action*complete*action
+    (state <s>    ^name action
+                  ^action <act>
+                  ^complete <act>
+                  ^segment.purpose <p>)
+    (<p>    ^type react)
+-->
+    (<p>    ^completed true
+            ^status success)
+    }

@@ -1,0 +1,32 @@
+##!
+# @file
+#
+# @created smohan 20191220
+
+#sp {ground-action-reference*propose*compose-action
+#    (state <s>    ^name ground-action-reference
+#                  ^linguistic <ling>
+#                  ^map <map>
+#                  ^procedural <proc>
+#                  ^grounding <g>
+#                  ^parses <parse>)
+#-->
+#    (<s>    ^operator <op> +)
+#    (<op>    ^name compose-action
+#             ^linguistic <ling>
+#             ^map <map>
+#             ^procedural <proc>
+#             ^grounding <g>
+#             ^parses <parse>)
+#    }
+
+sp {ground-action-reference*propose*complete-ground-action-reference
+    (state <s>    ^name ground-action-reference
+                  ^procedural <proc>
+                  ^action <act>)
+    -{(<proc>    ^<arg> <valid>)
+      (<act>    -^<arg> <val>)}
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name complete-ground-action-reference)
+    }

@@ -15,14 +15,19 @@ sp {learn-from-object*apply*send-instance-to-concept-memory
              ^object <obj>)
     (<lti>    ^gpool <gpool>
               ^concept <con>)
+    (<obj>    ^id_string <id_string>)
 -->
     (<ol>    ^concept-memory <cm>)
-    (<cm>    ^store-instance <si>)
+    (<cm>    ^store <si>)
     (<si>    ^gpool <gpool>
-             ^object <obj-new>
+             ^concept <con>
+             ^facts <facts>
              ^context <pid>)
-    (<obj-new>    ^isa <con>)
-    } 
+    (<facts>    ^fact <f>)
+    (<f>    ^lfirst isa
+            ^lsecond <id_string>
+            ^lthird <con>)
+    }
 
 sp {learn-from-object*apply*send-instance-to-concept-memory*object-attributes
     (state <s>    ^name learn-from-object
@@ -34,18 +39,22 @@ sp {learn-from-object*apply*send-instance-to-concept-memory*object-attributes
              ^concept <lti>
              ^object <obj>)
     (<ol>    ^concept-memory <cm>)
-    (<cm>    ^store-instance <si>)
-    (<si>    ^object <obj-new>)
+    (<cm>    ^store <si>)
+    (<si>    ^facts <facts>)
     (<set>    ^type <type>)
-    (<obj>    ^<type> <symbol>)
+    (<obj>    ^<type> <symbol>
+              ^id_string <id_string>)
 -->
-    (<obj-new>    ^<type> <symbol>)
+    (<facts>    ^fact <f>)
+    (<f>    ^lfirst isa
+            ^lsecond <id_string>
+            ^lthird <symbol>)
     }
 
 sp {learn-from-object*apply*send-instance*status
     (state <s>    ^name learn-from-object
                   ^operator <op> 
-                  ^io.output-link.concept-memory.store-instance.object.isa <con>)
+                  ^io.output-link.concept-memory.store.gpool)
     (<op>    ^name send-instance-to-concept-memory
              ^object <obj>)
 -->
