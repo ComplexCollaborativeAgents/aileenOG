@@ -3,7 +3,9 @@ import os
 from random import choice
 
 import settings
-from aileen_object import AileenObject
+from aileen_object import AileenObject, Color
+
+
 from aileen_scene import AileenScene
 from language_generator import LanguageGenerator
 from log_config import logging
@@ -46,7 +48,7 @@ class SpatialWordLesson:
         objects = self._spatial_configuration_def[settings.SPATIAL_DEF_OBJECTS]
         if object_descriptions:
             for o, desc in zip(objects, object_descriptions):
-                self._scene_objects[o] = AileenObject.generate_object(desc['shape'], desc['color'])
+                self._scene_objects[o] = AileenObject.generate_object(desc)
         elif len(objects) > 0:
             objs = AileenObject.generate_random_objects(len(objects))
             for o, obj in zip(objs, objects):

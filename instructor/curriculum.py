@@ -2,6 +2,7 @@ import json
 
 from instructor.visual_word_lesson import VisualWordLesson
 from instructor.spatial_word_lesson import SpatialWordLesson
+from instructor.aileen_object import Color
 
 
 class Curriculum(object):
@@ -15,13 +16,10 @@ class Curriculum(object):
         lesson_configuration = next(self.curriculum)
         lesson_type = lesson_configuration['lesson']
         distractors = lesson_configuration.get('distractors', 0)
-        position = lesson_configuration.get('position', None)
         signal = lesson_configuration['signal']
         description = lesson_configuration['description']
         if lesson_type == 'visual':
-            shape = lesson_configuration['shape']
-            color = lesson_configuration['color']
-            lesson = VisualWordLesson().generate_lesson(shape, color, position, distractors)
+            lesson = VisualWordLesson().generate_lesson(lesson_configuration, distractors)
         elif lesson_type == 'spatial':
             language = lesson_configuration['language']
             configuration = language[1]

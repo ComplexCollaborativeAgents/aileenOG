@@ -9,28 +9,28 @@ class VisualWordLesson:
         self._scene = AileenScene()
         self._interaction = {}
 
-    def generate_lesson(self, shape=None, color=None, position=None, distractors=0):
+    def generate_lesson(self, description=None, distractors=0):
         """
         :param distractors: Number of distractors to be generated. Default is zero distractors.
         """
         lesson = {}
-        self.generate_scene(shape, color, position, distractors)
+        self.generate_scene(description, distractors)
         lesson['scene'] = self._scene.generate_scene_description()
         lesson['interaction'] = self._interaction
         return lesson
 
-    def generate_scene(self, shape, color, position, distractors):
+    def generate_scene(self, description, distractors):
         """
         :param distractors: Number of distractors to be generated.
         """
         logging.debug("[aileen_visual_word_lesson] :: generating a new scene for visual word learning")
 
-        if shape and color:
-            target = AileenObject.generate_object(shape, color)
+        if description:
+            target = AileenObject.generate_object(description)
         else:
             target = AileenObject.generate_random_object()
-        if position:
-            target.set_translation(position)
+        if description.get('position', None):
+            target.set_translation(description['position'])
         else:
             target.set_translation(AileenScene.randomizer.get_random_position_on_table())
         self._scene.add_object(target)
