@@ -13,6 +13,8 @@ class VisualWordLesson:
         """
         :param distractors: Number of distractors to be generated. Default is zero distractors.
         """
+        if description is None:
+            description = {}
         lesson = {}
         self.generate_scene(description, distractors)
         lesson['scene'] = self._scene.generate_scene_description()

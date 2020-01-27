@@ -27,6 +27,8 @@ class SpatialWordLesson:
         self._language = None
 
     def generate_lesson(self, objects=None, distractors=0):
+        if objects is None:
+            objects = []
         self.generate_setup(objects)
 
         positions = [o.get('position', None) for o in objects]
