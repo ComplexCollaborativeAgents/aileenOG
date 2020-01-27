@@ -6,3 +6,9 @@
 source "proposals.soar"
 
 source "elaborations.soar"
+
+source "preferences.soar"
+
+source "add-object.soar"
+
+source "add-relation.soar"

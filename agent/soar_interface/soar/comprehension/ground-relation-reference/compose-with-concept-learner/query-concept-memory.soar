@@ -1,0 +1,21 @@
+##!
+# @file
+#
+# @created smohan 20191211
+
+sp {compose-with-concept-learner*apply*query-concept-memory
+    (state <s>    ^name compose-with-concept-learner
+                  ^operator <op>
+                  ^epmem.present-id <pid>
+                  ^io.output-link <ol>
+                  ^map.gpool <pool>)
+    (<op>    ^name query-concept-memory
+             ^facts <f>
+             ^query <query>)
+-->
+    (<ol>    ^concept-memory <cm>)
+    (<cm>    ^query <q>)
+    (<q>    ^facts <f>
+            ^pattern <query>)
+    }
+

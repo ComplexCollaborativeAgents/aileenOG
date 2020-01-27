@@ -1,0 +1,25 @@
+##!
+# @file
+#
+# @created smohan 20191211
+
+sp {compose-with-concept-learner*apply*query-concept-learner
+    (state <s>    ^name compose-with-concept-learner
+                  ^operator.name collect-relation-facts)
+-->
+    (<s>    ^facts <facts>)}
+
+sp {compose-with-concept-learner*apply*query-concept-learner*relations
+    (state <s>    ^name compose-with-concept-learner
+                  ^operator.name collect-relation-facts
+                  ^world.relations.relation <rel>
+                  ^facts <facts>)
+    (<rel>    ^<< rcc8 cardir >> <sym>
+              ^root.id_string <fid>
+              ^target.id_string <sid>)
+-->
+    (<facts>    ^fact <f>)
+    (<f>    ^lfirst <sym>
+            ^lsecond <fid>
+            ^lthird <sid>)
+    }

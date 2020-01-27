@@ -8,13 +8,23 @@ sp {find-object-with-concept-learner*apply*create-candidate-set
                   ^world <w>
                   ^operator.name create-candidate-set)
 -->
-    (<s>    ^candidate-set <cs>)
+    (<s>    ^proposed-set <cs>)
     }
 
 sp {find-object-with-concept-learner*apply*create-candidate-set*copy-objects
     (state <s>    ^name find-object-with-concept-learner
                   ^world.objects.object <obj>
-                  ^candidate-set <cs>)
+                  ^proposed-set <cs>
+                  ^operator.name create-candidate-set)
 -->
     (<cs>    ^object <obj>)
+    }
+
+sp {find-object-with-concept-learner*apply*create-candidate-set*candidate-set
+    (state <s>    ^name find-object-with-concept-learner
+                  ^proposed-set <cs>
+                  ^operator.name create-candidate-set)
+    (<cs>    ^object)
+-->
+    (<s>    ^candidate-set <cs>)
     }

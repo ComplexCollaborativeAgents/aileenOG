@@ -8,7 +8,8 @@ sp {compose-with-semantic-memory*apply*complote-compose-with-semantic-memory
                   ^operator <op>
                   ^superstate <ss>)
     (<op>    ^name complete-compose-with-semantic-memory
-             ^relation <rel>)
+             ^relations <rels>)
+    (<rels>    ^relation <rel>)
 -->
     (<ss>    ^relation <rel>)
     }

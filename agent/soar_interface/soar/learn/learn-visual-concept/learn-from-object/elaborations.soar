@@ -69,4 +69,11 @@ sp {external*learn-from-object*invoke-concept-learner*store-gpool
 -->
     (<s>    ^store-concept <lti>)
     }
+
+sp {external*learn-from-object*copy*concept-structure
+    (state <s>    ^name learn-from-object
+                  ^information.concept-structure <struct>)
+-->
+    (<s>    ^concept-structure <struct>)
+    }
     

@@ -48,13 +48,15 @@ class AileenGrammar:
                              "[prop] [prop] [prop] [obj_name]",
                              "[prop] [prop] [obj_name] [rel]",
                              "[prop] [obj_name] [rel] [rel]"]
-        self.property_names = ["the",
-                               "left", "middle", "right",
-                               "blue", "red", "yellow"]
+        # self.property_names = ["the",
+        #                        "left", "middle", "right",
+        #                        "blue", "red", "yellow"]
+        self.property_names = ["blue", "red", "yellow"]
         self.relation_rules = ["between [obj] and [obj]",
                                "left of [obj]",
                                "on [obj]",
                                "right of [obj]"]
+        self.action_rules = ["move [obj] [rel]", "pick up [obj]"]
         self.reset_parser()
 
     def _compile_rules(self):
@@ -250,6 +252,7 @@ class AileenGrammar:
 
 if __name__ == '__main__':
     grammar = AileenGrammar()
-    outputs = grammar.parse("blue blue")
+    grammar.use_default_rules()
+    outputs = grammar.parse("pick up blue box")
     for output in outputs:
         logging.info("[aileen_grammar] :: test: {}".format(output))

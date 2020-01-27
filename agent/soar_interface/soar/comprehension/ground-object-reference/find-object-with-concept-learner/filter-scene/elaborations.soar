@@ -32,14 +32,4 @@ sp {filter-scene*elaborate*retrieved-concept
     (<s>    ^retrieved-concept-lti <res>)
     }
 
-sp {filter-scene*propose*complete-filter-scene
-    (state <s>    ^name filter-scene
-                  ^visual-word <tag>
-                  ^retrieved-concept-lti <lti>
-                  ^filtered-with <concept>
-                  ^superstate <ss>)
-    (<lti>    ^concept <concept>
-              ^nl <tag>)
--->
-    (<ss>    ^filtered-with <tag>)
-    }
+

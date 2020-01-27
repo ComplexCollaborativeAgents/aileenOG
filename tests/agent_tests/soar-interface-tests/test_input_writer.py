@@ -149,7 +149,6 @@ def test_writing_qsrs_to_input_link():
     assert qsr_asserts['403_397_rcc8_dc']
     assert qsr_asserts['403_397_cardir_n']
 
-
 @pytest.mark.skip(reason='Something is causing a segfault')
 def test_writing_interaction_to_input_link():
     agent = SoarAgent(None)
@@ -286,6 +285,9 @@ def test_writing_language_to_input_link_rel():
     assert iwriter._language is None
     agent.stop()
     agent.shutdown()
+
+
+
 
 @pytest.mark.skip(reason='Something is causing a segfault')
 def test_qsr_input_writer():

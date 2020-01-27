@@ -12,7 +12,7 @@ sp {learn-spatial-concept*propose*select-scene-subset
     (<rels>    ^relation <rel>)
     (<objs>    ^object <obj>)}
 -->
-    (<s>    ^operator <op> +)
+    (<s>    ^operator <op> + >)
     (<op>    ^name select-scene-subset)
     }
 

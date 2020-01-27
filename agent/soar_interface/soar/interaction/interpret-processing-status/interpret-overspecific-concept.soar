@@ -1,0 +1,21 @@
+##!
+# @file
+#
+# @created smohan 20200115
+
+sp {interpret-processing-status*apply*interpret-overspecific-concept
+    (state <s>    ^name interpret-processing-status
+                  ^operator <op>
+                  ^superstate <ss>)
+    (<op>    ^name interpret-overspecific-concept
+             ^information <info>
+             ^concept <con>)
+-->
+    (<ss>    ^new-segment <segment>)
+    (<segment>    ^purpose <p>
+                  ^information <info>
+                  ^originator agent
+                  ^_metadata <met>)
+    (<p>    ^type learn
+            ^concept <con>)
+    }

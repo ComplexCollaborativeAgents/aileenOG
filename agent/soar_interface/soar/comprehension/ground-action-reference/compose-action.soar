@@ -1,0 +1,22 @@
+##!
+# @file
+#
+# @created smohan 20191220
+
+sp {ground-action-reference*apply*compose-action
+    (state <s>    ^name ground-action-reference
+                  ^action <act>
+                  ^linguistic <ling>
+                  ^procedural <proc>
+                  ^parses.parse <parse>
+                  ^grounding <g>)
+    (<parse>    ^action-ref <aref>)
+    (<aref>    ^obj-ref <oref>)
+    (<ling>    ^obj-ref <orefid>)
+    (<proc>    ^<arg> <orefid>)
+    (<g>  ^entity <ent>)
+    (<ent>    ^_metadata.description <oref>
+              ^object <obj>)
+-->
+    (<act>    ^<arg>    <obj>)
+    }
