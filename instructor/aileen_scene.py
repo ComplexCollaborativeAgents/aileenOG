@@ -60,12 +60,12 @@ class AileenScene:
                                                  ysize=target_object._width_z)
 
             try:
-                found_target_object_position = AileenScene.randomizer.sample_position_from_region(
-                    compute_region_for_relations(world, configuration_definition, qsr_target_object, table))
+                region = compute_region_for_relations(world, configuration_definition, qsr_target_object, table)
+                found_target_object_position = AileenScene.randomizer.sample_position_from_region(region)
                 position = [found_target_object_position.x, settings.OBJECT_POSITION_MAX_Y, found_target_object_position.y]
                 translations[target_object_name] = position
-            except ValueError:
-                point = None
+            except (ValueError, AttributeError):
+                pass
         return translations
 
     @staticmethod
