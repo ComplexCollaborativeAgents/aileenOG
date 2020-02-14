@@ -54,6 +54,15 @@ sp {comprehension*elaborate*rel-ref
     (<s>    ^rel-ref <tag>)
     }
 
+sp {comprehension*elaborate*obj-ref*indirect*indirect
+    (state <s>    ^name comprehension
+                  ^parses.parse <p>)
+    (<p>    ^<any>.<any>.obj-ref <oref>)
+    (<oref>    ^tag <tag>)
+-->
+    (<s>    ^obj-ref <tag>)
+    }
+
 sp {comprehension*elaborate*action-ref
     (state <s>    ^name comprehension
                   ^parses.parse <p>)

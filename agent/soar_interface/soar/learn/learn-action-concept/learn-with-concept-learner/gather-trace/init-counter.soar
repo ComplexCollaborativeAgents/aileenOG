@@ -1,0 +1,11 @@
+##!
+# @file
+#
+# @created smohan 20200119
+
+sp {gather-trace*apply*init-counter
+    (state <s>    ^name gather-trace
+                  ^operator.name init-counter)
+-->
+    (<s>    ^counter 1)
+    }

@@ -22,14 +22,14 @@ sp {ground-action-reference*elaborate*smem-query
                   ^reference <ref>)
 -->
     (<s>    ^smem-query.cue <cue>)
-    (<cue>    ^tag <ref>)
+    (<cue>    ^nl <ref>)
     }
               
 sp {ground-action-reference*elaborate*nl
     (state <s>    ^name ground-action-reference
                   ^reference <ref>
                   ^smem-query <query>)
-    (<query>    ^cue.tag <ref>
+    (<query>    ^cue.nl <ref>
               ^result <ling>)
 -->
     (<s>    ^linguistic <ling>)
@@ -37,7 +37,7 @@ sp {ground-action-reference*elaborate*nl
 
 sp {ground-action-reference*query*map
     (state <s>    ^name ground-action-reference
-                  ^linguistic <ling>)
+                  ^linguistic {<> failure <ling>})
 -->
     (<s>    ^smem-query <query>)
     (<query>    ^cue <cue>)

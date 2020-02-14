@@ -20,6 +20,20 @@
 #             ^parses <parse>)
 #    }
 
+sp {ground-action-reference*propose*learn-action
+    (state <s>    ^name ground-action-reference
+                  ^linguistic failure
+                  ^smem-query <sq>
+                  ^reference <ref>)
+    (<sq>    ^cue.nl <ref>
+             ^result failure)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name mark-unknown-action-concept
+             ^nl <ref>
+             ^type action)
+    }
+
 sp {ground-action-reference*propose*complete-ground-action-reference
     (state <s>    ^name ground-action-reference
                   ^procedural <proc>

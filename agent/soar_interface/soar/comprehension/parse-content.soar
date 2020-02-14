@@ -47,7 +47,7 @@ sp {comprehension*elaborate*parse*temporal*encoding*first-object
     (<order>    ^first <ref>)
     }
 
-sp {comprehension*elaborate*parse*temporal*encoding*rel-first-object
+sp {comprehension*elaborate*parse*temporal*encoding*rel-second-object
     (state <s>    ^name comprehension
                   ^segment.parses <parses>)
     (<parses>    ^parse <parse>
@@ -55,6 +55,30 @@ sp {comprehension*elaborate*parse*temporal*encoding*rel-first-object
     (<temp>    ^of-parse <parse>
               ^order <order>)
     (<parse>    ^rel-ref.obj-ref <ref>)
+-->
+    (<order>    ^second <ref>)
+    }
+
+sp {comprehension*elaborate*parse*temporal*encoding*action*first-object
+    (state <s>    ^name comprehension
+                  ^segment.parses <parses>)
+    (<parses>    ^parse <parse>
+                 ^temporal <temp>)
+    (<temp>    ^of-parse <parse>
+              ^order <order>)
+    (<parse>    ^action-ref.obj-ref <ref>)
+-->
+    (<order>    ^first <ref>)
+    }
+
+sp {comprehension*elaborate*parse*temporal*encoding*action-second-object
+    (state <s>    ^name comprehension
+                  ^segment.parses <parses>)
+    (<parses>    ^parse <parse>
+                 ^temporal <temp>)
+    (<temp>    ^of-parse <parse>
+              ^order <order>)
+    (<parse>    ^action-ref.rel-ref.obj-ref <ref>)
 -->
     (<order>    ^second <ref>)
     }

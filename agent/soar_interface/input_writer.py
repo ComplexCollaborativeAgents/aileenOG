@@ -238,13 +238,14 @@ objects = [{'orientation': [1.0, -5.75539615965681e-17, 3.38996313371214e-17, 5.
         qsrlib = QSRlib() # We don't need a new object each time
         world = World_Trace()
         for obj in objects:
-            world.add_object_state_series(
-                [Object_State(name=str(obj['id']),timestamp=0,
-                              x=obj['position'][0],
-                              y=obj['position'][2],
-                              xsize=obj['bounding_box'][3]-obj['bounding_box'][0],
-                              ysize=obj['bounding_box'][5]-obj['bounding_box'][2]
-                )])
+            if obj['held'] == 'false':
+                world.add_object_state_series(
+                    [Object_State(name=str(obj['id']),timestamp=0,
+                                  x=obj['position'][0],
+                                  y=obj['position'][2],
+                                  xsize=obj['bounding_box'][3]-obj['bounding_box'][0],
+                                  ysize=obj['bounding_box'][5]-obj['bounding_box'][2]
+                    )])
         qsrlib_request_message = QSRlib_Request_Message(["rcc8","cardir"], world)
         qsrlib_response_message = qsrlib.request_qsrs(req_msg=qsrlib_request_message)
         ret = {}

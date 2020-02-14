@@ -9,7 +9,7 @@ sp {interpret-processing-status*propose*interpret-unknown-concept
                   ^superstate.operator <sop>)
     (<sop>    ^name interpret-processing-status
               ^processing-status <ps>)
-    (<ps>    ^type {<< unknown-visual-concept unknown-spatial-concept >> <con>}
+    (<ps>    ^type {<< unknown-visual-concept unknown-spatial-concept unknown-action-concept >> <con>}
              ^information <info>)
 -->
     (<s>    ^operator <op> +)

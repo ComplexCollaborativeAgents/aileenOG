@@ -33,8 +33,7 @@ sp {compose-with-concept-learner*generate*relation
     (state <s>    ^name compose-with-concept-learner
                   ^io.input-link <il>
                   ^grounding <g>
-                  ^relations <rels>
-                  ^operator.name query-concept-memory)
+                  ^relations <rels>)
     (<il>    ^concept-memory <cm>)
     (<cm>    ^result.matches.match <match>)
     (<match>    ^first <rel-name>

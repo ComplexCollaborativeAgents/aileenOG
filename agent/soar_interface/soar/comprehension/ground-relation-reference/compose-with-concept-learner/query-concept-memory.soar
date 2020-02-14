@@ -19,3 +19,12 @@ sp {compose-with-concept-learner*apply*query-concept-memory
             ^pattern <query>)
     }
 
+sp {compose-with-concept-learner*apply*query-concept-memory*applied-query
+    (state <s>    ^name compose-with-concept-learner
+                  ^operator <op>)
+    (<op>    ^name query-concept-memory
+             ^query <query>)
+-->
+    (<s>    ^queried-with <query>)
+    }
+                  

@@ -36,6 +36,25 @@ sp {learn-from-scene-external*apply*send-instance-to-concept-memory*facts*new-re
            ^lsecond <fid>
            ^lthird <sid>)}
 
+sp {learn-from-scene-external*apply*send-instance-to-concept-memory*facts*objects
+    (state <s>    ^name learn-from-scene-external
+                  ^operator <op>
+                  ^io.output-link.concept-memory.store <si>
+                  ^topstate._params.relevant-percept-set <set>)
+    (<set>    ^type <type>)
+    (<si>    ^facts <facts>)
+    (<op>    ^scene.objects.object <obj>)
+    (<obj>    ^id_string <id_string>
+              ^<type> <symbol>)
+    (<si>    ^facts <facts>)
+-->
+    (<facts> ^fact <f>)
+    (<f>    ^lfirst isa
+            ^lsecond <id_string>
+            ^lthird <symbol>)
+    }
+
+
 sp {learn-from-scene-external*apply*send-instance-to-concept-memory*spatial
     (state <s>    ^name learn-from-scene-external
                   ^operator <op>

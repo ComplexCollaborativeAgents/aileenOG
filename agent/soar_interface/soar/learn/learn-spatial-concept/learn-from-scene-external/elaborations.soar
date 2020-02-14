@@ -47,3 +47,10 @@ sp {learn-from-scene-external*store*store-gpool
     (<s>    ^store-concept <struct>)
     }
 
+sp {learn-from-scene-external*elaborate*new-concept-structure
+    (state <s>    ^name learn-from-scene-external
+                  ^information <info>)
+    (<info>    ^concept-structure <struct>)
+-->
+    (<s>    ^new-concept-structure <struct>)
+    }

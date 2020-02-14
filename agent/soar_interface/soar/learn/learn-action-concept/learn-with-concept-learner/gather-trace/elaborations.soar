@@ -1,0 +1,14 @@
+##!
+# @file
+#
+# @created smohan 20200119
+
+sp {gather-trace*elaborate*state
+    (state <s>    ^name gather-trace
+                  ^superstate.operator <sop>)
+    (<sop>    ^name gather-trace
+              ^concept-structure <con>)
+-->
+    (<s>    ^concept-structure <con>
+            ^trace <t>)
+    }    

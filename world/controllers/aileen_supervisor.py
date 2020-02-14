@@ -73,22 +73,29 @@ class AileenSupervisor(Supervisor):
                 im_x2, im_y2 = coord_world2im(w_x2, w_y2)
 
                 object_children = object_node.getField('children')
-                object_dict = {
-                    'id_string': "ob{}".format(str(object_node.getId())),
-                    'id': object_node.getId(),
-                    'position': object_node.getPosition(),
-                    'bounding_box': self.computeBoundingBox(object_node),
-                    'bounding_box_camera': [im_x1, im_y1, im_x2, im_y2],
-                    'shape': self.get_object_shape(object_node),
-                    'color': self.get_object_color(object_node),
-                    'texture': self.get_object_texture(object_node),
-                    'id_name': self.get_object_name(object_node)
-                }
                 if object_node == self._held_node:
-                    object_dict['held'] = 'true'
+                    object_dict = {'id_string': "ob{}".format(str(object_node.getId())),
+                                   'id': object_node.getId(),
+                                   'shape': self.get_object_shape(object_node),
+                                   'color': self.get_object_color(object_node),
+                                   'texture': self.get_object_texture(object_node),
+                                   'id_name': self.get_object_name(object_node),
+                                   'held': 'true'}
                 else:
-                    object_dict['held'] = 'false'
+                    object_dict = {'id_string': "ob{}".format(str(object_node.getId())),
+                                   'id': object_node.getId(),
+                                   'position': object_node.getPosition(),
+                                   'bounding_box': self.computeBoundingBox(object_node),
+                                   'bounding_box_camera': [im_x1, im_y1, im_x2, im_y2],
+                                   'shape': self.get_object_shape(object_node),
+                                   'color': self.get_object_color(object_node),
+                                   'texture': self.get_object_texture(object_node),
+                                   'id_name': self.get_object_name(object_node),
+                                   'held': 'false'}
                 objects.append(object_dict)
+
+
+
 
         output_dict = {'objects': objects}
 

@@ -1,0 +1,14 @@
+##!
+# @file: 
+#
+# @created smohan 20200118
+
+source "elaborations.soar"
+
+source "proposals.soar"
+
+source "store-new-concept.soar"
+
+source "gather-trace/load.soar"
+
+source "augment-trace-with-action.soar"

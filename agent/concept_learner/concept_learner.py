@@ -27,6 +27,10 @@ class ConceptLearner(object):
             response_json = self._server.create_reasoning_predicate(xmlrpclib.Binary(json.dumps({'predicate': request['name'], 'arity': 2})))
             response = json.loads(response_json.data)
             return response
+        if request['type'] == "action":
+            response_json = self._server.create_reasoning_action(xmlrpclib.Binary(json.dumps({'action': request['name'], 'arity':2})))
+            response = json.loads(response_json.data)
+            return response
 
     def store(self, request):
         response_json = self._server.store(xmlrpclib.Binary(json.dumps(request)))

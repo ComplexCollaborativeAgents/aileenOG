@@ -1,0 +1,12 @@
+##!
+# @file
+#
+# @created smohan 20200119
+
+sp {gather-trace*apply*get-next
+    (state <s>    ^name gather-trace
+                  ^operator.name get-next
+                  ^io.output-link <ol>)
+-->
+    (<ol>    ^interaction.response get-next)
+    }

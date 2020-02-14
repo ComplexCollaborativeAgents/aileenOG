@@ -10,3 +10,5 @@ source "proposals.soar"
 source "learn-visual-concept/load.soar"
 
 source "learn-spatial-concept/load.soar"
+
+source "learn-action-concept/load.soar"

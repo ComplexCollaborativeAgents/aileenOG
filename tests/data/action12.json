@@ -1,1 +1,264 @@
-{"concept":"rMove","context":"Test12","facts":[["rMove","Obj12A",["rRight","Obj12A","Obj12B"]],["holdsIn","Time12_0",["isa","Obj12A","CVRed"]],["holdsIn","Time12_0",["isa","Obj12A","RRed"]],["holdsIn","Time12_0",["isa","Obj12A","CVCone"]],["holdsIn","Time12_0",["isa","Obj12B","CVBlue"]],["holdsIn","Time12_0",["isa","Obj12B","CVBox"]],["holdsIn","Time12_0",["isa","Obj12B","RBox"]],["holdsIn","Time12_0",["ne","Obj12A","Obj12B"]],["holdsIn","Time12_0",["dc","Obj12A","Obj12B"]],["holdsIn","Time12_0",["dc","Obj12B","Obj12A"]],["holdsIn","Time12_1",["isa","Obj12A","CVRed"]],["holdsIn","Time12_1",["isa","Obj12A","RRed"]],["holdsIn","Time12_1",["isa","Obj12A","CVCone"]],["holdsIn","Time12_1",["isa","Obj12B","CVBlue"]],["holdsIn","Time12_1",["isa","Obj12B","CVBox"]],["holdsIn","Time12_1",["isa","Obj12B","RBox"]],["holdsIn","Time12_1",["holdsInHand","Aileen1","Obj12A"]],["holdsIn","Time12_2",["isa","Obj12A","CVRed"]],["holdsIn","Time12_2",["isa","Obj12A","RRed"]],["holdsIn","Time12_2",["isa","Obj12A","CVCone"]],["holdsIn","Time12_2",["isa","Obj12B","CVBlue"]],["holdsIn","Time12_2",["isa","Obj12B","CVBox"]],["holdsIn","Time12_2",["isa","Obj12B","RBox"]],["holdsIn","Time12_2",["n","Obj12A","Obj12B"]],["holdsIn","Time12_2",["dc","Obj12A","Obj12B"]],["holdsIn","Time12_2",["dc","Obj12B","Obj12A"]],["holdsIn","Time12_2",["rRight","Obj12A","Obj12B"]],["isa","Time12_0","AileenActionStartTime"],["startsAfterEndingOf","Time12_1","Time12_0"],["startsAfterEndingOf","Time12_2","Time12_1"]]}
+{
+  "concept": "rMove" ,
+  "context": "Test12" ,
+  "facts": [
+    [
+      "rMove" ,
+      "Obj12A" ,
+      [
+        "rRight" ,
+        "Obj12A" ,
+        "Obj12B"
+      ]
+    ] ,
+    [
+      "holdsIn" ,
+      "Time12_0" ,
+      [
+        "isa" ,
+        "Obj12A" ,
+        "CVRed"
+      ]
+    ] ,
+    [
+      "holdsIn" ,
+      "Time12_0" ,
+      [
+        "isa" ,
+        "Obj12A" ,
+        "RRed"
+      ]
+    ] ,
+    [
+      "holdsIn" ,
+      "Time12_0" ,
+      [
+        "isa" ,
+        "Obj12A" ,
+        "CVCone"
+      ]
+    ] ,
+    [
+      "holdsIn" ,
+      "Time12_0" ,
+      [
+        "isa" ,
+        "Obj12B" ,
+        "CVBlue"
+      ]
+    ] ,
+    [
+      "holdsIn" ,
+      "Time12_0" ,
+      [
+        "isa" ,
+        "Obj12B" ,
+        "CVBox"
+      ]
+    ] ,
+    [
+      "holdsIn" ,
+      "Time12_0" ,
+      [
+        "isa" ,
+        "Obj12B" ,
+        "RBox"
+      ]
+    ] ,
+    [
+      "holdsIn" ,
+      "Time12_0" ,
+      [
+        "ne" ,
+        "Obj12A" ,
+        "Obj12B"
+      ]
+    ] ,
+    [
+      "holdsIn" ,
+      "Time12_0" ,
+      [
+        "dc" ,
+        "Obj12A" ,
+        "Obj12B"
+      ]
+    ] ,
+    [
+      "holdsIn" ,
+      "Time12_0" ,
+      [
+        "dc" ,
+        "Obj12B" ,
+        "Obj12A"
+      ]
+    ] ,
+    [
+      "holdsIn" ,
+      "Time12_1" ,
+      [
+        "isa" ,
+        "Obj12A" ,
+        "CVRed"
+      ]
+    ] ,
+    [
+      "holdsIn" ,
+      "Time12_1" ,
+      [
+        "isa" ,
+        "Obj12A" ,
+        "RRed"
+      ]
+    ] ,
+    [
+      "holdsIn" ,
+      "Time12_1" ,
+      [
+        "isa" ,
+        "Obj12A" ,
+        "CVCone"
+      ]
+    ] ,
+    [
+      "holdsIn" ,
+      "Time12_1" ,
+      [
+        "isa" ,
+        "Obj12B" ,
+        "CVBlue"
+      ]
+    ] ,
+    [
+      "holdsIn" ,
+      "Time12_1" ,
+      [
+        "isa" ,
+        "Obj12B" ,
+        "CVBox"
+      ]
+    ] ,
+    [
+      "holdsIn" ,
+      "Time12_1" ,
+      [
+        "isa" ,
+        "Obj12B" ,
+        "RBox"
+      ]
+    ] ,
+    [
+      "holdsIn" ,
+      "Time12_1" ,
+      [
+        "holdsInHand" ,
+        "Aileen1" ,
+        "Obj12A"
+      ]
+    ] ,
+    [
+      "holdsIn" ,
+      "Time12_2" ,
+      [
+        "isa" ,
+        "Obj12A" ,
+        "CVRed"
+      ]
+    ] ,
+    [
+      "holdsIn" ,
+      "Time12_2" ,
+      [
+        "isa" ,
+        "Obj12A" ,
+        "RRed"
+      ]
+    ] ,
+    [
+      "holdsIn" ,
+      "Time12_2" ,
+      [
+        "isa" ,
+        "Obj12A" ,
+        "CVCone"
+      ]
+    ] ,
+    [
+      "holdsIn" ,
+      "Time12_2" ,
+      [
+        "isa" ,
+        "Obj12B" ,
+        "CVBlue"
+      ]
+    ] ,
+    [
+      "holdsIn" ,
+      "Time12_2" ,
+      [
+        "isa" ,
+        "Obj12B" ,
+        "CVBox"
+      ]
+    ] ,
+    [
+      "holdsIn" ,
+      "Time12_2" ,
+      [
+        "isa" ,
+        "Obj12B" ,
+        "RBox"
+      ]
+    ] ,
+    [
+      "holdsIn" ,
+      "Time12_2" ,
+      [
+        "n" ,
+        "Obj12A" ,
+        "Obj12B"
+      ]
+    ] ,
+    [
+      "holdsIn" ,
+      "Time12_2" ,
+      [
+        "dc" ,
+        "Obj12A" ,
+        "Obj12B"
+      ]
+    ] ,
+    [
+      "holdsIn" ,
+      "Time12_2" ,
+      [
+        "dc" ,
+        "Obj12B" ,
+        "Obj12A"
+      ]
+    ] ,
+    [
+      "holdsIn" ,
+      "Time12_2" ,
+      [
+        "rRight" ,
+        "Obj12A" ,
+        "Obj12B"
+      ]
+    ] ,
+    [
+      "isa" ,
+      "Time12_0" ,
+      "AileenActionStartTime"
+    ] ,
+    [
+      "startsAfterEndingOf" ,
+      "Time12_1" ,
+      "Time12_0"
+    ] ,
+    [
+      "startsAfterEndingOf" ,
+      "Time12_2" ,
+      "Time12_1"
+    ]
+  ]
+}

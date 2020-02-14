@@ -1,0 +1,32 @@
+##!
+# @file
+#
+# @created smohan 20200118
+
+
+sp {learn-action-with-concept-learner*apply*store-new-concept
+    (state <s>    ^name learn-action-with-concept-learner
+                  ^operator <op>
+                  ^io.output-link <ol>)
+    (<op>    ^name store-new-concept
+             ^concept-structure <lti>)
+    (<lti>    ^concept <con>)
+-->
+    (<ol>    ^concept-memory <cl>)
+    (<cl>    ^create <cc>)
+    (<cc>    ^name <con>
+             ^type action)
+    }
+
+sp {learn-action-with-concept-learner*apply*store-new-concept*copy-gpool
+    (state <s>    ^name learn-action-with-concept-learner
+                  ^operator <op>
+                  ^topstate.concept-memory <cl>)
+    (<cl>    ^result <res>)
+    (<res>    ^status success
+              ^gpool <gpool>)
+    (<op>    ^name store-new-concept
+             ^concept-structure <lti>)
+-->
+    (<lti>    ^gpool <gpool>)
+    }

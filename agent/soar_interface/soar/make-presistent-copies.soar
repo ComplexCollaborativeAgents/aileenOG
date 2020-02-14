@@ -7,6 +7,8 @@ sp {topstate*propose*persistent-copy-message*interaction
     (state <s>    ^name aileen
                   ^io.input-link.interaction-link.message <m>
                   -^message <m>)
+    (<m>   -^marker trace)
+    (<m>    -^marker end)
 -->
     (<s>    ^operator <op> +)
     (<op>    ^name persistent-copy-message

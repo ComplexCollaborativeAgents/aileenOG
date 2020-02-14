@@ -9,7 +9,7 @@ SOAR_PATH = path.join(OS_ROOT_PATH, 'usr', 'local', 'SoarSuite_9.6.0-Multiplatfo
                       'linux64' if CI else '')
 SOAR_AGENT_PATH = path.join(ROOT_PATH, 'agent', 'soar_interface', 'soar', 'load.soar')
 SOAR_AGENT_NAME = 'aileen'
-SOAR_SLEEP_TIME = 0.0001
+SOAR_SLEEP_TIME = 0.001
 SOAR_DEBUG = True
 SOAR_SVS = False
 SOAR_CV = False
@@ -25,7 +25,7 @@ WORLD_PORT = 30000
 AGENT_HOST = 'localhost'
 AGENT_PORT = 40001
 CONCEPT_LEARNER_HOST = 'dubs.parc.xerox.com'
-CONCEPT_LEARNER_PORT = 8080
+CONCEPT_LEARNER_PORT = 8085
 
 # World
 ROBOT_PLATE_LOCATION = [-0.1, 0.2, 0]
@@ -68,14 +68,14 @@ ACTION_LESSON_STATE_BAD = 'bad'
 
 ## Agent
 AGENT_PARAM_RUNTIME_FILE = path.join(ROOT_PATH, 'agent', 'soar_interface', 'soar', '_agent_params_runtime.soar')
-AGENT_VISUAL_CONCEPTS_PARAM = 'external'
-AGENT_PRELOAD_VISUAL_CONCEPTS_PARAM = 'false'
+AGENT_VISUAL_CONCEPTS_PARAM = 'soar'
+AGENT_PRELOAD_VISUAL_CONCEPTS_PARAM = 'true'
 
-AGENT_SPATIAL_CONCEPTS_PARAM = 'soar'
-AGENT_PRELOAD_SPATIAL_CONCEPTS_PARAM = 'true'
+AGENT_SPATIAL_CONCEPTS_PARAM = 'external'
+AGENT_PRELOAD_SPATIAL_CONCEPTS_PARAM = 'false'
 
-AGENT_ACTION_CONCEPTS_PARAM = 'soar'
-AGENT_PRELOAD_ACTION_CONCEPTS_PARAM = 'true'
+AGENT_ACTION_CONCEPTS_PARAM = 'external'
+AGENT_PRELOAD_ACTION_CONCEPTS_PARAM = 'false'
 
 try:
     from local_settings import *

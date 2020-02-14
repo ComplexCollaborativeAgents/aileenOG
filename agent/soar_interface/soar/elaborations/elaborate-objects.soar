@@ -130,7 +130,7 @@ sp {aileen*elaborate*remove*qsrs*no-target-object
     (<rels>    ^relation <rel> -)
     }
 
-sp {aileen*elaborate*remove*qsrs*no-qsr
+sp {aileen*elaborate*remove*qsrs*different-qsr
     :o-support
     (state <s>    ^name aileen
                   ^world <w>
@@ -147,6 +147,25 @@ sp {aileen*elaborate*remove*qsrs*no-qsr
                ^<type> {<nval> <> <val>})
     (<root-obj>    ^id <root-num>)
     (<target-obj>    ^id <target-num>)
+-->
+    (<rels>    ^relation <rel> -)
+    }
+
+sp {aileen*elaborate*remove*qsrs*no-qsr
+    :o-support
+    (state <s>    ^name aileen
+                  ^world <w>
+                  ^io.input-link.world.qsrs <qsrs>)
+    (<w>    ^objects <objs>
+            ^relations <rels>)
+    (<rels>    ^relation <rel>)
+    (<rel>    ^root <root-obj>
+              ^target <target-obj>
+              ^{<< cardir rcc8 >> <type>} <val>)
+    (<objs>    ^object <target-obj> <root-obj>)
+    -{(<qsrs>  ^qsr <q>)
+       (<q>    ^root <root-num>
+               ^target <target-num>)}
 -->
     (<rels>    ^relation <rel> -)
     }

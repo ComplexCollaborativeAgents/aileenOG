@@ -1,0 +1,24 @@
+##!
+# @file
+#
+# @created smohan 20200117
+
+sp {ground-action-reference*apply*mark-unknown-concept
+    (state <s>    ^name ground-action-reference
+                  ^operator <op>
+                  ^topstate <ts>
+                  ^superstate <ss>)
+    (<op>    ^name mark-unknown-action-concept
+             ^type <type>
+             ^nl <nl>)
+    (<ss>    ^grounding <g>
+             ^segment.parses <parses>)
+-->
+    (<ts>    ^processing-status <ps>)
+    (<ps>    ^type unknown-action-concept
+             ^information <info>
+             ^source comprehension)
+    (<info>    ^nl <nl>
+               ^grounding <g>
+               ^parses <parses>)
+    }

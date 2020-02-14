@@ -33,9 +33,9 @@ if __name__ == '__main__':
             from generate_training_images import TrainingImage
             TrainingImage.generate_scenes(world_server, agent_server)
     else:
-        VisualWordLesson.administer_curriculum(world_server, agent_server)
-        # SpatialWordLesson.administer_curriculum(world_server, agent_server)
-        # ActionWordLesson.administer_curriculum(world_server, agent_server)
+        #VisualWordLesson.administer_curriculum(world_server, agent_server)
+        SpatialWordLesson.administer_curriculum(world_server, agent_server)
+        #ActionWordLesson.administer_curriculum(world_server, agent_server)
 
 
 

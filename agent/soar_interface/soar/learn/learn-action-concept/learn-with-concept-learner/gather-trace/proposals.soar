@@ -1,0 +1,65 @@
+##!
+# @file
+#
+# @created smohan 20200119
+
+sp {gather-trace*propose*describe-state-at-start
+    (state <s>    ^name gather-trace)
+    -{(<s>    ^state-record <sr>)
+      (<sr>    ^label start)}
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name record-state
+             ^label start)
+    }
+
+sp {gather-trace*propose*get-next
+    (state <s>    ^name gather-trace
+                  ^state-record <st>
+                  -^io.input-link.interaction-link.message.marker << trace end >>)
+-->
+    (<s>    ^operator <op> + < =)
+    (<op>    ^name get-next)
+    }
+
+sp {gather-trace*propose*describe-state-action-trace1
+    (state <s>    ^name gather-trace
+                  ^io.input-link.interaction-link.message.marker trace)
+  -{(<s>    ^state-record <sr>)
+      (<sr>    ^label trace1)}
+-->
+    (<s>    ^operator <op> + >)
+    (<op>    ^name record-state
+             ^label trace1)
+    }
+
+sp {gather-trace*propose*describe-state-action-trace2
+    (state <s>    ^name gather-trace
+                  ^io.input-link.interaction-link.message.marker trace)
+  -{(<s>    ^state-record <sr>)
+      (<sr>    ^label trace2)}
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name record-state
+             ^label trace2)
+    }
+
+sp {gather-trace*propose*describe-state-action-end
+    (state <s>    ^name gather-trace
+                  ^io.input-link.interaction-link.message.marker end)
+   -{(<s>    ^state-record <sr>)
+      (<sr>    ^label end)}
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name record-state
+             ^label end)}
+
+sp {gather-trace*propose*complete-trace
+    (state <s>    ^name gather-trace
+                  ^state-record <sr>)
+    (<sr>    ^label end)
+-->
+    (<s>    ^operator <op> + !)
+    (<op>    ^name complete-trace)
+    }
+                  
