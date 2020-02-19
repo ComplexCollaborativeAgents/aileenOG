@@ -9,12 +9,6 @@ source "proposals.soar"
 
 source "mark-unknown-spatial-concept.soar"
 
-source "compose-relation-query.soar"
-
-source "collect-relation-facts.soar"
-
-source "query-concept-memory.soar"
-
 source "complete-ground-relation-reference.soar"
 
 source "compose-with-semantic-memory/load.soar"

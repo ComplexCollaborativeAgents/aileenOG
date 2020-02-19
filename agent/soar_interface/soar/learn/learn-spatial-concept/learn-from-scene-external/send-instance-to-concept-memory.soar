@@ -15,16 +15,48 @@ sp {learn-from-scene-external*apply*send-instance-to-concept-memory
               ^concept <con>)
 -->
     (<ol>    ^concept-memory <cm>)
-    (<cm>    ^store-instance <si>)
-    (<si>    ^gpool <gpool>
-             ^relations <rels>
-             ^context <pid>)
+    (<cm>    ^store <si>)
+    (<si>    ^concept <con>
+             ^context <pid>
+             ^facts <fact>)
     }
+
+sp {learn-from-scene-external*apply*send-instance-to-concept-memory*facts*new-rel
+    (state <s>    ^name learn-from-scene-external
+                  ^operator <op>
+                  ^io.output-link.concept-memory.store <si>)
+    (<si>    ^facts <facts>)
+    (<op>    ^scene.relations.relation <rel>)
+    (<rel>    ^internal <int>
+              ^first.id_string <fid>
+              ^second.id_string <sid>)
+-->
+    (<facts> ^fact <f>)
+    (<f>   ^lfirst <int>
+           ^lsecond <fid>
+           ^lthird <sid>)}
+
+sp {learn-from-scene-external*apply*send-instance-to-concept-memory*spatial
+    (state <s>    ^name learn-from-scene-external
+                  ^operator <op>
+                  ^io.output-link.concept-memory.store <si>)
+    (<si>    ^facts <facts>)
+    (<op>    ^scene.relations.relation <rel>)
+    (<rel>    ^<< rcc8 cardir >> <val>
+              ^root.id_string <fid>
+              ^target.id_string <sid>)
+-->
+    (<facts> ^fact <f>)
+    (<f>   ^lfirst <val>
+           ^lsecond <fid>
+           ^lthird <sid>)}
+
+
    
 sp {learn-from-scene-external*apply*send-instance-to-concept-memory*status
     (state <s>    ^name learn-from-scene-external
                   ^operator <op>
-                  ^io.output-link.concept-memory.store-instance.gpool <gpool>)
+                  ^io.output-link.concept-memory.store.facts.fact <f>)
     (<op>    ^name send-instance-to-concept-memory
              ^scene <scene>)
 -->

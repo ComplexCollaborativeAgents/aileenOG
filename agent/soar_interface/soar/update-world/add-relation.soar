@@ -1,0 +1,32 @@
+##!
+# @file
+#
+# @created smohan 20191218
+sp {aileen*apply*update-world*add-relation
+    (state <s>    ^name aileen
+                  ^operator <op1>
+                  ^operator <op2> +
+                  ^world.relations <wrels>)
+    (<op1>    ^name update-world)
+    (<op2>    ^name update-world
+              ^add-relation <rel>)
+    (<rel>    ^target <tobj>
+              ^root <robj>
+              ^{<type> << cardir rcc8 >>} <val>)
+-->
+    (<wrels>    ^relation <rel>)
+    (<rel>    ^target <tobj>
+              ^root <robj>
+              ^<type> <val>)
+    }
+
+sp {aileen*apply*update-world*remove-relation
+    (state <s>    ^name aileen
+                  ^operator <op1>
+                  ^operator <op2> +
+                  ^world.relations <wrels>)
+    (<op1>    ^name update-world)
+    (<op2>    ^name update-world
+              ^remove-relation <rel>)
+-->
+    (<wrels>    ^relation <rel> -)}

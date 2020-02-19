@@ -1,0 +1,19 @@
+##!
+# @file
+#
+# @created smohan 20200115
+
+sp {filter-scene*apply*mark-overspecific-concept
+    (state <s>    ^name filter-scene
+                  ^operator <op>
+                  ^topstate <ts>)
+    (<op>    ^name mark-overspecific-visual-concept
+             ^type <type>
+             ^concept-structure <con>)
+-->
+    (<ts>    ^processing-status <ps>)
+    (<ps>    ^type overspecific-visual-concept
+             ^information <info>
+             ^source comprehension)
+    (<info>    ^concept-structure <con>)
+    }

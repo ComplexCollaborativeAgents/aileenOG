@@ -11,7 +11,7 @@ sp {learn*propose*learn-visual-concept
               ^purpose <p>
               -^learned <info>)
     (<p>    ^type learn
-            ^concept unknown-visual-concept)
+            ^concept << unknown-visual-concept overspecific-visual-concept >>)
 -->
     (<s>    ^operator <op> +)
     (<op>    ^name learn-visual-concept

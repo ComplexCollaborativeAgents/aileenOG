@@ -1,0 +1,30 @@
+##!
+# @file
+#
+# @created smohan 20191202
+
+
+sp {filter-scene*apply*filter-for-concept*object
+    (state <s>    ^name filter-scene
+                  ^candidate-set <cs>
+                  ^operator <op>)
+    (<cs>    ^object <obj>)
+    (<op>    ^name filter-for-concept
+             ^concept <con>)
+    (<obj>    -^isa <con>)
+-->
+    (<cs>    ^object <obj> -)
+    }
+
+sp {filter-scene*apply*filter-for-concept*object*mark-status
+    (state <s>    ^name filter-scene
+                  ^operator <op>
+                  ^candidate-set <cs>)
+    (<op>    ^name filter-for-concept
+             ^concept <concept>)
+-->
+    (<s>    ^filtered-with <concept>)
+    }
+
+
+                  

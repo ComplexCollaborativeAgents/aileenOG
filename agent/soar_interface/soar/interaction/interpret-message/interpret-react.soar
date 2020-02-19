@@ -1,0 +1,20 @@
+##!
+# @file
+#
+# @created smohan 20191219
+
+sp {interpret-message*apply*interpret-react
+    (state <s>    ^name interpret-message
+                  ^operator <op>
+                  ^superstate <ss>)
+    (<op>    ^name interpret-react
+             ^message <m>)
+-->
+    (<ss>    ^new-segment <segment>)
+    (<segment>    ^message <m>
+                  ^purpose <p>
+                  ^originator instructor
+                  ^satisfaction action-event
+                  ^_metadata <met>)
+    (<p>    ^type react)
+    }

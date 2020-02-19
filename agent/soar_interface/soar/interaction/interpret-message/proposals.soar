@@ -26,3 +26,16 @@ sp {interpret-message*propose*interpret*feedback
     (<op>    ^name interpret-feedback
              ^message <m1>)
     }
+
+sp {interpret-message*propose*interpret-react
+    (state <s>    ^name interpret-message
+                  ^superstate.operator <sop>)
+    (<sop>    ^name interpret-message
+              ^message <m1>)
+    (<m1>    ^signal react)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name interpret-react
+             ^message <m1>)
+    }
+                  

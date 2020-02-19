@@ -189,7 +189,7 @@ class AileenSupervisor(Supervisor):
         for scene_object in scene_objects:
             self._children.importMFNodeFromString(-1, scene_object)
 
-        self.setLabel(1, label, 0.4, 0.1, 0.1, 0x000000, 0, "Arial")
+        self.setLabel(1, label, 0.02, 0.3, 0.1, 0x000000, 0, "Arial")
         return True
 
     def clean_scene(self):

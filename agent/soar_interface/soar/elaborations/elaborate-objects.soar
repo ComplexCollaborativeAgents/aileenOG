@@ -10,11 +10,22 @@ sp {aileen*elaborate*objects*copy
                   ^io.input-link <il>
                   ^world.objects <wobjs>)
     (<il>    ^world.objects.object <obj>)
-    (<obj>    ^id <id>)
+    (<obj>    ^color <color>
+              ^shape <shape>
+              ^held <held>
+              ^id <id>
+              ^id_uuid <id-uuid>
+              ^id_string <id-string>)
    -{(<wobjs>    ^object <wobj>)
     (<wobj>    ^id <id>)}
 -->
-    (<wobjs>    ^object  <obj>)
+    (<wobjs>    ^object <obj-new>)
+    (<obj-new>    ^color <color>
+                  ^shape <shape>
+                  ^held <held>
+                  ^id <id>
+                  ^id_uuid <id-uuid>
+                  ^id_string <id-string>)
     }
 
 sp {aileen*elaborate*objects*remove
@@ -28,6 +39,21 @@ sp {aileen*elaborate*objects*remove
     (<wobj>    ^id <id>)
 -->
     (<wobjs>    ^object  <wobj> -)
+    }
+
+sp {aileen*elaborate*objects*update*held
+    :o-support
+    (state <s>    ^name aileen
+                  ^io.input-link <il>
+                  ^world.objects.object <wobj>)
+    (<il>    ^world.objects.object <obj>)
+    (<obj>    ^id <id>
+              ^held <held>)
+    (<wobj>    ^id <id>
+               ^held {<nheld> <> <held>})
+-->
+    (<wobj>    ^held <nheld> -
+               ^held <held>)
     }
 
 
@@ -108,7 +134,7 @@ sp {aileen*elaborate*remove*qsrs*no-qsr
     :o-support
     (state <s>    ^name aileen
                   ^world <w>
-                  ^io.input-link.world.relations <irel>)
+                  ^io.input-link.world.qsrs.qsr <irel>)
     (<w>    ^objects <objs>
             ^relations <rels>)
     (<rels>    ^relation <rel>)
@@ -118,7 +144,7 @@ sp {aileen*elaborate*remove*qsrs*no-qsr
     (<objs>    ^object <target-obj> <root-obj>)
     (<irel>    ^root <root-num>
                ^target <target-num>
-               ^<type> <> <val>)
+               ^<type> {<nval> <> <val>})
     (<root-obj>    ^id <root-num>)
     (<target-obj>    ^id <target-num>)
 -->

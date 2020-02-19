@@ -23,7 +23,7 @@ CV_WEIGHTS = path.join(ROOT_PATH, 'agent', 'vision', 'yolov3-tiny-aileen_session
 WORLD_HOST = 'localhost'
 WORLD_PORT = 30000
 AGENT_HOST = 'localhost'
-AGENT_PORT = 40000
+AGENT_PORT = 40001
 CONCEPT_LEARNER_HOST = 'dubs.parc.xerox.com'
 CONCEPT_LEARNER_PORT = 8080
 
