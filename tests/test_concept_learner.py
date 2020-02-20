@@ -108,7 +108,7 @@ def test_concept_learner_server():
             "pattern": ["rRight","Obj10A","Obj10B"]}
     r = server.query(xmlrpclib.Binary(json.dumps(data)))
     res = json.loads(r.data)
-#    assert len(res['matches']) == 1
+    assert len(res['matches']) == 1
     # This should match, but it doesn't currently. Klenk have a request in with QRG 12/18
 
     # add more cases to the generalization
