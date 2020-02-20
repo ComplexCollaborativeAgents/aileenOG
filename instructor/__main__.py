@@ -4,6 +4,8 @@ import xmlrpclib
 import settings
 from log_config import logging
 from visual_word_lesson import VisualWordLesson
+
+from generate_training_images import TrainingImage
 from spatial_word_lesson import SpatialWordLesson
 from action_word_lesson import ActionWordLesson
 from instructor.curriculum import Curriculum

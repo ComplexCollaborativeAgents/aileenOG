@@ -1,13 +1,12 @@
 from threading import Thread
 from controller import Supervisor
 import settings
-
+from agent.vision.Detector import Detector
 import os
 import xmlrpclib
 from action_executor import ActionExecutor
 from world.log_config import logging
 import json
-
 
 class AileenSupervisor(Supervisor):
 
@@ -66,11 +65,20 @@ class AileenSupervisor(Supervisor):
 
                 world_bbox = self.computeBoundingBox(object_node)
                 w_x1 = world_bbox[0]
-                w_y1 = world_bbox[1]
+                w_y1 = world_bbox[2]
                 w_x2 = world_bbox[3]
-                w_y2 = world_bbox[4]
-                im_x1, im_y1 = coord_world2im(w_x1, w_y1)
-                im_x2, im_y2 = coord_world2im(w_x2, w_y2)
+                w_y2 = world_bbox[5]
+
+                im_x1, im_y1 = Detector.coord_world2im(w_x1, w_y1)
+                im_x2, im_y2 = Detector.coord_world2im(w_x2, w_y2)
+
+                # convert into bbox format: (top_left (x1,y1), bottom_right (x2,y2))
+                width = im_x2 - im_x1
+                height = im_y2 - im_y1
+                im_x1 = im_x1 - width / 2.0
+                im_y1 = im_y1 - height / 2.0
+                im_x2 = im_x2 - width / 2.0
+                im_y2 = im_y2 - height / 2.0
 
                 object_children = object_node.getField('children')
                 object_dict = {
@@ -207,22 +215,3 @@ class AileenSupervisor(Supervisor):
         with open(settings.COLOR_PATH) as f:
             colors = json.load(f)
         return colors
-
-
-def coord_im2world(x, y):
-    # Due to some difficulty getting camera parameters from webots, we use a simple linear regression
-    # to map im coordinates to world coordinates, and vice-versa.
-    # Eventually, solve rotation matrix for camera and use transform matrix
-    w_x = x * 1.3910 + 0.1639
-    w_y = y * 1.3719 - 0.4558
-    w_z = 0.399802  # pretty much every object has this height in the training data.
-    return w_x, w_y, w_z
-
-
-def coord_world2im(x, y):
-    # Due to some difficulty getting camera parameters from webots, we use a simple linear regression
-    # to map im coordinates to world coordinates, and vice-versa.
-    # Eventually, solve rotation matrix for camera and use transform matrix
-    im_x = x * 0.7167 - 0.1165
-    im_y = y * 0.7269 + 0.3323
-    return im_x, im_y
