@@ -99,7 +99,6 @@ class AileenSupervisor(Supervisor):
                 objects.append(object_dict)
 
         output_dict = {'objects': objects}
-
         return output_dict
 
     def get_object_name(self, object_node):
@@ -170,6 +169,7 @@ class AileenSupervisor(Supervisor):
         return acknowledgement
 
     def get_image(self):
+        output_dict = self.get_all()
         logging.debug("[aileen_supervisor] :: processing get_image from client")
         image_string = self._camera.getImage()
         logging.debug("[aileen_supervisor] :: got current image")
@@ -181,7 +181,9 @@ class AileenSupervisor(Supervisor):
 
         with open(settings.CURRENT_IMAGE_PATH, "rb") as handle:
             binary_image = xmlrpclib.Binary(handle.read())
-            return binary_image
+            output_dict['image'] = binary_image
+        return output_dict
+
 
     def set_scene(self, scene_objects, label):
         self.clean_scene()

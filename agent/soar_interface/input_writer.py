@@ -79,12 +79,13 @@ class InputWriter(object):
             self.write_language_to_input_link()
 
         if settings.SOAR_CV:
-            binary_image = self.request_server_for_current_state_image()
+            # these will be used to map UUID, ID, and held status to CV detections
+            data = self.request_server_for_current_state_image()
+            objects_list = data['objects']
+            binary_image = data['image']
             self.write_binary_image_to_file(binary_image)
             im = cv2.imdecode(np.fromstring(binary_image.data, dtype=np.uint8), 1)
             cv_detections = self.detector.run(im)
-            # these will be used to map UUID, ID, and held status to CV detections
-            objects_list = self.request_server_for_objects_info()
             objects_list = self.align_cv_detections_to_world(cv_detections, objects_list)
         else:
             objects_list = self.request_server_for_objects_info()
@@ -230,7 +231,7 @@ class InputWriter(object):
 
     def request_server_for_current_state_image(self):
         try:
-            binary_image = self._world_server.get_image()
+            data = self._world_server.get_image()
         except xmlrpclib.ProtocolError as err:
             logging.error("[input_writer] :: protocol error {}".format(err.errmsg))
             return
@@ -239,7 +240,7 @@ class InputWriter(object):
             return
 
         logging.debug("[input_writer] :: received binary image from server")
-        return binary_image
+        return data
 
     def write_binary_image_to_file(self, binary_image):
         dir_name = os.path.split(settings.CURRENT_IMAGE_PATH)[0]
