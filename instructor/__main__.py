@@ -34,7 +34,7 @@ if __name__ == '__main__':
             TrainingImage.generate_scenes(world_server, agent_server)
     else:
         #VisualWordLesson.administer_curriculum(world_server, agent_server)
-        SpatialWordLesson.administer_curriculum(world_server, agent_server)
+        #SpatialWordLesson.administer_curriculum(world_server, agent_server)
         #ActionWordLesson.administer_curriculum(world_server, agent_server)
 
 
