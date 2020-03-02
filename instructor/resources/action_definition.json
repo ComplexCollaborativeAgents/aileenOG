@@ -5,6 +5,6 @@
           "trace-actions": [
               {"name": "pick-up", "argument": "<obj1>"},
               {"name": "place", "argument1": "<obj1>", "argument2": "<obj2>", "relation": "right-of"}],
-          "language": ["move", "<obj1>", "right-of", "<obj2>"]
+          "language": ["move", "<obj1>", "right-of", "<obj2>"],
   }
 }
