@@ -125,6 +125,9 @@ def translate_soar_fact_to_tuple(fact_id):
         if child.GetAttribute() == 'lsecond':
             fact_tuple[1] = child.GetValueAsString()
         if child.GetAttribute() == 'lthird':
-            fact_tuple[2] = child.GetValueAsString()
+            if child.IsIdentifier() is False:
+                fact_tuple[2] = child.GetValueAsString()
+            else:
+                fact_tuple[2] = translate_soar_fact_to_tuple(child.ConvertToIdentifier())
     return fact_tuple
 

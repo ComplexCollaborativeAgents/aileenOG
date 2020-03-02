@@ -2,3 +2,47 @@
 # @file
 #
 # @created smohan 20200119
+
+
+sp {learn-action-with-concept-learner*apply*augment-trace-with-concept
+    (state <s>    ^name learn-action-with-concept-learner
+                  ^operator <op>)
+    (<op>    ^name augment-trace-with-action
+             ^trace <trace>
+             ^concept-structure <con>)
+    (<con>    ^concept <con-name>)
+-->
+    (<trace> ^action <act>)
+    (<act>    ^internal <con-name>)
+    }
+
+sp {learn-action-with-concept-learner*apply*augment-trace-with-concept*objects
+    (state <s>    ^name learn-action-with-concept-learner
+                  ^operator <op>
+                  ^parses.temporal <t>
+                  ^grounding <g>)
+    (<op>    ^name augment-trace-with-action
+             ^trace.action <act>
+             ^concept-structure <cons>)
+    (<cons>    ^concept <con-name>)
+    (<act>    ^internal <con-name>)
+    (<t>    ^order.{<< first second >> <order>} <ref>)
+    (<g>    ^entity <ent>)
+    (<ent>    ^_metadata.description <ref>
+              ^object <obj>)
+-->
+    (<act>    ^<order>    <obj>)
+    }
+
+
+sp {learn-action-with-concept-learner*apply*augment-trace-with-action*complete
+    (state <s>    ^name learn-action-with-concept-learner
+                  ^operator <op>)
+    (<op>    ^name augment-trace-with-action
+             ^trace <t>
+             ^concept-structure <lti>)
+    (<t>    ^action <act>)
+    (<act>    ^internal <name>)
+-->
+    (<s>    ^augmented-with <lti>)
+    }

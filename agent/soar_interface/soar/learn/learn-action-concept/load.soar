@@ -10,3 +10,5 @@ source "proposals.soar"
 source "select-scene-subset.soar"
 
 source "learn-with-concept-learner/load.soar"
+
+source "complete-learn-action-concept.soar"
