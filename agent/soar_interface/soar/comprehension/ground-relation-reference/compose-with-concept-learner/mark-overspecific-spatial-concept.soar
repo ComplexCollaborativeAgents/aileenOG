@@ -7,7 +7,8 @@ sp {compose-with-concept-learner*apply*mark-overspecific-concept
     (state <s>    ^name compose-with-concept-learner
                   ^operator <op>
                   ^topstate <ts>
-                  ^grounding <g>)
+                  ^grounding <g>
+                  ^parses <p>)
     (<op>    ^name mark-overspecific-spatial-concept
              ^type <type>
              ^concept-structure <con>)
@@ -17,5 +18,6 @@ sp {compose-with-concept-learner*apply*mark-overspecific-concept
              ^information <info>
              ^source comprehension)
     (<info>    ^concept-structure <con>
-               ^grounding <g>)
+               ^grounding <g>
+               ^parses <p>)
     }

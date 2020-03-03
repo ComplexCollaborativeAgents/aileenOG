@@ -16,13 +16,24 @@ sp {learn-from-scene-external*elaborate*state
 sp {learn-from-scene-external*elaborate*parses*grounding
     (state <s>    ^name learn-from-scene-external
                   ^information <info>)
-    (<info>    ^grounding <g>
-               ^parses <p>
-               ^nl <nl>)
+    (<info>    ^grounding <g>)
 -->
-    (<s>    ^grounding <g>
-            ^parses <p>
-            ^nl <nl>)
+    (<s>    ^grounding <g>)
+    }
+
+sp {learn-from-scene-external*elaborate*parses*parses
+    (state <s>    ^name learn-from-scene-external
+                  ^information <info>)
+    (<info>    ^parses <p>)
+-->
+    (<s>    ^parses <p>)
+    }
+sp {learn-from-scene-external*elaborate*parses*nl
+    (state <s>    ^name learn-from-scene-external
+                  ^information <info>)
+    (<info>  ^nl <nl>)
+-->
+    (<s>  ^nl <nl>)
     }
 
 sp {learn-from-scene-external*store*spatial-word*index
