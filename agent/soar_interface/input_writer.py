@@ -82,9 +82,9 @@ class InputWriter(object):
             # these will be used to map UUID, ID, and held status to CV detections
             data = self.request_server_for_current_state_image()
             objects_list = data['objects']
-            binary_image = data['image']
-            self.write_binary_image_to_file(binary_image)
-            im = cv2.imdecode(np.fromstring(binary_image.data, dtype=np.uint8), 1)
+            # Assumption: Both world and agent are running on the same machine and that's why the image is stored in
+            #             `settings.CURRENT_IMAGE_PATH.
+            im = cv2.imdecode(np.fromfile(settings.CURRENT_IMAGE_PATH, dtype=np.uint8), 1)
             cv_detections = self.detector.run(im)
             objects_list = self.align_cv_detections_to_world(cv_detections, objects_list)
         else:

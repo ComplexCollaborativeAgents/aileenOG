@@ -171,17 +171,13 @@ class AileenSupervisor(Supervisor):
     def get_image(self):
         output_dict = self.get_all()
         logging.debug("[aileen_supervisor] :: processing get_image from client")
-        image_string = self._camera.getImage()
+        _ = self._camera.getImage()
         logging.debug("[aileen_supervisor] :: got current image")
         dir_name = os.path.split(settings.CURRENT_IMAGE_PATH)[0]
         if not os.path.exists(dir_name):
             os.mkdir(dir_name)
         self._camera.saveImage(settings.CURRENT_IMAGE_PATH, 100)
         logging.debug("[aileen_supervisor] :: saved current image at {}".format(settings.CURRENT_IMAGE_PATH))
-
-        with open(settings.CURRENT_IMAGE_PATH, "rb") as handle:
-            binary_image = xmlrpclib.Binary(handle.read())
-            output_dict['image'] = binary_image
         return output_dict
 
 
