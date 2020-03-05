@@ -6,7 +6,7 @@
 ;;;;   Created: November 13, 2019 16:35:48
 ;;;;   Purpose: 
 ;;;; ----------------------------------------------------------------------------
-;;;;  Modified: Tuesday, January  7, 2020 at 09:08:51 by klenk
+;;;;  Modified: Wednesday, February 19, 2020 at 08:24:58 by klenk
 ;;;; ----------------------------------------------------------------------------
 
 (load "server.lsp")
@@ -219,7 +219,7 @@
 				("n" "Obj10A" "Obj10B") ("dc" "Obj10A" "Obj10B")
 				)
                               pattern))))
-;;    (assert (= 1 (length (cdr (assoc :MATCHES res)))))
+    (assert (= 1 (length (cdr (assoc :MATCHES res)))))
 ;;;This test should match, but greedy merge is missing the CVCube fact
 ;;;A simple fix would be to extend the match any reverse candidate inferences that are already true, but I'm not sure all the things that work for it
     ;; also exhaustive-sme works, but it can't be used with filters
