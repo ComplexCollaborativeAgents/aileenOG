@@ -44,9 +44,9 @@ class AileenWorldServer:
 
         def get_image():
             logging.info("[aileen_world_server] :: received get_image from agent client")
-            binary_image = aileen_supervisor.get_image()
+            data = aileen_supervisor.get_image()
             logging.debug("[aileen_world_server] :: sending image in binary format")
-            return binary_image
+            return data
 
         def set_scene(scene_specification):
             logging.info("[aileen_world_server] :: received set_scene from instructor client")
