@@ -126,7 +126,11 @@ class InputWriter(object):
                     qsr_id = self._qsrs_link.CreateIdWME('qsr')
                     qsr_id.CreateIntWME("root", int(root_obj_id))
                     qsr_id.CreateIntWME("target", int(target_obj_id))
-                    qsr_id.CreateStringWME(qsr_type, qsr_value)
+                    if qsr_type == "rcc8":
+                        qsr_id.CreateStringWME("rcc8", qsr_value)
+                    else:
+                        if qsr_type == "cardir":
+                            qsr_id.CreateStringWME("cardir", qsr_value)
 
     def clean_concept_memory(self):
         self._soar_agent.delete_all_children(self._concept_memory)
