@@ -1,0 +1,13 @@
+##!
+# @file
+#
+# @created smohan 20200305
+
+sp {observe-demonstration*elaborate*state
+    (state <s>    ^name observe-demonstration
+                  ^superstate.operator <sop>)
+    (<sop>    ^name observe-demonstration
+              ^segment <seg>)
+-->
+    (<s>    ^segment <seg>)
+    }

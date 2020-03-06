@@ -15,3 +15,5 @@ source "augment-trace-with-action.soar"
 
 source "send-instance-to-concept-memory.soar"
 source "complete-learn-action-with-concept-learner.soar"
+
+source "find-action-trace-from-epmem.soar"

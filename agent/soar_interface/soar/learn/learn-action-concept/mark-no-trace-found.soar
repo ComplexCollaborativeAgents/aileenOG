@@ -1,0 +1,19 @@
+##!
+# @file
+#
+# @created smohan 20200305
+
+
+sp {learn-action-with-concept-learner*apply*mark-no-trace-found
+    (state <s>    ^name learn-action-with-concept-learner
+                  ^operator <op>
+                  ^topstate <ts>)
+    (<op>    ^name mark-no-trace-found
+             ^concept-structure <con>)
+-->
+    (<ts>    ^processing-status <ps>)
+    (<ps>    ^type no-accessible-trace
+             ^information <info>
+             ^source learning)
+    (<info>    ^concept-structure <con>)
+    }

@@ -12,17 +12,42 @@ sp {learn-action-with-concept-learner*propose*store-new-concept
              ^concept-structure <con-s>)
     }
 
-
-sp {learn-action-with-concept-learner*propose*gather-action-trace
+sp {learn-action-with-concept-learner*propose*find-action-trace-from-epmem
     (state <s>    ^name learn-action-with-concept-learner
-                  ^concept-structure <struct>
-                  -^trace <t>)
-    (<struct>    ^gpool)
+                  ^concept-structure <con-s>
+                  -^epmem.result.failure <any>
+                  -^trace)
+    (<con-s>    ^gpool)
 -->
     (<s>    ^operator <op> + =)
-    (<op>    ^name gather-trace
-             ^concept-structure <struct>)
+    (<op>    ^name find-action-trace-from-epmem)
     }
+
+
+sp {learn-action-with-concept-learner*propose*mark-no-trace-found
+    (state <s>    ^name learn-action-with-concept-learner
+                  ^epmem.command.query <any>
+                  ^epmem.result.failure <any>
+                  ^concept-structure <con-s>)
+    (<con-s>    ^gpool)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name mark-no-trace-found
+             ^concept-structure <con-s>)
+    }
+             
+
+
+#sp {learn-action-with-concept-learner*propose*gather-action-trace
+#    (state <s>    ^name learn-action-with-concept-learner
+#                  ^concept-structure <struct>
+#                  -^trace <t>)
+#    (<struct>    ^gpool)
+#-->
+#    (<s>    ^operator <op> + =)
+#    (<op>    ^name gather-trace
+#             ^concept-structure <struct>)
+#    }
 
 sp {learn-action-with-concept-learner*propose*augment-trace-with-action
     (state <s>    ^name learn-action-with-concept-learner

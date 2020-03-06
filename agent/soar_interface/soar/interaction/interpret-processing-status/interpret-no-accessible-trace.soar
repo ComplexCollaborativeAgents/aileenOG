@@ -1,0 +1,19 @@
+##!
+# @file
+#
+# @created smohan 20200305
+
+sp {interpret-processing-status*apply*intrepret-no-accessible-trace
+    (state <s>    ^name interpret-processing-status
+                  ^operator <op>
+                  ^superstate <ss>)
+    (<op>    ^name interpret-no-accessible-trace
+             ^information <info>)
+-->
+    (<ss>    ^new-segment <segment>)
+    (<segment>    ^purpose <p>
+                  ^information <info>
+                  ^originator agent
+                  ^_metadata <met>)
+    (<p>    ^type observe-demonstration)
+    }

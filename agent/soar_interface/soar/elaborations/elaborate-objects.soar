@@ -83,20 +83,15 @@ sp {aileen*elaborate*add*qsrs
     (<il>    ^world.qsrs.qsr <qsr>)
     (<qsr>    ^root <root-num>
               ^target <target-num>
-              ^{<type> << cardir rcc8 >>} <val>)
+              ^{<< cardir rcc8 >> <type>} <val>)
     (<objs>    ^object <root-obj>
-                 ^object <target-obj>)
+               ^object <target-obj>)
     (<root-obj>    ^id <root-num>)
     (<target-obj>    ^id <target-num>)
-    -{(<rels>    ^relation <rel>)
-      (<rel>    ^root <root-obj>
-                ^target <target-obj>
-                ^<type> <val>)
-      }
 -->
     (<rels>    ^relation <rel-new>)
-    (<rel-new>    ^root <root-obj>
-                  ^target <target-obj>
+    (<rel-new>    ^root-object <root-obj>
+                  ^target-object <target-obj>
                   ^<type> <val>)
     }
 
@@ -107,8 +102,8 @@ sp {aileen*elaborate*remove*qsrs*no-root-object
     (<w>    ^objects <objs>
             ^relations <rels>)
     (<rels>    ^relation <rel>)
-    (<rel>    ^root <root-obj>
-              ^target <target-obj>
+    (<rel>    ^root-object <root-obj>
+              ^target-object <target-obj>
               ^<< cardir rcc8 >> <val>)
     (<objs>    -^object <root-obj>)
 -->
@@ -122,8 +117,8 @@ sp {aileen*elaborate*remove*qsrs*no-target-object
     (<w>    ^objects <objs>
             ^relations <rels>)
     (<rels>    ^relation <rel>)
-    (<rel>    ^root <root-obj>
-              ^target <target-obj>
+    (<rel>    ^root-object <root-obj>
+              ^target-object <target-obj>
               ^<< cardir rcc8 >> <val>)
     (<objs>    -^object <target-obj>)
 -->
@@ -138,8 +133,8 @@ sp {aileen*elaborate*remove*qsrs*different-qsr
     (<w>    ^objects <objs>
             ^relations <rels>)
     (<rels>    ^relation <rel>)
-    (<rel>    ^root <root-obj>
-              ^target <target-obj>
+    (<rel>    ^root-object <root-obj>
+              ^target-object <target-obj>
               ^{<< cardir rcc8 >> <type>} <val>)
     (<objs>    ^object <target-obj> <root-obj>)
     (<irel>    ^root <root-num>
@@ -159,8 +154,8 @@ sp {aileen*elaborate*remove*qsrs*no-qsr
     (<w>    ^objects <objs>
             ^relations <rels>)
     (<rels>    ^relation <rel>)
-    (<rel>    ^root <root-obj>
-              ^target <target-obj>
+    (<rel>    ^root-object <root-obj>
+              ^target-object <target-obj>
               ^{<< cardir rcc8 >> <type>} <val>)
     (<objs>    ^object <target-obj> <root-obj>)
     -{(<qsrs>  ^qsr <q>)

@@ -8,3 +8,5 @@ source "proposals.soar"
 source "interpret-unknown-concept.soar"
 
 source "interpret-overspecific-concept.soar"
+
+source "interpret-no-accessible-trace.soar"

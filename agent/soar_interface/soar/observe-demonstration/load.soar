@@ -1,14 +1,12 @@
 ##!
 # @file: 
 #
-# @created smohan 20191114
+# @created smohan 20200305
 
 source "elaborations.soar"
 
 source "proposals.soar"
 
-source "request-acknowledgement.soar"
-
-source "complete-learning-status.soar"
+source "get-next.soar"
 
 source "complete-observe-demonstration.soar"

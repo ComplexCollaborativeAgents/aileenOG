@@ -31,3 +31,16 @@ sp {interpret-processing-status*propose*interpret-overspecific-concept
              ^information <info>
              ^concept <con>)
     }
+
+sp {interpret-processing-status*propose*interpret-no-accessible-trace
+    (state <s>    ^name interpret-processing-status
+                  ^superstate.operator <sop>)
+    (<sop>    ^name interpret-processing-status
+              ^processing-status <ps>)
+    (<ps>    ^type no-accessible-trace
+             ^information <info>)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name interpret-no-accessible-trace
+             ^information <info>)
+}

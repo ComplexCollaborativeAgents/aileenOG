@@ -46,6 +46,6 @@ sp {compose-with-concept-learner*generate*relation
 -->
     (<rels>    ^relation <rel>)
     (<rel>    ^spatial-concept <rel-name>
-              ^root <root-obj>
-              ^target <target-obj>)
+              ^root-object <root-obj>
+              ^target-object <target-obj>)
     }

@@ -12,3 +12,5 @@ source "select-scene-subset.soar"
 source "learn-with-concept-learner/load.soar"
 
 source "complete-learn-action-concept.soar"
+
+source "mark-no-trace-found.soar"
