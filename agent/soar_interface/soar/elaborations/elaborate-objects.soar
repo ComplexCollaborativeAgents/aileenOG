@@ -88,6 +88,10 @@ sp {aileen*elaborate*add*qsrs
                ^object <target-obj>)
     (<root-obj>    ^id <root-num>)
     (<target-obj>    ^id <target-num>)
+    -{(<rels>    ^relation <rel>)
+      (<rel>    ^root-object <root-obj>
+                ^target-object <target-obj>
+                ^<type> <val>)}
 -->
     (<rels>    ^relation <rel-new>)
     (<rel-new>    ^root-object <root-obj>

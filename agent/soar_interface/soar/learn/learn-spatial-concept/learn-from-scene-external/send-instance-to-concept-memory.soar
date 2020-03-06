@@ -62,8 +62,8 @@ sp {learn-from-scene-external*apply*send-instance-to-concept-memory*spatial
     (<si>    ^facts <facts>)
     (<op>    ^scene.relations.relation <rel>)
     (<rel>    ^<< rcc8 cardir >> <val>
-              ^root.id_string <fid>
-              ^target.id_string <sid>)
+              ^root-object.id_string <fid>
+              ^target-object.id_string <sid>)
 -->
     (<facts> ^fact <f>)
     (<f>   ^lfirst <val>
