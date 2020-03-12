@@ -34,12 +34,21 @@ sp {ground-action-reference*propose*learn-action
              ^type action)
     }
 
+#sp {ground-action-reference*propose*complete-ground-action-reference
+#    (state <s>    ^name ground-action-reference
+#                  ^procedural <proc>
+#                  ^action <act>)
+#    -{(<proc>    ^<arg> <valid>)
+#      (<act>    -^<arg> <val>)}
+#-->
+#    (<s>    ^operator <op> +)
+#    (<op>    ^name complete-ground-action-reference)
+#    }
+
 sp {ground-action-reference*propose*complete-ground-action-reference
     (state <s>    ^name ground-action-reference
-                  ^procedural <proc>
                   ^action <act>)
-    -{(<proc>    ^<arg> <valid>)
-      (<act>    -^<arg> <val>)}
+    (<act>    ^internal <name>)
 -->
     (<s>    ^operator <op> +)
     (<op>    ^name complete-ground-action-reference)

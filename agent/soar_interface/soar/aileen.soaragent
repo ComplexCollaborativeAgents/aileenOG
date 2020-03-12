@@ -11,8 +11,6 @@
     <member path="elaborations/load.soar" />
     <member path="_knowledge" />
     <member path="_knowledge/_semantic-memory" />
-    <member path="default" />
-    <member path="default/smem-operators" />
     <member path="interaction/elaborations.soar" />
     <member path="interaction/load.soar" />
     <member path="interaction/proposals.soar" />

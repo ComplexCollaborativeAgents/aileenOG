@@ -9,11 +9,12 @@ source "proposals.soar"
 
 source "store-new-concept.soar"
 
-source "gather-trace/load.soar"
-
 source "augment-trace-with-action.soar"
 
-source "send-instance-to-concept-memory.soar"
 source "complete-learn-action-with-concept-learner.soar"
 
-source "find-action-trace-from-epmem.soar"
+source "store-new-concept.soar"
+
+source "initialize-new-concept.soar"
+
+source "proposals.soar"

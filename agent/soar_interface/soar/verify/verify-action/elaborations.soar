@@ -1,0 +1,29 @@
+##!
+# @file
+#
+# @created smohan 20200311
+
+sp {verify-action*elaborate*action
+    (state <s>    ^name verify-action
+                  ^superstate.operator.action <act>)
+-->
+    (<s>    ^action <act>)
+    }
+
+sp {verify-action*elaborate*pattern
+    (state <s>    ^name verify-action
+                  ^action <act>)
+    (<act>    ^internal <inter>
+              ^first.id_string <fobj>)
+-->
+    (<s>    ^pattern <act-pattern>)
+    (<act-pattern>    ^lfirst <inter>
+                      ^lsecond <fobj>)
+    }
+
+sp {verify-action*elaborate*concept
+    (state <s>    ^name verify-action
+                  ^action._metadata.concept-structure <struct>)
+-->
+    (<s>    ^concept-structure <struct>)
+    }

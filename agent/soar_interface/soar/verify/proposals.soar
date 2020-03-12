@@ -31,7 +31,6 @@ sp {verify*propose*report-success*relation
     (<s>    ^operator <op> + >!)
     (<op>    ^name report-success)
     }
-
                   
 
 sp {verify*propose*verify-relation-refence
@@ -42,4 +41,14 @@ sp {verify*propose*verify-relation-refence
     (<s>    ^operator <op> + > =)
     (<op>    ^name verify-relation
              ^relation <rel>)
+    }
+
+sp {verify*propose*verify-action
+    (state <s>    ^name verify
+                  ^grounding.action <act>
+                  -^verified <act>)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name verify-action
+             ^action <act>)
     }

@@ -1,0 +1,18 @@
+##!
+# @file: 
+#
+# @created smohan 20200306
+
+source "elaborations.soar"
+
+source "proposals.soar"
+
+source "find-first-observation-episode.soar"
+
+source "find-trace-observation-episode.soar"
+
+source "initialize-trace-lookup.soar"
+
+source "finalize-trace.soar"
+
+source "find-last-observation-episode/load.soar"

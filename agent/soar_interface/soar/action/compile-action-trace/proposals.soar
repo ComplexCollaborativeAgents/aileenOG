@@ -1,0 +1,58 @@
+##!
+# @file
+#
+# @created smohan 20200306
+
+sp {compile-action-trace*propose*find-last-observation-episode
+    (state <s>    ^name compile-action-trace
+                  -^last-observation-episode <any>)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name find-last-observation-episode)
+    }
+
+sp {compile-action-trace*propose*find-first-observation-episode
+    (state <s>    ^name compile-action-trace
+                  ^last-observation-episode <lep>
+                  -^first-observation-episode <fep>)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name find-first-observation-episode
+             ^last-episode <lep>)
+    }
+
+sp {compile-action-trace*propose*initialize-trace-lookup
+    (state <s>    ^name compile-action-trace
+                  -^before-marker
+                  -^after-marker
+                   ^last-observation-episode <lep>
+                   ^first-observation-episode <fep>)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name initialize-trace-lookup
+             ^last-observation-episode <lep>
+             ^first-observation-episode <fep>)
+    }
+
+
+sp {compile-action-trace*propose*find-trace-observation-episode
+    (state <s>    ^name compile-action-trace
+                  ^before-marker <lep>
+                  ^after-marker <fep>
+                  -^trace-observation-episode failed)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name find-trace-observation-episode
+             ^after <fep>
+             ^before <lep>)
+    }
+           
+
+sp {compile-action-trace*propose*finalize-trace
+    (state <s>    ^name compile-action-trace
+                  ^trace-observation-episode failed
+                  ^before <bef>)
+-->
+    (<s>    ^operator <op> + =)
+    (<op>    ^name finalize-trace)
+    }

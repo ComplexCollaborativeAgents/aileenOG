@@ -1,0 +1,13 @@
+##!
+# @file
+#
+# @created smohan 20200311
+
+sp {find-last-observation-episode*propose*mark-no-trace-found
+    (state <s>    ^name find-last-observation-episode
+                  ^epmem.result.failure <any>)
+-->
+    (<s>    ^operator <op>)
+    (<op>    ^name mark-no-trace-found)
+    }
+    

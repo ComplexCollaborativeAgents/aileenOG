@@ -23,14 +23,12 @@ sp {learn-action-with-concept-learner*elaborate*parses*grounding
             ^nl <nl>)
     }
 
-sp {learn-action-with-concept-learner*store*action-word*index
+sp {learn-action-with-concept-learne*elaborate*concept-structure
     (state <s>    ^name learn-action-with-concept-learner
-                  ^nl <tag>)
+                  ^information <info>)
+    (<info>    ^concept-structure <con>)
 -->
-    (<s>    ^concept-structure <index>)
-    (<index>    ^concept (make-constant-symbol r_ <tag>)
-                ^type action
-                ^nl <tag>)
+    (<s>    ^concept-structure <con>)
     }
 
 sp {learn-action-with-concept-learner*store*map*semantic-memory
@@ -42,7 +40,18 @@ sp {learn-action-with-concept-learner*store*map*semantic-memory
                  ^gpool <gpool>)
 -->
     (<s>    ^store-concept <struct>)
+    }      
+
+
+sp {learn-action-with-concept-learner*store*map*semantic-memory
+    (state <s>    ^name learn-action-with-concept-learner
+                  ^concept-structure <struct>
+                  ^information <info>)
+    (<struct>    ^concept <con>
+                 ^type <type>
+                 ^nl <nl>
+                 ^gpool <gpool>)
+-->
+    (<s>    ^store-concept <struct>)
+    (<info>    ^concept-structure <struct>)
     }
-                  
-
-

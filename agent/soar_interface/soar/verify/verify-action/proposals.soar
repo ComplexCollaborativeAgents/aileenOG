@@ -1,0 +1,35 @@
+##!
+# @file
+#
+# @created smohan 20200311
+
+
+sp {verify-action*propose*compile-action-trace
+    (state <s>    ^name verify-action
+                  -^trace <t>)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name compile-action-trace)
+    }
+
+sp {verify-action*propse*translate-to-facts
+    (state <s>    ^name verify-action
+                  ^trace <t>
+                  -^facts <f>)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name translate-to-facts
+             ^trace <t>)
+    }
+
+sp {verif-action*propose*query-concept-memory
+    (state <s>    ^name verify-action
+                  ^facts <f>
+                  ^pattern <p>
+                  -^retrieved <any>)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name query-concept-memory
+             ^facts <f>
+             ^pattern <p>)
+    }

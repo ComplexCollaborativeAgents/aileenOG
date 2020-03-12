@@ -24,6 +24,13 @@ sp {topstate*apply*persistent-copy-message*interaction
     (<s>    ^message <m>)
 }
 
+sp {topstate*elaborate*marker
+    (state <s>    ^name aileen
+                  ^io.input-link.interaction-link.message.marker <m>)
+-->
+    (<s>    ^marker <m>)
+    }
+
 sp {topstate*delete*interaction*message
     :o-support
     (state <s>    ^name aileen

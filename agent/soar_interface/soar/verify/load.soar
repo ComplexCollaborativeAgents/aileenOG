@@ -11,3 +11,5 @@ source "proposals.soar"
 
 
 source "verify-relation/load.soar"
+
+source "verify-action/load.soar"
