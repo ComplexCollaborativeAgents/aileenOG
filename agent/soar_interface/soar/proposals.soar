@@ -66,7 +66,8 @@ sp {aileen*propose*verify
              ^type verify)
     (<seg>    ^grounding <g>)
     (<g>    ^complete true)
-    
+    -{(<s>    ^processing-status <ps>)
+      (<ps>    ^source verify)}
 -->
     (<s>    ^operator <op> +)
     (<op>    ^name verify
@@ -97,7 +98,7 @@ sp {aileen*propose*learn
     (<p>    -^completed
              ^type learn)
     -{(<s>    ^processing-status <ps>)
-      (<ps>    ^source learning)}
+      (<ps>    ^source learn)}
 -->
     (<s>    ^operator <op> +)
     (<op>    ^name learn

@@ -16,3 +16,6 @@ source "initialize-trace-lookup.soar"
 source "finalize-trace.soar"
 
 source "find-last-observation-episode/load.soar"
+
+
+source "mark-no-trace-found.soar"

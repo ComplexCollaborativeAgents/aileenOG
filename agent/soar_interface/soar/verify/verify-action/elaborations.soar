@@ -10,15 +10,24 @@ sp {verify-action*elaborate*action
     (<s>    ^action <act>)
     }
 
+sp {verify-action*elaborate*grounding
+    (state <s>    ^name verify-action
+                  ^superstate.grounding <g>)
+-->
+    (<s>    ^grounding <g>)
+    }
+
 sp {verify-action*elaborate*pattern
     (state <s>    ^name verify-action
                   ^action <act>)
     (<act>    ^internal <inter>
-              ^first.id_string <fobj>)
+              ^first.id_string <fobj1>
+              ^second.id_string <fobj2>)
 -->
     (<s>    ^pattern <act-pattern>)
     (<act-pattern>    ^lfirst <inter>
-                      ^lsecond <fobj>)
+                      ^lsecond <fobj1>
+                      ^lthird <fobj2>)
     }
 
 sp {verify-action*elaborate*concept

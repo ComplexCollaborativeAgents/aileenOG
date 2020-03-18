@@ -23,11 +23,13 @@ sp {translate-to-facts*write-facts*action
                   ^facts <facts>
                   ^trace.action <act>)
     (<act>    ^internal <name>
-              ^first.id_string <obj-name>)
+              ^first.id_string <obj-name1>
+              ^second.id_string <obj-name2>)
 -->
     (<facts>    ^fact <f>)
     (<f>    ^lfirst <name>
-            ^lsecond <obj-name>)
+            ^lsecond <obj-name1>
+            ^lthird <obj-name2>)
     }         
     
 sp {translate-to-facts*write-facts*trace*world*relations

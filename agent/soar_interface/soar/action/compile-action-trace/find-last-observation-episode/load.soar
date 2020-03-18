@@ -7,4 +7,3 @@ source "proposals.soar"
 
 source "elaborations.soar"
 
-source "mark-no-trace-found.soar"

@@ -1,0 +1,66 @@
+##!
+# @file
+#
+# @created smohan 20200312
+
+sp {comprehension*elaborate*parse*temporal
+    (state <s>    ^name comprehension
+                  ^segment.parses <parses>
+                  ^operator <op>)
+    (<op>    ^name extract-temporal-information
+             ^parse <parse>)
+    (<parses>    ^parse <parse>)
+-->
+    (<parses>    ^temporal <temp>)
+    (<temp>    ^of-parse <parse>
+               ^order <order>)
+    }
+
+
+sp {comprehension*apply*parse*temporal*encoding*first-object
+    (state <s>    ^name comprehension
+                  ^segment.parses <parses>)
+    (<parses>    ^parse <parse>
+                 ^temporal <temp>)
+    (<temp>    ^of-parse <parse>
+              ^order <order>)
+    (<parse>    ^obj-ref <ref>)
+-->
+    (<order>    ^first <ref>)
+    }
+
+sp {comprehension*elaborate*parse*temporal*encoding*rel-second-object
+    (state <s>    ^name comprehension
+                  ^segment.parses <parses>)
+    (<parses>    ^parse <parse>
+                 ^temporal <temp>)
+    (<temp>    ^of-parse <parse>
+              ^order <order>)
+    (<parse>    ^rel-ref.obj-ref <ref>)
+-->
+    (<order>    ^second <ref>)
+    }
+
+sp {comprehension*elaborate*parse*temporal*encoding*action*first-object
+    (state <s>    ^name comprehension
+                  ^segment.parses <parses>)
+    (<parses>    ^parse <parse>
+                 ^temporal <temp>)
+    (<temp>    ^of-parse <parse>
+              ^order <order>)
+    (<parse>    ^action-ref.obj-ref <ref>)
+-->
+    (<order>    ^first <ref>)
+    }
+
+sp {comprehension*elaborate*parse*temporal*encoding*action-second-object
+    (state <s>    ^name comprehension
+                  ^segment.parses <parses>)
+    (<parses>    ^parse <parse>
+                 ^temporal <temp>)
+    (<temp>    ^of-parse <parse>
+              ^order <order>)
+    (<parse>    ^action-ref.rel-ref.obj-ref <ref>)
+-->
+    (<order>    ^second <ref>)
+    }

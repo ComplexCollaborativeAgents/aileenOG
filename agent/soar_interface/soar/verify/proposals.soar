@@ -52,3 +52,13 @@ sp {verify*propose*verify-action
     (<op>    ^name verify-action
              ^action <act>)
     }
+
+sp {verify*propose*report-success*action
+    (state <s>    ^name verify
+                  ^grounding.action <act>
+                  ^verified <act>)
+-->
+    (<s>    ^operator <op> + >!)
+    (<op>    ^name report-success)
+    }
+             

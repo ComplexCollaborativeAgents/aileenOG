@@ -39,7 +39,7 @@ sp {learn*propose*learn-action-concept
               ^purpose <p>
               -^learned <info>)
     (<p>    ^type learn
-            ^concept unknown-action-concept)
+            ^concept << unknown-action-concept overspecific-action-concept >>)
 -->
     (<s>    ^operator <op> +)
     (<op>    ^name learn-action-concept

@@ -17,27 +17,25 @@ sp {query-concept-memory*write-to-output-link
 
 sp {query-concept-memory*read-results*success
     (state <s>    ^operator <op>
-                  ^superstate <ss>
                   ^io.input-link <il>)
     (<op>    ^name query-concept-memory
              ^pattern <pat>
              ^facts <facts>)
-    (<il>    ^concept-memory <cm>)
-    (<cm>    ^status success
+    (<il>    ^concept-memory.result <res>)
+    (<res>    ^status success
              ^matches <m>)
 -->
-    (<ss>    ^retrieved <m>)
+    (<s>    ^retrieved <m>)
     }
 
 sp {query-concept-memory*read-results*failed
     (state <s>    ^operator <op>
-                  ^superstate <ss>
                   ^io.input-link <il>)
     (<op>    ^name query-concept-memory
              ^pattern <pat>
              ^facts <facts>)
-    (<il>    ^concept-memory <cm>)
-    (<cm>    ^status failure)
+    (<il>    ^concept-memory.result <res>)
+    (<res>    ^status failure)
 -->
-    (<ss>    ^retrieved failure)
+    (<s>    ^retrieved failure)
     }

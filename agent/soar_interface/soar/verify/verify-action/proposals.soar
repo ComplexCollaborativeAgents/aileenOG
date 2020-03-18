@@ -22,7 +22,7 @@ sp {verify-action*propse*translate-to-facts
              ^trace <t>)
     }
 
-sp {verif-action*propose*query-concept-memory
+sp {verify-action*propose*query-concept-memory
     (state <s>    ^name verify-action
                   ^facts <f>
                   ^pattern <p>
@@ -32,4 +32,31 @@ sp {verif-action*propose*query-concept-memory
     (<op>    ^name query-concept-memory
              ^facts <f>
              ^pattern <p>)
+    }
+
+sp {verify-action*propose*mark-overspecific-action-concept
+    (state <s>    ^name verify-action
+                  ^retrieved <ret>)
+    (<ret>    -^match)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name mark-overspecific-action-concept)
+    }
+
+sp {verify-action*propose*report-succes
+    (state <s>    ^name verify-action
+                  ^retrieved.match <any>
+                 )
+-->
+    (<s>    ^operator <op> + !)
+    (<op>    ^name report-success)
+    }
+
+sp {verify-action*superstate*propose*report-succes
+    (state <s>    ^name verify-action
+                  ^operator.name report-success
+                  ^superstate <ss>
+                  ^action <act>)
+-->
+    (<ss>    ^verified <act>)
     }

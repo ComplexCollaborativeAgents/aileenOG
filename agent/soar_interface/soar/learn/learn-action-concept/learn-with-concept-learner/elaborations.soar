@@ -11,16 +11,28 @@ sp {learn-action-with-concept-learner*elaborate*state
     (<s>    ^information <info>)
     }
 
-sp {learn-action-with-concept-learner*elaborate*parses*grounding
+sp {learn-action-with-concept-learner*elaborate*parses
     (state <s>    ^name learn-action-with-concept-learner
                   ^information <info>)
-    (<info>    ^grounding <g>
-               ^parses <p>
-               ^nl <nl>)
+    (<info>    ^parses <p>)
 -->
-    (<s>    ^grounding <g>
-            ^parses <p>
-            ^nl <nl>)
+    (<s>    ^parses <p>)
+    }
+
+sp {learn-action-with-concept-learner*elaborate*nl
+    (state <s>    ^name learn-action-with-concept-learner
+                  ^information <info>)
+    (<info>    ^nl <nl>)
+-->
+    (<s>    ^nl <nl>)
+    }
+
+sp {learn-action-with-concept-learner*elaborate*grounding
+    (state <s>    ^name learn-action-with-concept-learner
+                  ^information <info>)
+    (<info>    ^grounding <g>)
+-->
+    (<s>    ^grounding <g>)
     }
 
 sp {learn-action-with-concept-learne*elaborate*concept-structure
@@ -29,6 +41,13 @@ sp {learn-action-with-concept-learne*elaborate*concept-structure
     (<info>    ^concept-structure <con>)
 -->
     (<s>    ^concept-structure <con>)
+    }
+
+sp {learn-action-with-concept-learne*elaborate*concept-structure*grounding
+    (state <s>    ^name learn-action-with-concept-learner
+                  ^information.grounding.action._metadata.concept-structure <struct>)
+-->
+    (<s>    ^concept-structure <struct>)
     }
 
 sp {learn-action-with-concept-learner*store*map*semantic-memory
@@ -54,4 +73,14 @@ sp {learn-action-with-concept-learner*store*map*semantic-memory
 -->
     (<s>    ^store-concept <struct>)
     (<info>    ^concept-structure <struct>)
+    }
+
+sp {learn-action-with-concept-learner*elaborate*action*trace
+    (state <s>    ^name learn-action-with-concept-learner
+                  ^grounding <g>
+                  ^trace <t>)
+    (<g>    ^action <act>)
+-->
+    (<t>    ^action <act>)
+    (<s>    ^augmented-with <act>)
     }

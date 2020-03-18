@@ -28,7 +28,7 @@ sp {learn-action-with-concept-learner*propose*compile-action-trace
                   -^trace <t>)
     (<con>    ^gpool <g>)
 -->
-    (<s>    ^operator <op> + =)
+    (<s>    ^operator <op> + = >)
     (<op>    ^name compile-action-trace
              ^episode <res>)
     }

@@ -23,7 +23,7 @@ sp {interpret-processing-status*propose*interpret-overspecific-concept
                   ^superstate.operator <sop>)
     (<sop>    ^name interpret-processing-status
               ^processing-status <ps>)
-    (<ps>    ^type {<< overspecific-visual-concept overspecific-spatial-concept >> <con>}
+    (<ps>    ^type {<< overspecific-visual-concept overspecific-spatial-concept overspecific-action-concept >> <con>}
              ^information <info>)
 -->
     (<s>    ^operator <op> +)

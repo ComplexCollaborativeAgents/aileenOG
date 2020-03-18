@@ -5,13 +5,13 @@
 
 
 sp {find-last-observation-episode*apply*mark-no-trace-found
-    (state <s>    ^name find-last-observation-episode
-                  ^operator <op>
-                  ^topstate <ts>)
+    (state <s>    ^operator <op>
+                  ^topstate <ts>
+                  ^source <source>)
     (<op>    ^name mark-no-trace-found)
 -->
     (<ts>    ^processing-status <ps>)
     (<ps>    ^type no-accessible-trace
              ^information <info>
-             ^source learning)
+             ^source <source>)
     }
