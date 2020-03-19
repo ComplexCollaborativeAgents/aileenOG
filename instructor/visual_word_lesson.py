@@ -48,6 +48,9 @@ class VisualWordLesson:
         if agent_response['status'] == 'success':
             return {'signal': 'correct'}
 
+        if agent_response['status'] == 'failure':
+            return {'signal': 'correct'}
+
     @staticmethod
     def administer_curriculum(world_server, agent_server):
         while True:
@@ -55,7 +58,6 @@ class VisualWordLesson:
 
             lesson_object = VisualWordLesson()
             lesson = lesson_object.generate_lesson(distractors=0)
-
 
             scene_acknowledgement = world_server.set_scene(
                 {'configuration': lesson['scene'], 'label': lesson['interaction']['content']})

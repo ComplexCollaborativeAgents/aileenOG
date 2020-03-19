@@ -19,7 +19,9 @@ class Curriculum(object):
         signal = lesson_configuration['signal']
         description = lesson_configuration['description']
         if lesson_type == 'visual':
-            lesson = VisualWordLesson().generate_lesson(lesson_configuration, distractors)
+            lesson_object = VisualWordLesson()
+            lesson = lesson_object.generate_lesson(lesson_configuration, distractors)
+            lesson['object'] = lesson_object
         elif lesson_type == 'spatial':
             language = lesson_configuration['language']
             configuration = language[1]
