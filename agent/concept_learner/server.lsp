@@ -6,7 +6,7 @@
 ;;;;   Created: November 13, 2019 16:14:37
 ;;;;   Purpose: 
 ;;;; ----------------------------------------------------------------------------
-;;;;  Modified: Sunday, January  5, 2020 at 14:43:51 by klenk
+;;;;  Modified: Thursday, March 19, 2020 at 14:09:26 by klenk
 ;;;; ----------------------------------------------------------------------------
 
 (in-package :cl-user)
@@ -55,9 +55,39 @@
 	(t (error "symbols->strs "))))
 
 
+;; The current KB is always the next kb
+(defun checkpoint-helper (str)
+  (handler-bind ((error #'print-backtrace))
+    (format t "~%Checkpoint-kb ~A" str)
+    (let* ((json (cl-json:decode-json-from-string str))
+	   (dir (cdr (assoc :DIR json))))
+      (assert (fire:open-kb? fire:*kb*))
+      (fire:copy-kb-files fire:*kb* (qrg:make-qrg-path ".." "data" dir))
+      (cl-json:encode-json-alist-to-string
+       (pairlis
+	'("dir")
+	(list dir))
+       ))))
+
+
+(defun restore-helper (str)
+  (handler-bind ((error #'print-backtrace))
+    (format t "~%Restoring-kb ~A" str)
+    (let* ((json (cl-json:decode-json-from-string str))
+	   (dir (cdr (assoc :DIR json))))
+      (assert (fire:open-kb? fire:*kb*))
+      (fire:copy-kb-files (qrg:make-qrg-path ".." "data" dir)
+			  (qrg::make-qrg-path "planb" "kbs""nextkb"))
+      (assert (string= (car (last (pathname-directory (fire:kb-path fire:*kb*)))) "nextkb"))
+      (cl-json:encode-json-alist-to-string
+       (pairlis
+	'("dir")
+	(list dir))
+       ))))
+
 (defun create-reasoning-symbol-helper (str)
   (handler-bind ((error #'print-backtrace))
-  (format t "~%Creating Reasoning Symbol2 ~A" str)
+    (format t "~%Creating Reasoning Symbol2 ~A" str)
   (let* ((json (cl-json:decode-json-from-string str))
 	 (symbol (str->symbols (cdr (assoc :SYMBOL json)))))
     (cond (symbol
@@ -293,6 +323,12 @@
      :base64 :base64)
     (net.xml-rpc:export-xml-rpc-method
      rcp '("project" project-helper)
+     :base64 :base64)
+    (net.xml-rpc:export-xml-rpc-method
+     rcp '("checkpoint_kb" checkpoint-helper)
+     :base64 :base64)
+    (net.xml-rpc:export-xml-rpc-method
+     rcp '("restore_kb" restore-helper)
      :base64 :base64)
 ;; Klenk: We want to match against the whole scene.
     (net.xml-rpc:export-xml-rpc-method
