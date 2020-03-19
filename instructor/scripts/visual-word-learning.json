@@ -11,7 +11,7 @@
     "description": "box",
     "color": "blue",
     "shape": "box",
-    "signal": "verify"
+    "signal": "inform"
   },
   {
     "lesson": "visual",
