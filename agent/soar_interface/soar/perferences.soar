@@ -20,7 +20,7 @@ sp {alieen*prefer*verify*over*interaction*comprehension
     (<op1>    ^name interaction)
     (<op2>    ^name verify)
 -->
-    (<s>    ^operator <op2> > <op1>)
+    (<s>    ^operator <op2> < <op1>)
     }
 
 sp {aileen*prefer*learn*over*interaction

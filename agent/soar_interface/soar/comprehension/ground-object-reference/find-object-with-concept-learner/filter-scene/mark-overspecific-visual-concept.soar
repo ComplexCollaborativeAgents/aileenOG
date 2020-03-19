@@ -6,7 +6,8 @@
 sp {filter-scene*apply*mark-overspecific-concept
     (state <s>    ^name filter-scene
                   ^operator <op>
-                  ^topstate <ts>)
+                  ^topstate <ts>
+                  ^grounding <g>)
     (<op>    ^name mark-overspecific-visual-concept
              ^concept-structure <con>)
 -->
@@ -14,5 +15,7 @@ sp {filter-scene*apply*mark-overspecific-concept
     (<ps>    ^type overspecific-visual-concept
              ^information <info>
              ^source comprehension)
-    (<info>    ^concept-structure <con>)
+    (<info>    ^concept-structure <con>
+               ^grounding <g>)
+    (<g>    ^complete true)
     }

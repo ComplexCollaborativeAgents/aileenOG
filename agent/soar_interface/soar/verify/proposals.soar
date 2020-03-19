@@ -15,8 +15,21 @@ sp {verify*propose*report-success*object
     (<g-entity>    ^_metadata.description <oref>
                    ^object <obj>)
 -->
-    (<s>    ^operator <op> +)
+    (<s>    ^operator <op> + =)
     (<op>    ^name report-success)
+    }
+
+sp {verify*propose*report-failure*object
+    (state <s>    ^name verify
+                  ^segment <seg>)
+    (<seg>    ^parses.parse.obj-ref <oref>
+              ^grounding <g>)
+    -{(<g>    ^entity <g-entity>)
+    (<g-entity>    ^_metadata.description <oref>
+                   ^object <obj>)}
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name report-failure)
     }
 
 sp {verify*propose*report-success*relation

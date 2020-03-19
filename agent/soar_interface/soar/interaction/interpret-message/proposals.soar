@@ -12,7 +12,21 @@ sp {interpret-message*propose*interpret-verify
 -->
     (<s>    ^operator <op> +)
     (<op>    ^name interpret-verify
-             ^message <m1>)
+             ^message <m1>
+             ^type verify-only)
+    }
+
+sp {interpret-message*propose*interpret-verify-inform
+    (state <s>    ^name interpret-message
+                  ^superstate.operator <sop>)
+    (<sop>    ^name interpret-message
+              ^message <m1>)
+    (<m1>    ^signal inform)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name interpret-verify
+             ^message <m1>
+             ^type inform-and-verify)
     }
 
 sp {interpret-message*propose*interpret*feedback

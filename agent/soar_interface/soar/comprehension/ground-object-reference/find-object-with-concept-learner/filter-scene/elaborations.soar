@@ -32,4 +32,10 @@ sp {filter-scene*elaborate*retrieved-concept
     (<s>    ^retrieved-concept-lti <res>)
     }
 
+sp {filter-scene*elaborate*grounding
+    (state <s>    ^name filter-scene
+                  ^superstate.grounding <g>)
+-->
+    (<s>    ^grounding <g>)
+    }
 
