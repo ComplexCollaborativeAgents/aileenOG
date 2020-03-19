@@ -1,0 +1,21 @@
+##!
+# @file
+#
+# @created smohan 20200311
+
+sp {find-last-observation-episode*query*epmem
+    (state <s>    ^name find-last-observation-episode
+                  ^epmem.command <ecomm>)
+-->
+    (<ecomm>    ^query <cue>)
+    (<cue>    ^interaction.stack.segment.purpose.type observe-demonstration)
+    }
+
+sp {find-last-observation-episode*success
+    (state <s>    ^name find-last-observation-episode
+                  ^epmem.result <res>
+                  ^superstate <ss>)
+    (<res>    ^success <cue>)
+-->
+    (<ss>    ^last-observation-episode <res>)
+    }

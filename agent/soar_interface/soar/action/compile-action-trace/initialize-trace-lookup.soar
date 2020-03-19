@@ -1,0 +1,16 @@
+##!
+# @file
+#
+# @created smohan 20200310
+
+sp {compile-action-trace*apply*initialize-trace-lookup
+    (state <s>    ^name compile-action-trace
+                  ^operator <op>)
+    (<op>    ^name initialize-trace-lookup
+             ^last-observation-episode <lep>
+             ^first-observation-episode <fep>)
+-->
+    (<s>    ^before-marker <lep>
+            ^after-marker <fep>)
+    }
+

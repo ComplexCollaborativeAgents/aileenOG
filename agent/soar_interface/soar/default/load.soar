@@ -4,3 +4,5 @@
 # @created smohan 20191108
 
 source "smem-operators/load.soar"
+
+source "concept-memory-operators/load.soar"

@@ -44,3 +44,17 @@ sp {topstate*elaborate*topstate
     (<s>    ^topstate <s>)
     }
 
+sp {topstate*operator*elaborate*source
+    (state <s>    ^name <name>
+                  ^topstate <ts>
+                  ^superstate <ts>)
+-->
+    (<s>    ^source <name>)
+    }
+
+sp {topstate*operator*elaborate*source*substate
+    (state <s>    ^superstate.source <source>)
+-->
+    (<s>    ^source <source>)
+    }
+

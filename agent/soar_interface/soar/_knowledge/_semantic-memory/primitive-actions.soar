@@ -4,7 +4,7 @@
 # @created smohan 20191220
 
 smem --add {
-    (<a4> ^nl <al4> ^procedural <ap4> ^type action)
-    (<al4> ^tag pickup ^obj-ref obj4) 
+    (<a4> ^linguistic <al4> ^procedural <ap4> ^type action)
+    (<al4> ^nl pickup ^obj-ref obj4) 
     (<ap4> ^op_name op_pick-up ^argument1 obj4)
 }

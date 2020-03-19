@@ -1,0 +1,13 @@
+##!
+# @file
+#
+# @created smohan 20200220
+
+sp {learn-action-concept*apply*complete-learn-action-concept
+    (state <s>    ^name learn-action-concept
+                  ^superstate.segment <seg>
+                  ^information <info>
+                  ^operator.name complete-learn-action-concept)
+-->
+    (<seg>    ^learned <info>)
+    }

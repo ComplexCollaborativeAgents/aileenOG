@@ -33,8 +33,7 @@ sp {compose-with-concept-learner*generate*relation
     (state <s>    ^name compose-with-concept-learner
                   ^io.input-link <il>
                   ^grounding <g>
-                  ^relations <rels>
-                  ^operator.name query-concept-memory)
+                  ^relations <rels>)
     (<il>    ^concept-memory <cm>)
     (<cm>    ^result.matches.match <match>)
     (<match>    ^first <rel-name>
@@ -47,6 +46,6 @@ sp {compose-with-concept-learner*generate*relation
 -->
     (<rels>    ^relation <rel>)
     (<rel>    ^spatial-concept <rel-name>
-              ^root <root-obj>
-              ^target <target-obj>)
+              ^root-object <root-obj>
+              ^target-object <target-obj>)
     }

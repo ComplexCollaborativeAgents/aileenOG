@@ -13,3 +13,5 @@ source "collect-relation-facts.soar"
 
 source "query-concept-memory.soar"
 source "compose-with-concept-learner.soar"
+
+source "mark-overspecific-spatial-concept.soar"

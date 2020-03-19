@@ -7,6 +7,8 @@ sp {topstate*propose*persistent-copy-message*interaction
     (state <s>    ^name aileen
                   ^io.input-link.interaction-link.message <m>
                   -^message <m>)
+    (<m>   -^marker trace)
+    (<m>    -^marker end)
 -->
     (<s>    ^operator <op> +)
     (<op>    ^name persistent-copy-message
@@ -21,6 +23,13 @@ sp {topstate*apply*persistent-copy-message*interaction
 -->
     (<s>    ^message <m>)
 }
+
+sp {topstate*elaborate*marker
+    (state <s>    ^name aileen
+                  ^io.input-link.interaction-link.message.marker <m>)
+-->
+    (<s>    ^marker <m>)
+    }
 
 sp {topstate*delete*interaction*message
     :o-support

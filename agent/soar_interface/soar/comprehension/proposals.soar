@@ -17,6 +17,17 @@ sp {comprehension*propose*parse
              ^content <cont>)
     }
 
+sp {comprehension*propose*extract-temporal-information
+    (state <s>    ^name comprehension
+                  ^parses <parses>)
+    (<parses>    ^parse <p>
+                 -^temporal.of-parse <p>)
+-->
+    (<s>    ^operator <op> + >)
+    (<op>    ^name extract-temporal-information
+             ^parse <p>)
+    }
+
 sp {comprehension*propose*init-grounding
     (state <s>    ^name comprehension
                    ^segment <seg>)

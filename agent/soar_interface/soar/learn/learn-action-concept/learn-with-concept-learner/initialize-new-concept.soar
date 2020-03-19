@@ -1,0 +1,17 @@
+##!
+# @file
+#
+# @created smohan 20200310
+
+sp {initialize-new-concept*store*action-word*index
+    (state <s>    ^name learn-action-with-concept-learner
+                  ^operator <op>)     
+    (<op>    ^name initialize-new-concept
+              ^nl <tag>)
+-->
+    (<s>    ^concept-structure <index>)
+    (<index>    ^concept (make-constant-symbol r_ <tag>)
+                ^type action
+                ^nl <tag>)
+    }
+

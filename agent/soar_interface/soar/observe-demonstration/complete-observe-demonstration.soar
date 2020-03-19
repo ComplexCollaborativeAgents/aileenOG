@@ -1,0 +1,14 @@
+##!
+# @file
+#
+# @created smohan 20200305
+
+sp {observe-demonstration*apply*complete-observe-demonstration
+    (state <s>    ^name observe-demonstration
+                  ^operator.name complete-observe-demonstration
+                  ^segment <seg>)
+    (<seg>    ^purpose <p>)
+-->
+    (<seg>    ^completed <p>)
+    (<p>    ^completed true)
+    }

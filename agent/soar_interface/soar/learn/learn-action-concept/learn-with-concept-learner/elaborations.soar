@@ -1,0 +1,86 @@
+##!
+# @file
+#
+# @created smohan 20200118
+sp {learn-action-with-concept-learner*elaborate*state
+    (state <s>    ^name learn-action-with-concept-learner
+                  ^superstate.operator <sop>)
+    (<sop>    ^name learn-action-with-concept-learner
+              ^information <info>)
+-->
+    (<s>    ^information <info>)
+    }
+
+sp {learn-action-with-concept-learner*elaborate*parses
+    (state <s>    ^name learn-action-with-concept-learner
+                  ^information <info>)
+    (<info>    ^parses <p>)
+-->
+    (<s>    ^parses <p>)
+    }
+
+sp {learn-action-with-concept-learner*elaborate*nl
+    (state <s>    ^name learn-action-with-concept-learner
+                  ^information <info>)
+    (<info>    ^nl <nl>)
+-->
+    (<s>    ^nl <nl>)
+    }
+
+sp {learn-action-with-concept-learner*elaborate*grounding
+    (state <s>    ^name learn-action-with-concept-learner
+                  ^information <info>)
+    (<info>    ^grounding <g>)
+-->
+    (<s>    ^grounding <g>)
+    }
+
+sp {learn-action-with-concept-learne*elaborate*concept-structure
+    (state <s>    ^name learn-action-with-concept-learner
+                  ^information <info>)
+    (<info>    ^concept-structure <con>)
+-->
+    (<s>    ^concept-structure <con>)
+    }
+
+sp {learn-action-with-concept-learne*elaborate*concept-structure*grounding
+    (state <s>    ^name learn-action-with-concept-learner
+                  ^information.grounding.action._metadata.concept-structure <struct>)
+-->
+    (<s>    ^concept-structure <struct>)
+    }
+
+sp {learn-action-with-concept-learner*store*map*semantic-memory
+    (state <s>    ^name learn-action-with-concept-learner
+                  ^concept-structure <struct>)
+    (<struct>    ^concept <con>
+                 ^type <type>
+                 ^nl <nl>
+                 ^gpool <gpool>)
+-->
+    (<s>    ^store-concept <struct>)
+    }      
+
+
+sp {learn-action-with-concept-learner*store*map*semantic-memory
+    (state <s>    ^name learn-action-with-concept-learner
+                  ^concept-structure <struct>
+                  ^information <info>)
+    (<struct>    ^concept <con>
+                 ^type <type>
+                 ^nl <nl>
+                 ^gpool <gpool>)
+-->
+    (<s>    ^store-concept <struct>)
+    (<info>    ^concept-structure <struct>)
+    }
+
+sp {learn-action-with-concept-learner*elaborate*action*trace
+    (state <s>    ^name learn-action-with-concept-learner
+                  ^grounding <g>
+                  ^trace <t>)
+    (<g>    ^action <act>)
+-->
+    (<t>    ^action <act>)
+    (<s>    ^augmented-with <act>)
+    }

@@ -66,7 +66,8 @@ sp {aileen*propose*verify
              ^type verify)
     (<seg>    ^grounding <g>)
     (<g>    ^complete true)
-    
+    -{(<s>    ^processing-status <ps>)
+      (<ps>    ^source verify)}
 -->
     (<s>    ^operator <op> +)
     (<op>    ^name verify
@@ -94,10 +95,26 @@ sp {aileen*propose*learn
                   ^interaction.stack.segment <seg>)
     (<seg>    ^information <info>
               ^purpose <p>)
-    (<p>    -^completed)
+    (<p>    -^completed
+             ^type learn)
+    -{(<s>    ^processing-status <ps>)
+      (<ps>    ^source learn)}
 -->
     (<s>    ^operator <op> +)
     (<op>    ^name learn
+             ^segment <seg>)
+    }
+
+
+sp {aileen*propose*observe-demonstration
+    (state <s>    ^name aileen
+                  ^interaction.stack.segment <seg>)
+    (<seg>    ^purpose <p>)
+    (<p>    -^completed
+            ^type observe-demonstration)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name observe-demonstration
              ^segment <seg>)
     }
               

@@ -1,0 +1,31 @@
+[
+  {
+    "lesson": "visual",
+    "description": "box",
+    "color": "red",
+    "shape": "box",
+    "signal": "verify"
+  },
+  {
+    "lesson": "visual",
+    "description": "box",
+    "color": "blue",
+    "shape": "box",
+    "signal": "verify"
+  },
+  {
+    "lesson": "visual",
+    "description": "box",
+    "color": "green",
+    "shape": "box",
+    "signal": "verify"
+  },
+  {
+    "lesson": "visual",
+    "description": "box",
+    "color": "green",
+    "shape": "box",
+    "signal": "verify",
+    "distractors": 2
+  }
+]

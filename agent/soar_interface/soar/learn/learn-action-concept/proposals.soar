@@ -1,0 +1,38 @@
+##!
+# @file
+#
+# @created smohan 20200118
+
+
+sp {learn-action-concept*propose*select-scene
+    (state <s>    ^name learn-actieuon-concept
+                  ^world <w>)
+    -{(<s>    ^selected-scene <scene>)
+      (<scene>    ^objects <objs>
+                  ^relations <rels>)
+      (<rels>    ^relation <rel>)
+      (<objs>    ^object <obj>)}
+-->
+    (<s>    ^operator <op> + >)
+    (<op>    ^name select-scene-subset)
+    }
+
+sp {learn-action-concept*propose*learn-with-concept-learner
+    (state <s>    ^name learn-action-concept
+                  ^information <info>
+                  ^topstate._params.action-concepts external
+                  -^learned <info>)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name learn-action-with-concept-learner
+             ^information <info>)
+    }
+             
+sp {learn-action-concept*propose*complete-learn-action-concept
+    (state <s>    ^name learn-action-concept
+                  ^learned <info>)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name complete-learn-action-concept)
+    }
+  

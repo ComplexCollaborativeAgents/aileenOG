@@ -8,3 +8,5 @@ source "elaborations.soar"
 source "proposals.soar"
 
 source "primitive-actions/load.soar"
+
+source "compile-action-trace/load.soar"

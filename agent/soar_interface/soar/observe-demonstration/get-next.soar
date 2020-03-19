@@ -1,0 +1,12 @@
+##!
+# @file
+#
+# @created smohan 20200305
+
+sp {observe-demonstration*apply*get-next
+    (state <s>    ^name observe-demonstration
+                  ^operator.name get-next
+                  ^io.output-link <ol>)
+-->
+    (<ol>    ^interaction.response get-next)
+    }
