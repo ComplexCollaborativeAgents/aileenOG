@@ -3,13 +3,15 @@
 #
 # @created smohan 20200115
 
-sp {interpret-processing-status*apply*interpret-overspecific-concept
+sp {interpret-processing-status*apply*interpret-overspecific-concept*inform
     (state <s>    ^name interpret-processing-status
                   ^operator <op>
-                  ^superstate <ss>)
+                  ^superstate <ss>
+                  ^topstate <ts>)
     (<op>    ^name interpret-overspecific-concept
              ^information <info>
              ^concept <con>)
+    (<ts>    ^interaction.stack.segment.purpose.type inform)
 -->
     (<ss>    ^new-segment <segment>)
     (<segment>    ^purpose <p>
@@ -18,4 +20,18 @@ sp {interpret-processing-status*apply*interpret-overspecific-concept
                   ^_metadata <met>)
     (<p>    ^type learn
             ^concept <con>)
+    }
+
+sp {interpret-processing-status*apply*interpret-overspecific-concept*no-inform
+    (state <s>    ^name interpret-processing-status
+                  ^operator <op>
+                  ^superstate <ss>
+                  ^topstate.interaction.stack.segment.purpose <pur>)
+    (<op>    ^name interpret-overspecific-concept
+             ^information <info>
+             ^concept <con>)
+    (<pur>    -^type inform)
+    (<ss>    ^operator.processing-status <ps>)
+-->
+    (<ps>    ^processed true)
     }

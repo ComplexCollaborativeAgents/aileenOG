@@ -6,10 +6,10 @@
 sp {filter-scene*apply*mark-overspecific-concept
     (state <s>    ^name filter-scene
                   ^operator <op>
-                  ^topstate <ts>
-                  ^grounding <g>)
+                  ^topstate <ts>)
     (<op>    ^name mark-overspecific-visual-concept
              ^concept-structure <con>)
+    (<ts>    ^interaction.stack.segment.grounding <g>)
 -->
     (<ts>    ^processing-status <ps>)
     (<ps>    ^type overspecific-visual-concept
