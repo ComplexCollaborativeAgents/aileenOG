@@ -2,7 +2,6 @@ from aileen_object import AileenObject
 from aileen_scene import AileenScene
 from language_generator import LanguageGenerator
 from log_config import logging
-from experiments.results_helper import ResultsHelper
 
 
 class VisualWordLesson:
@@ -37,13 +36,15 @@ class VisualWordLesson:
 
         if self._description:
             target = AileenObject.generate_object(self._description)
+            if self._description.get('position', None):
+                target.set_translation(self._description['position'])
+            else:
+                target.set_translation(AileenScene.randomizer.get_random_position_on_table())
         else:
             target = AileenObject.generate_random_object()
-
-        if self._description.get('position', None):
-            target.set_translation(self._description['position'])
-        else:
             target.set_translation(AileenScene.randomizer.get_random_position_on_table())
+
+
 
         self._scene.add_object(target)
 
@@ -73,15 +74,14 @@ class VisualWordLesson:
 
     @staticmethod
     def administer_curriculum(world_server, agent_server):
-        lesson_number = 0
-        ResultsHelper.set_do_record(True)
-        ResultsHelper.reset_results_file('visual-word-learning')
         while True:
             raw_input("Press any key to generate the next lesson...")
 
-            lesson_object = VisualWordLesson()
-            lesson = lesson_object.generate_lesson(distractors=0)
-            ResultsHelper.write_lesson_number_to_results_file(lesson_number)
+            lesson_object = VisualWordLesson(is_positive=True,
+                                             signal="inform",
+                                             description=None,
+                                             distractors=None)
+            lesson = lesson_object.generate_lesson()
 
             scene_acknowledgement = world_server.set_scene(
                 {'configuration': lesson['scene'], 'label': lesson['interaction']['content']})
@@ -94,7 +94,6 @@ class VisualWordLesson:
             agent_response = agent_server.process_interaction(evaluation)
 
             logging.info("[aileen_instructor] :: provided feedback to agent")
-            lesson_number = lesson_number + 1
 
 
 if __name__ == '__main__':
