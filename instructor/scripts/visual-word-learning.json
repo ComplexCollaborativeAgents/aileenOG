@@ -1,30 +1,30 @@
 [
   {
-    "lesson": "visual",
-    "description": "box",
-    "color": "red",
-    "shape": "box",
-    "signal": "verify"
-  },
-  {
-    "lesson": "visual",
-    "description": "box",
-    "color": "blue",
-    "shape": "box",
+    "lesson-type": "visual-word",
+    "content": "box",
+    "description": {"color": "red",
+                    "shape": "box"},
     "signal": "inform"
   },
   {
-    "lesson": "visual",
-    "description": "box",
-    "color": "green",
-    "shape": "box",
+    "lesson-type": "visual-word",
+    "content": "box",
+    "description": {"color": "blue",
+                    "shape": "box"},
+    "signal": "inform"
+  },
+  {
+    "lesson-type": "visual-word",
+    "content": "box",
+    "description": {"color": "green",
+                    "shape": "box"},
     "signal": "verify"
   },
   {
-    "lesson": "visual",
-    "description": "box",
-    "color": "green",
-    "shape": "box",
+    "lesson-type": "visual-word",
+    "content": "box",
+    "description": {"color": "green",
+                    "shape": "box"},
     "signal": "verify",
     "distractors": 2
   }

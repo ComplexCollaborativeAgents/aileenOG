@@ -37,7 +37,7 @@ class SpatialWordLesson:
 
         self.generate_scene(positions, distractors)
         lesson = {
-            'scene': self._scene.generate_scene_description(),
+            'scene': self._scene.generate_scene_world_config(),
             'interaction': {
                 'signal': 'verify',
                 'content': self._language

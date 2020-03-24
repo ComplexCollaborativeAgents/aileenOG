@@ -78,7 +78,7 @@ class ActionWordLesson:
     def get_segment_for_lesson_start(self):
         self.generate_initial_state()
         segment = {
-            'scene': self._initial_scene.generate_scene_description(),
+            'scene': self._initial_scene.generate_scene_world_config(),
             'interaction': {
                 'signal': 'verify',
                 'marker': settings.ACTION_LESSON_STATE_START,

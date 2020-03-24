@@ -32,7 +32,6 @@ def parse():
     parser.add_argument('--json', help='Use curriculum from JSON file')
     return parser.parse_args()
 
-
 if __name__ == '__main__':
     arguments = parse()
     world_server = create_connection_with_aileen_world()
@@ -42,8 +41,8 @@ if __name__ == '__main__':
         # run vision training scripts
         print ('Generating images that will train vision system.')
         from generate_training_images import TrainingImage
-
         TrainingImage.generate_scenes(world_server, agent_server)
+        
     elif arguments.json:
         with open(arguments.json, 'r') as f:
             curriculum = Curriculum(json.load(f))
@@ -57,8 +56,9 @@ if __name__ == '__main__':
             agent_response = agent_server.process_interaction(lesson['interaction'])
             logging.info("[aileen_instructor] :: received from agent {}".format(agent_response))
 
-            if agent_response['status'] == 'success':
-                evaluation = {'signal': 'correct'}
+            evaluation = lesson['object'].evaluate_agent_response(agent_response)
+            # if agent_response['status'] == 'success' or agent_response['status'] == 'failure':
+            #     evaluation = {'signal': 'correct'}
             agent_response = agent_server.process_interaction(evaluation)
             logging.info("[aileen_instructor] :: provided feedback to agent")
     else:
