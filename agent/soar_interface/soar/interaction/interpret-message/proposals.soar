@@ -34,7 +34,7 @@ sp {interpret-message*propose*interpret*feedback
                   ^superstate.operator <sop>)
     (<sop>    ^name interpret-message
               ^message <m1>)
-    (<m1>    ^signal correct)
+    (<m1>    ^signal << correct incorrect >>)
 -->
     (<s>    ^operator <op> +)
     (<op>    ^name interpret-feedback

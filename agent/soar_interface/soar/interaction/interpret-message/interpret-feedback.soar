@@ -12,7 +12,7 @@ sp {interpret-message*apply*interpret-feedback
              ^message <m>)
     (<seg>    ^purpose.type verify)
     (<ss>    ^interaction.stack.segment <seg>)
-    (<m>    ^signal correct)
+    (<m>    ^signal << correct incorrect >>)
 -->
     (<ss>    ^terminate-segment <seg>)
     (<seg>    ^message <m>)

@@ -15,3 +15,9 @@ source "verify-relation/load.soar"
 source "verify-action/load.soar"
 
 source "report-failure.soar"
+
+source "verify-object/load.soar"
+
+source "verify-rel-ref.soar"
+
+source "verify-obj-ref.soar"

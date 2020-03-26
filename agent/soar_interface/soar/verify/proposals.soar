@@ -3,11 +3,70 @@
 #
 # @created smohan 20191114
 
+sp {verify*propose*verify-object-ref
+    (state <s>    ^name verify
+                  ^to-verify <tv>
+                  ^grounding <g>
+                  -^verified <obj-ref>
+                  -^not-verified <obj-ref>)
+    (<tv>    ^type obj-ref
+             ^ref <obj-ref>)
+-->
+    (<s>    ^operator <op> + =) 
+    (<op>    ^name verify-obj-ref
+             ^ref <obj-ref>)
+    }
+
+sp {verify*propose*verify-rel-ref
+    (state <s>    ^name verify
+                  ^to-verify <tv>
+                  ^grounding <g>
+                  -^verified <rel-ref>
+                  -^not-verified <rel-ref>)
+    (<tv>    ^type rel-ref
+             ^ref <rel-ref>)
+-->
+    (<s>    ^operator <op> + =) 
+    (<op>    ^name verify-rel-ref
+             ^ref <rel-ref>)
+    }
+
+sp {verify*propose*verify-action-ref
+    (state <s>    ^name verify
+                  ^to-verify <tv>
+                  ^grounding <g>
+                  -^verified <act-ref>
+                  -^not-verified <act-ref>)
+    (<tv>    ^type act-ref
+             ^ref <act-ref>)
+-->
+    (<s>    ^operator <op> + =)
+    (<op>    ^name verify-act-ref
+             ^ref <act-ref>)
+    }
+
+sp {verify*propose*report-success
+    (state <s>    ^name verify
+                  -^verification failure)
+-->
+    (<s>    ^operator <op> < +)
+    (<op>    ^name report-success)
+    }
+
+sp {verify*propose*report-failure
+    (state <s>    ^name verify
+                  ^verification failure)
+-->
+    (<s>    ^operator <op> + <)
+    (<op>    ^name report-failure)
+    }
+
+
 
 
 ## verification is successful if there are one or more objects that the object reference can be grounded into
 sp {verify*propose*report-success*object
-    (state <s>    ^name verify
+    (state <s>    ^name verify-temp
                   ^segment <seg>)
     (<seg>    ^parses.parse.obj-ref <oref>
               ^grounding <g>)
@@ -20,7 +79,7 @@ sp {verify*propose*report-success*object
     }
 
 sp {verify*propose*report-failure*object
-    (state <s>    ^name verify
+    (state <s>    ^name verify-temp
                   ^segment <seg>)
     (<seg>    ^parses.parse.obj-ref <oref>
               ^grounding <g>)
@@ -33,7 +92,7 @@ sp {verify*propose*report-failure*object
     }
 
 sp {verify*propose*report-success*relation
-    (state <s>    ^name verify
+    (state <s>    ^name verify-temp
                   ^segment <seg>)
     (<seg>    ^parses.parse.rel-ref.tag <rref>
               ^grounding <g>)
@@ -44,10 +103,10 @@ sp {verify*propose*report-success*relation
     (<s>    ^operator <op> + >!)
     (<op>    ^name report-success)
     }
-                  
+
 
 sp {verify*propose*verify-relation-refence
-    (state <s>    ^name verify
+    (state <s>    ^name verify-temp
                   ^grounding.relation <rel>
                   -^verified <rel>)
 -->
@@ -57,7 +116,7 @@ sp {verify*propose*verify-relation-refence
     }
 
 sp {verify*propose*verify-action
-    (state <s>    ^name verify
+    (state <s>    ^name verify-temp
                   ^grounding.action <act>
                   -^verified <act>)
 -->
@@ -67,7 +126,7 @@ sp {verify*propose*verify-action
     }
 
 sp {verify*propose*report-success*action
-    (state <s>    ^name verify
+    (state <s>    ^name verify-temp
                   ^grounding.action <act>
                   ^verified <act>)
 -->
