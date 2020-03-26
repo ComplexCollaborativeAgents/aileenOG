@@ -5,7 +5,7 @@ from log_config import logging
 
 
 class VisualWordLesson:
-    def __init__(self, is_positive, signal, description, distractors):
+    def __init__(self, is_positive, signal, description, distractors, content):
         self._scene = AileenScene()
         self._interaction = {}
 
@@ -13,6 +13,7 @@ class VisualWordLesson:
         self._is_positive = is_positive
         self._description = description
         self._distractors = distractors
+        self._content = content
 
     def generate_lesson(self):
         """
@@ -59,6 +60,9 @@ class VisualWordLesson:
         else:
             self._interaction['content'] = LanguageGenerator.generate_language_for_object(target,
                                                                                           is_positive=False)
+
+        if self._content:
+            self._interaction['content'] = self._content
 
     def evaluate_agent_response(self, agent_response):
         if self._is_positive:

@@ -1,0 +1,50 @@
+[
+  {
+    "lesson-type": "spatial-word",
+    "content": "blue cone left of red cylinder",
+    "description": {
+      "objects": [{"color": "blue", "shape": "cone"},  {"color": "red", "rgb": [1, 0, 0], "shape": "cylinder"}],
+      "relation": "left-of"},
+     "signal": "inform"
+  },
+  {
+    "lesson-type": "spatial-word",
+    "content": "blue cone left of red cylinder",
+    "description": {
+      "objects": [{"color": "blue", "shape": "cone"},  {"color": "red", "rgb": [1, 0, 0], "shape": "cylinder"}],
+      "relation": "right-of"},
+     "signal": "verify"
+  },
+  {
+    "lesson-type": "spatial-word",
+    "content": "blue cone left of blue cylinder",
+    "description": {
+      "objects": [{"color": "blue", "shape": "cone"},  {"color": "blue", "shape": "cylinder"}],
+      "relation": "left-of"},
+    "signal": "verify"
+  },
+    {
+    "lesson-type": "spatial-word",
+    "content": "blue cone left of blue box",
+    "description": {
+      "objects": [{"color": "blue", "shape": "cone"},  {"color": "blue", "shape": "box"}],
+      "relation": "left-of"},
+    "signal": "verify"
+  },
+  {
+    "lesson-type": "spatial-word",
+    "content": "blue sphere left of blue box",
+    "description": {
+      "objects": [{"color": "blue", "shape": "sphere"},  {"color": "blue", "shape": "box"}],
+      "relation": "left-of"},
+    "signal": "verify"
+  },
+  {
+    "lesson-type": "spatial-word",
+    "content": "red sphere left of blue box",
+    "description": {
+      "objects": [{"color": "red", "shape": "sphere"},  {"color": "blue", "shape": "box"}],
+      "relation": "left-of"},
+    "signal": "verify"
+  }
+]
