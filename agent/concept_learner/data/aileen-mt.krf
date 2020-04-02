@@ -83,6 +83,34 @@
 (arg2Isa ne Thing)
 (comment ne "arg2 is northeast of arg1")
 
+
+(isa e Relation)
+(arity e 2)
+(arg1Isa e Thing)
+(arg2Isa e Thing)
+(comment e "arg2 is east of arg1")
+
+(isa se Relation)
+(arity se 2)
+(arg1Isa se Thing)
+(arg2Isa se Thing)
+(comment se "arg2 is southeast of arg1")
+
+(isa s Relation)
+(arity s 2)
+(arg1Isa s Thing)
+(arg2Isa s Thing)
+(comment s "arg2 is south of arg1")
+
+(isa sw Relation)
+(arity sw 2)
+(arg1Isa sw Thing)
+(arg2Isa sw Thing)
+(comment sw "arg2 is southwest of arg1")
+
+
+
+
 ;;; RCC8
 (isa dc Relation)
 (arity dc 2)
