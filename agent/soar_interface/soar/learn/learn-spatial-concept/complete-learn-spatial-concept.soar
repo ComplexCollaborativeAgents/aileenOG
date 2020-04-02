@@ -12,6 +12,15 @@ sp {learn-spatial-concept*apply*complete-learn-spatial-concept
     (<seg>    ^learned <info>)
     }
 
+sp {learn-visual-concept*apply*complete-learn-spatial-concept*grounding*clear
+    (state <s>    ^name learn-spatial-concept
+                  ^information.grounding <g>
+                   ^operator.name complete-learn-spatial-concept)
+    (<g>    ^complete true)
+-->
+    (<g>    ^complete true -)
+    }
+
 sp {learn-spatial-concept*clear*concept-memory*topstate
     (state <s>    ^name learn-spatial-concept
                   ^topstate <ts>

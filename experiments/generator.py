@@ -4,29 +4,42 @@ import json
 import settings
 
 from instructor.curriculum import Curriculum
+from instructor.spatial_word_lesson import SpatialWordLesson
 
 
-class CurriculumOnRails:
+class Generator:
     def __init__(self, lesson_type="visual-word"):
-        self.lesson_type = lesson_type
+        self._lesson_type = lesson_type
+
         pass
 
     def generate_inform_training_gamut(self):
-        if self.lesson_type == "visual-word":
+        lesson_config = None
+        if self._lesson_type == "visual-word":
             lesson_config = self._generate_visual_word_lesson_descriptions(signal='inform',
                                                                            distractors=None,
                                                                            is_positive=True)
-            return lesson_config
+        if self._lesson_type == "spatial-word":
+            lesson_config = self._generate_spatial_word_lesson_descriptions(signal='inform',
+                                                                            distractors=None,
+                                                                            is_positive=True)
+
+        return lesson_config
 
     def generate_verify_testing_gamut_generality(self):
-        if self.lesson_type == "visual-word":
-            lessons_config = self._generate_visual_word_lesson_descriptions(signal='verify',
+        lesson_config = None
+        if self._lesson_type == "visual-word":
+            lesson_config = self._generate_visual_word_lesson_descriptions(signal='verify',
                                                                             distractors=(0, 3),
                                                                             is_positive=True)
-            return lessons_config
+        # if self._lesson_type == "spatial-word":
+        #     lesson_config = self._generate_spatial_word_lesson_descriptions(signal='verify',
+        #                                                                      distractors=(0,3),
+        #                                                                      is_positive=True)
+        return lesson_config
 
     def generate_verify_testing_gamut_specificity(self):
-        if self.lesson_type == "visual-word":
+        if self._lesson_type == "visual-word":
             lessons_config = self._generate_visual_word_lesson_descriptions(signal='verify',
                                                                             distractors=(0, 3),
                                                                             is_positive=False)
@@ -57,10 +70,29 @@ class CurriculumOnRails:
         random.shuffle(lessons)
         return lessons
 
+    def _generate_spatial_word_lesson_descriptions(self, signal, distractors, is_positive, number_of_samples=5):
+        relation_configs = SpatialWordLesson.get_spatial_configurations_set()
+
+        lessons = []
+        for i in range(0, number_of_samples):
+            for key in relation_configs.keys():
+                lesson = {'lesson-type': 'spatial-word',
+                          'is_positive': str(is_positive),
+                          'description': {"relation": key},
+                          'signal': signal
+                          }
+                if distractors:
+                    lesson['distractors'] = random.randint(distractors[0], distractors[1])
+                lessons.append(lesson)
+
+        random.shuffle(lessons)
+        return lessons
+
+
 
 if __name__ == '__main__':
-    rail = CurriculumOnRails("visual-word")
-    test_gamut = rail.generate_verify_testing_gamut_specificity()
+    rail = Generator("spatial-word")
+    test_gamut = rail.generate_inform_training_gamut()
     print test_gamut
 
     for test in Curriculum(test_gamut):

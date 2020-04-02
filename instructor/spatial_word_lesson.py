@@ -30,10 +30,15 @@ class SpatialWordLesson:
 
         self._is_positive = is_positive
         self._spatial_configuration_def = self._spatial_configurations_set[self._spatial_configuration]
-        other_spatial_configs = deepcopy(self._spatial_configurations_set.keys())
-        other_spatial_configs.remove(self._spatial_configuration)
-        self._spatial_configuration_negative = SpatialWordLesson.randomizer.random_spatial_configuration(other_spatial_configs)
-        self._spatial_configuration_def_negative = self._spatial_configurations_set[self._spatial_configuration_negative]
+
+
+
+        if not is_positive:
+            other_spatial_configs = deepcopy(self._spatial_configurations_set.keys())
+            other_spatial_configs.remove(self._spatial_configuration)
+            self._spatial_configuration_negative = SpatialWordLesson.randomizer.random_spatial_configuration(
+                other_spatial_configs)
+            self._spatial_configuration_def_negative = self._spatial_configurations_set[self._spatial_configuration_negative]
 
         self._scene_objects = OrderedDict()
         self._scene = AileenScene()
@@ -53,7 +58,7 @@ class SpatialWordLesson:
             objects = []
         self.generate_setup(objects)
 
-        
+
         positions = [o.get('position', None) for o in objects]
         if not all(positions):
             positions = []
@@ -146,7 +151,7 @@ class SpatialWordLesson:
         while True:
             raw_input("Press any key to generate the next spatial word lesson...")
 
-            lesson_object = SpatialWordLesson(is_positive=False,
+            lesson_object = SpatialWordLesson(is_positive=True,
                                               signal="inform",
                                               description=None,
                                               distractors=None,
