@@ -1,0 +1,11 @@
+##!
+# @file: 
+#
+# @created smohan 20200311
+
+
+source "translate-to-facts/load.soar"
+
+source "query-concept-memory/load.soar"
+
+source "store-in-concept-memory.soar"

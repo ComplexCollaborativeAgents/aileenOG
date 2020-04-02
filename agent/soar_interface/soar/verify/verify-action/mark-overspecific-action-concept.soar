@@ -1,0 +1,22 @@
+##!
+# @file
+#
+# @created smohan 20200313
+
+
+sp {verify-action*apply*mark-overspecific-action-concept
+    (state <s>    ^name verify-action
+                  ^operator.name mark-overspecific-action-concept
+                  ^topstate <ts>
+                  ^grounding <g>
+                  ^action._metadata <met>
+                  ^source <source>)
+    (<met>    ^concept-structure <struct>)
+-->
+    (<ts>    ^processing-status <ps>)
+    (<ps>    ^type overspecific-action-concept
+             ^information <info>
+             ^source <source>)
+    (<info>    ^concept-structure <con>
+               ^grounding <g>)
+    }

@@ -1,0 +1,20 @@
+##!
+# @file
+#
+# @created smohan 20200305
+
+sp {observe-demonstration*propose*get-next
+    (state <s>    ^name observe-demonstration
+                  -^io.input-link.interaction-link.message.marker << trace end >>)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name get-next)
+    }
+                 
+sp {observe-demonstration*propose*complete-observe-demonstration
+    (state <s>    ^name observe-demonstration
+                  ^io.input-link.interaction-link.message.marker end)
+-->
+    (<s>    ^operator <op> + !)
+    (<op>    ^name complete-observe-demonstration)
+    }

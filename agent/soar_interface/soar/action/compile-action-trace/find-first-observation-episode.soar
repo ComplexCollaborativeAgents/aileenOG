@@ -1,0 +1,27 @@
+##!
+# @file
+#
+# @created smohan 20200306
+
+sp {find-first-observation-episode*apply
+    (state <s>    ^name find-first-observation-episode
+                  ^epmem.command <ecomm>
+                  ^superstate.operator <op>)
+    (<op>    ^name find-first-observation-episode
+             ^last-episode <lep>)
+-->
+    (<ecomm>    ^query <cue>)
+    (<cue>    #^interaction.stack.segment.purpose.type observe-demonstration
+              ^marker start)
+    }
+
+sp {find-first-observation-episode*write
+    (state <s>    ^name find-first-observation-episode
+                  ^epmem.result <eres>
+                  ^superstate <ss>)
+    (<eres>    ^success <cue>)
+-->
+    (<ss>    ^first-observation-episode <eres>)
+    }
+    
+                  

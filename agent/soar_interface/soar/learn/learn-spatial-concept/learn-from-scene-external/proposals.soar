@@ -17,8 +17,6 @@ sp {learn-from-scene-external*propose*augment-scene-with-concept
     (state <s>    ^name learn-from-scene-external
                   ^new-concept-structure <lti>
                   ^scene <scene>
-                  ^parses <p>
-                  ^grounding <g>
                   -^augmented-with <c>)
     (<lti>    ^concept <c>
               ^gpool <gpool>)

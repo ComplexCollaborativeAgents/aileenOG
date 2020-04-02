@@ -31,8 +31,8 @@ sp {verify-relation*elaborate*world*match
                   ^pair <p>)
     (<rels>    ^relation <rel>)
     (<rel>    ^{<type> << cardir rcc8 >>} <qsr>
-              ^root <robj>
-              ^target <tobj>)
+              ^root-object <robj>
+              ^target-object <tobj>)
     (<p>    ^root <robj>
             ^target <tobj>
             ^primitives.<type> <qsr>)

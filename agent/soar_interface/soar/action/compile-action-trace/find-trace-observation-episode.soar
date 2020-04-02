@@ -1,0 +1,48 @@
+##!
+# @file
+#
+# @created smohan 20200310
+
+sp {find-trace-observation-episode*apply
+    (state <s>    ^name find-trace-observation-episode
+                  ^superstate.operator <sop>
+                  ^epmem.command <ecomm>)
+    (<sop>    ^name find-trace-observation-episode
+              ^after.memory-id <after-enum>
+              ^before.memory-id <before-enum>)
+-->
+    (<ecomm>    ^query <cue>
+                ^before <before-enum>
+                ^after <after-enum>)
+    (<cue>    ^interaction.stack.segment.purpose.type observe-demonstration
+              ^marker trace)
+    }
+
+sp {find-trace-observation-episode*write*success
+    (state <s>    ^name find-trace-observation-episode
+                  ^superstate <ss>
+                  ^epmem.result <res>)
+    (<ss>    ^before-marker <before-orig>)
+    (<res>    ^success <cue>
+              ^normalized-match-score > 0.9999)
+-->
+    (<ss>    ^trace-observation-episode <res>
+             ^before-marker <before-orig> -
+             ^before-marker <res>
+             ^before <bef>)
+    (<bef>    ^<res> <before-orig>)
+    }
+
+sp {find-trace-observation-episode*write*failure
+    (state <s>    ^name find-trace-observation-episode
+                  ^superstate <ss>
+                  ^epmem.result <res>)
+    (<ss>    ^before-marker <before-orig>
+             ^first-observation-episode <fep>)
+    (<res>    ^success <cue>
+              ^normalized-match-score < 0.9999)
+-->
+    (<ss>    ^trace-observation-episode failed
+             ^before <bef>)
+    (<bef>    ^<fep> <before-orig>)
+    }

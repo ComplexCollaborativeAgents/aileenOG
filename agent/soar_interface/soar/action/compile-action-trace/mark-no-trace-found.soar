@@ -1,0 +1,17 @@
+##!
+# @file
+#
+# @created smohan 20200311
+
+
+sp {find-last-observation-episode*apply*mark-no-trace-found
+    (state <s>    ^operator <op>
+                  ^topstate <ts>
+                  ^source <source>)
+    (<op>    ^name mark-no-trace-found)
+-->
+    (<ts>    ^processing-status <ps>)
+    (<ps>    ^type no-accessible-trace
+             ^information <info>
+             ^source <source>)
+    }

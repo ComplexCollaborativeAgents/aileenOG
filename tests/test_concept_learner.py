@@ -11,7 +11,7 @@ def test_square():
     assert num*num == 49
 
 # Functional test that creates a generalization and then matches against it
-@pytest.mark.skip(reason='SSH in CI is not correctly set up yet.')
+#@pytest.mark.skip(reason='SSH in CI is not correctly set up yet.')
 def test_concept_learner_server():
 
     cmd = 'ssh {} {}/start_concept_learner.sh {}'.format(settings.CONCEPT_LEARNER_HOST,

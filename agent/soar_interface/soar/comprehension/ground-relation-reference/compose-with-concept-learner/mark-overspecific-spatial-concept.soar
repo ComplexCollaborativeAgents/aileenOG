@@ -1,0 +1,23 @@
+##!
+# @file
+#
+# @created smohan 20200203
+
+sp {compose-with-concept-learner*apply*mark-overspecific-concept
+    (state <s>    ^name compose-with-concept-learner
+                  ^operator <op>
+                  ^topstate <ts>
+                  ^grounding <g>
+                  ^parses <p>)
+    (<op>    ^name mark-overspecific-spatial-concept
+             ^type <type>
+             ^concept-structure <con>)
+-->
+    (<ts>    ^processing-status <ps>)
+    (<ps>    ^type overspecific-spatial-concept
+             ^information <info>
+             ^source comprehension)
+    (<info>    ^concept-structure <con>
+               ^grounding <g>
+               ^parses <p>)
+    }

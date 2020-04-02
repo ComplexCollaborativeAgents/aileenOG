@@ -1,0 +1,15 @@
+##!
+# @file
+#
+# @created smohan 20200310
+
+
+sp {compile-action-trace*apply*finalize-trace
+    (state <s>    ^name compile-action-trace
+                  ^trace <t>
+                  ^superstate <ss>
+                  ^operator.name finalize-trace)
+-->
+    (<ss>    ^trace <t>)
+    }
+

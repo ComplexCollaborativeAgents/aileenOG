@@ -19,3 +19,5 @@ source "ground-relation-reference/load.soar"
 source "init-grounding.soar"
 
 source "ground-action-reference/load.soar"
+
+source "extract-temporal-information.soar"

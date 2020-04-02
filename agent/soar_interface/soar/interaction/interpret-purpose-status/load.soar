@@ -10,3 +10,5 @@ source "proposals.soar"
 source "request-acknowledgement.soar"
 
 source "complete-learning-status.soar"
+
+source "complete-observe-demonstration.soar"

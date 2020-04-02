@@ -15,11 +15,27 @@ sp {compose-with-concept-learner*apply*query-concept-learner*relations
                   ^world.relations.relation <rel>
                   ^facts <facts>)
     (<rel>    ^<< rcc8 cardir >> <sym>
-              ^root.id_string <fid>
-              ^target.id_string <sid>)
+              ^root-object.id_string <fid>
+              ^target-object.id_string <sid>)
 -->
     (<facts>    ^fact <f>)
     (<f>    ^lfirst <sym>
             ^lsecond <fid>
             ^lthird <sid>)
+    }
+
+sp {compose-with-concept-learner*apply*query-concept-learner*objects
+    (state <s>    ^name compose-with-concept-learner
+                  ^operator.name collect-relation-facts
+                  ^world.objects.object <obj>
+                  ^facts <facts>
+                  ^topstate._params.relevant-percept-set <set>)
+    (<set>    ^type <type>)
+    (<obj>    ^id_string <id_string>
+              ^<type> <symbol>)
+-->
+    (<facts>    ^fact <f>)
+    (<f>    ^lfirst isa
+            ^lsecond <id_string>
+            ^lthird <symbol>)
     }

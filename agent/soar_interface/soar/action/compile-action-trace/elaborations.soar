@@ -1,0 +1,58 @@
+##!
+# @file
+#
+# @created smohan 20200306
+
+sp {compile-action-trace*elaborate*trace
+    (state <s>    ^name compile-action-trace)
+-->
+    (<s>    ^trace <t>)
+    }
+
+sp {compile-action-trace*elaborate*trace*last-observation-episode
+    (state <s>    ^name compile-action-trace
+                  ^trace <t>
+                  ^last-observation-episode <epid>)
+    (<epid>    ^retrieved.world <w>
+               ^memory-id <mid>)
+-->
+    (<t>    ^world <w>)
+    (<w>    ^memory-id <mid>)
+    }
+
+sp {compile-action-trace*elaborate*trace*first-observation-episode
+    (state <s>    ^name compile-action-trace
+                  ^trace <t>
+                  ^first-observation-episode <epid>)
+    (<epid>    ^retrieved.world <w>
+               ^memory-id <mid>)
+-->
+    (<t>    ^world <w>
+            ^start <w>)
+    (<w>    ^memory-id <mid>)
+    }
+
+sp {compile-action-trace*elaborate*trace*trace-observation-episode
+    (state <s>    ^name compile-action-trace
+                  ^trace <t>
+                  ^trace-observation-episode <epid>)
+    (<epid>    ^retrieved.world <w>
+               ^memory-id <mid>)
+-->
+    (<t>    ^world <w>)
+    (<w>    ^memory-id <mid>)
+    }
+
+sp {compile-action-trace*elaborate*trace*before
+    (state <s>    ^name compile-action-trace
+                  ^trace <t>
+                  ^before  <bef>
+                  ^<< trace-observation-episode last-observation-episode first-observation-episode >> <epid1>
+                  ^<< trace-observation-episode last-observation-episode first-observation-episode >> <epid2>)
+    (<bef>    ^<epid1> <epid2>)
+    (<epid1> ^retrieved.world <w1>)
+    (<epid2> ^retrieved.world <w2>)
+-->
+    (<t>    ^after <after>)
+    (<after>    ^<w2> <w1>)
+    }

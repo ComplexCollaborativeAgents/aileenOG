@@ -1,0 +1,20 @@
+##!
+# @file
+#
+# @created smohan 20200117
+sp {learn-action-concept*elaborate*state
+    (state <s>    ^name learn-action-concept
+                  ^superstate.operator <sop>)
+    (<sop>    ^name learn-action-concept
+              ^information <info>)
+-->
+    (<s>    ^information <info>)
+    }
+
+sp {learn-action-concept*elaborate*grounding
+    (state <s>    ^name learn-action-concept
+                  ^information <info>)
+    (<info>    ^grounding <g>)
+-->
+    (<s>    ^grounding <g>)
+    }

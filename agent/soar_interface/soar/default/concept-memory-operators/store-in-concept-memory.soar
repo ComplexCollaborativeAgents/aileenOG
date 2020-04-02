@@ -1,0 +1,19 @@
+##!
+# @file
+#
+# @created smohan 20200311
+
+sp {store-in-concept-memory*write-to-io
+    (state <s>    ^operator <op>
+                  ^epmem.present-id <pid>
+                  ^io.output-link <ol>)
+    (<op>    ^name store-in-concept-memory
+             ^facts <facts>
+             ^concept <con>)
+-->
+    (<ol>    ^concept-memory.store <store>)
+    (<store>    ^concept <con>
+                ^facts <facts>
+                ^context <pid>)
+    (<s>    ^stored <con>)
+    }

@@ -1,0 +1,22 @@
+##!
+# @file
+#
+# @created smohan 20200311
+
+
+sp {translate-to-facts*propose*write-to-superstate
+    (state <s>    ^name translate-to-facts
+                  ^facts <facts>)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name write-to-superstate)
+    }
+
+sp {translate-to-facts*apply*write-to-superstate
+    (state <s>    ^name translate-to-facts
+                  ^operator.name write-to-superstate
+                  ^facts <facts>
+                  ^superstate <ss>)
+-->
+    (<ss>    ^facts <facts>)
+    }

@@ -25,9 +25,23 @@ sp {learn*propose*learn-spatial-concept
               ^purpose <p>
               -^learned <info>)
     (<p>    ^type learn
-            ^concept unknown-spatial-concept)
+            ^concept << unknown-spatial-concept overspecific-spatial-concept >>)
 -->
     (<s>    ^operator <op> +)
     (<op>    ^name learn-spatial-concept
+             ^information <info>)
+    }
+
+sp {learn*propose*learn-action-concept
+    (state <s>    ^name learn
+                  ^segment <seg>)
+    (<seg>    ^information <info>
+              ^purpose <p>
+              -^learned <info>)
+    (<p>    ^type learn
+            ^concept << unknown-action-concept overspecific-action-concept >>)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name learn-action-concept
              ^information <info>)
     }

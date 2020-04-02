@@ -22,56 +22,56 @@ sp {ground-action-reference*elaborate*smem-query
                   ^reference <ref>)
 -->
     (<s>    ^smem-query.cue <cue>)
-    (<cue>    ^tag <ref>)
+    (<cue>    ^nl <ref>)
     }
               
 sp {ground-action-reference*elaborate*nl
     (state <s>    ^name ground-action-reference
                   ^reference <ref>
                   ^smem-query <query>)
-    (<query>    ^cue.tag <ref>
+    (<query>    ^cue.nl <ref>
               ^result <ling>)
 -->
     (<s>    ^linguistic <ling>)
     }
 
-sp {ground-action-reference*query*map
-    (state <s>    ^name ground-action-reference
-                  ^linguistic <ling>)
--->
-    (<s>    ^smem-query <query>)
-    (<query>    ^cue <cue>)
-    (<cue>    ^nl <ling>)
-    }
+#sp {ground-action-reference*query*map
+#    (state <s>    ^name ground-action-reference
+#                  ^linguistic {<> failure <ling>})
+#-->
+#    (<s>    ^smem-query <query>)
+#    (<query>    ^cue <cue>)
+#    (<cue>    ^nl <ling>)
+#    }
 
-sp {ground-action-reference*elaborate*map
-    (state <s>    ^name ground-action-reference
-                  ^linguistic <ling>
-                  ^smem-query <query>)
-    (<query>    ^cue.nl <ling>
-                ^result <map>)
--->
-    (<s>    ^map <map>)
-    }
-
-sp {ground-action-reference*retrieve*procedural
-    (state <s>    ^name ground-action-reference
-                  ^map <map>)
-    (<map>    ^procedural <proc>)
--->
-    (<s>    ^smem-retrieve <sr>)
-    (<sr>    ^identifier <proc>)
-    }
-
-sp {ground-action-reference*elaborate*procedural
-    (state <s>    ^name ground-action-reference
-                  ^map.procedural <proc>
-                  ^smem-retrieve <sr>)
-    (<sr>    ^identifier <proc>
-             ^retrieved-lti <proc-id>)
--->
-    (<s>    ^procedural <proc-id>)
-    }
+#sp {ground-action-reference*elaborate*map
+#    (state <s>    ^name ground-action-reference
+#                  ^linguistic <ling>
+#                  ^smem-query <query>)
+#    (<query>    ^cue.nl <ling>
+#                ^result <map>)
+#-->
+#    (<s>    ^map <map>)
+#    }
+#
+#sp {ground-action-reference*retrieve*procedural
+#    (state <s>    ^name ground-action-reference
+#                  ^map <map>)
+#    (<map>    ^procedural <proc>)
+#-->
+#    (<s>    ^smem-retrieve <sr>)
+#    (<sr>    ^identifier <proc>)
+#    }
+#
+#sp {ground-action-reference*elaborate*procedural
+#    (state <s>    ^name ground-action-reference
+#                  ^map.procedural <proc>
+#                  ^smem-retrieve <sr>)
+#    (<sr>    ^identifier <proc>
+#             ^retrieved-lti <proc-id>)
+#-->
+#    (<s>    ^procedural <proc-id>)
+#    }
 
 sp {ground-action-reference*elaborate*action
     (state <s>    ^name ground-action-reference
@@ -83,6 +83,31 @@ sp {ground-action-reference*elaborate*action
     (<act>    ^name <name>
               ^op_name <name>
               ^_metadata.description <ref>)
+    }
+
+sp {grounded-action-reference*elaborate*action
+    (state <s>    ^name ground-action-reference
+                  ^linguistic <ling>)
+    (<ling>    ^concept <con-name>)
+-->
+    (<s>    ^action <act>)
+    (<act>    ^internal <con-name>)
+    }
+
+sp {grounded-action-reference*elaborate*action*object
+    (state <s>    ^name ground-action-reference
+                  ^parses.temporal <t>
+                  ^grounding <g>
+                  ^action <act>
+                  ^linguistic <cons>)
+    (<cons>    ^concept <con-name>)
+    (<act>    ^internal <con-name>)
+    (<t>    ^order.{<< first second >> <order>} <ref>)
+    (<g>    ^entity <ent>)
+    (<ent>    ^_metadata.description <ref>
+              ^object <obj>)
+-->
+    (<act>    ^<order>    <obj>)
     }
 
 

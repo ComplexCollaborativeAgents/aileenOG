@@ -127,7 +127,11 @@ class InputWriter(object):
                     qsr_id = self._qsrs_link.CreateIdWME('qsr')
                     qsr_id.CreateIntWME("root", int(root_obj_id))
                     qsr_id.CreateIntWME("target", int(target_obj_id))
-                    qsr_id.CreateStringWME(qsr_type, qsr_value)
+                    if qsr_type == "rcc8":
+                        qsr_id.CreateStringWME("rcc8", qsr_value)
+                    else:
+                        if qsr_type == "cardir":
+                            qsr_id.CreateStringWME("cardir", qsr_value)
 
     def clean_concept_memory(self):
         self._soar_agent.delete_all_children(self._concept_memory)
@@ -225,7 +229,7 @@ class InputWriter(object):
             logging.error("[input_writer] :: fault code {}; fault string{}".format(fault.faultCode, fault.faultString))
             return
 
-        logging.debug("[input_writer] :: received objects from server {}".format(objects_dict))
+        #logging.debug("[input_writer] :: received objects from server {}".format(objects_dict))
         objects_list = objects_dict['objects']
         return objects_list
 
@@ -262,13 +266,14 @@ objects = [{'orientation': [1.0, -5.75539615965681e-17, 3.38996313371214e-17, 5.
         qsrlib = QSRlib() # We don't need a new object each time
         world = World_Trace()
         for obj in objects:
-            world.add_object_state_series(
-                [Object_State(name=str(obj['id']),timestamp=0,
-                              x=obj['position'][0],
-                              y=obj['position'][2],
-                              xsize=obj['bounding_box'][3]-obj['bounding_box'][0],
-                              ysize=obj['bounding_box'][5]-obj['bounding_box'][2]
-                )])
+            if obj['held'] == 'false':
+                world.add_object_state_series(
+                    [Object_State(name=str(obj['id']),timestamp=0,
+                                  x=obj['position'][0],
+                                  y=obj['position'][2],
+                                  xsize=obj['bounding_box'][3]-obj['bounding_box'][0],
+                                  ysize=obj['bounding_box'][5]-obj['bounding_box'][2]
+                    )])
         qsrlib_request_message = QSRlib_Request_Message(["rcc8","cardir"], world)
         qsrlib_response_message = qsrlib.request_qsrs(req_msg=qsrlib_request_message)
         ret = {}

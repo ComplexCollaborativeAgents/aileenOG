@@ -1,0 +1,99 @@
+##!
+# @file
+#
+# @created smohan 20200311
+
+sp {translate-to-facts*elaborate*trace
+    (state <s>    ^name translate-to-facts
+                  ^superstate.operator <sop>)
+    (<sop>    ^name translate-to-facts
+              ^trace <t>)
+-->
+    (<s>    ^trace <t>)
+    }
+
+sp {translate-to-facts*elaborate*facts
+    (state <s>    ^name translate-to-facts)
+-->
+    (<s>    ^facts <facts>)
+    }
+
+sp {translate-to-facts*write-facts*action
+    (state <s>    ^name translate-to-facts
+                  ^facts <facts>
+                  ^trace.action <act>)
+    (<act>    ^internal <name>
+              ^first.id_string <obj-name1>
+              ^second.id_string <obj-name2>)
+-->
+    (<facts>    ^fact <f>)
+    (<f>    ^lfirst <name>
+            ^lsecond <obj-name1>
+            ^lthird <obj-name2>)
+    }         
+    
+sp {translate-to-facts*write-facts*trace*world*relations
+    (state <s>    ^name translate-to-facts
+                  ^trace.world <sr>
+                  ^facts <facts>)
+    (<sr>    ^memory-id <lab>)
+    (<sr>    ^relations.relation <rel>)
+    (<rel>    ^<< rcc8 cardir >> <val>
+              ^root-object.id_string <fid>
+              ^target-object.id_string <sid>)
+-->
+    (<facts>    ^fact <f>)
+    (<f>    ^lfirst holdsIn
+            ^lsecond (concat episode_ <lab>)
+            ^lthird <srel>)
+    (<srel>    ^lfirst <val>
+               ^lsecond <fid>
+               ^lthird <sid>)
+    }
+
+sp {translate-to-facts*write-facts*trace*world*objects
+    (state <s>    ^name translate-to-facts
+                  ^facts <facts>
+                  ^topstate._params.relevant-percept-set <set>
+                  ^trace.world <sr>)
+    (<set>    ^type <type>)
+    (<sr>    ^memory-id <lab>)
+    (<sr>    ^objects.object <obj>)
+    (<obj>    ^id_string <id_string>
+              ^<type> <symbol>)
+-->
+    (<facts>    ^fact <f>)
+    (<f>    ^lfirst holdsIn
+            ^lsecond (concat episode_ <lab>)
+            ^lthird <objf>)
+    (<objf>    ^lfirst isa
+               ^lsecond <id_string>
+               ^lthird <symbol>)
+    }
+
+sp {translate-to-facts*write-facts*start
+    (state <s>    ^name translate-to-facts
+                  ^facts <facts>
+                  ^trace.start.memory-id <lab>)
+-->
+    (<facts>    ^fact <f>)
+    (<f>    ^lfirst isa
+            ^lsecond (concat episode_ <lab>)
+            ^lthird AileenActionStartTime)
+    }
+
+sp {translate-to-facts*write-facts*after
+    (state <s>    ^name translate-to-facts
+                  ^facts <facts>
+                  ^trace <t>)
+    (<t>    ^after <af>
+            ^world <epid1>)
+    (<af>    ^<epid1> <epid2>)
+    (<epid1> ^memory-id <mid1>)
+    (<epid2> ^memory-id <mid2>)
+-->
+    (<facts>    ^fact <f>)
+    (<f>    ^lfirst startsAfterEndingOf
+            ^lsecond (concat episode_ <mid1>)
+            ^lthird (concat episode_ <mid2>))
+    }

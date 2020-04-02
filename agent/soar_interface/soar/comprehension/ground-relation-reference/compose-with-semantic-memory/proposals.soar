@@ -8,8 +8,8 @@ sp {compose-with-semantic-memory*propose*compose-concept-grounding-parse
                   ^smem-retrieve.retrieved-lti <concept>)
     -{(<s>    ^relation <rel>)
       (<rel>    ^primitives
-                ^root.object
-                ^target.object)}
+                ^root-object.object
+                ^target-object.object)}
 -->
     (<s>    ^operator <op> +)
     (<op>    ^name compose-concept-grounding-parse
@@ -20,8 +20,8 @@ sp {compose-with-semantic-memory*propose*complete*compose-with-semantic-memory
     (state <s>    ^name compose-with-semantic-memory
                   ^relation <rel>)
     (<rel>    ^primitives
-              ^root
-              ^target)
+              ^root-object
+              ^target-object)
 -->
     (<s>    ^operator <op> + <)
     (<op>    ^name complete-compose-with-semantic-memory

@@ -119,7 +119,9 @@ class ActionWordLesson:
             action_dict = self.get_structure_for_place_action(trace_action)
         segment = {
             'action': action_dict,
-            'interaction': "none"
+            'interaction': {
+                'marker': settings.ACTION_LESSON_STATE_TRACE
+            }
         }
         self._action_trace_index += 1
         if self._action_trace_index >= len(self._trace_action_list):
@@ -128,8 +130,7 @@ class ActionWordLesson:
 
     def get_segment_for_lesson_end(self):
         segment = {
-            'interaction': {'marker': settings.ACTION_LESSON_STATE_END,
-                            'interaction': ""}
+            'interaction': {'marker': settings.ACTION_LESSON_STATE_END}
         }
         self.advance_lesson_state()
         return segment
@@ -147,8 +148,10 @@ class ActionWordLesson:
             logging.debug("[action_word_lesson] :: setting up the initial state configuration of action")
             segment = self.get_next_segment()
             scene_acknowledgement = world_server.set_scene(
-                {'configuration': segment['scene'], 'label': "{}".format(self._language)})
-            # agent_response = agent_server.process_interaction(segment['interaction'])
+                {'configuration': segment['scene'],
+                 'label': "{}: {}: {}".format(segment['interaction']['signal'], segment['interaction']['content'],
+                                              segment['interaction']['marker'])})
+            agent_response = agent_server.process_interaction(segment['interaction'])
             return
 
         if self._lesson_state == settings.ACTION_LESSON_STATE_TRACE:
@@ -157,13 +160,13 @@ class ActionWordLesson:
             logging.debug("[action_word_lesson] :: received action trace {}".format(segment))
             if segment['action'] is not None:
                 scene_acknowledgement = world_server.apply_action(segment['action'])
-                # interaction_acknowledgement = agent_server.process_interaction(segment['interaction'])
+                agent_response = agent_server.process_interaction(segment['interaction'])
             return
 
         if self._lesson_state == settings.ACTION_LESSON_STATE_END:
             logging.debug("[action_word_lesson] :: communicating the terminal state configuration of action")
             segment = self.get_next_segment()
-            # interaction_acknowledgement = agent_server.process_interaction({'marker':'end'})
+            agent_response = agent_server.process_interaction({'marker':'end'})
             return
 
         if self._lesson_state == settings.ACTION_LESSON_STATE_BAD:
@@ -175,7 +178,8 @@ class ActionWordLesson:
         segment = self.get_segment_for_lesson_start()
         segment['interaction']['signal'] = 'react'
         scene_acknowledgement = world_server.set_scene(
-            {'configuration': segment['scene'], 'label': "{}:{}".format(segment['interaction']['signal'], segment['interaction']['content'])})
+            {'configuration': segment['scene'],
+             'label': "{}:{}".format(segment['interaction']['signal'], segment['interaction']['content'])})
         agent_response = agent_server.process_interaction(segment['interaction'])
 
     @staticmethod
@@ -183,12 +187,12 @@ class ActionWordLesson:
         while True:
             raw_input("Press any key to generate the next action word lesson...")
             lesson = ActionWordLesson()
-            lesson.deliver_action_reaction_test(world_server, agent_server)
-            # logging.info("[action_word_lesson] :: generated a lesson for new action word")
-            # while lesson._lesson_state is not settings.ACTION_LESSON_STATE_COMPLETE:
-            #     raw_input("Press any key to deliver the next action lesson segment...")
-            #     lesson.deliver_action_lesson_segment(world_server, agent_server)
-            #     logging.debug("[action_word_lesson] :: action lesson state is: {}".format(lesson._lesson_state))
+            # lesson.deliver_action_reaction_test(world_server, agent_server)
+            logging.info("[action_word_lesson] :: generated a lesson for new action word")
+            while lesson._lesson_state is not settings.ACTION_LESSON_STATE_COMPLETE:
+                raw_input("Press any key to deliver the next action lesson segment...")
+                lesson.deliver_action_lesson_segment(world_server, agent_server)
+                logging.debug("[action_word_lesson] :: action lesson state is: {}".format(lesson._lesson_state))
 
     @staticmethod
     def get_action_definition_set():

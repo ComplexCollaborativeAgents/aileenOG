@@ -25,3 +25,14 @@ sp {interaction-purpose-status*propose*complete-learning-status
     (<op>    ^name complete-learn-purpose
              ^purpose <p>)
     }
+
+sp {interaction-purpose-status*propose*complete-observe-demonstration-status
+    (state <s>    ^name interpret-purpose-status
+                  ^purpose <p>)
+    (<p>    ^type observe-demonstration
+            ^completed true)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name complete-observe-demonstration-purpose
+             ^purpose <p>)
+    }
