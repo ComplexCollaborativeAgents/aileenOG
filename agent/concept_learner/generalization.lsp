@@ -6,7 +6,7 @@
 ;;;;   Created: November  6, 2019 14:54:11
 ;;;;   Purpose: 
 ;;;; ----------------------------------------------------------------------------
-;;;;  Modified: Thursday, February 20, 2020 at 11:11:04 by klenk
+;;;;  Modified: Thursday, April  2, 2020 at 18:38:16 by klenk
 ;;;; ----------------------------------------------------------------------------
 
 (in-package :aileen)
@@ -312,8 +312,11 @@
 	   `(d::reverseCIsAllowed
 	     (d::and
 	      (d::sageSelect ,case-term ,gpool ?ret ?mapping)
-	      (d::reverseCandidateInferenceOf ?ci ?mapping)
-	      (d::candidateInferenceContent ?ci ,pattern)))
+	      (d::mappingOf  ?mapping ?matcher)
+	      (d::mappingOf ?mapping1 ?matcher )
+	      (d::reverseCandidateInferenceOf ?ci ?mapping1)
+	      (d::candidateInferenceContent ?ci ,pattern)
+	      ))
 	   :context gpool)))
       (multiple-value-bind (rbrowse full url) (rbrowse::browse-sme sme::*sme*)
 	(declare (ignore rbrowse url))
@@ -323,6 +326,8 @@
 		gpool
 		full))
       (when ci-found?
+	;; The query above should return the score of the best mapping that includes
+	;; the pattern in the reverse candidate inference
 	(let ((score (sme::score (car (sme::mappings  sme::*sme*))))
 	      (sme sme::*sme*))
 	  (sme::clone-current-sme)
