@@ -44,9 +44,8 @@
    > First Time Xvfb setup:
    > ```bash
    > sudo apt install xvfb
-   > Xvfb :99 -screen 0 1024x768x16
    >```
-   > To run webots headless run the following in a new shell:
+   > To run Webots headless, run the following in a new shell:
    > ```bash
    > cd /path/to/aileen-agent
    > ./webots_headless.sh
