@@ -40,6 +40,16 @@
 
 ### Run
 1. Open Webots and load the world: "File", "Open World...", and select `world/data/aileen_world.wbt`.
+> Note: Webots can be run headless using Xvfb
+   > First Time Xvfb setup:
+   > ```bash
+   > sudo apt install xvfb
+   >```
+   > To run Webots headless, run the following in a new shell:
+   > ```bash
+   > cd /path/to/aileen-agent
+   > ./webots_headless.sh
+   > ```
 2. Run the world server:
    ```bash
    export WEBOTS_HOME="/usr/local/webots"
