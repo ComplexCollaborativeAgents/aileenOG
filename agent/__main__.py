@@ -20,7 +20,7 @@ if __name__ == '__main__':
     logging.info("[aileen] :: Created aileen agent")
     aileen_agent.register_output_callback(update, aileen_agent)
     aileen_agent.start()
-    aileen_agent.stop()
+    # aileen_agent.stop()
     aileen_agent_server = AileenAgentServer(aileen_agent, port=settings.AGENT_PORT)
     aileen_agent_server.run_in_background()
 
