@@ -9,8 +9,6 @@
     <member path="wait.soar" />
     <member path="elaborations/elaborate-state.soar" />
     <member path="elaborations/load.soar" />
-    <member path="_knowledge" />
-    <member path="_knowledge/_semantic-memory" />
     <member path="interaction/elaborations.soar" />
     <member path="interaction/load.soar" />
     <member path="interaction/proposals.soar" />

@@ -175,7 +175,7 @@ class SoarAgent(object):
         logging.info("[soar_agent] :: spun-off agent thread.")
 
         ## start debugger
-        if settings.SOAR_DEBUG and self._headless is False: 
+        if settings.SOAR_DEBUG:
             self.run_soar_java_debugger()
 
     def stop(self):
