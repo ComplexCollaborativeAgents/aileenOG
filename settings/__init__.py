@@ -10,7 +10,7 @@ SOAR_PATH = path.join(OS_ROOT_PATH, 'usr', 'local', 'SoarSuite_9.6.0-Multiplatfo
 SOAR_AGENT_PATH = path.join(ROOT_PATH, 'agent', 'soar_interface', 'soar', 'load.soar')
 SOAR_AGENT_NAME = 'aileen'
 SOAR_SLEEP_TIME = 0.001
-SOAR_DEBUG = False
+SOAR_DEBUG = True
 SOAR_SVS = False
 SOAR_CV = True
 CURRENT_IMAGE_PATH = path.join(ROOT_PATH, 'world', 'controllers', 'images', 'current_image.png')
@@ -82,6 +82,10 @@ AGENT_PRELOAD_SPATIAL_CONCEPTS_PARAM = 'false'
 
 AGENT_ACTION_CONCEPTS_PARAM = 'external'
 AGENT_PRELOAD_ACTION_CONCEPTS_PARAM = 'false'
+
+
+## Experiments
+RUN_DATA_FILE_PATH = path.join(ROOT_PATH, 'experiments', 'results', 'run.csv')
 
 
 try:
