@@ -84,7 +84,8 @@ class VisualWordLesson:
             lesson_object = VisualWordLesson(is_positive=True,
                                              signal="inform",
                                              description=None,
-                                             distractors=None)
+                                             distractors=None,
+                                             content=None)
             lesson = lesson_object.generate_lesson()
 
             scene_acknowledgement = world_server.set_scene(

@@ -42,8 +42,11 @@ class Curriculum(object):
             lesson = lesson_object.generate_lesson()
             lesson['object'] = lesson_object
 
-        elif lesson_type == 'action':
+        elif lesson_type == 'action-word':
             pass
+
+        else:
+            return None
 
         return lesson
 
