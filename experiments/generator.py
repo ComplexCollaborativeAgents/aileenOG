@@ -32,10 +32,10 @@ class Generator:
             lesson_config = self._generate_visual_word_lesson_descriptions(signal='verify',
                                                                             distractors=(0, 3),
                                                                             is_positive=True)
-        # if self._lesson_type == "spatial-word":
-        #     lesson_config = self._generate_spatial_word_lesson_descriptions(signal='verify',
-        #                                                                      distractors=(0,3),
-        #                                                                      is_positive=True)
+        if self._lesson_type == "spatial-word":
+            lesson_config = self._generate_spatial_word_lesson_descriptions(signal='verify',
+                                                                             distractors=(0,3),
+                                                                             is_positive=True)
         return lesson_config
 
     def generate_verify_testing_gamut_specificity(self):
@@ -43,7 +43,13 @@ class Generator:
             lessons_config = self._generate_visual_word_lesson_descriptions(signal='verify',
                                                                             distractors=(0, 3),
                                                                             is_positive=False)
-            return lessons_config
+
+        if self._lesson_type == "spatial-word":
+            lessons_config = self._generate_spatial_word_lesson_descriptions(signal='verify',
+                                                                            distractors=(0, 3),
+                                                                            is_positive=False)
+
+        return lessons_config
 
     def _generate_visual_word_lesson_descriptions(self, signal, distractors, is_positive):
         shapes = settings.SHAPE_SET
@@ -91,12 +97,11 @@ class Generator:
 
 
 if __name__ == '__main__':
+
     rail = Generator("spatial-word")
     test_gamut = rail.generate_inform_training_gamut()
     print test_gamut
 
-    for test in Curriculum(test_gamut):
-        print test
 
     # print training_gamut
     # for lesson in training_gamut:

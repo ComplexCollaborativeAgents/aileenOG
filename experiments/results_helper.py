@@ -40,4 +40,4 @@ class ResultsHelper:
     def record_specificity_performance_score(score):
         if ResultsHelper.do_record:
             with open(ResultsHelper.gfilename, "a") as myfile:
-                myfile.write("\n" + str(score))
+                myfile.write("\n specificity " + str(score))

@@ -22,7 +22,7 @@ def create_connection_with_aileen_agent():
 
 if __name__ == '__main__':
     settings.DO_RECORD = True
-    ResultsHelper.reset_results_file('spatial-word-learning-run2')
+    ResultsHelper.reset_results_file('spatial-word-learning-run1')
     lesson_number = 0
 
     world = create_connection_with_aileen_world()
@@ -58,6 +58,7 @@ if __name__ == '__main__':
             ResultsHelper.record_generality_performance_score(score)
 
     specificity_tests = rails.generate_verify_testing_gamut_specificity()
+    print len(specificity_tests)
     if specificity_tests is not None:
         score = 0
         for test in Curriculum(specificity_tests):
