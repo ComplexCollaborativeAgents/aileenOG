@@ -1,12 +1,4 @@
 {
-    "next-to": ["ec"],
-    "left-of": ["n", "dc"],
-    "right-of": ["s", "dc"],
-    "on": ["s", "ec"],
-    "in-front-of": ["e"]
-}
-
-{
    "left-of": {
         "objects": ["<obj1>", "<obj2>"],
         "definition": [["s" , "<obj2>", "<obj1>"], ["dc", "<obj2>", "<obj1>"]],
@@ -32,12 +24,9 @@
         "definition": [["ec", "<obj2>", "<obj1>"]],
         "language": ["<obj1>", "next to", "<obj2>"]
     },
-
-
-
- "between": {
-        "objects": ["<obj1>", "<obj2>", "<obj3>"],
-        "definition": [
+    "between": {
+      "objects": ["<obj1>", "<obj2>", "<obj3>"],
+      "definition": [
                         [
                             [["dc", "<obj1>", "<obj2>"],["w", "<obj1>", "<obj2>"]],
                             [["dc", "<obj2>", "<obj3>"],["w", "<obj2>", "<obj3>"]]
@@ -51,6 +40,6 @@
                             [["dc", "<obj2>", "<obj3>"], ["se", "<obj2>", "<obj3>"]]
                         ]
                     ],
-        "language": ["<obj2>", "between", "<obj1>", "<obj3>"]
+      "language": ["<obj2>", "between", "<obj1>", "<obj3>"]
     }
-
+  }
