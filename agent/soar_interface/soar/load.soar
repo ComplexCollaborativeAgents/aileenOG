@@ -19,8 +19,6 @@ source "comprehension/load.soar"
 
 source "perferences.soar"
 
-source "_knowledge/load.soar"
-
 source "default/load.soar"
 
 source "verify/load.soar"

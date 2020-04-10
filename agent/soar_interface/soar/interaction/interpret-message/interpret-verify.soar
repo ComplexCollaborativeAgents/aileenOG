@@ -3,12 +3,13 @@
 #
 # @created smohan 20191113
 
-sp {interpret-message*apply*interpret-verify
+sp {interpret-message*apply*interpret-verify-only
     (state <s>    ^name interpret-message
                   ^operator <op>
                   ^superstate <ss>)
     (<op>    ^name interpret-verify
-             ^message <m>)
+             ^message <m>
+             ^type verify-only)
 -->
     (<ss>    ^new-segment <segment>)
     (<segment>    ^message <m>
@@ -18,4 +19,23 @@ sp {interpret-message*apply*interpret-verify
                   ^_metadata <met>)
     (<p>    ^type verify)
 }
+
+sp {interpret-message*apply*interpret-verify-inform
+    (state <s>    ^name interpret-message
+                  ^operator <op>
+                  ^superstate <ss>)
+    (<op>    ^name interpret-verify
+             ^message <m>
+             ^type inform-and-verify)
+-->
+    (<ss>    ^new-segment <segment>)
+    (<segment>    ^message <m>
+                  ^purpose <p>
+                  ^originator instructor
+                  ^satisfaction interaction-event
+                  ^_metadata <met>)
+    (<p>    ^type verify
+            ^type inform)
+}
+     
                   

@@ -21,7 +21,7 @@ class AileenScene:
     def add_object(self, aileen_object):
         self._objects.append(aileen_object)
 
-    def generate_scene_description(self):
+    def generate_scene_world_config(self):
         description = []
         for scene_object in self._objects:
             description.append(scene_object.get_object_description())

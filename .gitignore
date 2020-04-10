@@ -1,5 +1,6 @@
 settings/local_settings.py
 world/controllers/images/current_image.png
+experiments/results/*
 
 *.wbproj
 # Created by https://www.gitignore.io/api/python,pycharm+all

@@ -4,6 +4,7 @@ from random import choice
 
 import settings
 from aileen_object import AileenObject, Color
+from copy import deepcopy
 
 
 from aileen_scene import AileenScene
@@ -14,33 +15,60 @@ from collections import OrderedDict
 
 class SpatialWordLesson:
 
-    def __init__(self, configuration=None):
+    def __init__(self, is_positive, signal, description, distractors, content):
         self._spatial_configurations_set = SpatialWordLesson.get_spatial_configurations_set()
+
+        self._description = description
+        configuration = None
+        if self._description:
+            configuration = description.get("relation", None)
         if configuration:
             self._spatial_configuration = configuration
         else:
             self._spatial_configuration = SpatialWordLesson.randomizer.random_spatial_configuration(
                 self._spatial_configurations_set.keys())
+
+        self._is_positive = is_positive
         self._spatial_configuration_def = self._spatial_configurations_set[self._spatial_configuration]
+
+
+
+        if not is_positive:
+            other_spatial_configs = deepcopy(self._spatial_configurations_set.keys())
+            other_spatial_configs.remove(self._spatial_configuration)
+            self._spatial_configuration_negative = SpatialWordLesson.randomizer.random_spatial_configuration(
+                other_spatial_configs)
+            self._spatial_configuration_def_negative = self._spatial_configurations_set[self._spatial_configuration_negative]
+
         self._scene_objects = OrderedDict()
         self._scene = AileenScene()
         self._language = None
 
-    def generate_lesson(self, objects=None, distractors=0):
+        self._signal = signal
+
+
+        self._distractors = distractors
+        self._content = content
+
+    def generate_lesson(self):
+        objects = None
+        if self._description:
+            objects = self._description.get("objects", None)
         if objects is None:
             objects = []
         self.generate_setup(objects)
+
 
         positions = [o.get('position', None) for o in objects]
         if not all(positions):
             positions = []
 
-        self.generate_scene(positions, distractors)
+        self.generate_scene(positions)
         lesson = {
-            'scene': self._scene.generate_scene_description(),
+            'scene': self._scene.generate_scene_world_config(),
             'interaction': {
-                'signal': 'verify',
-                'content': self._language
+                'signal': self._signal,
+                'content': self._content if self._content is not None else self._language
             }
         }
         return lesson
@@ -55,11 +83,15 @@ class SpatialWordLesson:
             objs = AileenObject.generate_random_objects(len(objects))
             for o, obj in zip(objs, objects):
                 self._scene_objects[obj] = o
-        self._language = LanguageGenerator.generate_language_from_template(self._scene_objects,
-                                                                           self._spatial_configuration_def[
-                                                                               settings.SPATIAL_DEF_LANGUAGE_TEMPLATE])
+        if self._is_positive:
+            self._language = LanguageGenerator.generate_language_from_template(self._scene_objects,
+                                                                               self._spatial_configuration_def[
+                                                                                   settings.SPATIAL_DEF_LANGUAGE_TEMPLATE])
+        else:
+            self._language = LanguageGenerator.generate_language_from_template(self._scene_objects,
+                                                                               self._spatial_configuration_def_negative[settings.SPATIAL_DEF_LANGUAGE_TEMPLATE])
 
-    def generate_scene(self, positions, distractors):
+    def generate_scene(self, positions):
         logging.debug("[aileen_spatial_word_lesson] :: generating a new scene for spatial word learning")
 
         if len(positions) == len(self._scene_objects):
@@ -89,7 +121,7 @@ class SpatialWordLesson:
                 scene_object.set_translation(translations[scene_object_name])
                 self._scene.add_object(scene_object)
 
-        for distractor in AileenObject.generate_distractors(self._scene_objects.values(), distractors):
+        for distractor in AileenObject.generate_distractors(self._scene_objects.values(), self._distractors):
             distractor.set_translation(AileenScene.randomizer.get_random_position_on_table())
             self._scene.add_object(distractor)
 
@@ -103,16 +135,28 @@ class SpatialWordLesson:
         return spatial_configurations
 
     def evaluate_agent_response(self, agent_response):
-        if agent_response['status'] == 'success':
-            return {'signal': 'correct'}
+        if self._is_positive:
+            if agent_response['status'] == 'success':
+                return {'signal': 'correct', 'score': 1}
+            else:
+                return {'signal': 'incorrect', 'score': 0}
+        else:
+            if agent_response['status'] == 'failure':
+                return {'signal': 'correct', 'score': 1}
+            else:
+                return {'signal': 'incorrect', 'score': 0}
 
     @staticmethod
     def administer_curriculum(world_server, agent_server):
         while True:
             raw_input("Press any key to generate the next spatial word lesson...")
 
-            lesson_object = SpatialWordLesson()
-            lesson = lesson_object.generate_lesson(distractors=0)
+            lesson_object = SpatialWordLesson(is_positive=True,
+                                              signal="inform",
+                                              description=None,
+                                              distractors=None,
+                                              content=None)
+            lesson = lesson_object.generate_lesson()
 
 
             scene_acknowledgement = world_server.set_scene(

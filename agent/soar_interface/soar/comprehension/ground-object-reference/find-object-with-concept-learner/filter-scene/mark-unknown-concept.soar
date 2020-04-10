@@ -11,10 +11,13 @@ sp {filter-scene*apply*mark-unknown-concept
     (<op>    ^name mark-unknown-visual-concept
              ^type <type>
              ^nl <nl>)
+    (<ts>    ^interaction.stack.segment.grounding <g>)
 -->
     (<ts>    ^processing-status <ps>)
     (<ps>    ^type unknown-visual-concept
              ^information <info>
              ^source comprehension)
-    (<info>    ^nl <nl>)
+    (<info>    ^nl <nl>
+               ^grounding <g>)
+    (<g>    ^complete true)
     }

@@ -26,7 +26,7 @@ class TrainingImage:
     def generate_lesson(self, num_objects=1):
         lesson = {}
         self.generate_scene(num_objects)
-        lesson['scene'] = self._scene.generate_scene_description()
+        lesson['scene'] = self._scene.generate_scene_world_config()
         lesson['interaction'] = self._language
         return lesson
 

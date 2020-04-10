@@ -11,10 +11,10 @@ sp {interpret-purpose-status*apply*request-acknowledgement
                   ^topstate <ts>
                   ^superstate.interaction.stack.segment <seg>)
     (<p>    ^type verify
-            ^status success)
+            ^status <any>)
 -->
     (<ts>  ^response <res>)
     (<res>    ^type verify
-              ^status success)
+              ^status <any>)
     (<seg>    ^communicated <res>)
 }

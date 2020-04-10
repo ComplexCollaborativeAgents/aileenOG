@@ -11,8 +11,8 @@ sp {initialize-agent*apply*initialize-visual-knowledge-state
     (<params>    ^visual-concepts soar
                  ^preload-visual-concepts true)
 -->
-    (<scomm>    ^store <map_blue> <map_red> <map_green> <map_cone> <map_cylinder> <map_box> <map_sphere>
-                ^store <filter_blue> <filter_red> <filter_green> <filter_cone> <filter_cylinder> <filter_box> <filter_sphere>)
+    (<scomm>    ^store <map_blue> <map_red> <map_green> <map_yellow> <map_purple> <map_cone> <map_cylinder> <map_box> <map_sphere> 
+                ^store <filter_blue> <filter_red> <filter_green> <filter_yellow> <filter_purple> <filter_cone> <filter_cylinder> <filter_box> <filter_sphere>)
     
     ## preload knowledge of visual concepts
     (<map_blue> ^nl blue ^concept <filter_blue> ^type visual)
@@ -23,6 +23,12 @@ sp {initialize-agent*apply*initialize-visual-knowledge-state
     
     (<map_green> ^nl green ^concept <filter_green> ^type visual)
     (<filter_green>    ^percept CVGreen)
+    
+    (<map_yellow> ^nl yellow ^concept <filter_yellow> ^type visual)
+    (<filter_yellow>    ^percept CVYellow)
+    
+    (<map_purple> ^nl purple ^concept <filter_purple> ^type visual)
+    (<filter_purple>    ^percept CVPurple)
     
     (<map_cone> ^nl cone ^concept <filter_cone> ^type visual)
     (<filter_cone>    ^percept CVCone)

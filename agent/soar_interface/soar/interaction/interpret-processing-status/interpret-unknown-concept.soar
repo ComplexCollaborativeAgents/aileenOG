@@ -3,13 +3,15 @@
 #
 # @created smohan 20191115
 
-sp {interpret-processing-status*apply*interpret-unknown-concept
+sp {interpret-processing-status*apply*interpret-unknown-concept*inform
     (state <s>    ^name interpret-processing-status
                   ^operator <op>
-                  ^superstate <ss>)
+                  ^superstate <ss>
+                  ^topstate <ts>)
     (<op>    ^name interpret-unknown-concept
              ^information <info>
              ^concept <con>)
+    (<ts>    ^interaction.stack.segment.purpose.type inform)
 -->
     (<ss>    ^new-segment <segment>)
     (<segment>    ^purpose <p>
@@ -18,4 +20,18 @@ sp {interpret-processing-status*apply*interpret-unknown-concept
                   ^_metadata <met>)
     (<p>    ^type learn
             ^concept <con>)
+    }
+
+sp {interpret-processing-status*apply*interpret-unknown-concept*no-inform
+    (state <s>    ^name interpret-processing-status
+                  ^operator <op>
+                  ^superstate <ss>
+                  ^topstate.interaction.stack.segment.purpose <pur>)
+    (<op>    ^name interpret-unknown-concept
+             ^information <info>
+             ^concept <con>)
+    (<pur>    -^type inform)
+    (<ss>    ^operator.processing-status <ps>)
+-->
+    (<ps>    ^processed true)
     }

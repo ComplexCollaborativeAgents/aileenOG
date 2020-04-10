@@ -41,3 +41,10 @@ sp {find-object-with-concept-learner*elaborate*visual-word*prop*tag
 -->
     (<vw>    ^word <tag>)
     }
+
+sp {find-object-with-concept-learner*elaborate*grounding
+    (state <s>    ^name find-object-with-concept-learner
+                  ^superstate.grounding <g>)
+-->
+    (<s>    ^grounding <g>)
+    }

@@ -4,21 +4,21 @@ from instructor.curriculum import Curriculum
 def test_visual():
     curriculum = Curriculum(
         [
-            {"lesson": "visual",
-             "description": "red box",
-             "color": "red",
-             "shape": "box",
+            {"lesson-type": "visual-word",
+             "content": "red box",
+             "description": {"color": "red",
+                             "shape": "box"},
              "signal": "verify"},
-            {"lesson": "visual",
-             "description": "blue cone",
-             "color": "blue",
-             "shape": "cone",
-             "position": [0.456, 0.45, -0.123],
+            {"lesson-type": "visual-word",
+             "content": "blue cone",
+             "description": {"color": "blue",
+                             "shape": "cone",
+                             "position": [0.456, 0.45, -0.123]},
              "signal": "verify"},
-            {"lesson": "visual",
-             "description": "red cylinder",
-             "color": "red",
-             "shape": "cylinder",
+            {"lesson-type": "visual-word",
+             "content": "red cylinder",
+             "description": {"color": "red",
+                             "shape": "cylinder"},
              "distractors": 4,
              "signal": "verify"},
         ])
@@ -39,14 +39,15 @@ def test_visual():
 def test_spatial():
     curriculum = Curriculum(
         [
-            {"lesson": "spatial",
-             "description": "red box left of blue cylinder",
-             "language": [
-                 {"color": "red", "shape": "box"},
-                 "left-of",
-                 {"color": "blue", "shape": "cylinder"}
-             ],
-             "signal": "verify"},
+            {
+                "lesson-type": "spatial-word",
+                "content": "blue cone left of red cylinder",
+                "description": {
+                    "objects": [{"color": "blue", "shape": "cone"},
+                                {"color": "red", "rgb": [1, 0, 0], "shape": "cylinder"}],
+                    "relation": "left-of"},
+                "signal": "inform"
+            },
         ])
 
     lesson = next(curriculum)

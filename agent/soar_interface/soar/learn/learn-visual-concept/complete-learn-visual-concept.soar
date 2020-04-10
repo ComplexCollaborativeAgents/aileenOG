@@ -13,6 +13,15 @@ sp {learn-visual-concept*apply*complete-learn-visual-concept
     (<seg>    ^learned <info>)
     }
 
+sp {learn-visual-concept*apply*complete-learn-visual-concept*grounding*clear
+    (state <s>    ^name learn-visual-concept
+                  ^information.grounding <g>
+                  ^operator.name complete-learn-visual-concept)
+    (<g>    ^complete true)
+-->
+    (<g>    ^complete true -)
+    }
+
 sp {learn-visual-concept*clear*concept-memory*topstate
     (state <s>    ^name learn-visual-concept
                   ^topstate <ts>

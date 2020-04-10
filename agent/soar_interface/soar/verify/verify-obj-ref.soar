@@ -1,0 +1,27 @@
+##!
+# @file
+#
+# @created smohan 20200326
+
+sp {verify*apply*verify-obj-ref
+    (state <s>    ^name verify
+                  ^operator <op>
+                  ^grounding <g>)
+    (<op>    ^name verify-obj-ref
+             ^ref <ref-id>)
+    (<g>    ^entity <ent>)
+    (<rel>    ^_metadata.description <ref-id>)
+-->
+    (<s>    ^verified <ref-id>)
+    }
+
+sp {verify*apply*verify-obj-ref*not-verified
+    (state <s>    ^name verify-obj-ref
+                  ^superstate <ss>)
+    (<ss>    ^operator <sop>)
+    (<sop>    ^ref <ref-id>
+              ^name verify-obj-ref)
+-->
+    (<ss>    ^not-verified <ref-id>)
+                
+    }

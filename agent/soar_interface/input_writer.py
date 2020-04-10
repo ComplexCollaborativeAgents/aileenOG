@@ -193,7 +193,7 @@ class InputWriter(object):
             new_interaction_link.CreateStringWME('signal', signal)
         if 'content' in self._interaction:
             content = str(self._interaction['content'])
-            new_interaction_link.CreateStringWME('content', content.replace(" ", "-"))
+            new_interaction_link.CreateStringWME('content', content)
         if 'marker' in self._interaction:
             marker = str(self._interaction['marker'])
             new_interaction_link.CreateStringWME('marker', marker)
@@ -229,7 +229,7 @@ class InputWriter(object):
             logging.error("[input_writer] :: fault code {}; fault string{}".format(fault.faultCode, fault.faultString))
             return
 
-        #logging.debug("[input_writer] :: received objects from server {}".format(objects_dict))
+        logging.debug("[input_writer] :: received objects from server {}".format(objects_dict))
         objects_list = objects_dict['objects']
         return objects_list
 
@@ -284,5 +284,5 @@ objects = [{'orientation': [1.0, -5.75539615965681e-17, 3.38996313371214e-17, 5.
                 if args[0] not in ret:
                     ret[args[0]] = {}
                 ret[args[0]][args[1]] = v.qsr
-        logging.info("[input_writer] :: qsrs computed {}".format(ret))
+        logging.debug("[input_writer] :: qsrs computed {}".format(ret))
         return ret
