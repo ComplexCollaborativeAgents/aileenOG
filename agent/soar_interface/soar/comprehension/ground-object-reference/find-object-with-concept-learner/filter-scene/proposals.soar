@@ -22,8 +22,7 @@ sp {filter-scene*propose*elaborate-with-concept
     (state <s>    ^name filter-scene
                   ^visual-word <tag>
                   ^retrieved-concept-lti <res>
-                  -^elaborated-with <concept>
-                   ^candidate-set <cs>)
+                  -^elaborated-with <concept>)
     (<res>    ^nl <tag>
               ^gpool <gpool>
               ^concept <concept>)
@@ -31,7 +30,6 @@ sp {filter-scene*propose*elaborate-with-concept
     (<s>    ^operator <op> +)
     (<op>    ^name elaborate-with-concept
              ^gpool <gpool>
-             ^candidate-set <cs>
              ^concept <concept>)
     }
               
