@@ -1,11 +1,10 @@
 import settings
-
+from shutil import copyfile
 
 class ResultsHelper:
     def __init__(self):
         pass
 
-    do_record = True
     gfilename = settings.RUN_DATA_FILE_PATH
 
     @staticmethod
@@ -13,31 +12,29 @@ class ResultsHelper:
         ResultsHelper.do_record = state
 
     @staticmethod
-    def reset_results_file(title):
-        if ResultsHelper.do_record:
-            with open(ResultsHelper.gfilename, "w") as myfile:
-                myfile.write(title)
+    def reset_results_file():
+        open(ResultsHelper.gfilename, "w").close()
 
     @staticmethod
     def write_lesson_number_to_results_file(lesson_number):
-        if ResultsHelper.do_record:
-            with open(ResultsHelper.gfilename, "a") as myfile:
-                myfile.write("\n" + str(lesson_number) + ",")
+        with open(ResultsHelper.gfilename, "a") as myfile:
+            myfile.write("\n" + str(lesson_number) + ",")
 
     @staticmethod
     def record_processing_phase(phase_string):
-        if ResultsHelper.do_record:
-            with open(ResultsHelper.gfilename, "a") as myfile:
-                myfile.write(phase_string + ",")
+         with open(ResultsHelper.gfilename, "a") as myfile:
+            myfile.write(phase_string + ",")
 
     @staticmethod
     def record_generality_performance_score(score):
-        if ResultsHelper.do_record:
-            with open(ResultsHelper.gfilename, "a") as myfile:
-                myfile.write(str(score))
+        with open(ResultsHelper.gfilename, "a") as myfile:
+            myfile.write(str(score))
 
     @staticmethod
     def record_specificity_performance_score(score):
-        if ResultsHelper.do_record:
-            with open(ResultsHelper.gfilename, "a") as myfile:
-                myfile.write("\n specificity " + str(score))
+        with open(ResultsHelper.gfilename, "a") as myfile:
+            myfile.write("\n specificity " + str(score))
+
+    @staticmethod
+    def copy_results_file(filename):
+        copyfile(ResultsHelper.gfilename, filename)
