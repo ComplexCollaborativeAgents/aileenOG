@@ -6,7 +6,6 @@ from aileen_object import AileenObject
 from aileen_scene import AileenScene
 from log_config import logging
 from language_generator import LanguageGenerator
-from agent.soar_interface import input_writer
 import cv2
 import numpy as np
 import settings

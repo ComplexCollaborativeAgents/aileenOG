@@ -3,7 +3,7 @@ import os
 from random import choice
 
 import settings
-from aileen_object import AileenObject, Color
+from aileen_object import AileenObject
 from copy import deepcopy
 
 
