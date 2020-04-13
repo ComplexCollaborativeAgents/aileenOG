@@ -30,8 +30,10 @@ sp {learn-spatial-concept*apply*selected-scene*relations
                   ^selected-scene <scene>
                   ^world.relations <wrels>)
     (<wrels>    ^relation <rel>)
-    (<rel>    ^<< root-object target-object >> <obj>)
-    (<objs>    ^object <obj>)
+    (<rel>    ^root-object <obj1>
+              ^target-object <obj2>)
+    (<objs>    ^object <obj1>
+               ^object <obj2>)
     (<scene>    ^objects <objs>
                 ^relations <rels>)
 -->

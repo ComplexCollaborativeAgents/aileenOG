@@ -5,6 +5,8 @@ import xmlrpclib
 import settings
 from instructor.curriculum import Curriculum
 
+import argparse
+
 
 def create_connection_with_aileen_world():
     url = 'http://{}:{}'.format(settings.WORLD_HOST, settings.WORLD_PORT)
@@ -19,16 +21,34 @@ def create_connection_with_aileen_agent():
     logging.info("[aileen_instructor] :: created a connection with the agent: {}".format(url))
     return server
 
+def parse():
+    parser = argparse.ArgumentParser(description='run experiments with aileen')
+    parser.add_argument('--type', help ='run this type of experiment')
+    parser.add_argument('--file', help='write results to this file')
+    return parser.parse_args()
+
 
 if __name__ == '__main__':
-    settings.DO_RECORD = True
-    ResultsHelper.reset_results_file('spatial-word-learning-run1')
+    arguments = parse()
+
+    if arguments.type:
+        experiment_type = arguments.type
+    else:
+        experiment_type = "visual-word"
+
+    if arguments.file:
+        results_file = arguments.file
+    else:
+        results_file = None
+
     lesson_number = 0
 
     world = create_connection_with_aileen_world()
     agent = create_connection_with_aileen_agent()
 
-    rails = Generator("spatial-word")
+    ResultsHelper.reset_results_file()
+
+    rails = Generator(experiment_type)
     lessons = rails.generate_inform_training_gamut()
     exams = rails.generate_verify_testing_gamut_generality()
 
@@ -71,5 +91,4 @@ if __name__ == '__main__':
             agent_response = agent.process_interaction(evaluation)
         ResultsHelper.record_specificity_performance_score(score)
 
-
-
+    ResultsHelper.copy_results_file(results_file)
