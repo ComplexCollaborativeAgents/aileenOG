@@ -74,8 +74,8 @@ TEST_FILES = TRAINING_DATA_FOLDER + '/test_files.txt'
 
 ## Agent
 AGENT_PARAM_RUNTIME_FILE = path.join(ROOT_PATH, 'agent', 'soar_interface', 'soar', '_agent_params_runtime.soar')
-AGENT_VISUAL_CONCEPTS_PARAM = 'soar'
-AGENT_PRELOAD_VISUAL_CONCEPTS_PARAM = 'true'
+AGENT_VISUAL_CONCEPTS_PARAM = 'external'
+AGENT_PRELOAD_VISUAL_CONCEPTS_PARAM = 'false'
 
 AGENT_SPATIAL_CONCEPTS_PARAM = 'external'
 AGENT_PRELOAD_SPATIAL_CONCEPTS_PARAM = 'false'

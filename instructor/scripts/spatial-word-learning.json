@@ -1,26 +1,30 @@
 [
   {
+    "comment": "preload visual concepts used in this example",
     "lesson-type": "spatial-word",
-    "content": "blue cone next to red cylinder",
+    "content": "blue cone right of red cylinder",
     "description": {
       "objects": [{"color": "blue", "shape": "cone"},  {"color": "red", "rgb": [1, 0, 0], "shape": "cylinder"}],
-      "relation": "next-to"},
-     "signal": "inform"
+      "relation": "right-of"},
+    "signal": "inform",
+    "distractors": 1
   },
   {
+    "comment": "preload visual concepts used in this example",
     "lesson-type": "spatial-word",
-    "content": "blue sphere next to blue box",
+    "content": "blue sphere right of blue box",
     "description": {
       "objects": [{"color": "blue", "shape": "sphere"},  {"color": "blue", "shape": "box"}],
-      "relation": "next-to"},
+      "relation": "right-of"},
     "signal": "inform"
   },
-   {
+  {
+    "comment": "preload visual concepts used in this example",
     "lesson-type": "spatial-word",
-    "content": "blue cylinder next to red box",
+    "content": "blue cylinder right of red box",
     "description": {
       "objects": [{"color": "blue", "shape": "cylinder"},  {"color": "red", "shape": "box"}],
-      "relation": "next-to"},
+      "relation": "right-of"},
     "signal": "verify"
   }
 ]
