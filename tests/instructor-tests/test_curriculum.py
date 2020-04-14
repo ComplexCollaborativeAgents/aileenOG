@@ -21,6 +21,13 @@ def test_visual():
                              "shape": "cylinder"},
              "distractors": 4,
              "signal": "verify"},
+            {
+                "lesson-type": "visual-word",
+                "description": {"color": "red",
+                                "shape": "box"},
+                "signal": "inform",
+                "is_positive": "false"
+            }
         ])
 
     lesson = next(curriculum)
@@ -34,6 +41,9 @@ def test_visual():
     lesson = next(curriculum)
     assert lesson["interaction"]["content"] == "red cylinder"
     assert len(lesson["scene"]) == 5
+
+    lesson = next(curriculum)
+    assert lesson["interaction"]["content"] != "red box"
 
 
 def test_spatial():
