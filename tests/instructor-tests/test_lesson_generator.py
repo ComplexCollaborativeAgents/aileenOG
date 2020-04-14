@@ -1,5 +1,5 @@
 from random import uniform
-from log_config import logging
+from instructor.log_config import logging
 from shapely.geometry import Point
 import settings
 from instructor.aileen_object import AileenObject
