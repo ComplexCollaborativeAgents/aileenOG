@@ -47,10 +47,9 @@ class ActionWordLesson:
         print len(initial_state_description)
         if len(initial_state_description) < 1 and len(self._scene_objects) <= 2:
             for scene_object_name in self._scene_objects.keys():
-                position = AileenScene.randomizer.get_random_position_on_table(
-                    z_min=settings.OBJECT_POSITION_MIN_Z + settings.OBJECT_POSITION_DELTA,
-                    z_max=settings.OBJECT_POSITION_MAX_Z - settings.OBJECT_POSITION_DELTA)
-                self._scene_objects[scene_object_name].set_translation(position)
+                position = AileenScene.randomizer.get_random_position_on_table()
+                away_from_edge = bound(position)
+                self._scene_objects[scene_object_name].set_translation(away_from_edge)
                 self._initial_scene.add_object(self._scene_objects[scene_object_name])
         else:
             if len(initial_state_description) <= 2 and len(self._scene_objects) <= 2:
@@ -61,7 +60,9 @@ class ActionWordLesson:
                     configuration_definition=initial_state_description)
                 for object_name in positions.keys():
                     scene_object = self._scene_objects[object_name]
-                    scene_object.set_translation(positions[object_name])
+                    position = positions[object_name]
+                    away_from_edge = bound(position)
+                    scene_object.set_translation(away_from_edge)
                     self._initial_scene.add_object(scene_object)
             else:
                 logging.error("[action_word_lesson] :: don't know how to interpret the initial state description")
@@ -211,6 +212,17 @@ class ActionWordLesson:
             return choice(actions)
 
     randomizer = Randomizer()
+
+
+def bound(position):
+    """
+    Ensure that position is not close to the edge so that there is space for another object to be placed next to it.
+    """
+    [x, y, z] = position
+    z = max(z, settings.OBJECT_POSITION_MIN_Z + settings.OBJECT_POSITION_DELTA)
+    z = min(z, settings.OBJECT_POSITION_MAX_Z - settings.OBJECT_POSITION_DELTA)
+    return [x, y, z]
+
 
 
 if __name__ == '__main__':

@@ -41,9 +41,7 @@ class AileenScene:
         while found_target_object_position is None:
             world = World_State(0.0)
 
-            new_reference_object_position = AileenScene.randomizer.get_random_position_on_table(
-                    z_min=settings.OBJECT_POSITION_MIN_Z + settings.OBJECT_POSITION_DELTA,
-                    z_max=settings.OBJECT_POSITION_MAX_Z - settings.OBJECT_POSITION_DELTA)
+            new_reference_object_position = AileenScene.randomizer.get_random_position_on_table()
 
             qsr_reference_object = Object_State(name=str(reference_object_name), timestamp=0,
                                             x=new_reference_object_position[0],
@@ -182,11 +180,10 @@ class AileenScene:
 
     class Randomizer:
 
-        def get_random_position_on_table(self,
-                                         x_min=settings.OBJECT_POSITION_MIN_X, x_max=settings.OBJECT_POSITION_MAX_X,
-                                         y_min=settings.OBJECT_POSITION_MIN_Y, y_max=settings.OBJECT_POSITION_MAX_Y,
-                                         z_min=settings.OBJECT_POSITION_MIN_Z, z_max=settings.OBJECT_POSITION_MAX_Z):
-            position = [uniform(x_min, x_max), uniform(y_min, y_max), uniform(z_min, z_max)]
+        def get_random_position_on_table(self):
+            position = [uniform(settings.OBJECT_POSITION_MIN_X, settings.OBJECT_POSITION_MAX_X),
+                        uniform(settings.OBJECT_POSITION_MIN_Y, settings.OBJECT_POSITION_MAX_Y),
+                        uniform(settings.OBJECT_POSITION_MIN_Z, settings.OBJECT_POSITION_MAX_Z)]
             return position
 
         def sample_position_from_region(self, region):
