@@ -41,7 +41,9 @@ class AileenScene:
         while found_target_object_position is None:
             world = World_State(0.0)
 
-            new_reference_object_position = AileenScene.randomizer.get_random_position_on_table()
+            new_reference_object_position = AileenScene.randomizer.get_random_position_on_table(
+                    z_min=settings.OBJECT_POSITION_MIN_Z + settings.OBJECT_POSITION_DELTA,
+                    z_max=settings.OBJECT_POSITION_MAX_Z - settings.OBJECT_POSITION_DELTA)
 
             qsr_reference_object = Object_State(name=str(reference_object_name), timestamp=0,
                                             x=new_reference_object_position[0],
