@@ -44,6 +44,13 @@
 (comment CVGreen "An object with property Green")
 (isa CVGreen AileenCVSymbol)
 
+(isa CVYellow Collection)
+(comment CVYellow "An object with property Yellow")
+(isa CVYellow AileenCVSymbol)
+
+(isa CVPurple Collection)
+(comment CVPurple "An object with property Purple")
+(isa CVPurple AileenCVSymbol)
 ;;; Shape
 (isa CVCube Collection)
 (comment CVCube "An object with property Cube")
