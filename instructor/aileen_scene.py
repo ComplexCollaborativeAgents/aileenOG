@@ -102,9 +102,9 @@ class AileenScene:
                     compute_region_for_relations(world, configuration_definition, qsr_target_object, table))
                 position = [found_target_object_position.x, settings.OBJECT_POSITION_MAX_Y,
                             found_target_object_position.y]
-            except ValueError:
+            except (ValueError, AttributeError), e:
                 logging.error("[aileen_scene] :: cannot place {} in configuration with {}".format(target_object_name, reference_object_name))
-                raise ValueError
+                raise e
         return position
 
     @staticmethod
@@ -180,10 +180,11 @@ class AileenScene:
 
     class Randomizer:
 
-        def get_random_position_on_table(self):
-            position = [uniform(settings.OBJECT_POSITION_MIN_X, settings.OBJECT_POSITION_MAX_X),
-                        uniform(settings.OBJECT_POSITION_MIN_Y, settings.OBJECT_POSITION_MAX_Y),
-                        uniform(settings.OBJECT_POSITION_MIN_Z, settings.OBJECT_POSITION_MAX_Z)]
+        def get_random_position_on_table(self,
+                                         x_min=settings.OBJECT_POSITION_MIN_X, x_max=settings.OBJECT_POSITION_MAX_X,
+                                         y_min=settings.OBJECT_POSITION_MIN_Y, y_max=settings.OBJECT_POSITION_MAX_Y,
+                                         z_min=settings.OBJECT_POSITION_MIN_Z, z_max=settings.OBJECT_POSITION_MAX_Z):
+            position = [uniform(x_min, x_max), uniform(y_min, y_max), uniform(z_min, z_max)]
             return position
 
         def sample_position_from_region(self, region):

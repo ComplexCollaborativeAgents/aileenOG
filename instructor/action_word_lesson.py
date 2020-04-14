@@ -47,7 +47,9 @@ class ActionWordLesson:
         print len(initial_state_description)
         if len(initial_state_description) < 1 and len(self._scene_objects) <= 2:
             for scene_object_name in self._scene_objects.keys():
-                position = AileenScene.randomizer.get_random_position_on_table()
+                position = AileenScene.randomizer.get_random_position_on_table(
+                    z_min=settings.OBJECT_POSITION_MIN_Z + settings.OBJECT_POSITION_DELTA,
+                    z_max=settings.OBJECT_POSITION_MAX_Z - settings.OBJECT_POSITION_DELTA)
                 self._scene_objects[scene_object_name].set_translation(position)
                 self._initial_scene.add_object(self._scene_objects[scene_object_name])
         else:
