@@ -22,12 +22,12 @@
    ```
 4. Clone this repository and its submodules:
    ```bash
-   cd aileen-agent
    git clone --recurse-submodules git@gitlab-external.parc.com:aileen/aileen-agent.git
    ``` 
 5. Run the `bootstrap.sh` script to set up the Conda environment and build the Python dependencies, such as 
    [Pynini](http://www.openfst.org/twiki/bin/view/GRM/Pynini) and [Darknet](https://pjreddie.com/darknet/):
    ```bash
+   cd aileen-agent
    ./bootstrap.sh
    ```
    > Note: This script creates a Conda environment, called `aileen`. To activate the environment:
