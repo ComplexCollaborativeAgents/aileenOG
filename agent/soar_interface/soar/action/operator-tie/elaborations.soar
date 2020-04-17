@@ -1,0 +1,18 @@
+##!
+# @file
+#
+# @created smohan 20200416
+
+
+sp {action*operator*tie*propose*concept-superstate
+    (state <s>    ^choices multiple
+                  ^superstate <ss>)
+    (<ss>    ^name action
+             ^action <act>
+             ^grounding <g>)
+-->
+    (<ss>    ^operator <op> + !)
+    (<op>    ^name determine-next-state
+             ^action <act>
+             ^grounding <g>)
+    }
