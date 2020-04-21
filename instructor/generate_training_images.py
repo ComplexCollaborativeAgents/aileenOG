@@ -51,7 +51,8 @@ class TrainingImage:
             scene_acknowledgement = world_server.set_scene(
                 {'configuration': lesson['scene'], 'label': lesson['interaction']})
             logging.info("[aileen_instructor] :: received from world {}".format(scene_acknowledgement))
-            binary_image = world_server.get_image()
+            data = world_server.get_image()
+            binary_image = data['image']
             im = cv2.imdecode(np.fromstring(binary_image.data, dtype=np.uint8), 1)
             cv2.imwrite(settings.TRAINING_DATA_FOLDER + '/frame_' + "{:0>6d}".format(counter) + '.jpg', im)
             meta = world_server.get_all()
