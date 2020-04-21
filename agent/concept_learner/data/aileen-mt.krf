@@ -131,3 +131,4 @@
 
 (in-microtheory BaseKB)
 (notForAnalogy AileenCaseMt)
+(notForAnalogy sageRequireInMapping)

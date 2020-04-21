@@ -6,7 +6,7 @@
 ;;;;   Created: November 13, 2019 16:35:48
 ;;;;   Purpose: 
 ;;;; ----------------------------------------------------------------------------
-;;;;  Modified: Wednesday, February 19, 2020 at 08:24:58 by klenk
+;;;;  Modified: Monday, April 20, 2020 at 17:34:16 by klenk
 ;;;; ----------------------------------------------------------------------------
 
 (load "server.lsp")
@@ -187,6 +187,59 @@
     (assert (= (cdr (assoc :NUM-EXAMPLES res)) 0))
     (assert (= (cdr (assoc :NUM-GENERALIZATIONS res)) 1))))
 
+;; Not called currently
+(defun make-test-gen-rel-gpool-1 ()
+  (let (res )
+    (setq res (call-test-server
+               "create_reasoning_predicate"
+               (pairlis '("predicate")
+                        '("rNextTo"))))
+    (assert (equal (cdr (assoc :GPOOL res))
+		   "rNextToMt"))
+
+    (setq res (call-test-server "store"
+               (pairlis '("facts" "context" "concept")
+                        (list '(("isa" "Obj8A" "CVCube") ("isa" "Obj8A" "CVRed")
+				("isa" "Obj8B" "CVCylinder") ("isa" "Obj8B" "CVBlue")
+				("n" "Obj8A" "Obj8B") ("s" "Obj8B" "Obj8A") 
+				("dc" "Obj8B" "Obj8A")("dc" "Obj8A" "Obj8B")
+				("rNextTo" "Obj8A" "Obj8B"))
+                              "Test8A" ;;Id
+                              "rNextTo"))))
+
+
+    (setq res (call-test-server "store"
+               (pairlis '("facts" "context" "concept")
+                        (list '(("isa" "Obj9A" "CVCube") ("isa" "Obj9A" "CVBlue")
+				("isa" "Obj9B" "CVSphere") ("isa" "Obj9B" "CVGreen")
+				("e" "Obj9A" "Obj9B")("w" "Obj9B" "Obj9A")
+				("po" "Obj9A" "Obj9B")("po" "Obj9B" "Obj9A")
+				("rNextTo" "Obj9A" "Obj9B"))
+                              "Test9A" ;;Id
+                              "rNextTo"))))
+;;    (break) ;; The nextTo facts don't appear in the mapping
+    (setq res (call-test-server "store"
+               (pairlis '("facts" "context" "concept")
+                        (list '(("isa" "Obj9A" "CVSphere") ("isa" "Obj9A" "CVBlue")
+				("isa" "Obj9B" "CVCube") ("isa" "Obj9B" "CVGreen")
+				("nw" "Obj9A" "Obj9B")("se"  "Obj9B" "Obj9A")
+				("po" "Obj9A" "Obj9B")("po" "Obj9B" "Obj9A")
+				("rNextTo" "Obj9A" "Obj9B"))
+                              "Test10A" ;;Id
+                              "rNextTo"))))
+
+    (setq res (call-test-server "store"
+               (pairlis '("facts" "context" "concept")
+                        (list '(("isa" "Obj9A" "CVSphere") ("isa" "Obj9A" "CVBlue")
+				("isa" "Obj9B" "CVCube") ("isa" "Obj9B" "CVGreen")
+				("sw" "Obj9A" "Obj9B")("ne"  "Obj9B" "Obj9A")
+				("po" "Obj9A" "Obj9B")("po"  "Obj9B" "Obj9A")
+				("rNextTo" "Obj9A" "Obj9B"))
+                              "Test11A" ;;Id
+                              "rNextTo"))))
+    ))
+
+
 
 (defun test-generalization-rel ()
   ;; Add two cases for rRight to the rRightMT gpool
@@ -291,9 +344,9 @@
 				("s" "Obj10B" "Obj10C") ("po" "Obj10B" "Obj10C")
 				)
                                pattern))))
-    (assert (= 2 (length (cdr (assoc :MATCHES res)))))  
-    (assert (find '("rRight" "Obj10A" "Obj10B")
-		  (cdr (assoc :MATCHES res)) :test #'equal))
+    (assert (= 1 (length (cdr (assoc :MATCHES res)))))  
+;    (assert (find '("rRight" "Obj10A" "Obj10B") ;this would be true of OBJ10B was Blue
+;		  (cdr (assoc :MATCHES res)) :test #'equal))
     (assert (find '("rRight" "Obj10A" "Obj10C")
 		   (cdr (assoc :MATCHES res)) :test #'equal))
     
@@ -310,9 +363,9 @@
 				("n" "Obj10B" "Obj10C") ("po" "Obj10B" "Obj10C")
 				)
                               pattern))))
-    (assert (= 3 (length (cdr (assoc :MATCHES res)))))
-    (assert (find '("rRight" "Obj10A" "Obj10B")
-		  (cdr (assoc :MATCHES res)) :test #'equal))
+    (assert (= 2 (length (cdr (assoc :MATCHES res)))))
+;    (assert (find '("rRight" "Obj10A" "Obj10B")  ;this would be true of OBJ10B was Blue
+;		  (cdr (assoc :MATCHES res)) :test #'equal))
     (assert (find '("rRight" "Obj10A" "Obj10C")
 		  (cdr (assoc :MATCHES res)) :test #'equal))
     (assert (find '("rRight" "Obj10B" "Obj10C")
@@ -368,7 +421,7 @@
 ;;; move the box to the right of the cylinder
 (defparameter *action-test-case-13*
   'd::((rMove Obj13B (rRight Obj13B Obj13A))
-       (holdsIn Time13_0 (isa Obj13A CVBlue))
+       (holdsIn Time13_0 (isa Obj13A CVGreen))
        (holdsIn Time13_0 (isa Obj13A CVCylinder))
        (holdsIn Time13_0 (isa Obj13B CVGreen))
        (holdsIn Time13_0 (isa Obj13B CVBox))
@@ -376,14 +429,14 @@
        (holdsIn Time13_0 (w Obj13A Obj13B))
        (holdsIn Time13_0 (dc Obj13A Obj13B))
        (holdsIn Time13_0 (dc Obj13B Obj13A))
-       (holdsIn Time13_1 (isa Obj13A CVBlue))
+       (holdsIn Time13_1 (isa Obj13A CVGreen))
        (holdsIn Time13_1 (isa Obj13A CVCylinder))
        (holdsIn Time13_1 (isa Obj13B CVGreen))
        (holdsIn Time13_1 (isa Obj13B CVBox))
        (holdsIn Time13_1 (isa Obj13B RBox))
        (holdsIn Time13_1 (holdsInHand Aileen1 Obj13B))
        ;;(holdsIn Time13_1 (dc Obj13A Obj13B)) ;;Do we just remove all spatial relations?
-       (holdsIn Time13_2 (isa Obj13A CVBlue))
+       (holdsIn Time13_2 (isa Obj13A CVGreen))
        (holdsIn Time13_2 (isa Obj13A CVCylinder))
        (holdsIn Time13_2 (isa Obj13B CVGreen))
        (holdsIn Time13_2 (isa Obj13B CVBox))
@@ -538,6 +591,7 @@
 (defun clean-tests ()
   (cl-user::nuke-gpool 'd::rMoveMt)
   (cl-user::nuke-gpool 'd::rRightMt)
+  (cl-user::nuke-gpool 'd::rNextToMt)
   (cl-user::nuke-gpool 'd::rOnMt)
   (cl-user::nuke-gpool 'd::RRedMt)
   (cl-user::nuke-gpool 'd::RBoxMt)
