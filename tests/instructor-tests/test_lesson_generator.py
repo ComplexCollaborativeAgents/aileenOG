@@ -21,12 +21,12 @@ def test_action_word_segment():
     assert segment == {'interaction': {'marker': 'start', 'content': 'move blue cylinder left-of blue box', 'signal': 'verify'},
                        'scene': [
                            'Solid {\n   recognitionColors 0 0 1\n   translation 0.676147498734 0.45 -0.0202334240995\n   children [\n       Shape {\n          appearance PBRAppearance {\n          baseColor 0 0 1\n          metalness 0\n          emissiveColor 0 0 1\n        }\n        geometry Cylinder {\n          radius 0.05\n          height 0.1\n        }\n        castShadows FALSE\n        }\n    ]\n    name "object1"\n   boundingObject Box {\n     size 0.1 0.1 0.1\n   }\n   physics Physics {\n}}',
-                           'Solid {\n   recognitionColors 0 0 1\n   translation 0.586304972021 0.45 0.238382561155\n   children [\n       Shape {\n          appearance PBRAppearance {\n          baseColor 0 0 1\n          metalness 0\n          emissiveColor 0 0 1\n        }\n        geometry Box {\n          size 0.1 0.1 0.1\n        }\n        castShadows FALSE\n        }\n    ]\n    name "object2"\n   boundingObject Box {\n     size 0.1 0.1 0.1\n   }\n   physics Physics {\n}}']}
+                           'Solid {\n   recognitionColors 0 0 1\n   translation 0.586304972021 0.45 0.092\n   children [\n       Shape {\n          appearance PBRAppearance {\n          baseColor 0 0 1\n          metalness 0\n          emissiveColor 0 0 1\n        }\n        geometry Box {\n          size 0.1 0.1 0.1\n        }\n        castShadows FALSE\n        }\n    ]\n    name "object2"\n   boundingObject Box {\n     size 0.1 0.1 0.1\n   }\n   physics Physics {\n}}']}
     segment = lesson1.get_next_segment()
-    assert segment == {'action': {'name': 'pick-up', 'uuid': 'object1'}, 'interaction': 'none'}
+    assert segment == {'action': {'name': 'pick-up', 'uuid': 'object1'}, 'interaction': {'marker':'trace'}}
     segment = lesson1.get_next_segment()
     assert segment == {'action': {'location': [0.676147498734, 0.45, -0.0202334240995], 'name': 'place'},
-                       'interaction': 'none'}
+                       'interaction': {'marker':'trace'}}
     segment = lesson1.get_next_segment()
     assert segment == None
 
@@ -37,7 +37,11 @@ def test_spatial_word_lesson():
     AileenScene.randomizer = SceneRandomizer()
     LanguageGenerator.randomizer = LanguageRandomizer()
     SpatialWordLesson.randomizer = SpatialRandomizer()
-    lesson1 = SpatialWordLesson()
+    lesson1 = SpatialWordLesson(is_positive=True,
+                                signal='verify',
+                                description=None,
+                                distractors=None,
+                                content=None)
     assert lesson1.generate_lesson() == {'interaction': {'content': 'blue cylinder right of blue box','signal': 'verify'}, 'scene': [
         'Solid {\n   recognitionColors 0 0 1\n   translation 0.676147498734 0.45 -0.0202334240995\n   children [\n       Shape {\n          appearance PBRAppearance {\n          baseColor 0 0 1\n          metalness 0\n          emissiveColor 0 0 1\n        }\n        geometry Cylinder {\n          radius 0.05\n          height 0.1\n        }\n        castShadows FALSE\n        }\n    ]\n    name "object1"\n   boundingObject Box {\n     size 0.1 0.1 0.1\n   }\n   physics Physics {\n}}',
         'Solid {\n   recognitionColors 0 0 1\n   translation 0.586304972021 0.45 0.238382561155\n   children [\n       Shape {\n          appearance PBRAppearance {\n          baseColor 0 0 1\n          metalness 0\n          emissiveColor 0 0 1\n        }\n        geometry Box {\n          size 0.1 0.1 0.1\n        }\n        castShadows FALSE\n        }\n    ]\n    name "object2"\n   boundingObject Box {\n     size 0.1 0.1 0.1\n   }\n   physics Physics {\n}}']}
@@ -48,7 +52,11 @@ def test_visual_word_lesson():
     AileenObject.randomizer = ObjectRandomizer()
     AileenScene.randomizer = SceneRandomizer()
     LanguageGenerator.randomizer = LanguageRandomizer()
-    lesson1 = VisualWordLesson()
+    lesson1 = VisualWordLesson(is_positive=True,
+                               signal='verify',
+                               description=None,
+                               distractors=None,
+                               content=None)
     assert lesson1.generate_lesson() == {'interaction': {'content': 'blue cylinder', 'signal': 'verify'}, 'scene': [
         'Solid {\n   recognitionColors 0 0 1\n   translation 0.586304972021 0.45 0.238382561155\n   children [\n       Shape {\n          appearance PBRAppearance {\n          baseColor 0 0 1\n          metalness 0\n          emissiveColor 0 0 1\n        }\n        geometry Cylinder {\n          radius 0.05\n          height 0.1\n        }\n        castShadows FALSE\n        }\n    ]\n    name "object1"\n   boundingObject Box {\n     size 0.1 0.1 0.1\n   }\n   physics Physics {\n}}']}
 

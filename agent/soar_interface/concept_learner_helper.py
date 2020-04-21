@@ -1,4 +1,6 @@
 from agent.log_config import logging
+from experiments.results_helper import ResultsHelper
+import settings
 
 def process_concept_learner_request(commandId, concept_learner):
     logging.debug("[output_reader] :: processing concept_learner command")
@@ -6,6 +8,7 @@ def process_concept_learner_request(commandId, concept_learner):
         cl_child = commandId.GetChild(i).ConvertToIdentifier()
         if cl_child:
             if cl_child.GetAttribute() == "store":
+                ResultsHelper.record_processing_phase("cm")
                 return process_store_command(cl_child, concept_learner)
             else:
                 if cl_child.GetAttribute() == "query":
@@ -15,6 +18,7 @@ def process_concept_learner_request(commandId, concept_learner):
                         return process_project_command(cl_child, concept_learner)
                     else:
                         if cl_child.GetAttribute() == "create":
+                            ResultsHelper.record_processing_phase("cm")
                             return process_create_concept_command(cl_child, concept_learner)
                         else:
                             logging.error("[output_reader] :: concept learner does not implement this command")

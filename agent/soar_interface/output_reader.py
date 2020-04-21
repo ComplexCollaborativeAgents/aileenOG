@@ -65,7 +65,7 @@ class OutputReader(object):
         for i in range(0, commandID.GetNumberChildren()):
             child = commandID.GetChild(i)
             if child.GetAttribute() == 'parse-content':
-                content = child.GetValueAsString().rstrip().replace("-", " ")
+                content = child.GetValueAsString().strip()
                 logging.info("[output-reader] :: received parse-content command for {}".format(content))
                 parsed_content = self._grammar.parse(content)
                 logging.debug("[output-reader] :: parsed content to {}".format(parsed_content))

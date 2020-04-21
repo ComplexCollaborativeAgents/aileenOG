@@ -1,15 +1,14 @@
 ##!
 # @file
 #
-# @created smohan 20191111
+# @created smohan 20200319
 
-sp {verify*apply*report-correct
+sp {verify*apply*report-failure
     (state <s>    ^name verify
-                  ^operator.name report-success
+                  ^operator.name report-failure
                   ^segment <seg>)
     (<seg>    ^purpose <p>)
 -->
     (<p>    ^completed true 
-              ^status success)
+              ^status failure)
 }
-

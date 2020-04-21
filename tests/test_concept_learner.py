@@ -11,7 +11,7 @@ def test_square():
     assert num*num == 49
 
 # Functional test that creates a generalization and then matches against it
-#@pytest.mark.skip(reason='SSH in CI is not correctly set up yet.')
+@pytest.mark.skip(reason='SSH in CI is not correctly set up yet.')
 def test_concept_learner_server():
 
     cmd = 'ssh {} {}/start_concept_learner.sh {}'.format(settings.CONCEPT_LEARNER_HOST,
@@ -24,6 +24,7 @@ def test_concept_learner_server():
                                                     settings.CONCEPT_LEARNER_PORT)
     server=xmlrpclib.ServerProxy(http_str)
 
+    r = server.checkpoint_kb(xmlrpclib.Binary(json.dumps({"dir":"init_kb"})))
     r = server.create_reasoning_symbol(xmlrpclib.Binary(json.dumps({'symbol':'RRed'})))
 
     res = json.loads(r.data)
@@ -31,12 +32,23 @@ def test_concept_learner_server():
     assert res['numSymbols'] == 1
     gpool = res['gpool']
 
+    
+    r = server.checkpoint_kb(xmlrpclib.Binary(json.dumps({"dir":"test_kb"})))
+    data = {"facts":[["isa","O0","CVRed"],["isa","O0","RRed"],["isa","O0","CVCylinder"]],
+            "context":"Test0",
+            "concept":"RRed"}
+    r = server.store(xmlrpclib.Binary(json.dumps(data)))
+    res = json.loads(r.data)
+    assert res['numExamples'] == 1
+    assert res['numGeneralizations'] == 0
+
+    r = server.restore_kb(xmlrpclib.Binary(json.dumps({"dir":"test_kb"})))
     data = {"facts":[["isa","O1","CVRed"],["isa","O1","RRed"],["isa","O1","CVCylinder"]],
             "context":"Test1",
             "concept":"RRed"}
     r = server.store(xmlrpclib.Binary(json.dumps(data)))
     res = json.loads(r.data)
-    assert res['numExamples'] == 1
+    assert res['numExamples'] == 1 #Number is still 1 because we checkpointed the kb
     assert res['numGeneralizations'] == 0
 
     data = {"facts":[["isa","O3","CVRed"],["isa","O3","CVCube"]],
@@ -232,4 +244,5 @@ def test_concept_learner_server():
     res = json.loads(r.data)
     assert res['matches'] == None
 
-    out.kill() # do we need to do anything more?1'a
+    r = server.restore_kb(xmlrpclib.Binary(json.dumps({"dir":"init_kb"})))
+    out.kill() # do we need to do anything more?

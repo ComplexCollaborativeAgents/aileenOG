@@ -48,7 +48,7 @@ return NIL."))
     (encode-json object stream)))
 
 (defmethod encode-json (anything &optional (stream *json-output*))
-  "If OBJECT is not handled by any specialized encoder signal an error
+  "If OBJECT is not handled by any specialized encoder self an error
 which the user can correct by choosing to encode the string which is
 the printed representation of the OBJECT."
   (declare (ignore stream))

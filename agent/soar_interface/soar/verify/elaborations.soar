@@ -19,3 +19,23 @@ sp {verify*elaborate*grounding
 -->
     (<s>    ^grounding <g>)
     }
+
+sp {verify*elaborate*to-verify
+    (state <s>    ^name verify
+                  ^segment <seg>)
+    (<seg>    ^parses.parse <p>)
+    (<p>    ^{<< obj-ref rel-ref >> <ref-type>} <ref-id>)
+-->
+    (<s>    ^to-verify <tv>)
+    (<tv>    ^type <ref-type>
+             ^ref <ref-id>)
+    }
+
+sp {verify*elaborate*verification-failure
+    (state <s>    ^name verify
+                  ^to-verify <tv>
+                  ^not-verified <ref-id>)
+    (<tv>    ^ref <ref-id>)
+-->
+    (<s>    ^verification failure)
+    }

@@ -17,12 +17,30 @@
 
 (defun test-concept-learner-server (&key (clean? t))
   (start-server :port *test-port*) ;; needs to match port in call-test-server.
+  (when clean? (checkpoint-init))
   (test-reasoning-symbols)
   (test-generalization-obj)
   (test-generalization-rel)
   (test-generalization-action)
-  (when clean? (clean-tests))
+  (when clean? (restore-init))
+;  (when clean? (clean-tests))
   )
+
+(defun checkpoint-init ()
+  (let ((res (call-test-server
+	      "checkpoint_kb"
+	      (pairlis '("dir")
+		       '("init_kb")))))
+    (assert (equal (cdr (assoc :DIR res)) "init_kb"))))
+
+(defun restore-init ()
+  (let ((res (call-test-server
+               "restore_kb"
+               (pairlis '("dir")
+                        '("init_kb")))))
+  (assert (equal (cdr (assoc :DIR res)) "init_kb"))))
+
+  
 
 (defun call-test-server (function arguments)
   (cl-json::decode-json-from-string
@@ -64,12 +82,31 @@
     ))
 
 (defun test-generalization-obj ()
+  ;; This also tests checkpoint and restore
   ;; Add two cases for RRed to the RRedMT gpool
   ;; generalize them
   ;; Match a new scene against it
   ;; verifies that removing facts works.
   (let (res pattern)
+    (setq res (call-test-server
+               "checkpoint_kb"
+               (pairlis '("dir")
+                        '("test_kb"))))
     ;; TEST STORE
+    (setq res (call-test-server "store"
+               (pairlis '("facts" "context" "concept")
+                        (list (list (list "isa" "O0" "RRed")
+                                    (list "isa" "O0" "CVRed")
+                                    (list "isa" "O0" "CVCylinder"))
+                              "Test0" ;;Id
+                              "RRed"))))
+    (assert (= (cdr (assoc :NUM-EXAMPLES res)) 1))
+    (assert (= (cdr (assoc :NUM-GENERALIZATIONS res)) 0))
+
+    (setq res (call-test-server
+               "restore_kb"
+               (pairlis '("dir")
+                        '("test_kb"))))
     (setq res (call-test-server "store"
                (pairlis '("facts" "context" "concept")
                         (list (list (list "isa" "O1" "RRed")
@@ -77,8 +114,10 @@
                                     (list "isa" "O1" "CVCylinder"))
                               "Test1" ;;Id
                               "RRed"))))
-    (assert (= (cdr (assoc :NUM-EXAMPLES res)) 1))
+    (assert (= (cdr (assoc :NUM-EXAMPLES res)) 1))  ;;becasue we restored the kb this is 1
     (assert (= (cdr (assoc :NUM-GENERALIZATIONS res)) 0))
+
+
 
     (setq res (call-test-server "store"
                (pairlis '("facts" "context" "concept")

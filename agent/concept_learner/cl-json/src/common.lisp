@@ -64,7 +64,7 @@
   "Mapping between JSON String escape sequences and Lisp chars.")
 
 (defvar *use-strict-json-rules* t
-  "If non-nil, signal error on unrecognized escape sequences in JSON
+  "If non-nil, self error on unrecognized escape sequences in JSON
 Strings.  If nil, translate any such sequence to the char after
 slash.")
 

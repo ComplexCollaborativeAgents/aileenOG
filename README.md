@@ -27,6 +27,7 @@
 5. Run the `bootstrap.sh` script to set up the Conda environment and build the Python dependencies, such as 
    [Pynini](http://www.openfst.org/twiki/bin/view/GRM/Pynini) and [Darknet](https://pjreddie.com/darknet/):
    ```bash
+   cd aileen-agent
    ./bootstrap.sh
    ```
    > Note: This script creates a Conda environment, called `aileen`. To activate the environment:
@@ -40,6 +41,16 @@
 
 ### Run
 1. Open Webots and load the world: "File", "Open World...", and select `world/data/aileen_world.wbt`.
+> Note: Webots can be run headless using Xvfb
+   > First Time Xvfb setup:
+   > ```bash
+   > sudo apt install xvfb
+   >```
+   > To run Webots headless, run the following in a new shell:
+   > ```bash
+   > cd /path/to/aileen-agent
+   > ./webots_headless.sh
+   > ```
 2. Run the world server:
    ```bash
    export WEBOTS_HOME="/usr/local/webots"

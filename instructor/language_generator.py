@@ -1,15 +1,19 @@
 import random
 
+
 class LanguageGenerator:
 
     def __init__(self):
         pass
 
     @staticmethod
-    def generate_language_for_object(aileen_object):
+    def generate_language_for_object(aileen_object, is_positive=True):
         ## SM: removing this because the default rules in the language parser do not accept any arbitrary order.
-        #LanguageGenerator.randomizer.shuffle_string(aileen_object._language)
-        return ' '.join(aileen_object._language)
+        # LanguageGenerator.randomizer.shuffle_string(aileen_object._language)
+        if is_positive:
+            return ' '.join(aileen_object._language)
+        else:
+            return ' '.join(aileen_object._negative_language)
 
     @staticmethod
     def generate_language_for_spatial_relation(arg1, arg2, relation):
@@ -31,7 +35,6 @@ class LanguageGenerator:
         for word in word_list:
             string = string + word + " "
         return str(string).rstrip()
-
 
     class Randomizer:
 

@@ -14,6 +14,13 @@ sp {filter-scene*elaborate*state
             ^candidate-set <cs>)
     }
 
+sp {filter-scene*elaborate*state*world
+    (state <s>    ^name filter-scene
+                  ^superstate.world <w>)
+-->
+    (<s>    ^world <w>)
+    }
+
 sp {filter-scene*query*smem
     (state <s>    ^name filter-scene
                   ^visual-word <tag>)
@@ -32,4 +39,10 @@ sp {filter-scene*elaborate*retrieved-concept
     (<s>    ^retrieved-concept-lti <res>)
     }
 
+sp {filter-scene*elaborate*grounding
+    (state <s>    ^name filter-scene
+                  ^superstate.grounding <g>)
+-->
+    (<s>    ^grounding <g>)
+    }
 

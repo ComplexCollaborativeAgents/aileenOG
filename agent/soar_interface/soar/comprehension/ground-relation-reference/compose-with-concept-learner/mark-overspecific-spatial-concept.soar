@@ -20,4 +20,5 @@ sp {compose-with-concept-learner*apply*mark-overspecific-concept
     (<info>    ^concept-structure <con>
                ^grounding <g>
                ^parses <p>)
+    (<g>    ^complete true)
     }

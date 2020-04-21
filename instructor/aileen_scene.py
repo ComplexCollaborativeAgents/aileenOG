@@ -21,7 +21,7 @@ class AileenScene:
     def add_object(self, aileen_object):
         self._objects.append(aileen_object)
 
-    def generate_scene_description(self):
+    def generate_scene_world_config(self):
         description = []
         for scene_object in self._objects:
             description.append(scene_object.get_object_description())
@@ -102,9 +102,9 @@ class AileenScene:
                     compute_region_for_relations(world, configuration_definition, qsr_target_object, table))
                 position = [found_target_object_position.x, settings.OBJECT_POSITION_MAX_Y,
                             found_target_object_position.y]
-            except ValueError:
+            except (ValueError, AttributeError), e:
                 logging.error("[aileen_scene] :: cannot place {} in configuration with {}".format(target_object_name, reference_object_name))
-                raise ValueError
+                raise e
         return position
 
     @staticmethod
