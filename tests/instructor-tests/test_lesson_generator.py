@@ -16,7 +16,7 @@ def test_action_word_segment():
     AileenObject.randomizer = ObjectRandomizer()
     AileenScene.randomizer = SceneRandomizer()
     LanguageGenerator.randomizer = LanguageRandomizer()
-    lesson1 = ActionWordLesson()
+    lesson1 = ActionWordLesson(is_positive=None, signal='verify', description=None, distractors=None, content=None)
     segment = lesson1.get_next_segment()
     assert segment == {'interaction': {'marker': 'start', 'content': 'move blue cylinder left-of blue box', 'signal': 'verify'},
                        'scene': [
