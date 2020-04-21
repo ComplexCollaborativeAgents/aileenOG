@@ -6,7 +6,7 @@
 ;;;;   Created: November  6, 2019 14:54:11
 ;;;;   Purpose: 
 ;;;; ----------------------------------------------------------------------------
-;;;;  Modified: Thursday, February 20, 2020 at 11:11:04 by klenk
+;;;;  Modified: Tuesday, April 21, 2020 at 14:51:47 by klenk
 ;;;; ----------------------------------------------------------------------------
 
 (in-package :aileen)
@@ -362,14 +362,24 @@
 
 
 (defun determine-state-correspondences (context gpool)
-  (assert (= (length (fire:ask-it `(d::gpoolGeneralization ,gpool ?x) :response '?x)) 1))
-  (let* ((generalization (car (fire:ask-it `(d::gpoolGeneralization ,gpool ?x) :response '?x)))
-	 (init-probe (car (fire::ask-it `d::(isa ?x AileenActionStartTime)
-					:context context :response `d::?x)))
-	 (init-gen (car (fire::ask-it `d::(isa ?x AileenActionStartTime)
-				      :context generalization :response `d::?x))))
-    (assert (and init-probe init-gen))
-    (list (list init-probe init-gen ))))
+  ;; if there is one generalization
+  (cond ((= (length (fire:ask-it `(d::gpoolGeneralization ,gpool ?x) :response '?x)) 1)
+	 (let* ((generalization (car (fire:ask-it `(d::gpoolGeneralization ,gpool ?x) :response '?x)))
+		(init-probe (car (fire::ask-it `d::(isa ?x AileenActionStartTime)
+					       :context context :response `d::?x)))
+		(init-gen (car (fire::ask-it `d::(isa ?x AileenActionStartTime)
+					     :context generalization :response `d::?x))))
+	   (assert (and init-probe init-gen))
+	   (list (list init-probe init-gen ))))
+	((= (length (fire:ask-it `(d::gpoolExample ,gpool ?x) :response '?x)) 1)
+	 (let* ((example (car (fire:ask-it `(d::gpoolExample ,gpool ?x) :response '?x)))
+		(init-probe (car (fire::ask-it `d::(isa ?x AileenActionStartTime)
+					       :context context :response `d::?x)))
+		(init-gen (car (fire::ask-it `d::(isa ?x AileenActionStartTime)
+					     :context example :response `d::?x))))
+	   (assert (and init-probe init-gen))
+	   (list (list init-probe init-gen ))))
+	(t (error "expected state of gpool is either with a single example or a single generalization"))))
 
 
 (defparameter *constraints-mt* 'd::ProjectionConstraintsMt)
