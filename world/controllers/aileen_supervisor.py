@@ -10,11 +10,26 @@ import json
 
 class AileenSupervisor(Supervisor):
 
+    def initialize_robot(self):
+        logging.info('[aileen_supervisor] :: initializing robot')
+        for name in settings.JOINT_NAMES:
+            self._motorNodes.append(self.getMotor(name))
+            self._motorSensorNodes.append(self.getPositionSensor(name+'_sensor'))
+            self._motorSensorNodes[-1].enable(settings.TIME_STEP)
+        logging.info('[aileen_supervisor] :: got {} motors and {} position sensors'.format(len(self._motorNodes), len(self._motorSensorNodes)))
+        logging.info('[aileen_supervisor] :: moving to start position')
+        self.command_pose(settings.START_LOCATION_1)
+        self.wait_for_motion_complete()
+        self.command_pose(settings.START_LOCATION_2)
+        self.wait_for_motion_complete()
+        logging.info('[aileen_supervisor] :: reached start position')
+
     def __init__(self):
         super(AileenSupervisor, self).__init__()
 
         self._root = self.getRoot()
         self._children = self._root.getField('children')
+        self._numNodes = self._children.getCount()
 
         logging.info("[aileen_supervisor] :: started supervisor control of the world")
 
@@ -22,6 +37,11 @@ class AileenSupervisor(Supervisor):
         logging.info("[aileen_supervisor] :: enabled action simulation")
 
         self._held_node = None
+
+        self._numDevices = self.getNumberOfDevices()
+
+        self._motorNodes = list()
+        self._motorSensorNodes = list()
 
         self._camera = self.getCamera('camera')
         self._camera.enable(settings.TIME_STEP)
@@ -33,12 +53,33 @@ class AileenSupervisor(Supervisor):
 
         self._world_thread = None
 
+        self.initialize_robot()
+
+    def wait_for_motion_complete(self):
+        while not self.check_in_position():
+            self.step(settings.TIME_STEP)
+
+    def check_in_position(self, motor=-1):
+        if motor < 0:
+            truth = list()
+            for i in range(len(self._motorNodes)):
+                truth.append(abs(self._motorNodes[i].getTargetPosition() - self._motorSensorNodes[i].getValue()) < settings.IN_POS_THRESH)
+
+            return all(truth)
+        else:
+            return abs(self._motorNodes[motor].getTargetPosition() - self._motorSensorNodes[motor].getValue()) < settings.IN_POS_THRESH
+
+    def command_pose(self, pose):
+        for i in range(len(pose)):
+            self._motorNodes[i].setPosition(pose[i])
+
     def run_in_background(self):
         self._world_thread = Thread(target=self.run_world_loop)
         self._world_thread.start()
         logging.info("[aileen_supervisor] :: started world thread")
 
     def run_world_loop(self):
+        #Robot Initialization Here
         while self.step(settings.TIME_STEP) != -1:
             pass
 
