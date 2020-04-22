@@ -102,10 +102,8 @@ class AileenSupervisor(Supervisor):
                                    'held': 'false'}
                 objects.append(object_dict)
 
-
-
-
-        output_dict = {'objects': objects}
+        output_dict = {'objects': objects,
+                       'image': ''}
         return output_dict
 
     def get_object_name(self, object_node):
@@ -185,8 +183,26 @@ class AileenSupervisor(Supervisor):
             os.mkdir(dir_name)
         self._camera.saveImage(settings.CURRENT_IMAGE_PATH, 100)
         logging.debug("[aileen_supervisor] :: saved current image at {}".format(settings.CURRENT_IMAGE_PATH))
+
+        if settings.GET_IMAGE_RETURNS_IMAGE_BINARY:
+            with open(settings.CURRENT_IMAGE_PATH, "rb") as handle:
+                binary_image = xmlrpclib.Binary(handle.read())
+                output_dict['image'] = binary_image
+
         return output_dict
 
+    # def get_image_training(self):
+    #     logging.debug("[aileen_supervisor] :: processing get_image from client")
+    #     image_string = self._camera.getImage()
+    #     logging.debug("[aileen_supervisor] :: got current image")
+    #     dir_name = os.path.split(settings.CURRENT_IMAGE_PATH)[0]
+    #     if not os.path.exists(dir_name):
+    #         os.makedirs(dir_name)
+    #     self._camera.saveImage(settings.CURRENT_IMAGE_PATH, 100)
+    #     logging.debug("[aileen_supervisor] :: saved current image at {}".format(settings.CURRENT_IMAGE_PATH))
+    #     with open(settings.CURRENT_IMAGE_PATH, "rb") as handle:
+    #         binary_image = xmlrpclib.Binary(handle.read())
+    #         return binary_image
 
     def set_scene(self, scene_objects, label):
         self.clean_scene()
