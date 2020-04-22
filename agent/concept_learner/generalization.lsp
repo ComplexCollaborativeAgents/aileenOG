@@ -6,7 +6,7 @@
 ;;;;   Created: November  6, 2019 14:54:11
 ;;;;   Purpose: 
 ;;;; ----------------------------------------------------------------------------
-;;;;  Modified: Thursday, February 20, 2020 at 11:11:04 by klenk
+;;;;  Modified: Monday, April 20, 2020 at 16:25:52 by klenk
 ;;;; ----------------------------------------------------------------------------
 
 (in-package :aileen)
@@ -14,8 +14,9 @@
 ;; (load "analogystack/qrgsetup.lsp")
 ;; (require-module "fire" :fire)
 
-(defparameter *assimilation-threshold* 0.2 "sage threshold for storing new cases. A low number means we want everything to be in one generalization and that we don't expect disjunctive concepts")
+(defparameter *assimilation-threshold* 0.01 "sage threshold for storing new cases. A low number means we want everything to be in one generalization and that we don't expect disjunctive concepts")
 (defparameter *match-threshold* 0.2 "sage threshold for matching to generalizations. because we are doing our own scoring this is low")
+(defparameter *probability-cutoff* 0.6 "facts below this threshold in generalizations do not contribute to score calculations")
 (defparameter *normalized-threshold* 0.75 "mapping threshold normalized against the target without the inference fact")
 ;;; Klenk tried making this .999, but I ran into a problem with some mapping scores not being as high expected in the relational cases
 
@@ -36,7 +37,8 @@
     (dolist (fact (fire:retrieve-it '?x :context gpool :response '?x))
       (format t "Forgetting ~A in ~A~%" fact gpool)
       (fire:kb-forget fact :mt gpool))
-    (cl-user::setup-gpool gpool  :strategy :gel )  
+    (cl-user::setup-gpool gpool  :strategy :gel
+			  :probability-cutoff *probability-cutoff*)  
     (fire:kb-store `d::(genls ,aileen::symbol AileenReasoningSymbol) :mt 'd::BaseKB)
     (fire:kb-store `d::(isa ,aileen::symbol Collection) :mt 'd::BaseKB)
     (values (1- (length (fire:ask-it `d::(genls ?x AileenReasoningSymbol)))) ;;due to genls identity
@@ -48,7 +50,7 @@
     (dolist (fact (fire:retrieve-it '?x :context gpool :response '?x))
       (format t "Forgetting ~A in ~A~%" fact gpool)
       (fire:kb-forget fact :mt gpool))
-    (cl-user::setup-gpool gpool :strategy :gel )  
+    (cl-user::setup-gpool gpool :strategy :gel  :context 'd::DummyMt)
     (fire:kb-store `d::(isa ,aileen::pred AileenReasoningPredicate) :mt 'd::BaseKB)
     (fire:kb-store `d::(arity ,aileen::pred
 			      ,aileen::arity) :mt 'd::BaseKB)
@@ -73,11 +75,20 @@
 (defun add-case-to-gpool (facts context concept)
   (let ((gpool (get-concept-gpool concept)))
     (store-facts-in-case facts context)
-    ;;    Does not work as expected
-    ;;    (fire:kb-store `d::(sageRequireInMapping ,aileen::concept) :mt context) 
+    (dolist (fact facts)
+      (cond ((eql concept (car fact))
+	     (fire:kb-store `d::(sageRequireInMapping ,aileen::fact) :mt context))
+	    ((and (eql concept (third fact))
+		  (eql 'd::isa (car fact)))
+	     (fire:kb-store `(d::sageRequireInMapping
+			      (,(third fact) ,(second fact))) :mt context))
+	    ((find concept fact)
+	     (error "unexpected concept in fact"))
+	    (t nil)))
+    (fire:clear-wm)
     (fire:kb-forget `(d::gpoolAssimilationThreshold ,gpool ?x) :mt gpool)
     (fire:kb-store `(d::gpoolAssimilationThreshold ,gpool ,*assimilation-threshold*) :mt gpool)
-    (fire:tell-it `(d::sageSelectAndGeneralize ,context ,gpool) :context gpool)
+    (fire:tell-it `(d::sageSelectAndGeneralize ,context ,gpool) :context 'd::BaseKB)
     (multiple-value-bind (rbrowse full url) (rbrowse::browse-sme sme::*sme*)
       (declare (ignore url rbrowse))
       (format t "~% rbrowse-sme: ~A base:~A target: ~A url: ~A "
@@ -182,44 +193,79 @@
 		      `(d::reverseCIsAllowed
 			(d::and
 			 (d::sageSelect (d::MinimalCaseFromMtFn ,obj ,context)
-					,gpool ?ret ?mapping)
+					,gpool ?target ?mapping)
 			 (d::reverseCandidateInferenceOf ?ci ?mapping)
 			 (d::candidateInferenceContent ?ci (d::isa ,obj ,collection))))
-		      :context gpool)))
+		      :context gpool :response '?target)))
 		 (multiple-value-bind (rbrowse full url) (rbrowse::browse-sme sme::*sme*)
 		   (declare (ignore url rbrowse))
 		   (format t "~% rbrowse-sme: ~A base:~A target: ~A url: ~A"
 			   sme::*sme*
 			   `(d::MinimalCaseFromMtFn ,obj ,context)
-			   gpool
+			   ci-found?
 			   full))
-		 (when ci-found? 
-		   (let ((score (sme::score (car (sme::mappings  sme::*sme*))))
-			 (sme sme::*sme*))
-		     (sme::clone-current-sme)
-		     (format t "~% ~A" (sme::expressions (sme::target sme::*sme*)))
-		     (remove-rel-from-dgroup (sme::target sme::*sme*) collection)
-		     (format t "~% ~A" (sme::expressions (sme::target sme::*sme*)))
-		     (let ((normalized-score (/ score
-						(sme::self-score-dgroup (sme::target sme::*sme*)
-									(sme::mapping-parameters sme::*sme*)))))
-		       (format t "~% ~A score: ~A normalized score: ~A" sme score normalized-score)
-		       (sme::in-sme sme)
-		       (> normalized-score *normalized-threshold*) ;; Out of floating point concerns
-		       )))))
-	       (reverse (objs-in-context context)))))
-	 (mapcar #'(lambda (obj) (list 'd::isa obj (third pattern))) objs)))
+		 (when ci-found?
+		   (match-score-exceeds-threshold?
+		    `(d::MinimalCaseFromMtFn ,obj ,context)
+		    (car ci-found?) :inference-rel collection))))
+	 (reverse (objs-in-context context)))))
+    (mapcar #'(lambda (obj) (list 'd::isa obj (third pattern))) objs)))
+
+(defun match-score-exceeds-threshold? (base target &key (constraints '(d::TheSet))
+							 (threshold *probability-cutoff*)
+							 (inference-rel nil))
+  ;;; base and target
   
+  (fire:ask-it `(d::matchBetween ,base (d::KBCaseFn-Probability ,target ,threshold)
+				 ,constraints ?target))
+  (multiple-value-bind (rbrowse full url) (rbrowse::browse-sme sme::*sme*)
+    (declare (ignore url rbrowse))
+		   (format t "~% match-scoring-sme rbrowse-sme: ~A url: ~A"
+			   sme::*sme*
+			   full))
+  (let ((score (sme::score (car (sme::mappings  sme::*sme*))))
+	(sme sme::*sme*))
+    (sme::clone-current-sme)
+    (format t "~% ~A" (sme::expressions (sme::target sme::*sme*)))
+    (remove-rel-from-dgroup (sme::target sme::*sme*) inference-rel)
+    (format t "~% ~A" (sme::expressions (sme::target sme::*sme*)))
+    (let ((normalized-score (/ score
+			       (sme::self-score-dgroup (sme::target sme::*sme*)
+						       (sme::mapping-parameters sme::*sme*)))))
+      (format t "~% ~A score: ~A normalized score: ~A" sme score normalized-score)
+      (sme::in-sme sme)
+      (> normalized-score *normalized-threshold*))))
+
+
+;;; We can roll this function back to the previous version
 (defun remove-rel-from-dgroup (dgroup rel)
+  ;;; Also remove unlikely affacts
+  ;;; Warning extremely poorly written code below.
   (let ((expr
 	 (find rel (sme::expressions dgroup)
-	       :key #'(lambda (expr) (sme:name (car expr))))))
-    (format t "~% REMOVING: ~A" expr)
-    (setf (sme::expressions dgroup)
-	  (remove expr (sme::expressions dgroup) :test #'equalp))
+	       :key #'(lambda (expr) (sme:name (car expr)))))
+	(unlikely-facts nil))
+	; (mapcar #'car (getf (sme:plist (sme::target sme::*sme*)) :unlikely-facts))))
+;    (format t "~%old:~A" (sme::expressions dgroup))
+;    (format t "~% REMOVING: ~A and ~A" expr unlikely-facts)
+    (let (new)
+      (dolist (expr2 (sme::expressions dgroup))
+;	(format t "~% expr2: ~A" expr2)
+	(unless (or (equalp expr expr2)
+		    (member (sme:lisp-form (second expr2)) unlikely-facts :test #'equalp))
+;	  (format t "~% keep it")
+	  (push expr new)))
+      (setf (sme::expressions dgroup) new))
+ ;   (format t "~%new:~A~%~%~%" (sme::expressions dgroup))
     (dolist (entity (sme::entities dgroup))
-      (setf (sme::parents entity)
-	    (remove (cadr expr) (sme::parents entity))))))
+      (let (new)
+	(dolist (exp (sme::parents entity))
+;	  (format t "~% exp: ~A" exp)
+	  (unless (or (equalp (second expr) exp)
+		      (member (sme:lisp-form exp) unlikely-facts :test #'equalp))
+;	    (format t "~% keep")
+	    (push exp new)))
+	(setf (sme::parents entity) new)))))
 
 (defun get-concept-gpool (concept)
   (intern (format nil "~AMt" (symbol-name concept)) :d))
@@ -292,7 +338,8 @@
 			    (isa ,aileen::entity AileenReasoningAction))))
    pattern))
 
-(defun match-query-against-gpool (context gpool pattern)
+;; repeat? is only included as we had strange behavior where a match did not work the first time we tried it
+(defun match-query-against-gpool (context gpool pattern &optional repeat?)
   (sme:with-sme-type
     ;  'sme::exhaustive-sme  ;;;DOESN'T WORK WITH FILTERS  ;;;annoyingly missing a greedy merge in a test case 
       'sme::sme
@@ -307,14 +354,18 @@
     (fire:tell-it `(d::constructCaseInWM ,case-term))
     (fire:tell-it `(d::copyWMCaseToKB ,case-term ,case-term)) ;;could have an explicit query context here for easier clean up?
     (dolist (obj objs) ;; analogy control predicates
+      (format t "~% (d::sageRequireInMapping ~A)" obj)
       (fire:kb-store `(d::sageRequireInMapping ,obj) :mt case-term))
     (let ((ci-found? (fire:ask-it
 	   `(d::reverseCIsAllowed
 	     (d::and
 	      (d::sageSelect ,case-term ,gpool ?ret ?mapping)
-	      (d::reverseCandidateInferenceOf ?ci ?mapping)
-	      (d::candidateInferenceContent ?ci ,pattern)))
-	   :context gpool)))
+	      (d::mappingOf  ?mapping ?matcher)
+	      (d::mappingOf ?mapping1 ?matcher )
+	      (d::reverseCandidateInferenceOf ?ci ?mapping1)
+	      (d::candidateInferenceContent ?ci ,pattern)
+	      ))
+	   :context gpool :response '?ret)))
       (multiple-value-bind (rbrowse full url) (rbrowse::browse-sme sme::*sme*)
 	(declare (ignore rbrowse url))
 	(format t "~% rbrowse-sme: ~A base: ~A target: ~A url: ~A"
@@ -322,23 +373,19 @@
 		case-term
 		gpool
 		full))
-      (when ci-found?
-	(let ((score (sme::score (car (sme::mappings  sme::*sme*))))
-	      (sme sme::*sme*))
-	  (sme::clone-current-sme)
-	  (format t "~% ~A" (sme::expressions (sme::target sme::*sme*)))
-	  (dolist (rel (aileen-symbols-in-pattern pattern))
-	    (remove-rel-from-dgroup (sme::target sme::*sme*) rel))
-	  (format t "~% ~A" (sme::expressions (sme::target sme::*sme*)))
-	  (let ((normalized-score (/ score
-				     (sme::self-score-dgroup (sme::target sme::*sme*)
-							     (sme::mapping-parameters sme::*sme*)))))
-	    (format t "~% ~A score: ~A normalized score: ~A" sme score normalized-score)
-	    (sme::in-sme sme)
-	    (> normalized-score *normalized-threshold*) ;; Out of floating point concerns
-	    )))))))
-
-
+      (cond (ci-found?
+	     ;; The query above should return the score of the best mapping that includes
+	     ;; the pattern in the reverse candidate inference
+	     (match-score-exceeds-threshold? case-term (car ci-found?)
+					     :inference-rel (car pattern))) ;;This used to be aileen-symbols-in-patter
+	    ((and (not repeat?)
+		  (sme:mappings sme::*sme*)
+		  (= (sme:score (car (sme:mappings sme::*sme*))) 0))
+	     (format t "~% Strange bug of mapping with a score of 0 that is corrected with a repeated call")
+	     (match-query-against-gpool context gpool pattern t))
+	    (t nil)
+	)))))
+  
 (defun make-possible-blists (vars objs &optional blist)
   (cond ((null vars) (list blist))
 	((null objs) (assert nil))
