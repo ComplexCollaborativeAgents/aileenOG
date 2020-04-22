@@ -5,6 +5,7 @@ import settings
 from log_config import logging
 
 from spatial_word_lesson import SpatialWordLesson
+from action_word_lesson import ActionWordLesson
 from instructor.curriculum import Curriculum
 import json
 
@@ -55,5 +56,5 @@ if __name__ == '__main__':
             logging.info("[aileen_instructor] :: provided feedback to agent")
     else:
         #VisualWordLesson.administer_curriculum(world_server, agent_server)
-        SpatialWordLesson.administer_curriculum(world_server, agent_server)
-        # ActionWordLesson.administer_curriculum(world_server, agent_server)
+        #SpatialWordLesson.administer_curriculum(world_server, agent_server)
+        ActionWordLesson.administer_curriculum(world_server, agent_server)

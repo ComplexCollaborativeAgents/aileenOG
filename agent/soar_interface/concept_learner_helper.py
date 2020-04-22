@@ -96,7 +96,7 @@ def process_project_command(project_command_id, concept_learner):
             request['facts'] = translate_soar_facts_to_tuple_list(child_id.ConvertToIdentifier())
             added_facts = True
         if child_id.GetAttribute() == "concept":
-            request['concept'] = child_id.GetValueAsString()
+            request['action'] = child_id.GetValueAsString()
             added_concept = True
 
     if added_facts and added_concept:

@@ -83,7 +83,7 @@ class ActionWordLesson:
         segment = {
             'scene': self._initial_scene.generate_scene_world_config(),
             'interaction': {
-                'signal': 'verify',
+                'signal': 'inform',
                 'marker': settings.ACTION_LESSON_STATE_START,
                 'content': self._language
             }
@@ -187,15 +187,19 @@ class ActionWordLesson:
 
     @staticmethod
     def administer_curriculum(world_server, agent_server):
-        while True:
+        number_of_exemplars = 3
+        for i in range(0,number_of_exemplars):
             raw_input("Press any key to generate the next action word lesson...")
             lesson = ActionWordLesson()
-            # lesson.deliver_action_reaction_test(world_server, agent_server)
+
             logging.info("[action_word_lesson] :: generated a lesson for new action word")
             while lesson._lesson_state is not settings.ACTION_LESSON_STATE_COMPLETE:
                 raw_input("Press any key to deliver the next action lesson segment...")
                 lesson.deliver_action_lesson_segment(world_server, agent_server)
                 logging.debug("[action_word_lesson] :: action lesson state is: {}".format(lesson._lesson_state))
+
+        lesson = ActionWordLesson()
+        lesson.deliver_action_reaction_test(world_server, agent_server)
 
     @staticmethod
     def get_action_definition_set():
