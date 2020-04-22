@@ -26,7 +26,7 @@ def test_visual():
                 "description": {"color": "red",
                                 "shape": "box"},
                 "signal": "inform",
-                "is_positive": "false"
+                "is_positive": False
             }
         ])
 

@@ -12,9 +12,18 @@ from collections import OrderedDict
 
 class ActionWordLesson:
 
-    def __init__(self):
+    def __init__(self, is_positive, signal, description, distractors, content):
+        self._is_positive = is_positive
+        self._signal = signal
+        self._description = description
+        self._distractors = distractors
+        self._content = content
+
         self._action_definitions_set = ActionWordLesson.get_action_definition_set()
-        self._action = ActionWordLesson.randomizer.random_action(self._action_definitions_set.keys())
+        if self._description:
+            self._action = self._description['action']
+        else:
+            self._action = ActionWordLesson.randomizer.random_action(self._action_definitions_set.keys())
         self._action_definition = self._action_definitions_set[self._action]
         self._initial_scene = AileenScene()
         self._scene_objects = OrderedDict()
@@ -28,10 +37,15 @@ class ActionWordLesson:
     def generate_setup(self):
         logging.debug("[action_word_lesson] :: generating the initial scene for action word learning")
         objects = self._action_definition[settings.ACTION_DEF_OBJECTS]
-        if len(objects) > 0:
-            objs = AileenObject.generate_random_objects(len(objects))
-            for o, obj in zip(objs, objects):
-                self._scene_objects[obj] = o
+
+        if self._description:
+            for o, obj in zip(self._description['objects'], objects):
+                self._scene_objects[obj] = AileenObject.generate_object(o)
+        else:
+            if len(objects) > 0:
+                objs = AileenObject.generate_random_objects(len(objects))
+                for o, obj in zip(objs, objects):
+                    self._scene_objects[obj] = o
 
         relations = self._action_definition[settings.ACTION_DEF_RELATIONS]
         if relations is not None and len(relations) > 0:
@@ -83,7 +97,7 @@ class ActionWordLesson:
         segment = {
             'scene': self._initial_scene.generate_scene_world_config(),
             'interaction': {
-                'signal': 'inform',
+                'signal': self._signal,
                 'marker': settings.ACTION_LESSON_STATE_START,
                 'content': self._language
             }
@@ -155,7 +169,7 @@ class ActionWordLesson:
                  'label': "{}: {}: {}".format(segment['interaction']['signal'], segment['interaction']['content'],
                                               segment['interaction']['marker'])})
             agent_response = agent_server.process_interaction(segment['interaction'])
-            return
+            return agent_response
 
         if self._lesson_state == settings.ACTION_LESSON_STATE_TRACE:
             logging.debug("[action_word_lesson] :: providing the next step in action trace")
@@ -164,13 +178,13 @@ class ActionWordLesson:
             if segment['action'] is not None:
                 scene_acknowledgement = world_server.apply_action(segment['action'])
                 agent_response = agent_server.process_interaction(segment['interaction'])
-            return
+            return agent_response
 
         if self._lesson_state == settings.ACTION_LESSON_STATE_END:
             logging.debug("[action_word_lesson] :: communicating the terminal state configuration of action")
             segment = self.get_next_segment()
             agent_response = agent_server.process_interaction({'marker':'end'})
-            return
+            return agent_response
 
         if self._lesson_state == settings.ACTION_LESSON_STATE_BAD:
             logging.debug("[action_word_lesson] :: communicating that the generated action trace is bad")
@@ -226,9 +240,3 @@ def bound(position):
     z = max(z, settings.OBJECT_POSITION_MIN_Z + settings.OBJECT_POSITION_DELTA)
     z = min(z, settings.OBJECT_POSITION_MAX_Z - settings.OBJECT_POSITION_DELTA)
     return [x, y, z]
-
-
-
-if __name__ == '__main__':
-    lesson1 = ActionWordLesson()
-    print(lesson1.get_segment_for_lesson_start())

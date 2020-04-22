@@ -32,6 +32,15 @@ ROBOT_PLATE_LOCATION = [-0.1, 0.2, 0]
 TIME_STEP = 32
 TEST_LOCATION = [0.771, 0.5610656650000001, -0.199]
 
+# Vision Module
+SHAPE_SET = ['cone', 'box', 'cylinder', 'sphere']
+COLOR_LABELS = ['blue', 'red']
+COLOR_VALUES = [[255, 0, 0], [0, 0, 255]]
+GET_IMAGE_RETURNS_IMAGE_BINARY = True
+TRAINING_DATA_FOLDER = './vision_training_data'
+TRAIN_FILES = TRAINING_DATA_FOLDER + '/train_files.txt'
+TEST_FILES = TRAINING_DATA_FOLDER + '/test_files.txt'
+
 # Instructor
 OBJECT_POSITION_MAX_X = 0.855
 OBJECT_POSITION_MIN_X = 0.356
@@ -47,10 +56,6 @@ OBJECT_POSITION_DELTA = 0.15
 OBJECT_STANDARD_HEIGHT = 0.1
 OBJECT_STANDARD_WIDTH_X = 0.1
 OBJECT_STANDARD_WIDTH_Z = 0.1
-
-SHAPE_SET = ['cone', 'box', 'cylinder', 'sphere']
-COLOR_LABELS = ['blue', 'red']
-COLOR_VALUES = [[255, 0, 0], [0, 0, 255]]
 
 SPATIAL_CONFIGURATION_FILE_NAME = 'spatial_configuration.json'
 SPATIAL_DEF_OBJECTS = 'objects'
@@ -69,10 +74,6 @@ ACTION_LESSON_STATE_TRACE = 'trace'
 ACTION_LESSON_STATE_END = 'end'
 ACTION_LESSON_STATE_COMPLETE = 'complete'
 ACTION_LESSON_STATE_BAD = 'bad'
-
-TRAINING_DATA_FOLDER = './vision_training_data'
-TRAIN_FILES = TRAINING_DATA_FOLDER + '/train_files.txt'
-TEST_FILES = TRAINING_DATA_FOLDER + '/test_files.txt'
 
 ## Agent
 AGENT_PARAM_RUNTIME_FILE = path.join(ROOT_PATH, 'agent', 'soar_interface', 'soar', '_agent_params_runtime.soar')
