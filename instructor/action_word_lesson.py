@@ -99,7 +99,7 @@ class ActionWordLesson:
             'interaction': {
                 'signal': self._signal,
                 'marker': settings.ACTION_LESSON_STATE_START,
-                'content': self._language
+                'content': self._content if self._content is not None else self._language
             }
         }
         self.advance_lesson_state()
