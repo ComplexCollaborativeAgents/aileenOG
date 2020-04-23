@@ -199,6 +199,16 @@ class ActionWordLesson:
              'label': "{}:{}".format(segment['interaction']['signal'], segment['interaction']['content'])})
         agent_response = agent_server.process_interaction(segment['interaction'])
 
+    def evaluate_agent_response(self, agent_response):
+        if self._is_positive:
+            if agent_response['status'] == 'success':
+                return {'signal':'correct', 'score':1}
+            else:
+                return {'signal':'incorrect', 'score':0}
+        else:
+            if agent_response['status'] == 'failure':
+                return {'signal': 'correct', 'score': '0'}
+
     @staticmethod
     def administer_curriculum(world_server, agent_server):
         number_of_exemplars = 3

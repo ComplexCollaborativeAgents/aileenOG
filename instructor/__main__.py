@@ -50,7 +50,10 @@ if __name__ == '__main__':
                 lesson_object = lesson['object']
                 while lesson_object._lesson_state is not settings.ACTION_LESSON_STATE_COMPLETE:
                     raw_input("Press any key to deliver the next action lesson segment...")
-                    lesson_object.deliver_action_lesson_segment(world_server, agent_server)
+                    agent_response = lesson_object.deliver_action_lesson_segment(world_server, agent_server)
+                evaluation = lesson['object'].evaluate_agent_response(agent_response)
+                agent_response = agent_server.process_interaction(evaluation)
+                logging.info("[aileen_instructor] :: provided feedback to agent")
             else:
                 raw_input("Press any key to generate the next lesson...")
                 scene_acknowledgement = world_server.set_scene(

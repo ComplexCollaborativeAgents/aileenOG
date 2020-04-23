@@ -2,13 +2,37 @@
   {
     "comment": "preload visual concepts used in this example",
     "lesson-type": "action-word",
-    "content": "blue cone right of red cylinder",
+    "content": "move blue cone right of red cylinder",
     "description": {
       "objects": [{"color": "blue", "shape": "cone"},  {"color": "red", "rgb": [1, 0, 0], "shape": "cylinder"}],
       "relation": "right-of",
       "action": "move"
     },
     "signal": "inform",
+    "distractors": 0
+  },
+  {
+    "comment": "preload visual concepts used in this example",
+    "lesson-type": "action-word",
+    "content": "move red box right of blue cylinder",
+    "description": {
+      "objects": [{"color": "red", "shape": "box"},  {"color": "blue", "shape": "cylinder"}],
+      "relation": "right-of",
+      "action": "move"
+    },
+    "signal": "inform",
+    "distractors": 0
+  },
+  {
+    "comment": "preload visual concepts used in this example",
+    "lesson-type": "action-word",
+    "content": "move yellow cylinder right of yellow box",
+    "description": {
+      "objects": [{"color": "yellow", "shape": "cylinder"},  {"color": "yellow", "shape": "box"}],
+      "relation": "right-of",
+      "action": "move"
+    },
+    "signal": "verify",
     "distractors": 0
   }
 ]
