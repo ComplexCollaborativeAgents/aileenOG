@@ -41,7 +41,16 @@
     "content": "green box next to purple box",
     "description": {
       "objects": [{"color": "green", "shape": "box"},  {"color": "purple", "shape": "box"}],
-      "relation": "right-of"},
-    "signal": "verify"
+      "relation": "next-to"},
+    "signal": "inform"
+  },
+  {
+    "comment": "preload visual concepts used in this example",
+    "lesson-type": "spatial-word",
+    "content": "green cylinder next to purple cylinder",
+    "description": {
+      "objects": [{"color": "green", "shape": "cylinder"},  {"color": "purple", "shape": "cylinder"}],
+      "relation": "next-to"},
+    "signal": "inform"
   }
 ]
