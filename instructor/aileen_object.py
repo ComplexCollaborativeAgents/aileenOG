@@ -187,11 +187,20 @@ class AileenObject:
         distractors = []
         while n:
             distractor = AileenObject.generate_random_object()
-            if not target._negative_language or distractor._language != target._negative_language:
-                if (isinstance(target, list) and distractor not in target) or \
-                        (not isinstance(target, list) and distractor != target):
-                    distractors.append(distractor)
-                    n -= 1
+            if (isinstance(target, list) and distractor not in target) or \
+                    (not isinstance(target, list) and distractor != target):
+                distractors.append(distractor)
+                n -= 1
+
+        for distractor in distractors:
+            if isinstance(target, list):
+                for target_i in target:
+                    if target_i._negative_language == distractor._language:
+                        distractors.remove(distractor)
+            else:
+                if target._negative_language == distractor._language:
+                    distractors.remove(distractor)
+
         return distractors
 
     # Put randomization code in separate class so that it can be overridden.
