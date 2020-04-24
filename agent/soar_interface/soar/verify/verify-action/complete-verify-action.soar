@@ -1,0 +1,15 @@
+##!
+# @file
+#
+# @created smohan 20200421
+
+sp {verify-action*apply*complete-verify-action
+    (state <s>    ^name verify-action
+                  ^superstate <ss>
+                  ^operator.name complete-verify-action)
+    (<ss>    ^operator <sop>)
+    (<sop>    ^ref <aref>
+             ^name verify-action)
+-->
+   (<ss>    ^verified <aref>)
+   }
