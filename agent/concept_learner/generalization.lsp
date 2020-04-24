@@ -6,7 +6,7 @@
 ;;;;   Created: November  6, 2019 14:54:11
 ;;;;   Purpose: 
 ;;;; ----------------------------------------------------------------------------
-;;;;  Modified: Tuesday, April 21, 2020 at 14:51:47 by klenk
+;;;;  Modified: Friday, April 24, 2020 at 15:14:29 by klenk
 ;;;; ----------------------------------------------------------------------------
 
 (in-package :aileen)
@@ -461,6 +461,9 @@
 		:context gpool :response '?ci-context)))
       ;; Should we verify anything?
       ;; What kind of score should be required?
+      (multiple-value-bind (rbrowse full url) (rbrowse::browse-wm)
+	(declare (ignore url rbrowse))
+	(format t "~% rbrowse-wm after project query: " full))
       (multiple-value-bind (rbrowse full url) (rbrowse::browse-sme sme::*sme*)
 	(declare (ignore url rbrowse))
 	(format t "~% rbrowse-sme: ~A base:~A target: ~A url: ~A"
