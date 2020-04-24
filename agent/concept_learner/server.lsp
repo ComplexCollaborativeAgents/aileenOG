@@ -6,7 +6,7 @@
 ;;;;   Created: November 13, 2019 16:14:37
 ;;;;   Purpose: 
 ;;;; ----------------------------------------------------------------------------
-;;;;  Modified: Thursday, March 19, 2020 at 14:09:26 by klenk
+;;;;  Modified: Friday, April 24, 2020 at 15:04:54 by klenk
 ;;;; ----------------------------------------------------------------------------
 
 (in-package :cl-user)
@@ -236,7 +236,7 @@
            (remove-facts-from-case context)
            ;; Store facts in context and match query.
            (let ((cis (project-state-for-action facts context  action)))
-             (format t "Found candidate inferences  ~A~%" cis)
+             (format t "~%Found candidate inferences  ~A~%" cis)
              (cl-json:encode-json-alist-to-string
               (pairlis '("cis")
                        (list (symbols->strs cis)
