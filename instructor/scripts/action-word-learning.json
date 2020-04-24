@@ -2,7 +2,7 @@
   {
     "comment": "preload visual concepts used in this example",
     "lesson-type": "action-word",
-    "content": "blue cone right of red cylinder",
+    "content": "move blue cone right of red cylinder",
     "description": {
       "objects": [{"color": "blue", "shape": "cone"},  {"color": "red", "rgb": [1, 0, 0], "shape": "cylinder"}],
       "relation": "right-of",
