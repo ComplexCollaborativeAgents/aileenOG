@@ -86,6 +86,8 @@ AGENT_PRELOAD_SPATIAL_CONCEPTS_PARAM = 'false'
 AGENT_ACTION_CONCEPTS_PARAM = 'external'
 AGENT_PRELOAD_ACTION_CONCEPTS_PARAM = 'false'
 
+AGENT_RECOMPREHEND_AFTER_LEARN = 'false'
+
 
 ## Experiments
 RUN_DATA_FILE_PATH = path.join(ROOT_PATH, 'experiments', 'results', 'run.csv')
