@@ -161,5 +161,8 @@ def translate_soar_fact_to_tuple(fact_id):
                 fact_tuple[2] = child.GetValueAsString()
             else:
                 fact_tuple[2] = translate_soar_fact_to_tuple(child.ConvertToIdentifier())
+    for element in fact_tuple:
+        if element is None:
+            fact_tuple.remove(element)
     return fact_tuple
 
