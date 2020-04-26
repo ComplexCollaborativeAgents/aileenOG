@@ -51,6 +51,7 @@
 (isa CVPurple Collection)
 (comment CVPurple "An object with property Purple")
 (isa CVPurple AileenCVSymbol)
+
 ;;; Shape
 (isa CVCube Collection)
 (comment CVCube "An object with property Cube")
@@ -63,6 +64,10 @@
 (isa CVCylinder Collection)
 (comment CVCylinder "An object with property Cylinder")
 (isa CVCylinder AileenCVSymbol)
+
+(isa CVCone Collection)
+(comment CVCone "An object with property Cone")
+(isa CVCone AileenCVSymbol)
 
 ;;; Positional Relations
 ;;;  Only define 4 of the positional relationships
