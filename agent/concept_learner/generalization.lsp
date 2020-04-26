@@ -6,7 +6,7 @@
 ;;;;   Created: November  6, 2019 14:54:11
 ;;;;   Purpose: 
 ;;;; ----------------------------------------------------------------------------
-;;;;  Modified: Friday, April 24, 2020 at 15:14:29 by klenk
+;;;;  Modified: Friday, April 24, 2020 at 16:47:15 by klenk
 ;;;; ----------------------------------------------------------------------------
 
 (in-package :aileen)
@@ -463,7 +463,7 @@
       ;; What kind of score should be required?
       (multiple-value-bind (rbrowse full url) (rbrowse::browse-wm)
 	(declare (ignore url rbrowse))
-	(format t "~% rbrowse-wm after project query: " full))
+	(format t "~% rbrowse-wm after project query: ~A" full))
       (multiple-value-bind (rbrowse full url) (rbrowse::browse-sme sme::*sme*)
 	(declare (ignore url rbrowse))
 	(format t "~% rbrowse-sme: ~A base:~A target: ~A url: ~A"
