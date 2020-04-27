@@ -6,10 +6,15 @@
 ;;;;   Created: April 26, 2020 06:11:24
 ;;;;   Purpose: 
 ;;;; ----------------------------------------------------------------------------
-;;;;  Modified: Sunday, April 26, 2020 at 07:52:38 by klenk
+;;;;  Modified: Monday, April 27, 2020 at 10:23:43 by klenk
 ;;;; ----------------------------------------------------------------------------
 
 (in-package :aileen)
+
+(defun replay-concept-memory-interactions (filename)
+  (dolist (interaction (extract-concept-memory-interactions filename))
+    (format t "~% interaction: ~A" interaction)
+    (funcall (car interaction) (second interaction))))
 
 (defun extract-concept-memory-interactions (filename)
   (with-open-file (f filename :direction :input)
@@ -29,9 +34,9 @@
 	 (list #'create-reasoning-action-helper 
 	       (if (json-in-str str)
 		   (json-in-str str)
-		   (format nil "{\"symbol\": \"~A\",\"arity\": 2}" (subseq str (1+ (search " " str :from-end t))))))) 
-	((starts-with-p str "Creating Reasoning Symbol")
-	 str)
+		   (format nil "{\"action\": \"~A\",\"arity\": 2}" (subseq str (1+ (search " " str :from-end t))))))) 
+	((starts-with-p str "Creating Reasoning Symbol2")
+	 (list #'create-reasoning-symbol-helper (json-in-str str)))
 	((starts-with-p str "Creating Reasoning Predicate")
 	 str)
 	(t nil)))
