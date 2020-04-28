@@ -8,6 +8,11 @@ from action_executor import ActionExecutor
 from world.log_config import logging
 import json
 
+from ikpy.chain import Chain
+from ikpy.link import OriginLink, URDFLink
+from ikpy.geometry_utils import *
+import numpy as np
+
 class AileenSupervisor(Supervisor):
 
     def initialize_robot(self):
@@ -20,16 +25,20 @@ class AileenSupervisor(Supervisor):
         logging.info('[aileen_supervisor] :: moving to start position')
         self.command_pose(settings.START_LOCATION_1)
         self.wait_for_motion_complete()
-        self.command_pose(settings.START_LOCATION_2)
+        self.command_pose(settings.HOME_POSE)
         self.wait_for_motion_complete()
         logging.info('[aileen_supervisor] :: reached start position')
+        T = self._ur10Chain.forward_kinematics(self.pose_to_ikpy(settings.HOME_POSE))
+        self._home = T[0:3,3]
+        self._orientation = T[0:3,0:3]
+        print('Home XYZ: {}'.format(self._home))
+        print('Home RPY: {}'.format(self._orientation))
 
     def __init__(self):
         super(AileenSupervisor, self).__init__()
 
         self._root = self.getRoot()
         self._children = self._root.getField('children')
-        self._numNodes = self._children.getCount()
 
         logging.info("[aileen_supervisor] :: started supervisor control of the world")
 
@@ -53,7 +62,73 @@ class AileenSupervisor(Supervisor):
 
         self._world_thread = None
 
+        self._ur10Chain = Chain( links=[
+                            OriginLink(),
+                            URDFLink(name='shoulder_pan_joint',
+                                     translation_vector=[0,0,.1273],
+                                     orientation=[0,0,0],
+                                     rotation=[0,0,1]),
+                            URDFLink(name='shoulder_lift_joint',
+                                    translation_vector=[0, .220941, 0],
+                                    orientation=[0, 1.57, 0],
+                                    rotation=[0,1,0]),
+                            URDFLink(name='elbow_joint',
+                                    translation_vector=[0, -.1719, .612],
+                                    orientation=[0,0,0],
+                                    rotation=[0,1,0]),
+                            URDFLink(name='wrist_1_joint',
+                                    translation_vector=[0, 0, .5723],
+                                    orientation=[0, 1.57,0],
+                                    rotation=[0,1,0]),
+                            URDFLink(name='wrist_2_joint',
+                                    translation_vector=[0, .1149, 0],
+                                    orientation=[0,0,0],
+                                    rotation=[0,0,1]),
+                            URDFLink(name='wrist_3_joint',
+                                    translation_vector=[0,0,.1157],
+                                    orientation=[0,0,0],
+                                    rotation=[0,1,0]),
+                            URDFLink(name='ee',
+                                    translation_vector=[0, .0922,0],
+                                    orientation=[0,0,1.57],
+                                    rotation=[0,0,1])],
+                            active_links_mask=[True, True, True, True, True, True, True, True]
+                        )
+
         self.initialize_robot()
+        self.test_ikpy(n=10)
+
+    def pose_to_ikpy(self, joints):
+        j = [0]
+        for item in joints:
+            j.append(item)
+        j.append(0)
+        return j
+
+    def pose_from_ikpy(self, pose):
+        return pose[1:-1]
+
+    def find_pose(self, point):
+        """
+        Assumes point is only XYZ coord right now.  Assuming fixed orientation is correct.  can change in future
+        point should be a list: [X, Y, Z]
+        """
+        return self.pose_from_ikpy(self._ur10Chain.inverse_kinematics(to_transformation_matrix(point, self._orientation),initial_position=self.pose_to_ikpy(self.get_current_position())))
+
+    def go_to_point(self, point, wait=True):
+        """
+        point should be a list: [X, Y, Z]
+        """
+        pose = self.find_pose(point)
+        self.command_pose(pose)
+        if wait:
+            self.wait_for_motion_complete()
+
+    def get_current_position(self):
+        pose = list()
+        for i in range(len(self._motorNodes)):
+            pose.append(self._motorSensorNodes[i].getValue())
+        return pose
 
     def wait_for_motion_complete(self):
         while not self.check_in_position():
@@ -64,7 +139,6 @@ class AileenSupervisor(Supervisor):
             truth = list()
             for i in range(len(self._motorNodes)):
                 truth.append(abs(self._motorNodes[i].getTargetPosition() - self._motorSensorNodes[i].getValue()) < settings.IN_POS_THRESH)
-
             return all(truth)
         else:
             return abs(self._motorNodes[motor].getTargetPosition() - self._motorSensorNodes[motor].getValue()) < settings.IN_POS_THRESH
@@ -73,13 +147,61 @@ class AileenSupervisor(Supervisor):
         for i in range(len(pose)):
             self._motorNodes[i].setPosition(pose[i])
 
+    def print_status(self):
+        for i in range(len(self._motorNodes)):
+            print('MOTOR {}: POS: {} TAR: {}'.format(i,self._motorSensorNodes[i].getValue(),self._motorNodes[i].getTargetPosition()))
+        print('===================')
+
+    def transform_point_to_robot_frame(self, point):
+        """
+        The whole webots world is rotated 90 degrees for some reason.  To avoid breaking anything, I am working around this, but this should really be rectified at some point
+        """
+        newpoint = [x for x in point]
+        newpoint.append(1)
+        pArr = np.array(newpoint)
+        T1 = np.array([[1, 0, 0, 0],
+                    [0, 0, -1, 0],
+                    [0, 1, 0, 0],
+                    [0, 0, 0, 1]])
+        T2 = np.array([[0, -1, 0, 0],
+                    [1, 0, 0, 0],
+                    [0, 0, 1, 0],
+                    [0, 0, 0, 1]])
+        newpoint2 = np.matmul(T2, np.matmul(T1,pArr))
+        return list(newpoint2[0:3])
+
+    def indicate_object(self, point):
+        logging.info('[aileen supervisor] :: Indicating Object')
+        tPoint = self.transform_point_to_robot_frame(point)
+        above = [tPoint[0], tPoint[1], tPoint[2]+.2]
+        down = [tPoint[0], tPoint[1], tPoint[2]+.1]
+        self.go_to_point(above)
+        #self.print_status()
+        self.go_to_point(down)
+        #self.print_status()
+        self.go_to_point(above)
+        #self.print_status()
+        self.return_home()
+        #self.print_status()
+
+    def test_ikpy(self, n=5):
+        #generate faux object location, move to directly above it, move down, move up, move home
+        for i in range(n):
+            point = [np.random.random()*(settings.OBJECT_POSITION_MAX_X-settings.OBJECT_POSITION_MIN_X) + settings.OBJECT_POSITION_MIN_X,
+                    np.random.random()*(settings.OBJECT_POSITION_MAX_Y-settings.OBJECT_POSITION_MIN_Y) + settings.OBJECT_POSITION_MIN_Y,
+                    np.random.random()*(settings.OBJECT_POSITION_MAX_Z-settings.OBJECT_POSITION_MIN_Z) + settings.OBJECT_POSITION_MIN_Z]
+            self.indicate_object(tPoint)
+
+    def return_home(self):
+        self.command_pose(settings.HOME_POSE)
+        self.wait_for_motion_complete()
+
     def run_in_background(self):
         self._world_thread = Thread(target=self.run_world_loop)
         self._world_thread.start()
         logging.info("[aileen_supervisor] :: started world thread")
 
     def run_world_loop(self):
-        #Robot Initialization Here
         while self.step(settings.TIME_STEP) != -1:
             pass
 
@@ -248,7 +370,7 @@ class AileenSupervisor(Supervisor):
             object_node = self._children.getMFNode(i)
             object_name = object_node.getTypeName()
             if 'Solid' in object_name:
-                nodes_to_remove.append(object_node.getId())
+                nodes_to_remove.append(object_node.getId())point
 
         print len(nodes_to_remove)
         for i in range(0, len(nodes_to_remove)):

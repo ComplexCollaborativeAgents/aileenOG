@@ -31,12 +31,12 @@ CONCEPT_LEARNER_PORT = 8085
 ROBOT_PLATE_LOCATION = [-0.1, 0.2, 0]
 TIME_STEP = 32
 TEST_LOCATION = [0.771, 0.5610656650000001, -0.199]
-IN_POS_THRESH = .01
+IN_POS_THRESH = .001
 
-#Robot Info
+#Robot Config
 JOINT_NAMES = ['shoulder_pan_joint', 'shoulder_lift_joint', 'elbow_joint', 'wrist_1_joint', 'wrist_2_joint', 'wrist_3_joint']
 START_LOCATION_1 = [0,-2.3562, 2.3562, 0, 0, 0]
-START_LOCATION_2 = [1.57, -2.3562, 2.3562, -1.57, -1.57, 0]
+HOME_POSE = [1.57, -2.3562, 2.3562, -1.57, -1.57, 0]
 
 # Instructor
 OBJECT_POSITION_MAX_X = 0.855
