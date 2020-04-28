@@ -46,3 +46,7 @@ def run():
 
     root.after(1, update)
     root.mainloop()
+
+
+def log(line):
+    queue.put(line)
