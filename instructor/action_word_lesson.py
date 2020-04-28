@@ -19,12 +19,13 @@ class ActionWordLesson:
         self._distractors = distractors
         self._content = content
 
-        self._action_definitions_set = ActionWordLesson.get_action_definition_set()
         if self._description:
-            self._action = self._description['action']
+            self._action_definition = self._description
         else:
+            self._action_definitions_set = ActionWordLesson.get_action_definition_set()
             self._action = ActionWordLesson.randomizer.random_action(self._action_definitions_set.keys())
-        self._action_definition = self._action_definitions_set[self._action]
+            self._action_definition = self._action_definitions_set[self._action]
+
         self._initial_scene = AileenScene()
         self._scene_objects = OrderedDict()
         self._scene_relations = {}
@@ -38,22 +39,28 @@ class ActionWordLesson:
         logging.debug("[action_word_lesson] :: generating the initial scene for action word learning")
         objects = self._action_definition[settings.ACTION_DEF_OBJECTS]
 
-        if self._description:
-            for o, obj in zip(self._description['objects'], objects):
-                self._scene_objects[obj] = AileenObject.generate_object(o)
-        else:
-            if len(objects) > 0:
-                objs = AileenObject.generate_random_objects(len(objects))
-                for o, obj in zip(objs, objects):
-                    self._scene_objects[obj] = o
+        number_of_objects = len(objects)
+
+        for object_desc in objects:
+            if object_desc in self._description:
+                self._scene_objects[object_desc] = AileenObject.generate_object(self._description[object_desc])
+                number_of_objects = number_of_objects - 1
+
+        if number_of_objects > 0:
+            objs = AileenObject.generate_random_objects(number_of_objects)
+            for o, obj in zip(objs, objects):
+                self._scene_objects[obj] = o
 
         relations = self._action_definition[settings.ACTION_DEF_RELATIONS]
         if relations is not None and len(relations) > 0:
             for rel in relations:
                 self._scene_relations[rel] = SpatialWordLesson.get_spatial_configurations_set()[rel]
 
-        language_template = self._action_definition[settings.ACTION_DEF_LANGUAGE]
-        self._language = LanguageGenerator.generate_language_from_template(self._scene_objects, language_template)
+        if settings.ACTION_DEF_LANGUAGE in self._description:
+            language_template = self._action_definition[settings.ACTION_DEF_LANGUAGE]
+            self._language = LanguageGenerator.generate_language_from_template(self._scene_objects, language_template)
+        else:
+            self._language = self._content
         logging.debug("[action_word_lesson] :: generated language for action: {}".format(self._language))
 
     def generate_initial_state(self):
@@ -99,7 +106,7 @@ class ActionWordLesson:
             'interaction': {
                 'signal': self._signal,
                 'marker': settings.ACTION_LESSON_STATE_START,
-                'content': self._content if self._content is not None else self._language
+                'content': self._language
             }
         }
         self.advance_lesson_state()
@@ -222,7 +229,11 @@ class ActionWordLesson:
                 lesson.deliver_action_lesson_segment(world_server, agent_server)
                 logging.debug("[action_word_lesson] :: action lesson state is: {}".format(lesson._lesson_state))
 
-        lesson = ActionWordLesson()
+        lesson = ActionWordLesson(is_positive=None,
+                                  signal="inform",
+                                  description=None,
+                                  distractors=None,
+                                  content=None)
         lesson.deliver_action_reaction_test(world_server, agent_server)
 
     @staticmethod
