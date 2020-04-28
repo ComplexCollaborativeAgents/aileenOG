@@ -15,13 +15,15 @@ class Curriculum(object):
 
     def __next__(self):
         lesson_configuration = next(self.curriculum)
+        print lesson_configuration
 
         lesson_type = lesson_configuration['lesson-type']
         signal = lesson_configuration['signal']
 
         description = lesson_configuration.get('description', None)
         distractors = lesson_configuration.get('distractors', 0)
-        is_positive = True if lesson_configuration.get('is_positive', True) else False
+        is_positive = True if lesson_configuration.get('is_positive', "True") == "True" else False
+        print is_positive
         content = lesson_configuration.get('content', None)
 
         lesson = {}
