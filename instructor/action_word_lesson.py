@@ -42,7 +42,7 @@ class ActionWordLesson:
         number_of_objects = len(objects)
 
         for object_desc in objects:
-            if object_desc in self._description:
+            if self._description and object_desc in self._description:
                 self._scene_objects[object_desc] = AileenObject.generate_object(self._description[object_desc])
                 number_of_objects = number_of_objects - 1
 
@@ -56,11 +56,11 @@ class ActionWordLesson:
             for rel in relations:
                 self._scene_relations[rel] = SpatialWordLesson.get_spatial_configurations_set()[rel]
 
-        if settings.ACTION_DEF_LANGUAGE in self._description:
-            language_template = self._action_definition[settings.ACTION_DEF_LANGUAGE]
-            self._language = LanguageGenerator.generate_language_from_template(self._scene_objects, language_template)
-        else:
+        if self._description and self._content:
             self._language = self._content
+        else:
+           language_template = self._action_definition[settings.ACTION_DEF_LANGUAGE]
+           self._language = LanguageGenerator.generate_language_from_template(self._scene_objects, language_template)
         logging.debug("[action_word_lesson] :: generated language for action: {}".format(self._language))
 
     def generate_initial_state(self):
