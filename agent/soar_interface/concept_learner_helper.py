@@ -19,6 +19,7 @@ def process_concept_learner_request(commandId, concept_learner):
                     else:
                         if cl_child.GetAttribute() == "create":
                             ResultsHelper.record_processing_phase("cm")
+                            ResultsHelper.increase_create_concept_count()
                             return process_create_concept_command(cl_child, concept_learner)
                         else:
                             logging.error("[output_reader] :: concept learner does not implement this command")

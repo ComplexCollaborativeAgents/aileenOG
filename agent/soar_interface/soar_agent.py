@@ -9,6 +9,7 @@ from threading import Thread
 import input_writer
 import output_reader
 import settings
+from experiments.results_helper import ResultsHelper
 
 try:
     import Python_sml_ClientInterface as sml
@@ -201,11 +202,16 @@ class SoarAgent(object):
 
     def process_interaction(self, interaction_dictionary):
         logging.debug("[soar_agent] :: handling process_interaction request {}".format(interaction_dictionary))
+
+        if 'signal' in interaction_dictionary:
+            ResultsHelper.reset_create_concept_count()
+
         self._input_writer.set_interaction(interaction_dictionary)
         while self._output_reader._response is None:
             pass
         response = self._output_reader._response
         self._output_reader._response = None
+        response['create_concept_count'] = ResultsHelper.create_concept_count
         return response
 
     def delete_all_children(self, id):
