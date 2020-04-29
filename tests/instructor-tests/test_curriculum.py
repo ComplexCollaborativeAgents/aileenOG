@@ -62,3 +62,27 @@ def test_spatial():
 
     lesson = next(curriculum)
     assert len(lesson["scene"]) == 2
+
+def test_action():
+    curriculum = Curriculum(
+        [{
+            "comment": "preload visual concepts used in this example",
+            "lesson-type": "action-word",
+            "content": "move blue cone right of red cylinder",
+            "description": {
+                "objects": ["<obj1>", "<obj2>"],
+                "relations": ["right-of"],
+                "action": "move",
+                "initial_configuration": [],
+                "trace-actions": [
+                    {"name": "pick-up", "argument": "<obj1>"},
+                    {"name": "place", "argument1": "<obj1>", "argument2": "<obj2>", "relation": "right-of"}],
+                "<obj1>": {"color": "blue", "shape": "cone"},
+                "<obj2>": {"color": "red", "shape": "cylinder"}
+            },
+            "signal": "inform",
+            "distractors": 0
+            }]
+    )
+    lesson = next(curriculum)
+    assert len(lesson['object'].get_next_segment()['scene']) == 2

@@ -5,7 +5,7 @@
 
 sp {verify-action*elaborate*action
     (state <s>    ^name verify-action
-                  ^superstate.operator.action <act>)
+                  ^grounding.action <act>)
 -->
     (<s>    ^action <act>)
     }

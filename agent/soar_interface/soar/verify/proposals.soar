@@ -37,11 +37,11 @@ sp {verify*propose*verify-action-ref
                   ^grounding <g>
                   -^verified <act-ref>
                   -^not-verified <act-ref>)
-    (<tv>    ^type act-ref
+    (<tv>    ^type action-ref
              ^ref <act-ref>)
 -->
     (<s>    ^operator <op> + =)
-    (<op>    ^name verify-act-ref
+    (<op>    ^name verify-action
              ^ref <act-ref>)
     }
 

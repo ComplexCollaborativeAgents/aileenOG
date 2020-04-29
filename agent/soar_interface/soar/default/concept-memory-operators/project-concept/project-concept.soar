@@ -1,0 +1,42 @@
+##!
+# @file
+#
+# @created smohan 20200416
+
+
+sp {project-concept*write-to-output-link
+    (state <s>    ^operator <op>
+                  ^io.output-link <ol>)
+    (<op>    ^name project-concept
+             ^concept <con>
+             ^facts <facts>)
+-->
+    (<ol>    ^concept-memory.project <project>)
+    (<project>  ^facts <facts>
+                ^concept <con>)
+    }
+
+sp {project-concept*read-results*success
+    (state <s>    ^operator <op>
+                  ^io.input-link <il>)
+    (<op>    ^name project-concept
+             ^facts <facts>
+             ^concept <con>)
+    (<il>    ^concept-memory.result <res>)
+    (<res>    ^status success
+              ^facts <facts>)
+-->
+    (<s>    ^retrieved <facts>)
+    }
+
+sp {project-concept*read-results*failure
+    (state <s>    ^operator <op>
+                  ^io.input-link <il>)
+    (<op>    ^name project-concept
+             ^facts <facts>
+             ^concept <con>)
+    (<il>    ^concept-memory.result <res>)
+    (<res>    ^status failure)
+-->
+    (<s>    ^retrieved failure)
+    }
