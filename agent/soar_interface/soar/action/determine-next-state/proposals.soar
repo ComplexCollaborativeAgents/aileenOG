@@ -1,0 +1,33 @@
+##!
+# @file
+#
+# @created smohan 20200416
+
+sp {determine-next-state*propose*select-scene-subset
+    (state <s>    ^name determine-next-state
+                  -^scene <scene>)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name select-scene-subset)
+    }
+
+sp {determine-next-state*propose*collect-facts
+    (state <s>    ^name determine-next-state
+                 -^facts <facts>
+                  ^scene <scene>)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name translate-to-facts
+             ^trace <scene>)
+    }
+
+sp {determine-next-state*propose*project-concept
+    (state <s>    ^name determine-next-state
+                  ^concept <con>
+                  ^facts <facts>)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name project-concept
+             ^concept <con>
+             ^facts <facts>)
+    }

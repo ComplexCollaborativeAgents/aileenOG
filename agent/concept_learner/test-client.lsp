@@ -6,7 +6,7 @@
 ;;;;   Created: November 13, 2019 16:35:48
 ;;;;   Purpose: 
 ;;;; ----------------------------------------------------------------------------
-;;;;  Modified: Monday, April 20, 2020 at 17:34:16 by klenk
+;;;;  Modified: Friday, April 24, 2020 at 15:04:42 by klenk
 ;;;; ----------------------------------------------------------------------------
 
 (load "server.lsp")
@@ -638,6 +638,119 @@
 	
   
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; testing out minimal ascension in SAGE
+
+;; right is n
+
+(defparameter *action-test-case-16*
+  'd::((rMove Obj16B (rRight Obj16B Obj16A))
+       (holdsIn Time16_0 (isa Obj16A CVGreen))
+       (holdsIn Time16_0 (isa Obj16A CVCylinder))
+       (holdsIn Time16_0 (isa Obj16B CVGreen))
+       (holdsIn Time16_0 (isa Obj16B CVBox))
+       (holdsIn Time16_0 (isa Obj16B RBox))
+       (holdsIn Time16_0 (w Obj16A Obj16B))
+       (holdsIn Time16_0 (dc Obj16A Obj16B))
+       (holdsIn Time16_0 (dc Obj16B Obj16A))
+       (holdsIn Time16_1 (isa Obj16A CVGreen))
+       (holdsIn Time16_1 (isa Obj16A CVCylinder))
+       (holdsIn Time16_1 (isa Obj16B CVGreen))
+       (holdsIn Time16_1 (isa Obj16B CVBox))
+       (holdsIn Time16_1 (isa Obj16B RBox))
+       (holdsIn Time16_1 (holdsInHand Aileen1 Obj16B))
+       ;;(holdsIn Time16_1 (dc Obj16A Obj16B)) ;;Do we just remove all spatial relations?
+       (holdsIn Time16_2 (isa Obj16A CVGreen))
+       (holdsIn Time16_2 (isa Obj16A CVCylinder))
+       (holdsIn Time16_2 (isa Obj16B CVGreen))
+       (holdsIn Time16_2 (isa Obj16B CVBox))
+       (holdsIn Time16_2 (isa Obj16B RBox))
+       (holdsIn Time16_2 (n Obj16B Obj16A))
+       (holdsIn Time16_2 (dc Obj16B Obj16A))
+       (holdsIn Time16_2 (dc Obj16A Obj16B))
+       (holdsIn Time16_2 (rRight Obj16B Obj16A))
+       (isa Time16_0 AileenActionStartTime)
+       (startsAfterEndingOf Time16_1 Time16_0)
+       (startsAfterEndingOf Time16_2 Time16_1) ;;Do we want to be explicit about T2 T0 relation, I think not
+       ))
+
+
+(defparameter *action-test-case-17-proj*
+  'd::((rMove Obj17B (rOn Obj17B Obj17A))
+       (holdsIn Time17_0 (isa Obj17A CVGreen))
+       (holdsIn Time17_0 (isa Obj17A CVCylinder))
+       (holdsIn Time17_0 (isa Obj17B CVGreen))
+       (holdsIn Time17_0 (isa Obj17B CVBox))
+       (holdsIn Time17_0 (isa Obj17B RBox))
+       (holdsIn Time17_0 (w Obj17A Obj17B))
+       (holdsIn Time17_0 (dc Obj17A Obj17B))
+       (holdsIn Time17_0 (dc Obj17B Obj17A))
+       (isa Time17_0 AileenActionStartTime)
+       ))
+
+
+;; on is east and po
+(defparameter *action-test-case-17-gen*
+  'd::((rMove Obj17B (rOn Obj17B Obj17A))
+       (holdsIn Time17_0 (isa Obj17A CVGreen))
+       (holdsIn Time17_0 (isa Obj17A CVCylinder))
+       (holdsIn Time17_0 (isa Obj17B CVGreen))
+       (holdsIn Time17_0 (isa Obj17B CVBox))
+       (holdsIn Time17_0 (isa Obj17B RBox))
+       (holdsIn Time17_0 (w Obj17A Obj17B))
+       (holdsIn Time17_0 (dc Obj17A Obj17B))
+       (holdsIn Time17_0 (dc Obj17B Obj17A))
+       (holdsIn Time17_1 (isa Obj17A CVGreen))
+       (holdsIn Time17_1 (isa Obj17A CVCylinder))
+       (holdsIn Time17_1 (isa Obj17B CVGreen))
+       (holdsIn Time17_1 (isa Obj17B CVBox))
+       (holdsIn Time17_1 (isa Obj17B RBox))
+       (holdsIn Time17_1 (holdsInHand Aileen1 Obj17B))
+       ;;(holdsIn Time17_1 (dc Obj17A Obj17B)) ;;Do we just remove all spatial relations?
+       (holdsIn Time17_2 (isa Obj17A CVGreen))
+       (holdsIn Time17_2 (isa Obj17A CVCylinder))
+       (holdsIn Time17_2 (isa Obj17B CVGreen))
+       (holdsIn Time17_2 (isa Obj17B CVBox))
+       (holdsIn Time17_2 (isa Obj17B RBox))
+       (holdsIn Time17_2 (e Obj17B Obj17A))
+       (holdsIn Time17_2 (po Obj17B Obj17A))
+       (holdsIn Time17_2 (po Obj17A Obj17B))
+       (holdsIn Time17_2 (rOn Obj17B Obj17A))
+       (isa Time17_0 AileenActionStartTime)
+       (startsAfterEndingOf Time17_1 Time17_0)
+       (startsAfterEndingOf Time17_2 Time17_1) ;;Do we want to be explicit about T2 T0 relation, I think not
+       ))
+
+(defun test-minmimal-ascension-action (&aux res)
+  (when clean? (restore-init))
+  (setq res (call-test-server
+	     "create_reasoning_predicate"
+	     (pairlis '("predicate")
+		      '("rRight"))))
+  (assert (equal (cdr (assoc :GPOOL res))
+		 "rRightMt"))
+  (setq res (call-test-server
+	     "create_reasoning_predicate"
+	     (pairlis '("predicate")
+		      '("rOn"))))
+  (assert (equal (cdr (assoc :GPOOL res))
+		 "rOnMt"))
+  (setq res (call-test-server
+	     "create_reasoning_action"
+	     (pairlis '("action" "arity")
+		      '("rMove" 2))))
+  (assert (equal (cdr (assoc :GPOOL res))
+		 "rMoveMt"))
+
+  (setq res (call-test-server "store"
+			      (pairlis '("facts" "context" "concept")
+				       (symbols->strs *action-test-case-12*)
+				       "Test0" ;;Id
+				       "RRed")))
+  (assert (= (cdr (assoc :NUM-EXAMPLES res)) 1))
+  (assert (= (cdr (assoc :NUM-GENERALIZATIONS res)) 0))
+  
+  )
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

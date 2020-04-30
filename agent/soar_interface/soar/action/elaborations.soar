@@ -12,12 +12,14 @@ sp {action*elaborate*state
     (<s>    ^segment <seg>)
     }
 
-sp {action*elaborate*state
+sp {action*elaborate*state*action
     (state <s>    ^name action
                   ^segment <seg>)
-    (<seg>    ^grounding.action <act>)
+    (<seg>    ^grounding <g>)
+    (<g>    ^action <act>)
 -->
-    (<s>    ^action <act>)
+    (<s>    ^action <act>
+            ^grounding <g>)
     }
 
 sp {action*complete*action
