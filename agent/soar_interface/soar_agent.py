@@ -205,6 +205,7 @@ class SoarAgent(object):
 
         if 'signal' in interaction_dictionary:
             ResultsHelper.reset_create_concept_count()
+            ResultsHelper.reset_store_instance_count()
 
         self._input_writer.set_interaction(interaction_dictionary)
         while self._output_reader._response is None:
@@ -212,6 +213,7 @@ class SoarAgent(object):
         response = self._output_reader._response
         self._output_reader._response = None
         response['create_concept_count'] = ResultsHelper.create_concept_count
+        response['store_instance_count'] = ResultsHelper.store_instance_count
         return response
 
     def delete_all_children(self, id):

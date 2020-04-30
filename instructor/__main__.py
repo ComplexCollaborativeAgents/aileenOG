@@ -54,8 +54,7 @@ def run_curriculum(json_path):
             agent_response = agent_server.process_interaction(lesson['interaction'])
             logging.info("[aileen_instructor] :: received from agent {}".format(agent_response))
             evaluation = lesson['object'].evaluate_agent_response(agent_response)
-            gui.log('Agent: ' + agent_response['status'] + ' and learning occurred ' +
-                    str(agent_response['create_concept_count']) + ' time(s)')
+            gui.log('Agent: ' + agent_response['status'] + '. ' + str(agent_response['create_concept_count']) + ' new concept(s) created' + ' and ' + str(agent_response['store_instance_count']) + ' example(s) stored.')
             agent_response = agent_server.process_interaction(evaluation)
             logging.info("[aileen_instructor] :: provided feedback to agent")
 

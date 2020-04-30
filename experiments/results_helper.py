@@ -8,6 +8,7 @@ class ResultsHelper:
 
     gfilename = settings.RUN_DATA_FILE_PATH
     create_concept_count = 0
+    store_instance_count = 0
 
     @staticmethod
     def increase_create_concept_count():
@@ -16,6 +17,14 @@ class ResultsHelper:
     @staticmethod
     def reset_create_concept_count():
         ResultsHelper.create_concept_count = 0
+
+    @staticmethod
+    def reset_store_instance_count():
+        ResultsHelper.store_instance_count = 0
+
+    @staticmethod
+    def increase_store_instance_count():
+        ResultsHelper.store_instance_count += 1
 
     @staticmethod
     def set_do_record(state):
