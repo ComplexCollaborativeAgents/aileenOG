@@ -203,9 +203,8 @@ class SoarAgent(object):
     def process_interaction(self, interaction_dictionary):
         logging.debug("[soar_agent] :: handling process_interaction request {}".format(interaction_dictionary))
 
-        if 'signal' in interaction_dictionary:
-            ResultsHelper.reset_create_concept_count()
-            ResultsHelper.reset_store_instance_count()
+        ResultsHelper.reset_create_concept_count()
+        ResultsHelper.reset_store_instance_count()
 
         self._input_writer.set_interaction(interaction_dictionary)
         while self._output_reader._response is None:

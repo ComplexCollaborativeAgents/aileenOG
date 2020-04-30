@@ -54,7 +54,7 @@ def run():
 
     combo = TextScrollCombo(root)
     combo.pack(fill="both", expand=True)
-    combo.config(width=600, height=600)
+    combo.config(width=800, height=800)
 
     def update():
         while not queue.empty():
