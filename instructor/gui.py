@@ -18,7 +18,9 @@ class TextScrollCombo(Tkinter.Frame):
         self.txt = Tkinter.Text(self, state=Tkinter.DISABLED)
         self.txt.grid(row=0, column=0, sticky="nsew")
         self.txt.config(undo=True, wrap="word", font=("Ubuntu", 16))
-        self.txt.tag_configure("signal", foreground="red")
+        self.txt.tag_configure("signal", foreground="blue")
+        self.txt.tag_configure("success", foreground="green")
+        self.txt.tag_configure("failure", foreground="red")
 
         # create a Scrollbar and associate it with txt
         scrollb = Tkinter.Scrollbar(self, command=self.txt.yview)
@@ -33,13 +35,18 @@ class TextScrollCombo(Tkinter.Frame):
         self._highlight(line)
 
     def _highlight(self, line):
-        signals = ["inform", "verify"]
-        for signal in signals:
-            if signal in line:
+        word_color = {
+            "inform": "signal",
+            "verify": "signal",
+            "success": "success",
+            "failure": "failure"
+        }
+        for word, color in word_color.items():
+            if word in line:
                 column = int(self.txt.index('end-2c').split('.')[0])
-                start = line.index(signal)
-                end = start + len(signal)
-                self.txt.tag_add("signal", "{}.{}".format(column, start), "{}.{}".format(column, end))
+                start = line.index(word)
+                end = start + len(word)
+                self.txt.tag_add(color, "{}.{}".format(column, start), "{}.{}".format(column, end))
 
 
 def run():
