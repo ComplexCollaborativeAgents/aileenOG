@@ -191,7 +191,7 @@ class ActionWordLesson:
         if self._lesson_state == settings.ACTION_LESSON_STATE_END:
             logging.debug("[action_word_lesson] :: communicating the terminal state configuration of action")
             segment = self.get_next_segment()
-            gui.log("[instructor] {}".format(segment['interaction']))
+            gui.log("[instructor] end of lesson")
             agent_response = agent_server.process_interaction({'marker':'end'})
             gui.log("[agent] {}".format(agent_response))
             return agent_response
