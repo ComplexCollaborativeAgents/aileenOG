@@ -8,6 +8,7 @@ from aileen_scene import AileenScene
 from spatial_word_lesson import SpatialWordLesson
 from language_generator import LanguageGenerator
 from collections import OrderedDict
+from instructor import gui
 
 
 class ActionWordLesson:
@@ -164,26 +165,35 @@ class ActionWordLesson:
         if self._lesson_state == settings.ACTION_LESSON_STATE_START:
             logging.debug("[action_word_lesson] :: setting up the initial state configuration of action")
             segment = self.get_next_segment()
+            gui.log("[instructor] {}: {}: {}".format(segment['interaction']['signal'],
+                                                     segment['interaction']['content'],
+                                                     segment['interaction']['marker']))
             scene_acknowledgement = world_server.set_scene(
                 {'configuration': segment['scene'],
                  'label': "{}: {}: {}".format(segment['interaction']['signal'], segment['interaction']['content'],
                                               segment['interaction']['marker'])})
             agent_response = agent_server.process_interaction(segment['interaction'])
+            gui.log("[agent] {}".format(agent_response))
             return agent_response
 
         if self._lesson_state == settings.ACTION_LESSON_STATE_TRACE:
             logging.debug("[action_word_lesson] :: providing the next step in action trace")
             segment = self.get_next_segment()
             logging.debug("[action_word_lesson] :: received action trace {}".format(segment))
+            gui.log("[instructor] {}".format(segment['interaction']))
+            agent_response = None
             if segment['action'] is not None:
                 scene_acknowledgement = world_server.apply_action(segment['action'])
                 agent_response = agent_server.process_interaction(segment['interaction'])
+                gui.log("[agent] {}".format(agent_response))
             return agent_response
 
         if self._lesson_state == settings.ACTION_LESSON_STATE_END:
             logging.debug("[action_word_lesson] :: communicating the terminal state configuration of action")
             segment = self.get_next_segment()
+            gui.log("[instructor] {}".format(segment['interaction']))
             agent_response = agent_server.process_interaction({'marker':'end'})
+            gui.log("[agent] {}".format(agent_response))
             return agent_response
 
         if self._lesson_state == settings.ACTION_LESSON_STATE_BAD:

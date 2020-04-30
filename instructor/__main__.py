@@ -49,13 +49,12 @@ def run_curriculum(json_path):
                 {'configuration': lesson['scene'], 'label': lesson['interaction']['content']})
 
             logging.info("[aileen_instructor] :: received from world {}".format(scene_acknowledgement))
-            gui.log('Instructor: ' + lesson['interaction']['signal'] + ' ' +
-                          lesson['interaction']['content'])
+            gui.log('[instructor] {}: {}'.format(lesson['interaction']['signal'], lesson['interaction']['content']))
             agent_response = agent_server.process_interaction(lesson['interaction'])
             logging.info("[aileen_instructor] :: received from agent {}".format(agent_response))
             evaluation = lesson['object'].evaluate_agent_response(agent_response)
-            gui.log('Agent: ' + agent_response['status'] + ' and learning occurred ' +
-                    str(agent_response['create_concept_count']) + ' time(s)')
+            gui.log('[agent] {} - {} learning(s) occurred'.format(agent_response['status'],
+                                                                  agent_response['create_concept_count']))
             agent_response = agent_server.process_interaction(evaluation)
             logging.info("[aileen_instructor] :: provided feedback to agent")
 
