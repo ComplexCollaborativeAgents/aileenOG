@@ -8,6 +8,7 @@ from aileen_scene import AileenScene
 from spatial_word_lesson import SpatialWordLesson
 from language_generator import LanguageGenerator
 from collections import OrderedDict
+from instructor import gui
 
 
 class ActionWordLesson:
@@ -19,12 +20,13 @@ class ActionWordLesson:
         self._distractors = distractors
         self._content = content
 
-        self._action_definitions_set = ActionWordLesson.get_action_definition_set()
         if self._description:
-            self._action = self._description['action']
+            self._action_definition = self._description
         else:
+            self._action_definitions_set = ActionWordLesson.get_action_definition_set()
             self._action = ActionWordLesson.randomizer.random_action(self._action_definitions_set.keys())
-        self._action_definition = self._action_definitions_set[self._action]
+            self._action_definition = self._action_definitions_set[self._action]
+
         self._initial_scene = AileenScene()
         self._scene_objects = OrderedDict()
         self._scene_relations = {}
@@ -38,22 +40,28 @@ class ActionWordLesson:
         logging.debug("[action_word_lesson] :: generating the initial scene for action word learning")
         objects = self._action_definition[settings.ACTION_DEF_OBJECTS]
 
-        if self._description:
-            for o, obj in zip(self._description['objects'], objects):
-                self._scene_objects[obj] = AileenObject.generate_object(o)
-        else:
-            if len(objects) > 0:
-                objs = AileenObject.generate_random_objects(len(objects))
-                for o, obj in zip(objs, objects):
-                    self._scene_objects[obj] = o
+        number_of_objects = len(objects)
+
+        for object_desc in objects:
+            if self._description and object_desc in self._description:
+                self._scene_objects[object_desc] = AileenObject.generate_object(self._description[object_desc])
+                number_of_objects = number_of_objects - 1
+
+        if number_of_objects > 0:
+            objs = AileenObject.generate_random_objects(number_of_objects)
+            for o, obj in zip(objs, objects):
+                self._scene_objects[obj] = o
 
         relations = self._action_definition[settings.ACTION_DEF_RELATIONS]
         if relations is not None and len(relations) > 0:
             for rel in relations:
                 self._scene_relations[rel] = SpatialWordLesson.get_spatial_configurations_set()[rel]
 
-        language_template = self._action_definition[settings.ACTION_DEF_LANGUAGE]
-        self._language = LanguageGenerator.generate_language_from_template(self._scene_objects, language_template)
+        if self._description and self._content:
+            self._language = self._content
+        else:
+           language_template = self._action_definition[settings.ACTION_DEF_LANGUAGE]
+           self._language = LanguageGenerator.generate_language_from_template(self._scene_objects, language_template)
         logging.debug("[action_word_lesson] :: generated language for action: {}".format(self._language))
 
     def generate_initial_state(self):
@@ -99,7 +107,7 @@ class ActionWordLesson:
             'interaction': {
                 'signal': self._signal,
                 'marker': settings.ACTION_LESSON_STATE_START,
-                'content': self._content if self._content is not None else self._language
+                'content': self._language
             }
         }
         self.advance_lesson_state()
@@ -164,26 +172,35 @@ class ActionWordLesson:
         if self._lesson_state == settings.ACTION_LESSON_STATE_START:
             logging.debug("[action_word_lesson] :: setting up the initial state configuration of action")
             segment = self.get_next_segment()
+            gui.log("[instructor] {}: {}: {}".format(segment['interaction']['signal'],
+                                                     segment['interaction']['content'],
+                                                     segment['interaction']['marker']))
             scene_acknowledgement = world_server.set_scene(
                 {'configuration': segment['scene'],
                  'label': "{}: {}: {}".format(segment['interaction']['signal'], segment['interaction']['content'],
                                               segment['interaction']['marker'])})
             agent_response = agent_server.process_interaction(segment['interaction'])
+            gui.log("[agent] {}".format(agent_response))
             return agent_response
 
         if self._lesson_state == settings.ACTION_LESSON_STATE_TRACE:
             logging.debug("[action_word_lesson] :: providing the next step in action trace")
             segment = self.get_next_segment()
             logging.debug("[action_word_lesson] :: received action trace {}".format(segment))
+            gui.log("[instructor] {}".format(segment['interaction']))
+            agent_response = None
             if segment['action'] is not None:
                 scene_acknowledgement = world_server.apply_action(segment['action'])
                 agent_response = agent_server.process_interaction(segment['interaction'])
+                gui.log("[agent] {}".format(agent_response))
             return agent_response
 
         if self._lesson_state == settings.ACTION_LESSON_STATE_END:
             logging.debug("[action_word_lesson] :: communicating the terminal state configuration of action")
             segment = self.get_next_segment()
+            gui.log("[instructor] end of lesson")
             agent_response = agent_server.process_interaction({'marker':'end'})
+            gui.log("[agent] {}".format(agent_response))
             return agent_response
 
         if self._lesson_state == settings.ACTION_LESSON_STATE_BAD:
@@ -199,17 +216,35 @@ class ActionWordLesson:
              'label': "{}:{}".format(segment['interaction']['signal'], segment['interaction']['content'])})
         agent_response = agent_server.process_interaction(segment['interaction'])
 
+    def evaluate_agent_response(self, agent_response):
+        if self._is_positive:
+            if agent_response['status'] == 'success':
+                return {'signal':'correct', 'score':1}
+            else:
+                return {'signal':'incorrect', 'score':0}
+        else:
+            if agent_response['status'] == 'failure':
+                return {'signal': 'correct', 'score': '0'}
+
     @staticmethod
     def administer_curriculum(world_server, agent_server):
-        while True:
+        number_of_exemplars = 3
+        for i in range(0,number_of_exemplars):
             raw_input("Press any key to generate the next action word lesson...")
             lesson = ActionWordLesson()
-            # lesson.deliver_action_reaction_test(world_server, agent_server)
+
             logging.info("[action_word_lesson] :: generated a lesson for new action word")
             while lesson._lesson_state is not settings.ACTION_LESSON_STATE_COMPLETE:
                 raw_input("Press any key to deliver the next action lesson segment...")
                 lesson.deliver_action_lesson_segment(world_server, agent_server)
                 logging.debug("[action_word_lesson] :: action lesson state is: {}".format(lesson._lesson_state))
+
+        lesson = ActionWordLesson(is_positive=None,
+                                  signal="inform",
+                                  description=None,
+                                  distractors=None,
+                                  content=None)
+        lesson.deliver_action_reaction_test(world_server, agent_server)
 
     @staticmethod
     def get_action_definition_set():

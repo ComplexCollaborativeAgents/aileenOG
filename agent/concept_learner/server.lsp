@@ -6,7 +6,7 @@
 ;;;;   Created: November 13, 2019 16:14:37
 ;;;;   Purpose: 
 ;;;; ----------------------------------------------------------------------------
-;;;;  Modified: Thursday, March 19, 2020 at 14:09:26 by klenk
+;;;;  Modified: Sunday, April 26, 2020 at 07:20:10 by klenk
 ;;;; ----------------------------------------------------------------------------
 
 (in-package :cl-user)
@@ -91,7 +91,7 @@
   (let* ((json (cl-json:decode-json-from-string str))
 	 (symbol (str->symbols (cdr (assoc :SYMBOL json)))))
     (cond (symbol
-	   (format t "Creating Reasoning Symbol ~A~%" symbol)
+	   (format t "Creating Reasoning Symbol ~A~%" str)
 	   (multiple-value-bind (num gpool)
 	       (create-reasoning-symbol symbol)
 	     (cl-json:encode-json-alist-to-string (pairlis '("numSymbols" "gpool")
@@ -110,7 +110,7 @@
 	 (symbol (str->symbols (cdr (assoc :PREDICATE json))))
 	 )
     (cond (symbol
-	   (format t "Creating Reasoning Predicate ~A~%" symbol)
+	   (format t "Creating Reasoning Predicate ~A~%" str)
 	   (multiple-value-bind (num gpool)
 	       (create-reasoning-predicate symbol 2)
 	     (cl-json:encode-json-alist-to-string
@@ -129,7 +129,7 @@
 	   (arity (cdr (assoc :ARITY json)))
 	   )
     (cond ((and symbol arity)
-	   (format t "Creating Reasoning Action  ~A~%" symbol)
+	   (format t "Creating Reasoning Action  ~A~%" str)
 	   (multiple-value-bind (num gpool)
 	       (create-reasoning-action symbol arity) 
 	     (cl-json:encode-json-alist-to-string
@@ -236,7 +236,7 @@
            (remove-facts-from-case context)
            ;; Store facts in context and match query.
            (let ((cis (project-state-for-action facts context  action)))
-             (format t "Found candidate inferences  ~A~%" cis)
+             (format t "~%Found candidate inferences  ~A~%" cis)
              (cl-json:encode-json-alist-to-string
               (pairlis '("cis")
                        (list (symbols->strs cis)

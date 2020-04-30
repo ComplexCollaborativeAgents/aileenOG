@@ -9,3 +9,5 @@ source "translate-to-facts/load.soar"
 source "query-concept-memory/load.soar"
 
 source "store-in-concept-memory.soar"
+
+source "project-concept/load.soar"

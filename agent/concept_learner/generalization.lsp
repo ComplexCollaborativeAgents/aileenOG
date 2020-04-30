@@ -6,7 +6,7 @@
 ;;;;   Created: November  6, 2019 14:54:11
 ;;;;   Purpose: 
 ;;;; ----------------------------------------------------------------------------
-;;;;  Modified: Monday, April 20, 2020 at 16:25:52 by klenk
+;;;;  Modified: Monday, April 27, 2020 at 11:32:54 by klenk
 ;;;; ----------------------------------------------------------------------------
 
 (in-package :aileen)
@@ -184,30 +184,7 @@
 	 (objs
 	  (remove-if-not
 	   #'(lambda (obj)
-	       (remove-facts-from-case `(d::MinimalCaseFromMtFn ,obj ,context))
-	       (fire:clear-dgroup-caches)	       
-	       (fire:tell-it `(d::constructCaseInWM (d::MinimalCaseFromMtFn ,obj ,context)))
-	       (fire:tell-it `(d::copyWMCaseToKB (d::MinimalCaseFromMtFn ,obj ,context)
-						 (d::MinimalCaseFromMtFn ,obj ,context)))
-	       (let ((ci-found? (fire:ask-it
-		      `(d::reverseCIsAllowed
-			(d::and
-			 (d::sageSelect (d::MinimalCaseFromMtFn ,obj ,context)
-					,gpool ?target ?mapping)
-			 (d::reverseCandidateInferenceOf ?ci ?mapping)
-			 (d::candidateInferenceContent ?ci (d::isa ,obj ,collection))))
-		      :context gpool :response '?target)))
-		 (multiple-value-bind (rbrowse full url) (rbrowse::browse-sme sme::*sme*)
-		   (declare (ignore url rbrowse))
-		   (format t "~% rbrowse-sme: ~A base:~A target: ~A url: ~A"
-			   sme::*sme*
-			   `(d::MinimalCaseFromMtFn ,obj ,context)
-			   ci-found?
-			   full))
-		 (when ci-found?
-		   (match-score-exceeds-threshold?
-		    `(d::MinimalCaseFromMtFn ,obj ,context)
-		    (car ci-found?) :inference-rel collection))))
+	       (match-query-against-gpool context gpool `(d::isa ,obj ,collection)))
 	 (reverse (objs-in-context context)))))
     (mapcar #'(lambda (obj) (list 'd::isa obj (third pattern))) objs)))
 
@@ -324,6 +301,8 @@
   ;;; Union of all the minimal case fns
   (cond ((null objs) ;; no objs, in event cases
 	 (list 'd::KBCaseFn context))
+	((= (length objs) 1)
+	 (list 'd::MinimalCaseFromMtFn (car objs) context))
 	(t 
 	 (cons 'd::CaseUnionFn
 	       (mapcar #'(lambda (obj)
@@ -377,10 +356,14 @@
 	     ;; The query above should return the score of the best mapping that includes
 	     ;; the pattern in the reverse candidate inference
 	     (match-score-exceeds-threshold? case-term (car ci-found?)
-					     :inference-rel (car pattern))) ;;This used to be aileen-symbols-in-patter
+					     :inference-rel
+					     (if (eql (car pattern) 'd::isa)
+						 (third pattern)
+						 (car pattern)))) ;;This used to be aileen-symbols-in-patter
 	    ((and (not repeat?)
-		  (sme:mappings sme::*sme*)
-		  (= (sme:score (car (sme:mappings sme::*sme*))) 0))
+		  (or (and (sme:mappings sme::*sme*)
+			   (= (sme:score (car (sme:mappings sme::*sme*))) 0))
+		      (not (sme:mappings sme::*sme*))))
 	     (format t "~% Strange bug of mapping with a score of 0 that is corrected with a repeated call")
 	     (match-query-against-gpool context gpool pattern t))
 	    (t nil)
@@ -409,14 +392,24 @@
 
 
 (defun determine-state-correspondences (context gpool)
-  (assert (= (length (fire:ask-it `(d::gpoolGeneralization ,gpool ?x) :response '?x)) 1))
-  (let* ((generalization (car (fire:ask-it `(d::gpoolGeneralization ,gpool ?x) :response '?x)))
-	 (init-probe (car (fire::ask-it `d::(isa ?x AileenActionStartTime)
-					:context context :response `d::?x)))
-	 (init-gen (car (fire::ask-it `d::(isa ?x AileenActionStartTime)
-				      :context generalization :response `d::?x))))
-    (assert (and init-probe init-gen))
-    (list (list init-probe init-gen ))))
+  ;; if there is one generalization
+  (cond ((= (length (fire:ask-it `(d::gpoolGeneralization ,gpool ?x) :response '?x)) 1)
+	 (let* ((generalization (car (fire:ask-it `(d::gpoolGeneralization ,gpool ?x) :response '?x)))
+		(init-probe (car (fire::ask-it `d::(isa ?x AileenActionStartTime)
+					       :context context :response `d::?x)))
+		(init-gen (car (fire::ask-it `d::(isa ?x AileenActionStartTime)
+					     :context generalization :response `d::?x))))
+	   (assert (and init-probe init-gen))
+	   (list (list init-probe init-gen ))))
+	((= (length (fire:ask-it `(d::gpoolExample ,gpool ?x) :response '?x)) 1)
+	 (let* ((example (car (fire:ask-it `(d::gpoolExample ,gpool ?x) :response '?x)))
+		(init-probe (car (fire::ask-it `d::(isa ?x AileenActionStartTime)
+					       :context context :response `d::?x)))
+		(init-gen (car (fire::ask-it `d::(isa ?x AileenActionStartTime)
+					     :context example :response `d::?x))))
+	   (assert (and init-probe init-gen))
+	   (list (list init-probe init-gen ))))
+	(t (error "expected state of gpool is either with a single example or a single generalization"))))
 
 
 (defparameter *constraints-mt* 'd::ProjectionConstraintsMt)
@@ -451,6 +444,9 @@
 		:context gpool :response '?ci-context)))
       ;; Should we verify anything?
       ;; What kind of score should be required?
+      (multiple-value-bind (rbrowse full url) (rbrowse::browse-wm)
+	(declare (ignore url rbrowse))
+	(format t "~% rbrowse-wm after project query: ~A" full))
       (multiple-value-bind (rbrowse full url) (rbrowse::browse-sme sme::*sme*)
 	(declare (ignore url rbrowse))
 	(format t "~% rbrowse-sme: ~A base:~A target: ~A url: ~A"

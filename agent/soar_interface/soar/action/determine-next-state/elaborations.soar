@@ -1,0 +1,38 @@
+##!
+# @file
+#
+# @created smohan 20200416
+
+
+sp {determine-next-state*elaborate*state*grounding
+    (state <s>    ^name determine-next-state
+                  ^superstate.operator <sop>)
+    (<sop>    ^name determine-next-state
+              ^grounding <g>)
+-->
+    (<s>    ^grounding <g>)
+    }
+
+sp {determine-next-state*elaborate*state*action
+    (state <s>    ^name determine-next-state
+                  ^superstate.operator <sop>)
+    (<sop>    ^action <action>)
+-->
+    (<s>    ^action <action>)
+    }
+
+sp {determine-next-state*elaborate*concept
+    (state <s>    ^name determine-next-state
+                  ^action.internal <con>)
+-->
+    (<s>    ^concept <con>)
+    }
+
+
+sp {determine-next-state*elaborate*scene*action
+    (state <s>    ^name determine-next-state
+                  ^scene <scene>
+                  ^action <act>)
+-->
+    (<scene>    ^action <act>)
+    }

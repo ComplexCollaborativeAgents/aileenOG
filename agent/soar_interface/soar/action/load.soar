@@ -10,3 +10,7 @@ source "proposals.soar"
 source "primitive-actions/load.soar"
 
 source "compile-action-trace/load.soar"
+
+source "operator-tie/load.soar"
+
+source "determine-next-state/load.soar"

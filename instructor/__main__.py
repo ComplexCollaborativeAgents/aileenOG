@@ -7,6 +7,7 @@ from log_config import logging
 
 from spatial_word_lesson import SpatialWordLesson
 from visual_word_lesson import VisualWordLesson
+from action_word_lesson import ActionWordLesson
 from instructor.curriculum import Curriculum
 import json
 from threading import Thread
@@ -42,19 +43,22 @@ def run_curriculum(json_path):
             lesson_object = lesson['object']
             while lesson_object._lesson_state is not settings.ACTION_LESSON_STATE_COMPLETE:
                 raw_input("Press any key to deliver the next action lesson segment...")
-                lesson_object.deliver_action_lesson_segment(world_server, agent_server)
+                agent_response = lesson_object.deliver_action_lesson_segment(world_server, agent_server)
+            evaluation = lesson['object'].evaluate_agent_response(agent_response)
+            agent_response = agent_server.process_interaction(evaluation)
+            logging.info("[aileen_instructor] :: provided feedback to agent")
         else:
             raw_input("Press any key to generate the next lesson...")
             scene_acknowledgement = world_server.set_scene(
                 {'configuration': lesson['scene'], 'label': lesson['interaction']['content']})
 
             logging.info("[aileen_instructor] :: received from world {}".format(scene_acknowledgement))
-            gui.log('Instructor: ' + lesson['interaction']['signal'] + ' ' +
-                          lesson['interaction']['content'])
+            gui.log('[instructor] {}: {}'.format(lesson['interaction']['signal'], lesson['interaction']['content']))
             agent_response = agent_server.process_interaction(lesson['interaction'])
             logging.info("[aileen_instructor] :: received from agent {}".format(agent_response))
             evaluation = lesson['object'].evaluate_agent_response(agent_response)
             gui.log('Agent: ' + agent_response['status'] + '. ' + str(agent_response['create_concept_count']) + ' new concept(s) created' + ' and ' + str(agent_response['store_instance_count']) + ' example(s) stored.')
+
             agent_response = agent_server.process_interaction(evaluation)
             logging.info("[aileen_instructor] :: provided feedback to agent")
 
@@ -68,6 +72,7 @@ if __name__ == '__main__':
         # run vision training scripts
         print ('Generating images that will train vision system.')
         from generate_training_images import TrainingImage
+
         TrainingImage.generate_scenes(world_server, agent_server)
 
     elif arguments.json:
