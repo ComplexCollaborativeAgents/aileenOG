@@ -110,5 +110,13 @@ sp {grounded-action-reference*elaborate*action*object
     (<act>    ^<order>    <obj>)
     }
 
+sp {grounded-action-reference*elaborate*rel-ref
+    (state <s>    ^name ground-action-reference
+                  ^parses.parse.action-ref <act-ref>)
+    (<act-ref>    ^rel-ref <ref>)
+-->
+    (<s>    ^rel-ref <ref>)
+    }
+
 
                   
