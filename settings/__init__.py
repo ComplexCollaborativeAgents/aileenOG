@@ -34,6 +34,7 @@ TEST_LOCATION = [0.771, 0.5610656650000001, -0.199]
 
 # Vision Module
 SHAPE_SET = ['cone', 'box', 'cylinder', 'sphere']
+COLOR_LABELS = ['blue', 'red']
 COLOR_VALUES = [[255, 0, 0], [0, 0, 255]]
 GET_IMAGE_RETURNS_IMAGE_BINARY = True
 TRAINING_DATA_FOLDER = './vision_training_data'
