@@ -17,7 +17,7 @@ CURRENT_IMAGE_PATH = path.join(ROOT_PATH, 'world', 'controllers', 'images', 'cur
 COLOR_PATH = path.join(ROOT_PATH, 'instructor', 'resources', 'colors.json')
 CV_NAMES = path.join(ROOT_PATH, 'agent', 'vision', 'aileen.names')  # TODO: This should be changed to setting.SHAPE_SET.
 CV_CONFIGURATION = path.join(ROOT_PATH, 'agent', 'vision', 'yolov3-tiny-aileen-test.cfg')
-CV_WEIGHTS = path.join(ROOT_PATH, 'agent', 'vision', 'yolov3-tiny-aileen_session2.weights')
+CV_WEIGHTS = path.join(ROOT_PATH, 'agent', 'vision', 'yolov3-tiny-aileen_final.weights')
 
 # Servers
 WORLD_HOST = 'localhost'
