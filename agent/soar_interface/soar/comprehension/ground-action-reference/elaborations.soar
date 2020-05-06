@@ -11,8 +11,9 @@ sp {ground-action-reference*elaborate*state
               ^reference <ref>
               ^grounding <g>
               ^parses <p>)
+    (<p>    ^parse.action-ref.rel-ref.tag <tag>)
 -->
-    (<s>    ^reference <ref>
+    (<s>    ^reference (concat <ref> _ <tag>)
             ^grounding <g>
             ^parses <p>)
     }

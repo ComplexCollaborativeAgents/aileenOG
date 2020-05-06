@@ -20,21 +20,21 @@
 #             ^parses <parse>)
 #    }
 
-sp {ground-action-reference*propose*ground-rel-ref
-    (state <s>    ^name ground-action-reference
-                  ^linguistic <any>
-                  ^rel-ref <ref>
-                  ^grounding <g>)
-    -{(<g>    ^relation <any>)
-      (<any>    ^_metadata.description <ref>)}
--->
-    (<s>    ^operator <op> +)
-    (<op>    ^name ground-relation-reference-action
-             ^reference <ref>
-             ^grounding <g>
-             ^parses <p>
-             ^argument relation)
-    }
+#sp {ground-action-reference*propose*ground-rel-ref
+#    (state <s>    ^name ground-action-reference
+#                  ^linguistic <any>
+#                  ^rel-ref <ref>
+#                  ^grounding <g>)
+#    -{(<g>    ^relation <any>)
+#      (<any>    ^_metadata.description <ref>)}
+#-->
+#    (<s>    ^operator <op> +)
+#    (<op>    ^name ground-relation-reference-action
+#             ^reference <ref>
+#             ^grounding <g>
+#             ^parses <p>
+#             ^argument relation)
+#    }
 
 
 sp {ground-action-reference*propose*learn-action
