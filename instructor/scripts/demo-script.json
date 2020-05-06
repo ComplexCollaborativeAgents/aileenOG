@@ -1,0 +1,124 @@
+[
+  {
+    "comment": "test the concept cone",
+    "lesson-type": "visual-word",
+    "content": "cone",
+    "description": {"color": "green",
+                    "shape": "cone"},
+    "signal": "verify"
+  },
+  {
+    "comment": "train the concept green",
+    "lesson-type": "visual-word",
+    "content": "green cone",
+    "description": {"color": "green",
+                    "shape": "cone"},
+    "signal": "inform"
+  },
+   {
+    "comment": "train the concept blue",
+    "lesson-type": "visual-word",
+    "content": "blue cone",
+    "description": {"color": "blue",
+                    "shape": "cone"},
+    "signal": "inform"
+  },
+  {
+    "comment": "test the concept con",
+    "lesson-type": "visual-word",
+    "content": "cone",
+    "description": {"color": "red",
+                    "shape": "cone"},
+    "signal": "verify",
+    "distractors": 2
+  },
+  {
+    "comment": "train the concept green and cylinder",
+    "lesson-type": "visual-word",
+    "content": "green cylinder",
+    "description": {"color": "green",
+                    "shape": "cylinder"},
+    "signal": "inform"
+  },
+  {
+    "comment": "train the concept red and cylinder",
+    "lesson-type": "visual-word",
+    "content": "red cylinder",
+    "description": {"color": "red",
+                    "shape": "cylinder"},
+    "signal": "inform"
+  },
+   {
+    "comment": "train the concept red and cone",
+    "lesson-type": "visual-word",
+    "content": "red cone",
+    "description": {"color": "red",
+                    "shape": "cone"},
+    "signal": "inform"
+  },
+  {
+    "comment": "train the concept red and cone",
+    "lesson-type": "visual-word",
+    "content": "blue cylinder",
+    "description": {"color": "blue",
+                    "shape": "cylinder"},
+    "signal": "inform"
+  },
+  {
+    "comment": "test spatial concept right-of",
+    "lesson-type": "spatial-word",
+    "content": "red cylinder right of green cylinder",
+    "description": {
+      "objects": [{"color": "red", "shape": "cylinder"},  {"color": "green", "shape": "cylinder"}],
+      "relation": "right-of"},
+    "signal": "verify",
+    "distractors": 0
+  },
+  {
+    "comment": "te.st spatial concept right-of",
+    "lesson-type": "spatial-word",
+    "content": "red cylinder right of green cone",
+    "description": {
+      "objects": [{"color": "red", "shape": "cylinder"},  {"color": "green", "shape": "cone"}],
+      "relation": "right-of"},
+    "signal": "inform",
+    "distractors": 1
+  },
+  {
+    "comment": "train spatial concept right-of",
+    "lesson-type": "spatial-word",
+    "content": "blue cone right of red cylinder",
+    "description": {
+      "objects": [{"color": "blue", "shape": "cone"},  {"color": "red", "shape": "cylinder"}],
+      "relation": "right-of"},
+    "signal": "inform",
+    "distractors": 2
+  },
+  {
+    "comment": "train the concept box",
+    "lesson-type": "visual-word",
+    "content": "box",
+    "description": {"color": "red",
+                    "shape": "box"},
+    "signal": "inform"
+  },
+  {
+    "comment": "train the concept box",
+    "lesson-type": "visual-word",
+    "content": "box",
+    "description": {"color": "blue",
+                    "shape": "box"},
+    "signal": "inform"
+  },
+  {
+    "comment": "train spatial concept right-of",
+    "lesson-type": "spatial-word",
+    "content": "green box right of red box",
+    "description": {
+      "objects": [{"color": "green", "shape": "box"},  {"color": "red", "shape": "box"}],
+      "relation": "right-of"},
+    "signal": "verify",
+    "distractors": 2
+  }
+]
+
