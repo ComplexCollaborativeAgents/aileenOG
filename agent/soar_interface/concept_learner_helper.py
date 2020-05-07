@@ -9,6 +9,7 @@ def process_concept_learner_request(commandId, concept_learner):
         if cl_child:
             if cl_child.GetAttribute() == "store":
                 ResultsHelper.record_processing_phase("cm")
+                ResultsHelper.increase_store_instance_count()
                 return process_store_command(cl_child, concept_learner)
             else:
                 if cl_child.GetAttribute() == "query":
@@ -19,6 +20,7 @@ def process_concept_learner_request(commandId, concept_learner):
                     else:
                         if cl_child.GetAttribute() == "create":
                             ResultsHelper.record_processing_phase("cm")
+                            ResultsHelper.increase_create_concept_count()
                             return process_create_concept_command(cl_child, concept_learner)
                         else:
                             logging.error("[output_reader] :: concept learner does not implement this command")
