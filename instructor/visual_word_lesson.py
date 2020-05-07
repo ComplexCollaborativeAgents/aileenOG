@@ -49,17 +49,15 @@ class VisualWordLesson:
 
         self._scene.add_object(target)
 
-        for distractor in AileenObject.generate_distractors(target, self._distractors):
+        distractor_objects = AileenObject.generate_distractors(target, self._distractors)
+
+        for distractor in distractor_objects:
             distractor.set_translation(AileenScene.randomizer.get_random_position_on_table())
             self._scene.add_object(distractor)
 
         self._interaction['signal'] = self._signal
 
-        if self._is_positive:
-            self._interaction['content'] = LanguageGenerator.generate_language_for_object(target)
-        else:
-            self._interaction['content'] = LanguageGenerator.generate_language_for_object(target,
-                                                                                          is_positive=False)
+        self._interaction['content'] = LanguageGenerator.generate_language_for_object(target, distractor_objects, self._is_positive)
 
         if self._content:
             self._interaction['content'] = self._content
