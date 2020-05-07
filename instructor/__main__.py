@@ -48,7 +48,7 @@ def run_curriculum(json_path):
                     break
             evaluation = lesson['object'].evaluate_agent_response(agent_response)
             agent_response = agent_server.process_interaction(evaluation)
-            logging.info("[aileen_instructor] :: provided feedback to agent")
+            logging.info("[aileen_instructor] :: provided feedback to agent " + str(agent_response))
         else:
             raw_input("Press any key to generate the next lesson...")
             scene_acknowledgement = world_server.set_scene(
