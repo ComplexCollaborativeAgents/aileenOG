@@ -11,7 +11,7 @@ class LanguageGenerator:
         pass
 
     @staticmethod
-    def generate_language_for_object(aileen_object, distractors, is_positive):
+    def generate_language_for_object(aileen_object, distractors=[], is_positive = True):
         ## SM: removing this because the default rules in the language parser do not accept any arbitrary order.
         # LanguageGenerator.randomizer.shuffle_string(aileen_object._language)
         if is_positive:
