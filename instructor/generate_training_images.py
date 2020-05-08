@@ -45,7 +45,7 @@ class TrainingImage:
 
         # iw = input_writer.InputWriter(agent_server, world_server)
         counter = 1
-        while True:
+        while counter < 4000:
             num_obj = random.randint(1, 6)
             lesson = TrainingImage().generate_lesson(num_obj)
             scene_acknowledgement = world_server.set_scene(
@@ -69,7 +69,7 @@ class TrainingImage:
                 
                 # for calculating transform between 2D and 3D:
 
-                # Debugging
+                # # Debugging
                 # cv2.rectangle(im,
                 #               (int(512 * bb[0]), int(512 * bb[1])),
                 #               (int(512 * bb[2]), int(512 * bb[3])),
@@ -131,9 +131,6 @@ class TrainingImage:
                     f.write(settings.TRAINING_DATA_FOLDER + '/frame_' + "{:0>6d}".format(counter) + '.jpg\n')
 
             counter += 1
-
-            if counter > 2000:
-                break
 
 
 if __name__ == '__main__':

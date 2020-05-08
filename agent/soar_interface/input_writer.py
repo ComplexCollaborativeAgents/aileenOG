@@ -87,6 +87,8 @@ class InputWriter(object):
             im = cv2.imdecode(np.fromfile(settings.CURRENT_IMAGE_PATH, dtype=np.uint8), 1)
             cv_detections = self.detector.run(im)
             objects_list = self.align_cv_detections_to_world(cv_detections, objects_list)
+            print("Aligned Detections: ")
+            print(objects_list)
         else:
             objects_list = self.request_server_for_objects_info()
 
@@ -106,12 +108,14 @@ class InputWriter(object):
                 d = detections[i]
                 bbox1 = d['bounding_box_camera']
                 bbox2 = w['bounding_box_camera']
-                if Detector.bb_iou(bbox1, bbox2) > .85:
+                if Detector.bb_iou(bbox1, bbox2) > .7:
                     # Match
                     detections[i]['id'] = w['id']
                     detections[i]['id_name'] = w['id_name']
                     detections[i]['id_string'] = w['id_string']
                     detections[i]['held'] = w['held']
+                    #  ToDo: use detected image->world transform
+                    detections[i]['bounding_box'] = w['bounding_box']
                     break
 
         return detections
