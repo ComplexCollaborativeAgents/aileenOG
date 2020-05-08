@@ -30,7 +30,7 @@ if __name__ == "__main__":
         logging.info('[batch_runner] :: Agent Started')
         #Run Runner
         logging.info('[batch_runner] :: Starting Runner')
-        #subprocess.call(RUNNER_CMD, stdout = open('experiments/logs/runner.out', 'w'), stderr = subprocess.STDOUT, shell = True)
+        subprocess.call(RUNNER_CMD, stdout = open('experiments/logs/runner.out', 'w'), stderr = subprocess.STDOUT, shell = True)
         logging.info('[batch_runner] :: Runner returned')
         time.sleep(5)
 
