@@ -97,4 +97,6 @@ def test_action():
             }]
     )
     lesson = next(curriculum)
+    lobject = lesson['object']
+    lobject.generate_lesson()
     assert len(lesson['object'].get_next_segment()['scene']) == 2
