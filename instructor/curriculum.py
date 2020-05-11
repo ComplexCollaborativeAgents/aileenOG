@@ -15,7 +15,6 @@ class Curriculum(object):
 
     def __next__(self):
         lesson_configuration = next(self.curriculum)
-        print lesson_configuration
 
         lesson_type = lesson_configuration['lesson-type']
         signal = lesson_configuration['signal']
@@ -23,7 +22,6 @@ class Curriculum(object):
         description = lesson_configuration.get('description', None)
         distractors = lesson_configuration.get('distractors', 0)
         is_positive = True if lesson_configuration.get('is_positive', "True") == "True" else False
-        print is_positive
         content = lesson_configuration.get('content', None)
 
         lesson = {}
@@ -33,7 +31,7 @@ class Curriculum(object):
                                              description=description,
                                              distractors=distractors,
                                              content=content)
-            lesson = lesson_object.generate_lesson()
+            #lesson = lesson_object.generate_lesson()
 
         elif lesson_type == 'spatial-word':
             lesson_object = SpatialWordLesson(is_positive=is_positive,
@@ -41,7 +39,7 @@ class Curriculum(object):
                                               description=description,
                                               distractors=distractors,
                                               content=content)
-            lesson = lesson_object.generate_lesson()
+            #lesson = lesson_object.generate_lesson()
 
         elif lesson_type == 'action-word':
             lesson_object = ActionWordLesson(is_positive=is_positive,

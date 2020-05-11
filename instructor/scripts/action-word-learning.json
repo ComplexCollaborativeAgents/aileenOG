@@ -2,20 +2,18 @@
   {
     "comment": "preload visual concepts used in this example",
     "lesson-type": "action-word",
-    "content": "move blue cone right of red cylinder",
     "description": {
       "objects": ["<obj1>", "<obj2>"],
       "relations": ["right-of"],
-      "action": "move",
+      "action": "move-right-of",
       "initial_configuration": [],
           "trace-actions": [
               {"name": "pick-up", "argument": "<obj1>"},
               {"name": "place", "argument1": "<obj1>", "argument2": "<obj2>", "relation": "right-of"}],
-      "<obj1>": {"color": "blue", "shape": "cone"},
-      "<obj2>": {"color": "red", "shape": "cylinder"}
+      "language": ["move", "<obj1>", "right of", "<obj2>"]
     },
-    "signal": "inform",
-    "distractors": 0
+    "signal": "verify",
+    "distractors": 2
   },
   {
     "comment": "preload visual concepts used in this example",
@@ -24,7 +22,7 @@
     "description": {
       "objects": ["<obj1>", "<obj2>"],
       "relations": ["right-of"],
-      "action": "move",
+      "action": "move-right-of",
       "initial_configuration": [],
           "trace-actions": [
               {"name": "pick-up", "argument": "<obj1>"},
@@ -42,7 +40,7 @@
     "description": {
       "objects": ["<obj1>", "<obj2>"],
       "relations": ["left-of"],
-      "action": "move",
+      "action": "move-left-of",
       "initial_configuration": [],
           "trace-actions": [
               {"name": "pick-up", "argument": "<obj1>"},
@@ -60,7 +58,7 @@
     "description": {
       "objects": ["<obj1>", "<obj2>"],
       "relations": ["left-of"],
-      "action": "move",
+      "action": "move-left-of",
       "initial_configuration": [],
           "trace-actions": [
               {"name": "pick-up", "argument": "<obj1>"},
@@ -69,7 +67,6 @@
       "<obj2>": {"color": "red", "shape": "cylinder"}
     },
     "signal": "verify",
-    "distractors": 0,
-     "is_positive": "False"
+    "distractors": 0
   }
 ]

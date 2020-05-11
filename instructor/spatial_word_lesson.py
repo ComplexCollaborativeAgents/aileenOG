@@ -146,6 +146,16 @@ class SpatialWordLesson:
             else:
                 return {'signal': 'incorrect', 'score': 0}
 
+    def administer_lesson(self, world, agent):
+        lesson = self.generate_lesson()
+        scene_acknowledgement = world.set_scene(
+            {'configuration': lesson['scene'], 'label': lesson['interaction']['content']})
+        agent_response = agent.process_interaction(lesson['interaction'])
+        evaluation = self.evaluate_agent_response(agent_response)
+        score = evaluation['score']
+        agent_response = agent.process_interaction(evaluation)
+        return score
+
     @staticmethod
     def administer_curriculum(world_server, agent_server):
         while True:
