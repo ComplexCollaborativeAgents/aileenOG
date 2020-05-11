@@ -41,12 +41,13 @@ def run_curriculum(json_path):
     for lesson_config in curriculum:
         if lesson_config['type'] == 'action-word':
             lesson_object = lesson_config['object']
+            lesson = lesson_object.generate_lesson()
             while lesson_object._lesson_state is not settings.ACTION_LESSON_STATE_COMPLETE:
                 raw_input("Press any key to deliver the next action lesson segment...")
                 agent_response = lesson_object.deliver_action_lesson_segment(world_server, agent_server)
                 if agent_response['status'] == 'failure':
                     break
-            evaluation = lesson['object'].evaluate_agent_response(agent_response)
+            evaluation = lesson_object.evaluate_agent_response(agent_response)
             agent_response = agent_server.process_interaction(evaluation)
             logging.info("[aileen_instructor] :: provided feedback to agent " + str(agent_response))
         else:
