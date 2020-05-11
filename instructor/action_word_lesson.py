@@ -11,6 +11,8 @@ from collections import OrderedDict
 from instructor import gui
 from copy import deepcopy
 
+from experiments.results_helper import ResultsHelper
+
 
 class ActionWordLesson:
 
@@ -37,9 +39,9 @@ class ActionWordLesson:
         self._lesson_state = settings.ACTION_LESSON_STATE_START
         self._action_trace_index = 0
         self._language = None
-        self.generate_setup()
+        #self.generate_setup()
 
-    def generate_setup(self):
+    def generate_lesson(self):
         logging.debug("[action_word_lesson] :: generating the initial scene for action word learning")
         objects = self._action_definition[settings.ACTION_DEF_OBJECTS]
 
@@ -234,14 +236,17 @@ class ActionWordLesson:
     def evaluate_agent_response(self, agent_response):
         if self._is_positive:
             if agent_response['status'] == 'success':
-                return {'signal':'correct', 'score':1}
+                return {'signal':'correct', 'score': 1}
             else:
-                return {'signal':'incorrect', 'score':0}
+                return {'signal':'incorrect', 'score': 0}
         else:
             if agent_response['status'] == 'failure':
-                return {'signal': 'correct', 'score': '0'}
+                return {'signal': 'correct', 'score': 1}
+            else:
+                return {'signal': 'incorrect', 'score': 0}
 
     def administer_lesson(self, world, agent):
+        self.generate_lesson()
         while self._lesson_state is not settings.ACTION_LESSON_STATE_COMPLETE:
             agent_response = self.deliver_action_lesson_segment(world, agent)
             if agent_response['status'] == 'failure':
@@ -250,7 +255,7 @@ class ActionWordLesson:
         score = evaluation['score']
         agent_response = agent.process_interaction(evaluation)
         logging.info("[aileen_instructor] :: provided feedback to agent " + str(agent_response))
-        return score
+        return score, self._language
 
     @staticmethod
     def administer_curriculum(world_server, agent_server):

@@ -53,7 +53,7 @@ class LanguageGenerator:
 
     @staticmethod
     def generate_language_from_template(scene_objects, language_template):
-        word_list = language_template
+        word_list = deepcopy(language_template)
         for i in range(0, len(word_list)):
             if "<" in word_list[i]:
                 word_list[i] = LanguageGenerator.generate_language_for_object(scene_objects[word_list[i]], is_positive=True)
