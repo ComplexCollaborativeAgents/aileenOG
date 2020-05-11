@@ -30,19 +30,19 @@ def test_visual():
             }
         ])
 
-    lesson = next(curriculum)
+    lesson = next(curriculum)['object'].generate_lesson()
     assert lesson["interaction"]["content"] == "red box"
     assert lesson["interaction"]["signal"] == "verify"
 
-    lesson = next(curriculum)
+    lesson = next(curriculum)['object'].generate_lesson()
     assert lesson["interaction"]["content"] == "blue cone"
     assert lesson["interaction"]["signal"] == "verify"
 
-    lesson = next(curriculum)
+    lesson = next(curriculum)['object'].generate_lesson()
     assert lesson["interaction"]["content"] == "red cylinder"
     assert len(lesson["scene"]) == 5
 
-    lesson = next(curriculum)
+    lesson = next(curriculum)['object'].generate_lesson()
     assert lesson["interaction"]["content"] != "red box"
 
 
@@ -60,7 +60,7 @@ def test_spatial():
             },
         ])
 
-    lesson = next(curriculum)
+    lesson = next(curriculum)['object'].generate_lesson()
     assert len(lesson["scene"]) == 2
 
 def test_action():
