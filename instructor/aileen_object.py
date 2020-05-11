@@ -1,9 +1,7 @@
 import json
 import uuid
 from collections import namedtuple
-from random import choice, shuffle
-from copy import deepcopy
-
+from random import choice
 import settings
 from log_config import logging
 
@@ -23,7 +21,6 @@ class AileenObject:
         self._translation = translation
         self._name = "object{}".format(AileenObject.randomizer.uuid4())
         self._language = None
-        self._negative_language = None
         logging.debug("[aileen_object] :: created a new object")
 
     def __eq__(self, other):
@@ -118,8 +115,6 @@ class AileenObject:
         scene_object = AileenObject(shape=scene_object_shape,
                                     color=color)
         scene_object._language = [scene_object_color, scene_object_shape]
-        scene_object._negative_language = AileenObject.generate_negative_words(scene_object._language[0],
-                                                                               scene_object._language[1])
         return scene_object
 
     @staticmethod
@@ -130,30 +125,7 @@ class AileenObject:
         shape = description.get('shape', AileenObject.randomizer.get_random_shape())
         scene_object = AileenObject(shape=shape, color=color)
         scene_object._language = [color.name, shape]
-        scene_object._negative_language = AileenObject.generate_negative_words(scene_object._language[0], scene_object._language[1])
         return scene_object
-
-    @staticmethod
-    def generate_negative_words(colorname, shapename):
-        colors = AileenObject.get_colors().keys()
-        shapes = deepcopy(settings.SHAPE_SET)
-
-        colors.remove(colorname)
-        shapes.remove(shapename)
-
-        word_list = []
-
-        for item in colors:
-            word_list.append([item, shapename])
-        for item in shapes:
-            word_list.append([colorname, item])
-        for item1 in colors:
-            for item2 in shapes:
-                word_list.append([item1, item2])
-
-        shuffle(word_list)
-        return word_list[0]
-
 
 
     @staticmethod
@@ -191,15 +163,6 @@ class AileenObject:
                     (not isinstance(target, list) and distractor != target):
                 distractors.append(distractor)
                 n -= 1
-
-        for distractor in distractors:
-            if isinstance(target, list):
-                for target_i in target:
-                    if target_i._negative_language == distractor._language:
-                        distractors.remove(distractor)
-            else:
-                if target._negative_language == distractor._language:
-                    distractors.remove(distractor)
 
         return distractors
 
