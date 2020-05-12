@@ -53,7 +53,7 @@ def test_visual():
     lesson = next(curriculum)['object'].generate_lesson()
     assert lesson["interaction"]["content"] != "red box"
 
-    lesson = next(curriculum)
+    lesson = next(curriculum)['object'].generate_lesson()
     assert lesson["interaction"]["content"] != "red box"
     assert len(lesson["scene"]) == 3
 
