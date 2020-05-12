@@ -55,5 +55,10 @@ class ResultsHelper:
             myfile.write("\n specificity " + str(score))
 
     @staticmethod
+    def record_content(content):
+        with open(ResultsHelper.gfilename, "a") as myfile:
+            myfile.write(content + ",")
+
+    @staticmethod
     def copy_results_file(filename):
         copyfile(ResultsHelper.gfilename, filename)

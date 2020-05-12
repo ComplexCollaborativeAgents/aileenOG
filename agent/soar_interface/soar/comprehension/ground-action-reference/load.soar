@@ -12,3 +12,5 @@ source "compose-action.soar"
 source "complete-ground-action-reference.soar"
 
 source "mark-unknown-action-concept.soar"
+
+source "ground-relation-reference-action/load.soar"

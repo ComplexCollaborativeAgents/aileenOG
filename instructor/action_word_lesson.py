@@ -9,6 +9,9 @@ from spatial_word_lesson import SpatialWordLesson
 from language_generator import LanguageGenerator
 from collections import OrderedDict
 from instructor import gui
+from copy import deepcopy
+
+from experiments.results_helper import ResultsHelper
 
 
 class ActionWordLesson:
@@ -22,6 +25,8 @@ class ActionWordLesson:
 
         if self._description:
             self._action_definition = self._description
+            self._action = self._description['action']
+
         else:
             self._action_definitions_set = ActionWordLesson.get_action_definition_set()
             self._action = ActionWordLesson.randomizer.random_action(self._action_definitions_set.keys())
@@ -34,9 +39,9 @@ class ActionWordLesson:
         self._lesson_state = settings.ACTION_LESSON_STATE_START
         self._action_trace_index = 0
         self._language = None
-        self.generate_setup()
+        #self.generate_setup()
 
-    def generate_setup(self):
+    def generate_lesson(self):
         logging.debug("[action_word_lesson] :: generating the initial scene for action word learning")
         objects = self._action_definition[settings.ACTION_DEF_OBJECTS]
 
@@ -52,21 +57,33 @@ class ActionWordLesson:
             for o, obj in zip(objs, objects):
                 self._scene_objects[obj] = o
 
+        for distractor in AileenObject.generate_distractors(self._scene_objects.values(), self._distractors):
+            distractor.set_translation(AileenScene.randomizer.get_random_position_on_table())
+            self._initial_scene.add_object(distractor)
+
+
         relations = self._action_definition[settings.ACTION_DEF_RELATIONS]
         if relations is not None and len(relations) > 0:
             for rel in relations:
                 self._scene_relations[rel] = SpatialWordLesson.get_spatial_configurations_set()[rel]
 
+        print self._scene_objects
+
         if self._description and self._content:
             self._language = self._content
         else:
-           language_template = self._action_definition[settings.ACTION_DEF_LANGUAGE]
-           self._language = LanguageGenerator.generate_language_from_template(self._scene_objects, language_template)
+            if self._is_positive:
+                language_template = self._action_definition[settings.ACTION_DEF_LANGUAGE]
+            else:
+                other_keys = deepcopy(ActionWordLesson.get_action_definition_set().keys())
+                other_keys.remove(self._action)
+                negative_action = choice(other_keys)
+                language_template = ActionWordLesson.get_action_definition_set()[negative_action]['language']
+            self._language = LanguageGenerator.generate_language_from_template(self._scene_objects, language_template)
         logging.debug("[action_word_lesson] :: generated language for action: {}".format(self._language))
 
     def generate_initial_state(self):
         initial_state_description = self._action_definition[settings.ACTION_DEF_INIT_CONFIG]
-        print len(initial_state_description)
         if len(initial_state_description) < 1 and len(self._scene_objects) <= 2:
             for scene_object_name in self._scene_objects.keys():
                 position = AileenScene.randomizer.get_random_position_on_table()
@@ -219,19 +236,37 @@ class ActionWordLesson:
     def evaluate_agent_response(self, agent_response):
         if self._is_positive:
             if agent_response['status'] == 'success':
-                return {'signal':'correct', 'score':1}
+                return {'signal':'correct', 'score': 1}
             else:
-                return {'signal':'incorrect', 'score':0}
+                return {'signal':'incorrect', 'score': 0}
         else:
             if agent_response['status'] == 'failure':
-                return {'signal': 'correct', 'score': '0'}
+                return {'signal': 'correct', 'score': 1}
+            else:
+                return {'signal': 'incorrect', 'score': 0}
+
+    def administer_lesson(self, world, agent):
+        self.generate_lesson()
+        while self._lesson_state is not settings.ACTION_LESSON_STATE_COMPLETE:
+            agent_response = self.deliver_action_lesson_segment(world, agent)
+            if agent_response['status'] == 'failure':
+                break
+        evaluation = self.evaluate_agent_response(agent_response)
+        score = evaluation['score']
+        agent_response = agent.process_interaction(evaluation)
+        logging.info("[aileen_instructor] :: provided feedback to agent " + str(agent_response))
+        return score, self._language
 
     @staticmethod
     def administer_curriculum(world_server, agent_server):
         number_of_exemplars = 3
         for i in range(0,number_of_exemplars):
             raw_input("Press any key to generate the next action word lesson...")
-            lesson = ActionWordLesson()
+            lesson = ActionWordLesson(is_positive=True,
+                                  signal="inform",
+                                  description=None,
+                                  distractors=None,
+                                  content=None)
 
             logging.info("[action_word_lesson] :: generated a lesson for new action word")
             while lesson._lesson_state is not settings.ACTION_LESSON_STATE_COMPLETE:
@@ -239,7 +274,7 @@ class ActionWordLesson:
                 lesson.deliver_action_lesson_segment(world_server, agent_server)
                 logging.debug("[action_word_lesson] :: action lesson state is: {}".format(lesson._lesson_state))
 
-        lesson = ActionWordLesson(is_positive=None,
+        lesson = ActionWordLesson(is_positive=True,
                                   signal="inform",
                                   description=None,
                                   distractors=None,
@@ -268,6 +303,9 @@ def bound(position):
     Ensure that position is not close to the edge so that there is space for another object to be placed next to it.
     """
     [x, y, z] = position
+    x = max(x, settings.OBJECT_POSITION_MIN_X + settings.OBJECT_POSITION_DELTA)
+    x = min(x, settings.OBJECT_POSITION_MAX_X - settings.OBJECT_POSITION_DELTA)
     z = max(z, settings.OBJECT_POSITION_MIN_Z + settings.OBJECT_POSITION_DELTA)
     z = min(z, settings.OBJECT_POSITION_MAX_Z - settings.OBJECT_POSITION_DELTA)
+
     return [x, y, z]
