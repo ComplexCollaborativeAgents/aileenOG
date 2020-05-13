@@ -163,9 +163,36 @@ class InputWriter(object):
                             match_id.CreateStringWME("third", str(match[2]))
                             logging.debug(
                                         "[input-writer] :: wrote matches {}".format(self._concept_memory_status['status']))
+        if 'cis' in self._concept_memory_status:
+            projects_id = new_status_link.CreateIdWME('projections')
+            filtered = self.filter_cis_for_next_state(self._concept_memory_status['cis'])
+            logging.debug("[input-writer] :: filtered cis {}".format(filtered))
+            for item in filtered:
+                if item is not None:
+                    logging.debug("[input_writer] :: match {}".format(item))
+                    item_id = projects_id.CreateIdWME("project")
+                    item_id.CreateStringWME("first", str(item[0]))
+                    item_id.CreateStringWME("second", str(item[1]))
+                    if len(item) == 3:
+                        item_id.CreateStringWME("third", str(item[2]))
+                    logging.debug("[input-writer] :: wrote projects {}".format(self._concept_memory_status['status']))
 
         self._concept_memory_status = None
         self._clean_concept_memory_flag = True
+
+    def filter_cis_for_next_state(self, candidate_inferences):
+        for ci in candidate_inferences:
+            if ci[0] == 'startsAfterEndingOf':
+                episode_identifier = ci[1]
+                candidate_inferences.remove(ci)
+
+        filtered = []
+        for ci in candidate_inferences:
+            if ci[1] == episode_identifier:
+                filtered.append(ci[2])
+
+        return filtered
+
 
     def clean_language_link(self):
         self._soar_agent.delete_all_children(self._language_link)
