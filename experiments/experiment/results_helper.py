@@ -45,14 +45,9 @@ class ResultsHelper:
             myfile.write(phase_string + ",")
 
     @staticmethod
-    def record_generality_performance_score(score):
+    def record_performance_score(score):
         with open(ResultsHelper.gfilename, "a") as myfile:
             myfile.write(str(score) + ",")
-
-    @staticmethod
-    def record_specificity_performance_score(score):
-        with open(ResultsHelper.gfilename, "a") as myfile:
-            myfile.write("\n specificity " + str(score))
 
     @staticmethod
     def record_content(content):
