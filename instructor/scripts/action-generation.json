@@ -1,0 +1,56 @@
+[
+  {
+    "comment": "Provide a grounded example of action",
+    "lesson-type": "action-word",
+    "description": {
+      "objects": ["<obj1>", "<obj2>"],
+      "relations": ["right-of"],
+      "action": "move-right-of",
+      "initial_configuration": [],
+          "trace-actions": [
+              {"name": "pick-up", "argument": "<obj1>"},
+              {"name": "place", "argument1": "<obj1>", "argument2": "<obj2>", "relation": "right-of"}],
+      "language": ["move", "<obj1>", "right of", "<obj2>"],
+      "<obj1>": {"color": "red", "shape": "box"},
+      "<obj2>": {"color": "blue", "shape": "box"}
+    },
+    "content": "move red box right of blue box",
+    "signal": "inform"
+  },
+  {
+    "comment": "Provide another grounded example of action",
+    "lesson-type": "action-word",
+    "description": {
+      "objects": ["<obj1>", "<obj2>"],
+      "relations": ["right-of"],
+      "action": "move-right-of",
+      "initial_configuration": [],
+          "trace-actions": [
+              {"name": "pick-up", "argument": "<obj1>"},
+              {"name": "place", "argument1": "<obj1>", "argument2": "<obj2>", "relation": "right-of"}],
+      "language": ["move", "<obj1>", "right of", "<obj2>"],
+      "<obj1>": {"color": "blue", "shape": "cylinder"},
+      "<obj2>": {"color": "red", "shape": "cylinder"}
+    },
+    "content": "move blue cylinder right of red cylinder",
+    "signal": "inform"
+  },
+  {
+    "comment": "Try to do exactly what was taught.",
+    "lesson-type": "action-word",
+    "description": {
+      "objects": ["<obj1>", "<obj2>"],
+      "relations": ["right-of"],
+      "action": "move-right-of",
+      "initial_configuration": [],
+          "trace-actions": [
+              {"name": "pick-up", "argument": "<obj1>"},
+              {"name": "place", "argument1": "<obj1>", "argument2": "<obj2>", "relation": "right-of"}],
+      "language": ["move", "<obj1>", "right of", "<obj2>"],
+      "<obj1>": {"color": "red", "shape": "box"},
+      "<obj2>": {"color": "blue", "shape": "box"}
+    },
+    "content": "move red box right of blue box",
+    "signal": "react"
+  }
+]
