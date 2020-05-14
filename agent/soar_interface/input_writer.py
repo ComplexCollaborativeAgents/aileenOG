@@ -139,7 +139,7 @@ class InputWriter(object):
 
     def write_concept_memory_status_to_input_link(self):
         new_status_link = self._concept_memory.CreateIdWME("result")
-        logging.debug("[input_writer] :: writing concept memory status to input link")
+        logging.debug("[input_writer] :: writing concept memory status to input link for keys {}".format(self._concept_memory_status.keys()))
 
         if 'status' in self._concept_memory_status:
             new_status_link.CreateStringWME("status", self._concept_memory_status['status'])
@@ -163,9 +163,9 @@ class InputWriter(object):
                             match_id.CreateStringWME("third", str(match[2]))
                             logging.debug(
                                         "[input-writer] :: wrote matches {}".format(self._concept_memory_status['status']))
-        if 'cis' in self._concept_memory_status:
+        if 'projections' in self._concept_memory_status.keys():
             projects_id = new_status_link.CreateIdWME('projections')
-            filtered = self.filter_cis_for_next_state(self._concept_memory_status['cis'])
+            filtered = self.filter_cis_for_next_state(self._concept_memory_status['projections'])
             logging.debug("[input-writer] :: filtered cis {}".format(filtered))
             for item in filtered:
                 if item is not None:

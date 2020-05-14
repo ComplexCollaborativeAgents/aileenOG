@@ -1,0 +1,13 @@
+##!
+# @file
+#
+# @created smohan 20200513
+
+sp {generate-next-state*apply*complete-determine-next-state
+    (state <s>    ^name generate-next-state
+                  ^operator.name complete-generate-next-state
+                  ^projected-world <pw>
+                  ^superstate <ss>)
+-->
+    (<ss>    ^projected-world <pw>)
+    }

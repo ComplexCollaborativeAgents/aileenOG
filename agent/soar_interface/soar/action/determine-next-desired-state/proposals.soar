@@ -24,10 +24,31 @@ sp {determine-next-state*propose*collect-facts
 sp {determine-next-state*propose*project-concept
     (state <s>    ^name determine-next-state
                   ^concept <con>
-                  ^facts <facts>)
+                  ^facts <facts>
+                  -^retrieved)
 -->
     (<s>    ^operator <op> +)
     (<op>    ^name project-concept
              ^concept <con>
              ^facts <facts>)
+    }
+
+sp {determine-next-state*propose*generate-next-state
+    (state <s>    ^name determine-next-state
+                  ^concept <con>
+                  ^facts <facts>
+                  ^retrieved {<ret> <> failure}
+                  -^projected-world <pw>)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name generate-next-state
+             ^projections <ret>)
+    }
+
+sp {determine-next-state*propose*complete-determine-next-state
+    (state <s>    ^name determine-next-state
+                  ^projected-world <pw>)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name complete-determine-next-state)
     }

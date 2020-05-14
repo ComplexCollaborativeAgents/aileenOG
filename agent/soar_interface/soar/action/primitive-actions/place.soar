@@ -1,0 +1,15 @@
+##!
+# @file
+#
+# @created smohan 20200513
+
+sp {action*propose*place
+    (state <s>    ^name action
+                  ^world <w>)
+    (<w>    ^holdsInHand <any>)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name op_place
+             ^object <any>
+             ^location <loc>)
+    }

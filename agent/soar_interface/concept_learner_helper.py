@@ -106,7 +106,7 @@ def process_project_command(project_command_id, concept_learner):
         response = concept_learner.project(request)
         if response is not None:
             logging.debug("[concept-learner-helper] :: response from concept memory {}".format(response))
-            return {'status': "success"}
+            return {'status': "success", "projections": response['cis']}
         else:
             logging.debug("[concept-learner-helper] :: concept memory returned with nothing. ill-formed request")
             return {'status':'failure'}

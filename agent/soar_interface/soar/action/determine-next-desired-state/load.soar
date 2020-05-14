@@ -8,3 +8,7 @@ source "elaborations.soar"
 source "proposals.soar"
 
 source "select-scene-subset/load.soar"
+
+source "generate-next-state/load.soar"
+
+source "complete-determine-next-state.soar"

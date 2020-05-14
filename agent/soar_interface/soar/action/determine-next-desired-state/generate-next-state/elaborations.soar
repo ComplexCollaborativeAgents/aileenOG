@@ -1,0 +1,35 @@
+##!
+# @file
+#
+# @created smohan 20200513
+
+
+sp {generate-next-state*elaborate*state
+    (state <s>    ^name generate-next-state
+                  ^superstate.operator <sop>)
+    (<sop>    ^name generate-next-state
+              ^projections <project>)
+-->
+    (<s>    ^projections <project>)
+    }
+
+sp {generate-next-state*elaborate*projected-world
+    (state <s>    ^name generate-next-state)
+-->
+    (<s>    ^projected-world <world>)
+    (<world>    ^objects <objs>
+                ^relations <rels>)
+    }
+
+sp {generate-next-state*elaborate*project*holdsIn*objects
+    (state <s>    ^name generate-next-state
+                  ^projected-world <pw>
+                  ^world <w>
+                  ^projections.project <por>)
+    (<por>    ^first holdsInHand
+              ^second <id>)
+    (<w>    ^objects.object <obj>)
+    (<obj>    ^id_string <id>)
+-->
+    (<pw>    ^holdsInHand <obj>)
+    }

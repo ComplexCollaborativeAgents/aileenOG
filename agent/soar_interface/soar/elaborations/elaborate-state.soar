@@ -17,7 +17,8 @@ sp {all*elaborate*topstate
  }
 
 sp {all*elaborate*io
-    (state <s>    ^superstate.io <io>)
+    (state <s>    ^superstate.io <io>
+                  -^name evaluate-operator)
 -->
     (<s>    ^io <io>)
     }

@@ -1,0 +1,13 @@
+##!
+# @file
+#
+# @created smohan 20200513
+
+
+sp {generate-next-state*propose*complete-determine-next-state
+    (state <s>    ^name generate-next-state
+                  ^projected-world <pw>)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name complete-generate-next-state)
+    }

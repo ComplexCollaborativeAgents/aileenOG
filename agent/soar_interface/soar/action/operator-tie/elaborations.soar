@@ -6,10 +6,11 @@
 
 sp {action*operator*tie*propose*concept-superstate
     (state <s>    ^choices multiple
-                  ^superstate <ss>)
+                   ^superstate <ss>)
     (<ss>    ^name action
              ^action <act>
-             ^grounding <g>)
+             ^grounding <g>
+             -^desired <d>)
 -->
     (<ss>    ^operator <op> + !)
     (<op>    ^name determine-next-state

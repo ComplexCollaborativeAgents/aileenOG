@@ -13,4 +13,4 @@ source "compile-action-trace/load.soar"
 
 source "operator-tie/load.soar"
 
-source "determine-next-state/load.soar"
+source "determine-next-desired-state/load.soar"

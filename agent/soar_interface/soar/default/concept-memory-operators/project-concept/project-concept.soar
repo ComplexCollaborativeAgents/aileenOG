@@ -24,9 +24,9 @@ sp {project-concept*read-results*success
              ^concept <con>)
     (<il>    ^concept-memory.result <res>)
     (<res>    ^status success
-              ^facts <facts>)
+              ^projections <project>)
 -->
-    (<s>    ^retrieved <facts>)
+    (<s>    ^retrieved <project>)
     }
 
 sp {project-concept*read-results*failure
