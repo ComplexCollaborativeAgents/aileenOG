@@ -9,7 +9,7 @@ from threading import Thread
 import input_writer
 import output_reader
 import settings
-from experiments.results_helper import ResultsHelper
+from experiments.experiment.results_helper import ResultsHelper
 
 try:
     import Python_sml_ClientInterface as sml

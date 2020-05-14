@@ -1,4 +1,4 @@
-from experiments.generator import Generator
+from experiments.experiment.generator import Generator
 from results_helper import ResultsHelper
 from log_config import logging
 import xmlrpclib
@@ -66,13 +66,13 @@ if __name__ == '__main__':
                 exam_object = exam['object']
                 e_score, content = exam_object.administer_lesson(world, agent)
                 score = score + e_score
-            ResultsHelper.record_generality_performance_score(score)
+            ResultsHelper.record_performance_score(score)
         if s_exams is not None:
             score = 0
             for exam in Curriculum(s_exams[0:5]):
                 exam_object = exam['object']
                 e_score, content = exam_object.administer_lesson(world, agent)
                 score = score + e_score
-            ResultsHelper.record_generality_performance_score(score)
+            ResultsHelper.record_performance_score(score)
 
     ResultsHelper.copy_results_file(results_file)
