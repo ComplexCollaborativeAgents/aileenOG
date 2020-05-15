@@ -236,10 +236,15 @@ class InputWriter(object):
         for w_object in objects_list:
             object_id = self._objects_link.CreateIdWME("object")
             object_id.CreateIntWME('id', w_object['id'])
-            #position_id = object_id.CreateIdWME('position')
-            # position_id.CreateFloatWME('x', w_object['position'][0])
-            # position_id.CreateFloatWME('y', w_object['position'][1])
-            # position_id.CreateFloatWME('z', w_object['position'][2])
+            if 'position' in w_object:
+                position_id = object_id.CreateIdWME('position')
+                position_id.CreateFloatWME('x', w_object['position'][0])
+                position_id.CreateFloatWME('y', w_object['position'][1])
+                position_id.CreateFloatWME('z', w_object['position'][2])
+            if 'bounding_box' in w_object:
+                size_id = object_id.CreateIdWME('size')
+                size_id.CreateFloatWME('xsize', w_object['bounding_box'][3]-w_object['bounding_box'][0])
+            size_id.CreateFloatWME('zsize', w_object['bounding_box'][5]-w_object['bounding_box'][2])
             object_id.CreateStringWME('held', w_object['held'])
             object_id.CreateStringWME('color', w_object['color'])
             object_id.CreateStringWME('shape', w_object['shape'])

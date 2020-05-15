@@ -5,8 +5,8 @@
 
 sp {action*propose*point
     (state <s>    ^name action
-                  ^world <w>)
-    (<w>  ^objects.object <obj>)
+                  ^objects.object <obj>
+                  ^desired <d>)
 -->
     (<s>    ^operator <op> +)
     (<op>    ^name op_point

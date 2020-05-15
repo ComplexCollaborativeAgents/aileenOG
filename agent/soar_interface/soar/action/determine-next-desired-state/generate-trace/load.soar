@@ -4,3 +4,5 @@
 # @created smohan 20200417
 
 source "elaborations.soar"
+
+source "proposals.soar"

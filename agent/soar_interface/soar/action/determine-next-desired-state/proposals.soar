@@ -3,22 +3,27 @@
 #
 # @created smohan 20200416
 
-sp {determine-next-state*propose*select-scene-subset
+sp {determine-next-state*propose*generate-trace
     (state <s>    ^name determine-next-state
-                  -^scene <scene>)
+                  ^trace <t>
+                  ^world <w>
+                  -^added <w>)
 -->
     (<s>    ^operator <op> +)
-    (<op>    ^name select-scene-subset)
+    (<op>    ^name add-to-trace 
+             ^trace <t>)
     }
 
 sp {determine-next-state*propose*collect-facts
     (state <s>    ^name determine-next-state
                  -^facts <facts>
-                  ^scene <scene>)
+                  ^trace <t>
+                  ^added <world>
+                  ^world <w>)
 -->
     (<s>    ^operator <op> +)
     (<op>    ^name translate-to-facts
-             ^trace <scene>)
+             ^trace <t>)
     }
 
 sp {determine-next-state*propose*project-concept
@@ -33,7 +38,7 @@ sp {determine-next-state*propose*project-concept
              ^facts <facts>)
     }
 
-sp {determine-next-state*propose*generate-next-state
+sp {determine-next-state*propose*generate-next-desired-state
     (state <s>    ^name determine-next-state
                   ^concept <con>
                   ^facts <facts>
@@ -41,7 +46,7 @@ sp {determine-next-state*propose*generate-next-state
                   -^projected-world <pw>)
 -->
     (<s>    ^operator <op> +)
-    (<op>    ^name generate-next-state
+    (<op>    ^name generate-next-desired-state
              ^projections <ret>)
     }
 
@@ -49,6 +54,6 @@ sp {determine-next-state*propose*complete-determine-next-state
     (state <s>    ^name determine-next-state
                   ^projected-world <pw>)
 -->
-    (<s>    ^operator <op> +)
+    (<s>    ^operator <op> + <)
     (<op>    ^name complete-determine-next-state)
     }

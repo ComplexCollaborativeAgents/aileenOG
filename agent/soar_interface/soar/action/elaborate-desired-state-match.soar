@@ -1,0 +1,64 @@
+##!
+# @file
+#
+# @created smohan 20200515
+
+
+sp {action*elaborate*goal*match*holdsInHand
+    (state <s>    ^name action
+                  ^holdsInHand <obj>
+                  ^desired <d>)
+    (<d>    ^holdsInHand <obj>)
+-->
+    (<s>    ^matched holdsInHand)}
+
+sp {action*elaborate*goal*not-match*holdsInHand
+    (state <s>    ^name action
+                  -^holdsInHand <obj>
+                  ^desired <d>)
+    (<d>    ^holdsInHand <obj>)
+-->
+    (<s>    ^not-matched holdsInHand)}
+
+sp {action*elaborate*goal*not-match*relation
+    (state <s>    ^name action
+                  ^desired <d>)
+    (<d>    ^relations.relation <rel1>)
+    (<rel1> ^{<< cardir rcc8 >> <type>} <symb>
+            ^root-object <robj>
+            ^target-object <tobj>)
+  -{(<s>    ^relations.relation <rel2>)
+    (<rel2> ^<type> <symb>
+            ^root-object <robj>
+            ^target-object <tobj>)}
+-->
+    (<s>    ^not-matched <rel1>)
+    }
+
+sp {action*elaborate*goal*match*relation
+    (state <s>    ^name action
+                  ^relations.relation <rel2>
+                  ^desired <d>)
+    (<d>    ^relations.relation <rel1>)
+    (<rel1> ^{<< cardir rcc8 >> <type>} <symb>
+            ^root-object <robj>
+            ^target-object <tobj>)
+    (<rel2> ^<type> <symb>
+            ^root-object <robj>
+            ^target-object <tobj>)
+-->
+    (<s>    ^matched <rel1>)
+    }
+
+sp {action*elaborate*goal*match*full
+    (state <s>    ^name action
+                  ^desired <d>)
+    (<s>    -^not-matched <any>
+             ^matched <some>)
+-->
+    (<s>    ^success <d>)
+    }
+            
+            
+            
+            

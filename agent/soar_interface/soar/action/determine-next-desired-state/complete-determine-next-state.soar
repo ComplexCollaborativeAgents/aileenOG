@@ -12,3 +12,14 @@ sp {determine-next-state*apply*complete-determine-next-state
 -->
     (<ss>    ^desired <pw>)
     }
+
+sp {determine-next-state*apply*complete-determine-next-state*action-tracking
+    (state <s>    ^name determine-next-state
+                  ^projected-world <pw>
+                  ^operator.name complete-determine-next-state
+                  ^superstate.operator <sop>)
+    (<sop>    ^action-tracking <track>
+             ^attribute <attr>)
+-->
+    (<track>    ^<attr> <pw>)
+    }

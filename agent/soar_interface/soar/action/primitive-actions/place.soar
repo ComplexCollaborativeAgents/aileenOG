@@ -5,11 +5,41 @@
 
 sp {action*propose*place
     (state <s>    ^name action
-                  ^world <w>)
-    (<w>    ^holdsInHand <any>)
+                  ^holdsInHand <any>
+                  ^desired <d>)
 -->
     (<s>    ^operator <op> +)
     (<op>    ^name op_place
              ^object <any>
              ^location <loc>)
     }
+
+## SM 05/15/2020: This model is wrong. It assumes that all relations containing that object can be achieved by a single place action.
+## This assumptions is very likely false.
+
+sp {action*elaborate*place
+    (state <s>    ^name action
+                  ^operator <op> +
+                  ^desired <d>)
+    (<op>    ^name op_place
+             ^object <obj1>)
+    (<d>    ^relations.relation <rel>)
+    (<rel>    ^<attr> <sym>
+              ^<< target-object root-object >> <obj1>)
+-->
+    (<op>    ^relation <rel>)
+    }
+
+
+
+sp {action*model*place
+    (state <s>    ^name action
+                  ^operator <op>
+                  ^relations <wrels>
+                  -^io)
+    (<op>    ^name op_place
+             ^relation <rel>)
+-->
+    (<wrels>    ^relation <rel>)
+    }
+    

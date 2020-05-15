@@ -21,3 +21,26 @@
 #    (<op>    ^name op_point
 #             ^argument1 <obj>)
 #    }
+
+
+sp {action*propose*initialize-action-tracking
+    (state <s>    ^name action
+                  ^segment <seg>)
+    (<seg>    -^trace <any>)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name initialize-action-tracking)
+    }
+
+sp {action*propose*determine-next-desired-state
+    (state <s>    ^name acetion
+                  ^segment.trace <t>
+                  ^grounding <g>
+                  ^action <act>)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name determine-next-state
+             ^trace <t>
+             ^grounding <g>
+             ^action <act>)
+    }

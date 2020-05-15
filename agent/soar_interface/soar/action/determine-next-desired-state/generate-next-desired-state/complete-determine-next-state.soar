@@ -4,8 +4,8 @@
 # @created smohan 20200513
 
 sp {generate-next-state*apply*complete-determine-next-state
-    (state <s>    ^name generate-next-state
-                  ^operator.name complete-generate-next-state
+    (state <s>    ^name generate-next-desired-state
+                  ^operator.name complete-generate-next-desired-state
                   ^projected-world <pw>
                   ^superstate <ss>)
 -->

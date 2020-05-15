@@ -1,0 +1,15 @@
+##!
+# @file
+#
+# @created smohan 20200514
+
+
+sp {action*apply*initialize-action-tracking
+    (state <s>    ^name action
+                  ^operator.name initialize-action-tracking
+                  ^segment <seg>
+                  ^action <act>)
+-->
+    (<seg>    ^trace <t>)
+    (<t>    ^action <act>)
+    }

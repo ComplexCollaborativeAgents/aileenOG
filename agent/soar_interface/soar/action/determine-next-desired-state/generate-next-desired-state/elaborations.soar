@@ -1,0 +1,57 @@
+##!
+# @file
+#
+# @created smohan 20200513
+
+
+sp {generate-next-desired-state*elaborate*state
+    (state <s>    ^name generate-next-desired-state
+                  ^superstate.operator <sop>)
+    (<sop>    ^name generate-next-desired-state
+              ^projections <project>)
+-->
+    (<s>    ^projections <project>)
+    }
+
+sp {generate-next-state*elaborate*projected-world
+    (state <s>    ^name generate-next-desired-state)
+-->
+    (<s>    ^projected-world <world>)
+    (<world>    ^objects <objs>
+                ^relations <rels>)
+    }
+
+sp {generate-next-state*elaborate*project*holdsIn*objects
+    (state <s>    ^name generate-next-desired-state
+                  ^projected-world <pw>
+                  ^world <w>
+                  ^projections.project <por>)
+    (<por>    ^first holdsInHand
+              ^second <id>)
+    (<w>    ^objects.object <obj>)
+    (<obj>    ^id_string <id>)
+-->
+    (<pw>    ^holdsInHand <obj>)
+    }
+
+sp {generate-next-state*elaborate*project*relations
+    (state <s>    ^name generate-next-desired-state
+                  ^projected-world <pw>
+                  ^world <w>
+                  ^projections.project <por>
+                  ^topstate._params.translate.<attr> <sym>)
+    (<por>    ^first <sym>
+              ^second <root-object-id>
+              ^third <target-object-id>)
+    (<pw>    ^relations <rels>)
+    (<w>    ^objects <objs>)
+    (<objs>    ^object <root-obj>
+               ^object <target-obj>)
+    (<root-obj> ^id_string <root-object-id>)
+    (<target-obj>    ^id_string <target-object-id>)
+-->
+    (<rels>    ^relation <rel>)
+    (<rel>    ^<attr> <sym>
+              ^root-object <root-obj>
+              ^target-object <target-obj>)
+    }

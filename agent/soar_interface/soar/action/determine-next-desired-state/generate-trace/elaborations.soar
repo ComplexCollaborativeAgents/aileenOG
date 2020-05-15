@@ -5,7 +5,9 @@
 
 sp {select-scene-subset*elaborate*scene
     (state <s>    ^name select-scene-subset
-                  ^epmem.present-id <pid>)
+                  ^epmem.present-id <pid>
+                  ^superstate.action-tracking <at>)
+    (<at>    -^start)
 -->
     (<s>    ^scene <scene>)
     (<scene>    ^world <sworld>
@@ -13,6 +15,7 @@ sp {select-scene-subset*elaborate*scene
     (<sworld>    ^memory-id <pid>
                 ^objects <objects>
                 ^relations <rels>)}
+
 
 sp {select-scene-subset*elaborate*scene*relations
     (state <s>    ^name select-scene-subset
@@ -22,6 +25,14 @@ sp {select-scene-subset*elaborate*scene*relations
 -->
     (<srels>    ^relation <rel>)
 }
+
+sp {select-scene-subset*elaborate*scene*holdsInHand
+    (state <s>    ^name select-scene-subset
+                  ^superstate.world.holdsInHand <obj>
+                  ^scene.world <sw>)
+-->
+    (<sw>    ^holdsInHand <obj>)
+    }
 
 sp {select-scene-subset*elaborate*scene*objects
     (state <s>    ^name select-scene-subset

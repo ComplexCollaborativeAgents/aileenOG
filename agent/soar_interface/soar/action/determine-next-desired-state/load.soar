@@ -7,8 +7,10 @@ source "elaborations.soar"
 
 source "proposals.soar"
 
-source "select-scene-subset/load.soar"
+source add-to-trace/load.soar
 
-source "generate-next-state/load.soar"
+source "generate-next-desired-state/load.soar"
 
 source "complete-determine-next-state.soar"
+
+source "add-to-trace/load.soar"

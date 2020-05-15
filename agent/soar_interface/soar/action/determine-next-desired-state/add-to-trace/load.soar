@@ -1,0 +1,10 @@
+##!
+# @file: 
+#
+# @created smohan 20200514
+
+source "elaborations.soar"
+
+source "proposals.soar"
+
+source "add-world/load.soar"

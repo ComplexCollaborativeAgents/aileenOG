@@ -1,0 +1,12 @@
+##!
+# @file
+#
+# @created smohan 20200514
+
+sp {action*apply*remove-desired
+    (state <s>    ^name action
+                  ^desired <d>
+                  ^operator.name remove-desired)
+-->
+    (<s>    ^desired <d> -)
+    }

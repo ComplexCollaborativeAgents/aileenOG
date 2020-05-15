@@ -1,0 +1,13 @@
+##!
+# @file
+#
+# @created smohan 20200515
+sp {generate-next-desired-state*apply*mark-terminal
+    (state <s>    ^name generate-next-desired-state
+                  ^projected-world <pw>
+                  ^operator <op>)
+    (<op>    ^name mark-terminal
+             ^flag <flag>)
+-->
+    (<pw>    ^_is-terminal <flag>)
+    }
