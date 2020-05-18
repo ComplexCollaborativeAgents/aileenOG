@@ -15,7 +15,8 @@ sp {aileen*elaborate*objects*copy
               ^held <held>
               ^id <id>
               ^id_uuid <id-uuid>
-              ^id_string <id-string>)
+              ^id_string <id-string>
+              ^size <sz>)
    -{(<wobjs>    ^object <wobj>)
     (<wobj>    ^id <id>)}
 -->
@@ -25,7 +26,8 @@ sp {aileen*elaborate*objects*copy
                   ^held <held>
                   ^id <id>
                   ^id_uuid <id-uuid>
-                  ^id_string <id-string>)
+                  ^id_string <id-string>
+                  ^size <sz>)
     }
 
 sp {aileen*elaborate*objects*remove
@@ -41,66 +43,16 @@ sp {aileen*elaborate*objects*remove
     (<wobjs>    ^object  <wobj> -)
     }
 
-sp {aileen*elaborate*objects*locations*x
-    :o-support
+sp {aileen*elaborate*objects*position
     (state <s>    ^name aileen
                   ^io.input-link <il>
                   ^world.objects.object <wobj>)
     (<il>    ^world.objects.object <obj>)
     (<obj>    ^id <id>
-              ^position.x <xpos>)
-    (<wobj>    ^position <p>
-               ^id <id>)
-    (<p>    ^x {<> <wxpos> <xpos>})
+              ^position <p>)
+    (<wobj>    ^id <id>)
 -->
-    (<p>    ^x <wxpos> -
-            ^x <xpos>)
-    }
-
-sp {aileen*elaborate*objects*locations*y
-    :o-support
-    (state <s>    ^name aileen
-                  ^io.input-link <il>
-                  ^world.objects.object <wobj>)
-    (<il>    ^world.objects.object <obj>)
-    (<obj>    ^id <id>
-              ^position.y <xpos>)
-    (<wobj>    ^position <p>
-               ^id <id>)
-    (<p>    ^y {<> <wxpos> <xpos>})
--->
-    (<p>    ^y <wxpos> -
-            ^y <xpos>)
-    }
-
-sp {aileen*elaborate*objects*locations*z
-    :o-support
-    (state <s>    ^name aileen
-                  ^io.input-link <il>
-                  ^world.objects.object <wobj>)
-    (<il>    ^world.objects.object <obj>)
-    (<obj>    ^id <id>
-              ^position.z <xpos>)
-    (<wobj>    ^position <p>
-               ^id <id>)
-    (<p>    ^z {<> <wxpos> <xpos>})
--->
-    (<p>    ^z <wxpos> -
-            ^z <xpos>)
-    }
-
-sp {aileen*elaborate*objects*no*position
-    :o-support
-    (state <s>    ^name aileen
-                  ^io.input-link <il>
-                  ^world.objects.object <wobj>)
-    (<il>    ^world.objects.object <obj>)
-    (<obj>    ^id <id>
-              -^position <p>)
-    (<wobj>    ^id <id>
-               ^position <p>)
--->
-    (<wobj>    ^position <p> -)
+    (<wobj>    ^position <p>)
     }
 
 sp {aileen*elaborate*objects*update*held
@@ -116,23 +68,6 @@ sp {aileen*elaborate*objects*update*held
 -->
     (<wobj>    ^held <nheld> -
                ^held <held>)
-    }
-
-
-sp {aileen*elaborate*objects*update
-    :o-support
-    (state <s>    ^name aileen
-                  ^io.input-link <il>
-                  ^world.objects <wobjs>)
-    (<il>    ^world.objects.object <obj>)
-    (<obj>    ^id <id>
-              ^position <ipose>)
-    (<wobjs>    ^object <wobj>)
-    (<wobj>    ^id <id>
-                ^position <wpose>)
--->
-    (<wobj>    ^position <wpose> -
-               ^position <ipose>)
     }
 
 sp {aileen*elaborate*object*holdInHand

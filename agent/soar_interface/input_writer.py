@@ -244,7 +244,7 @@ class InputWriter(object):
             if 'bounding_box' in w_object:
                 size_id = object_id.CreateIdWME('size')
                 size_id.CreateFloatWME('xsize', w_object['bounding_box'][3]-w_object['bounding_box'][0])
-            size_id.CreateFloatWME('zsize', w_object['bounding_box'][5]-w_object['bounding_box'][2])
+                size_id.CreateFloatWME('zsize', w_object['bounding_box'][5]-w_object['bounding_box'][2])
             object_id.CreateStringWME('held', w_object['held'])
             object_id.CreateStringWME('color', w_object['color'])
             object_id.CreateStringWME('shape', w_object['shape'])

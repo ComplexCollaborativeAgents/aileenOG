@@ -3,6 +3,7 @@ import xmlrpclib
 from agent.language.aileen_grammar import AileenGrammar
 from agent.concept_learner.concept_learner import ConceptLearner
 from agent.soar_interface import concept_learner_helper
+from agent.soar_interface import action_helper
 
 
 class OutputReader(object):
@@ -41,11 +42,16 @@ class OutputReader(object):
         for i in range(0, commandID.GetNumberChildren()):
             child = commandID.GetChild(i)
             if child.GetAttribute() == 'name':
-                action_dict['name'] = child.GetValueAsString()
-            if child.GetAttribute() == 'id':
-                action_dict['id'] = child.GetValueAsString()
-            if child.GetAttribute() == 'location':
-                action_dict['location'] = child.GetValueAsString()
+                if child.GetValueAsString() == 'pick-up':
+                    action_dict = action_helper.process_pick_command(commandID)
+                else:
+                    if child.GetValueAsString() == 'place':
+                        action_dict = action_helper.process_place_command(commandID)
+                    else:
+                        if child.GetValueAsString() == 'point':
+                            action_dict = action_helper.process_point_command(commandID)
+                        else:
+                            logging.error("[output_reader] :: soar agent provided an unknown command {}".format(child.GetValueAsString()))
 
         logging.info("[output_reader] :: soar agent output {}".format(action_dict))
 

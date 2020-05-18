@@ -30,6 +30,66 @@ sp {action*elaborate*place
     (<op>    ^relation <rel>)
     }
 
+sp {action*apply*place*target-object
+    (state <s>    ^name action
+                  ^operator <op>
+                  ^io.output-link <ol>)
+    (<op>    ^name op_place
+             ^object <obj1>)
+    (<obj1>    ^id <id>
+               ^size.xsize <xsize>
+               ^size.zsize <zsize>)
+-->
+    (<ol>    ^action <act>)
+    (<act>    ^name place
+              ^target <t>)
+    (<t>    ^id <id>
+            ^xsize <xsize>
+            ^zsize <zsize>)
+    }
+
+sp {action*apply*place*reference-object
+    (state <s>    ^name action
+                  ^operator <op> 
+                  ^io.output-link <ol>)
+    (<op>    ^name op_place
+             ^object <obj1>
+             ^relation <rel>)
+    (<rel>    ^<< target-object root-object >> <obj1>
+              ^<< target-object root-object >> <obj2> {<> <obj1> <obj2>})
+    (<ol>    ^action <act>)
+    (<obj2>    ^position.x <xpos>
+               ^position.y <ypos>
+               ^position.z <zpos>
+               ^size.xsize <xsize>
+               ^size.zsize <zsize>
+               ^id <id>)
+-->
+    (<act>    ^reference <ref>)
+    (<ref>    ^id <id>
+              ^xsize <xsize>
+              ^zsize <zsize>
+              ^xpos <xpos>
+              ^ypos <ypos>
+              ^zpos <zpos>)
+    }
+
+sp {action*apply*place*relation
+    (state <s>    ^name action
+                  ^operator <op>
+                  ^io.output-link.action <act>)
+    (<op>    ^name op_place
+             ^relation <rel>
+             ^object.id <oid>)
+    (<rel>    ^target-object.id <rid>
+              ^root-object.id <oid>
+              ^<< rcc8 cardir >> <sym>)
+-->
+    (<act>    ^relation <ri>)
+    (<ri>    ^target <oid>
+             ^root <rid>
+             ^qsr <sym>)}
+
 
 
 sp {action*model*place
