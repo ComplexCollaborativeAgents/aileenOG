@@ -218,7 +218,7 @@ class InputWriter(object):
             # position_id.CreateFloatWME('y', w_object['position'][1])
             # position_id.CreateFloatWME('z', w_object['position'][2])
             object_id.CreateStringWME('held', w_object['held'])
-            object_id.CreateStringWME('color', w_object['color'])
+            object_id.CreateStringWME('color', str(w_object['color']))
             object_id.CreateStringWME('shape', w_object['shape'])
             object_id.CreateStringWME('id_string', w_object['id_string'])
             object_id.CreateStringWME('id_uuid', w_object['id_name'])
