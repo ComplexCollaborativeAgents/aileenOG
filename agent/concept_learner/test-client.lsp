@@ -6,7 +6,7 @@
 ;;;;   Created: November 13, 2019 16:35:48
 ;;;;   Purpose: 
 ;;;; ----------------------------------------------------------------------------
-;;;;  Modified: Monday, May 18, 2020 at 21:26:13 by klenk
+;;;;  Modified: Tuesday, May 19, 2020 at 15:46:37 by klenk
 ;;;; ----------------------------------------------------------------------------
 
 (load "server.lsp")
@@ -607,13 +607,15 @@
 				  (and (equal 'd::holdsIn (car fact))
 				       (equalp next-state (second fact))))
 			      cis)))
+      ;; Check if the inferences include holding the object in hand
       (assert (find `(d::holdsIn ,next-state
 				  (d::holdsInHand (d::AnalogySkolemFn d::Aileen1) d::Obj15A))
 		    next-state-facts :test #'equalp))
-      (assert (find-if #'(lambda (ci)
-			   (eql 'd::aileenTerminalTransition (car ci))
-			   (eql next-state (second ci)))
-		       cis)))
+      ;; Check that the next state is not a terminal state
+      (assert (not (find-if #'(lambda (ci)
+				(and (eql 'd::aileenTerminalTransition (car ci))
+				     (equalp next-state (second ci))))
+			    cis))))
 
     
     (setq res (call-test-server "project"
@@ -628,13 +630,15 @@
 				  (and (equal 'd::holdsIn (car fact))
 				       (equalp next-state (second fact))))
 			      cis)))
+      ;;; Check that the next state includes the following spatial relationships
       (dolist (fact 'd::((dc Obj15B Obj15A)
 			 (rRight Obj15A Obj15B)
 			 (n Obj15A Obj15B)))
 	(assert (find `(d::holdsIn ,next-state ,fact) next-state-facts :test #'equalp)))
+      ;;; check that the next state is the last state of the action
       (assert (find-if #'(lambda (ci)
-			   (eql 'd::aileenTerminalTransition (car ci))
-			   (eql next-state (second ci)))
+			   (and (eql 'd::aileenTerminalTransition (car ci))
+				(equalp next-state (second ci))))
 		       cis))
       )))
 
