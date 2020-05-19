@@ -21,4 +21,5 @@ sp {ground-action-reference*apply*mark-unknown-concept
     (<info>    ^nl <nl>
                ^grounding <g>
                ^parses <parses>)
+    (<g>    ^complete true)
     }

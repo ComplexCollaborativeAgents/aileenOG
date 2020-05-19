@@ -36,3 +36,13 @@ sp {verify-action*elaborate*concept
 -->
     (<s>    ^concept-structure <struct>)
     }
+
+sp {verify-action*superstate*write-not-verified
+    (state <s>    ^name verify-action
+                  ^superstate <ss>
+                  ^grounding <g>)
+    (<ss>    ^operator.ref <ref>)
+    (<g>    -^action <any>)
+-->
+    (<ss>    ^not-verified <ref>)
+    }

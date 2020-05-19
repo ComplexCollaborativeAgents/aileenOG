@@ -11,3 +11,13 @@ sp {learn-action-concept*apply*complete-learn-action-concept
 -->
     (<seg>    ^learned <info>)
     }
+
+sp {learn-action-concept*apply*complete-learn-action-concept*grounding*clear*learn-until-correct
+    (state <s>    ^name learn-action-concept
+                  ^information.grounding <g>
+                  ^operator.name complete-learn-action-concept
+                  ^topstate._params.interaction.recomprehend true)
+    (<g>    ^complete true)
+-->
+    (<g>    ^complete true -)
+    }

@@ -27,23 +27,35 @@ def test_visual():
                                 "shape": "box"},
                 "signal": "inform",
                 "is_positive": "False"
+            },
+            {
+                "lesson-type": "visual-word",
+                "description": {"color": "red",
+                                "shape": "box"},
+                "signal": "inform",
+                "is_positive": "False",
+                "distractors": 2
             }
         ])
 
-    lesson = next(curriculum)
+    lesson = next(curriculum)['object'].generate_lesson()
     assert lesson["interaction"]["content"] == "red box"
     assert lesson["interaction"]["signal"] == "verify"
 
-    lesson = next(curriculum)
+    lesson = next(curriculum)['object'].generate_lesson()
     assert lesson["interaction"]["content"] == "blue cone"
     assert lesson["interaction"]["signal"] == "verify"
 
-    lesson = next(curriculum)
+    lesson = next(curriculum)['object'].generate_lesson()
     assert lesson["interaction"]["content"] == "red cylinder"
     assert len(lesson["scene"]) == 5
 
-    lesson = next(curriculum)
+    lesson = next(curriculum)['object'].generate_lesson()
     assert lesson["interaction"]["content"] != "red box"
+
+    lesson = next(curriculum)['object'].generate_lesson()
+    assert lesson["interaction"]["content"] != "red box"
+    assert len(lesson["scene"]) == 3
 
 
 def test_spatial():
@@ -60,7 +72,7 @@ def test_spatial():
             },
         ])
 
-    lesson = next(curriculum)
+    lesson = next(curriculum)['object'].generate_lesson()
     assert len(lesson["scene"]) == 2
 
 def test_action():
@@ -85,4 +97,6 @@ def test_action():
             }]
     )
     lesson = next(curriculum)
+    lobject = lesson['object']
+    lobject.generate_lesson()
     assert len(lesson['object'].get_next_segment()['scene']) == 2

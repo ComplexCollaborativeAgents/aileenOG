@@ -5,6 +5,7 @@ import settings
 
 from instructor.curriculum import Curriculum
 from instructor.spatial_word_lesson import SpatialWordLesson
+from instructor.action_word_lesson import ActionWordLesson
 
 
 class Generator:
@@ -23,7 +24,10 @@ class Generator:
             lesson_config = self._generate_spatial_word_lesson_descriptions(signal='inform',
                                                                             distractors=None,
                                                                             is_positive=True)
-
+        if self._lesson_type == "action-word":
+            lesson_config = self._generate_action_word_lesson_descriptions(signal='inform',
+                                                                           distractors=None,
+                                                                           is_positive=True)
         return lesson_config
 
     def generate_verify_testing_gamut_generality(self):
@@ -36,6 +40,11 @@ class Generator:
             lesson_config = self._generate_spatial_word_lesson_descriptions(signal='verify',
                                                                              distractors=(0,3),
                                                                              is_positive=True)
+        if self._lesson_type == "action-word":
+            lesson_config = self._generate_action_word_lesson_descriptions(signal='verify',
+                                                                           distractors=(0,3),
+                                                                           is_positive=True)
+
         return lesson_config
 
     def generate_verify_testing_gamut_specificity(self):
@@ -48,6 +57,10 @@ class Generator:
             lessons_config = self._generate_spatial_word_lesson_descriptions(signal='verify',
                                                                             distractors=(0, 3),
                                                                             is_positive=False)
+        if self._lesson_type == "action-word":
+            lessons_config = self._generate_action_word_lesson_descriptions(signal='verify',
+                                                                           distractors=(0,3),
+                                                                           is_positive=False)
 
         return lessons_config
 
@@ -95,11 +108,29 @@ class Generator:
         return lessons
 
 
+    def _generate_action_word_lesson_descriptions(self, signal, distractors, is_positive, number_of_samples=5):
+        action_configs = ActionWordLesson.get_action_definition_set()
+        lessons = []
+        for i in range(0, number_of_samples):
+            for key in action_configs.keys():
+                description = action_configs[key]
+                description['action'] = key
+                lesson = {
+                    'lesson-type': 'action-word',
+                    'is_positive': str(is_positive),
+                    'description': description,
+                    'signal': signal}
+                if distractors:
+                    lesson['distractors'] = random.randint(distractors[0], distractors[1])
+                lessons.append(lesson)
+        random.shuffle(lessons)
+        return lessons
+
 
 if __name__ == '__main__':
 
-    rail = Generator("spatial-word")
-    test_gamut = rail.generate_inform_training_gamut()
+    rail = Generator("action-word")
+    test_gamut = rail.generate_verify_testing_gamut_generality()
     print test_gamut
 
 

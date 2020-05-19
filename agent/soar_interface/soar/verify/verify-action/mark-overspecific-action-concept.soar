@@ -4,7 +4,7 @@
 # @created smohan 20200313
 
 
-sp {verify-action*apply*mark-overspecific-action-concept
+sp {verify-action*apply*mark-overspecific-action-concept*inform
     (state <s>    ^name verify-action
                   ^operator.name mark-overspecific-action-concept
                   ^topstate <ts>
@@ -12,6 +12,7 @@ sp {verify-action*apply*mark-overspecific-action-concept
                   ^action._metadata <met>
                   ^source <source>)
     (<met>    ^concept-structure <struct>)
+    (<ts>    ^interaction.stack.segment.purpose.type inform)
 -->
     (<ts>    ^processing-status <ps>)
     (<ps>    ^type overspecific-action-concept
@@ -19,4 +20,15 @@ sp {verify-action*apply*mark-overspecific-action-concept
              ^source <source>)
     (<info>    ^concept-structure <con>
                ^grounding <g>)
+    }
+
+sp {verify-action*apply*mark-overspecific-action-concept*no-inform
+    (state <s>    ^name verify-action
+                  ^operator.name mark-overspecific-action-concept
+                  ^topstate <ts>
+                  ^superstate <ss>)
+    (<ss>    ^operator.ref <aref>)
+    (<ts>    -^interaction.stack.segment.purpose.type inform)
+-->
+    (<ss>    ^not-verified <aref>)
     }
