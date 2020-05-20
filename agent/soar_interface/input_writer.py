@@ -115,7 +115,6 @@ class InputWriter(object):
                     detections[i]['id_string'] = w['id_string']
                     detections[i]['held'] = w['held']
                     #  ToDo: use detected image->world transform
-                    detections[i]['bounding_box'] = w['bounding_box']
                     detections[i]['position'] = w['position']
                     break
 
