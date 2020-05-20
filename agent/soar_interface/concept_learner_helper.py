@@ -1,6 +1,6 @@
 from agent.log_config import logging
-from experiments.results_helper import ResultsHelper
-import settings
+from experiments.experiment.results_helper import ResultsHelper
+
 
 def process_concept_learner_request(commandId, concept_learner):
     logging.debug("[output_reader] :: processing concept_learner command")
