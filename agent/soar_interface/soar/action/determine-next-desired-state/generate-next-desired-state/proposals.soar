@@ -5,7 +5,7 @@
 sp {genrate-next-desired-state*propose*mark-as-non-terminal
     (state <s>    ^name generate-next-desired-state
                   ^projected-world <pw>)
-    (<pw>    -^type AileenEndState
+    (<pw>    -^type terminal
              -^_is-terminal <any>)
 -->
     (<s>    ^operator <op> +)

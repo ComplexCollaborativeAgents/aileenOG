@@ -189,8 +189,10 @@ class InputWriter(object):
         filtered = []
         for ci in candidate_inferences:
             if ci[1] == episode_identifier:
-                filtered.append(ci[2])
-
+                if ci[0] == 'aileenTerminalTransition':
+                    filtered.append(['type','terminal_state'])
+                else:
+                    filtered.append(ci[2])
         return filtered
 
 

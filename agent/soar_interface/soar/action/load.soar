@@ -22,3 +22,5 @@ source "initialize-action-tracking.soar"
 source "remove-desired.soar"
 
 source "elaborate-desired-state-match.soar"
+
+source "mark-successful-completion.soar"

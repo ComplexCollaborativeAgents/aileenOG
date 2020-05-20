@@ -21,6 +21,16 @@ sp {generate-next-state*elaborate*projected-world
                 ^relations <rels>)
     }
 
+sp {generate-next-state*elaborate*projected-world*terminal
+    (state <s>    ^name generate-next-desired-state
+                  ^projections.project <p>
+                  ^projected-world <world>)
+    (<p>    ^first type
+            ^second terminal_state)
+-->
+    (<world>    ^type terminal)
+    }
+
 sp {generate-next-state*elaborate*project*holdsIn*objects
     (state <s>    ^name generate-next-desired-state
                   ^projected-world <pw>

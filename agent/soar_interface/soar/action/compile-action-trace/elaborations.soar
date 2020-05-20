@@ -56,3 +56,17 @@ sp {compile-action-trace*elaborate*trace*before
     (<t>    ^after <after>)
     (<after>    ^<w2> <w1>)
     }
+
+sp {compile-action-trace*elaborate*trace*end
+    (state <s>    ^name compile-action-trace
+                  ^trace <t>)
+    (<t>    ^after <aft1>
+            ^world <last>
+            ^world <last-but-one>)
+    (<aft1>    ^<last> <last-but-one>)
+    -{(<t>    ^after <aft2>)
+      (<aft2>    ^<pot-last>    <last>)}
+-->
+    (<t>    ^end <last>)
+    }
+                  

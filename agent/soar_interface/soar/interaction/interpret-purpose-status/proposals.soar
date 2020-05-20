@@ -26,6 +26,17 @@ sp {interaction-purpose-status*propose*complete-learning-status
              ^purpose <p>)
     }
 
+sp {interaction-purpose-status*propose*complete-react-status
+    (state <s>    ^name interpret-purpose-status
+                  ^purpose <p>)
+    (<p>    ^type react
+            ^completed true)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name complete-react-purpose
+             ^purpose <p>)
+    }
+
 sp {interaction-purpose-status*propose*complete-observe-demonstration-status
     (state <s>    ^name interpret-purpose-status
                   ^purpose <p>)
