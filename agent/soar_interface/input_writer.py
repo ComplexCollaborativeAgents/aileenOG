@@ -108,6 +108,14 @@ class InputWriter(object):
                 d = detections[i]
                 bbox1 = d['bounding_box_camera']
                 bbox2 = w['bounding_box_camera']
+
+                # detections should include the following fields, in addition to anything added below
+                # 'shape': e.g., CVCone
+                # 'bounding_box_camera': YOLO detection
+                # 'bounding_box_projected': World projection of YOLO detection
+                # 'color': e.g., CVRed
+                # 'position_projected': World projection of YOLO bounding box centroid
+
                 if Detector.bb_iou(bbox1, bbox2) > .7:
                     # Match
                     detections[i]['id'] = w['id']
