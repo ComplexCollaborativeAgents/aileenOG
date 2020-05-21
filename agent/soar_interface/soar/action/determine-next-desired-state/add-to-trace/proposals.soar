@@ -40,7 +40,7 @@ sp {add-to-trace*propose*add-after
 -->
     (<s>    ^operator <op> +)
     (<op>    ^name add-world
-             ^after <w2>
+             ^after <w1>
              ^trace <t>)}
 
 sp {add-to-trace*propose*complete-add-to-trace

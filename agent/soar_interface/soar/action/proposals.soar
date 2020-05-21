@@ -44,3 +44,13 @@ sp {action*propose*determine-next-desired-state
              ^grounding <g>
              ^action <act>)
     }
+
+sp {action*propose*mark-successful-completion
+    (state <s>    ^name action
+                  ^desired <d>
+                  ^success <d>)
+    (<d>    ^type terminal)
+-->
+    (<s>    ^operator <op> + !)
+    (<op>    ^name mark-successful-completion)
+    }

@@ -6,7 +6,7 @@
       "objects": ["<obj1>", "<obj2>"],
       "relations": ["right-of"],
       "action": "move-right-of",
-      "initial_configuration": [],
+      "initial_configuration": [[["not","n"], "<obj2>", "<obj1>"], ["dc", "<obj2>", "<obj1>"]],
           "trace-actions": [
               {"name": "pick-up", "argument": "<obj1>"},
               {"name": "place", "argument1": "<obj1>", "argument2": "<obj2>", "relation": "right-of"}],
@@ -24,7 +24,7 @@
       "objects": ["<obj1>", "<obj2>"],
       "relations": ["right-of"],
       "action": "move-right-of",
-      "initial_configuration": [],
+      "initial_configuration": [[["not","n"], "<obj2>", "<obj1>"], ["dc", "<obj2>", "<obj1>"]],
           "trace-actions": [
               {"name": "pick-up", "argument": "<obj1>"},
               {"name": "place", "argument1": "<obj1>", "argument2": "<obj2>", "relation": "right-of"}],
@@ -42,7 +42,7 @@
       "objects": ["<obj1>", "<obj2>"],
       "relations": ["right-of"],
       "action": "move-right-of",
-      "initial_configuration": [],
+      "initial_configuration": [[["not","n"], "<obj2>", "<obj1>"], ["dc", "<obj2>", "<obj1>"]],
           "trace-actions": [
               {"name": "pick-up", "argument": "<obj1>"},
               {"name": "place", "argument1": "<obj1>", "argument2": "<obj2>", "relation": "right-of"}],
