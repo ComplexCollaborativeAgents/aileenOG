@@ -11,8 +11,6 @@ from collections import OrderedDict
 from instructor import gui
 from copy import deepcopy
 
-from experiments.results_helper import ResultsHelper
-
 
 class ActionWordLesson:
 

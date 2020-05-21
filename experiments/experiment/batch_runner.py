@@ -11,7 +11,7 @@ AGENT_CMD = 'python agent'
 if __name__ == "__main__":
     for run in range(settings.BATCH_SIZE):
         #Redefine Runner CMD
-        RUNNER_CMD = 'python experiments/runner.py --type {} --file experiments/results/{}-run-{}.csv'.format(settings.BATCH_TYPE, settings.BATCH_TYPE, run)
+        RUNNER_CMD = 'python experiments/experiment/runner.py --type {} --file experiments/results/{}-run-{}.csv'.format(settings.BATCH_TYPE, settings.BATCH_TYPE, run)
         logging.info('[batch_runner] :: Starting run {} of {} of type {}'.format(run+1, settings.BATCH_SIZE, settings.BATCH_TYPE))
         #Run Webots
         logging.info('[batch_runner] :: Starting Webots')
@@ -21,7 +21,7 @@ if __name__ == "__main__":
         #Run World
         logging.info('[batch_runner] :: Starting World')
         subprocess.Popen(WORLD_CMD, stdout = open('experiments/logs/world.out', 'w'), stderr = subprocess.STDOUT, shell = True)
-        time.sleep(5)
+        time.sleep(20)
         logging.info('[batch_runner] :: World Started')
         #Run Agent
         logging.info('[batch_runner] :: Starting Agent')
@@ -37,7 +37,7 @@ if __name__ == "__main__":
 
         #Kill subprocesses
         logging.info('[batch_runner] :: Killing Subprocesses')
-        subprocess.Popen("experiments/kill_mlisp.sh", stdout = open('/dev/null'), shell = True)
-        subprocess.Popen("kill $(ps -u aileen | grep python | awk '{print $1}')", shell = True)
-        subprocess.Popen("kill $(ps -u aileen | grep webots-bin | awk '{print $1}')", shell = True)
+        subprocess.Popen("experiments/experiment/kill_mlisp.sh", stdout = open('/dev/null'), shell = True)
+        subprocess.Popen("kill $(ps -u $USERNAME | grep python | awk '{print $1}')", shell = True)
+        subprocess.Popen("kill $(ps -u $USERNAME | grep webots-bin | awk '{print $1}')", shell = True)
         logging.info('[batch_runner] :: Subprocesses murdered')
