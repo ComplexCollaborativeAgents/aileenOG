@@ -6,7 +6,7 @@
 ;;;;   Created: November 13, 2019 16:14:37
 ;;;;   Purpose: 
 ;;;; ----------------------------------------------------------------------------
-;;;;  Modified: Sunday, April 26, 2020 at 07:20:10 by klenk
+;;;;  Modified: Wednesday, May 20, 2020 at 19:56:33 by klenk
 ;;;; ----------------------------------------------------------------------------
 
 (in-package :cl-user)
@@ -85,7 +85,10 @@
 	(list dir))
        ))))
 
+(defparameter *str* nil)
+
 (defun create-reasoning-symbol-helper (str)
+  (setq *str* str)
   (handler-bind ((error #'print-backtrace))
     (format t "~%Creating Reasoning Symbol2 ~A" str)
   (let* ((json (cl-json:decode-json-from-string str))
@@ -102,9 +105,9 @@
 	   "")))))
 
 
-(defparameter *str* nil)
 
 (defun create-reasoning-predicate-helper (str)
+  (setq *str* str)
   (handler-bind ((error #'print-backtrace))
   (let* ((json (cl-json:decode-json-from-string str))
 	 (symbol (str->symbols (cdr (assoc :PREDICATE json))))
@@ -297,7 +300,7 @@
   (format t "~% starting server port ~A" port)
   (make-reasoner :kbdir kbdir)
   (let ((rcp (net.xml-rpc:make-xml-rpc-server
-	      :start nil :enable t
+	      :start `(:port ,port) :enable t
 	      :publish '(:path "/ConceptLearner")  )))
     ;; Add an init_kb helper that reinitializes the kb.
     (net.xml-rpc:export-xml-rpc-method
@@ -337,10 +340,130 @@
     (net.xml-rpc:export-xml-rpc-method  
      rcp '("filter_scene_by_expression" filter-scene-by-expression-helper)
      :base64 :base64)
-    (net.aserve:start :port port)
+					;    (net.aserve:start :port port)
+    rcp
     ))
   
-  
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; LXML patch
+
+(in-package :net.xml-rpc)
+
+(defun xml-rpc-server-implementation (request entity)
+  ;; parse an XML rpc call and pass it to the exported function
+  (when (xml-rpc-server-enabled *xml-rpc-server*)
+    (let* ((body (get-request-body request
+				   ;; If we do not specify an external format, Aserve
+				   ;; uses :octets but here we want to do any requested
+				   ;; character conversions   [bug19830]
+				   :external-format   
+				   net.aserve:*default-aserve-external-format*
+				   ))
+	   code string rval params pvals ptypes)
+      (multiple-value-bind (name e)
+	  (ignore-errors
+	   (multiple-value-list
+	    (let* ((xml (parse-to-lxml body :content-only t :normalize t))
+		   name v alist w)
+	      (multiple-value-setq (v alist)
+		(decode-xml-parse
+		 xml '(("methodCall"
+			("methodName" :name)
+			.
+			(:or (("params" (:* :params ("param" :param))))
+			     nil)))
+		 nil :ignore-whitespace))
+	      (or (and v
+		       (setf name (assoc :name alist))
+		       (setf name (cdr name)))
+		  (error "missing methodName"))
+	      ;; <params> may be omitted if empty
+	      (setf params (assoc :params alist))
+	      (dolist (p (cdr params))
+		(or (and p
+			 (setf w (assoc :param p))
+			 (multiple-value-bind (val type)
+			     (decode-xml-rpc-value(cdr w))
+			   (when type
+			     (push val pvals)
+			     (push type ptypes)
+			     t)))
+		    (error "param ~S" p)))
+	      (setf pvals (reverse pvals))
+	      (setf ptypes (reverse ptypes))
+	      name)))
+	(if* e
+	   then 
+		(typecase e
+		  (xml-rpc-fault
+		   ;; The exported method body signalled an error of the form
+		   ;;  (error 'xml-rpc-fault :fault-code c :fault-string s)
+		   ;;  [bug19752]
+		   (setf code (xml-rpc-fault-code e)
+			 string (xml-rpc-fault-string e)))
+		  (otherwise
+		   (setf code 2
+			 string (format nil "Error in XML-RPC call: ~A" e))))
+;;;;TODO: should this be here???  Seems to clobber the values just set above
+		(setf code 1
+		      string
+		      (format nil "Ill-formed XML-RPC call: ~A" e))
+	   else 
+		(setf name (car name))
+		(multiple-value-bind (v e)
+		    (ignore-errors
+		     (multiple-value-list
+		      (let* ((sig ptypes)
+			     (entry   (xml-rpc-server-method *xml-rpc-server* name sig))
+			     (function (and entry 
+					    ;; is this mp safe???
+					    (xml-rpc-export-function entry))))
+			(or function (error "Unknown XML-RPC method ~A(~{ ~A~})"
+					    name sig))
+			(encode-xml-rpc-value (apply function pvals)
+					      (xml-rpc-export-result entry))
+			)))
+		  (if* e
+		     then 
+			  (setf code (xml-rpc-fault-code e)
+				string (xml-rpc-fault-string e))
+		     else 
+			  ;; emit result
+			  (setf rval (first v))
+			  )))
+	(with-http-response 
+	    (request entity)
+	  ;; must send content-length [spr28777] [bug14271]
+	  (if* (equal (request-reply-strategy request) '(:use-socket-stream))
+	     then (setf (request-reply-strategy request)
+		    '(:string-output-stream :post-headers))) 
+	  (with-http-body 
+	      (request entity 
+	       :headers `((:server . ,(xml-rpc-server-name *xml-rpc-server*))))
+	    (html
+	     (:princ "<?xml version=\"1.0\"?>")
+	     (:princ "<methodResponse>")
+
+	     (if* code
+		then
+		     ;; emit fault
+		     (html
+		      (:princ "<fault>"
+			      (encode-xml-rpc-value nil :struct
+						    (list "faultCode" code)
+						    (list "faultString" string))
+			      "</fault>"))
+		else
+		     ;; emit value
+		     (html
+		      (:princ "<params><param>"
+			      rval
+			      "</param></params>"))
+		     )
+
+	     (:princ "</methodResponse>")
+	     )))))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
