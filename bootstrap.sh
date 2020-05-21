@@ -48,5 +48,5 @@ AILEEN_ENV="$(conda config --show envs_dirs | grep -o "/.*" | head -1)/aileen"
   tar xf pynini-1.9.3.tar.gz;
   cd pynini-1.9.3;
   source activate aileen;
-  CPATH="$AILEEN_ENV/include" python setup.py install
+  CPATH="$AILEEN_ENV/include" python setup.py install &> /dev/null
 )
