@@ -19,13 +19,15 @@ conda env create --force --file environment.yml
 
 AILEEN_ENV="$(conda config --show envs_dirs | grep -o "/.*" | head -1)/aileen"
 
-(
-  cd /tmp;
-  wget http://soar.eecs.umich.edu/downloads/SoarSuite/SoarSuite_9.6.0-Multiplatform_64bit.zip --no-check-certificate;
-  $SUDO unzip -d /usr/local SoarSuite_9.6.0-Multiplatform_64bit.zip
-)
-
-# Commented out because this is already pre-installed in Docker image.
+###############################################################################
+# Commented out because this is already pre-installed in Docker image for CI. #
+###############################################################################
+#  
+# (
+#   cd /tmp;
+#   wget http://soar.eecs.umich.edu/downloads/SoarSuite/SoarSuite_9.6.0-Multiplatform_64bit.zip --no-check-certificate;
+#   $SUDO unzip -d /usr/local SoarSuite_9.6.0-Multiplatform_64bit.zip
+# )
 # 
 # (
 #   cd /tmp;

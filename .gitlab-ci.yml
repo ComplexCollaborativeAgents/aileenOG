@@ -1,4 +1,4 @@
-image: aaronang/conda-pynini:latest
+image: aaronang/conda-pynini-soar:latest
 
 variables:
   GIT_SUBMODULE_STRATEGY: recursive
