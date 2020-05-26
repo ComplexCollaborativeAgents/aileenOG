@@ -108,15 +108,23 @@ class InputWriter(object):
                 d = detections[i]
                 bbox1 = d['bounding_box_camera']
                 bbox2 = w['bounding_box_camera']
+
+                # detections should include the following fields, in addition to anything added below
+                # 'shape': e.g., CVCone
+                # 'bounding_box_camera': YOLO detection
+                # 'bounding_box_projected': World projection of YOLO detection
+                # 'color': e.g., CVRed
+                # 'position_projected': World projection of YOLO bounding box centroid
+
                 if Detector.bb_iou(bbox1, bbox2) > .7:
                     # Match
                     detections[i]['id'] = w['id']
                     detections[i]['id_name'] = w['id_name']
                     detections[i]['id_string'] = w['id_string']
                     detections[i]['held'] = w['held']
-                    #  ToDo: use detected image->world transform
-                    detections[i]['bounding_box'] = w['bounding_box']
-                    detections[i]['position'] = w['position']
+                    #  These are from the simulator
+                    detections[i]['position_simulator'] = w['position']
+                    detections[i]['bounding_box_simulator'] = w['bounding_box']
                     break
 
         return detections
