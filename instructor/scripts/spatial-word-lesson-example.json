@@ -22,5 +22,14 @@
       "objects": [{"color": "blue", "shape": "sphere"},  {"color": "blue", "shape": "box"}],
       "relation": "left-of"},
     "signal": "verify"
+  },
+   {
+    "comment": "preload visual concepts used in this example. next-to example doesn't work yet. needs updates to the representation",
+    "lesson-type": "spatial-word",
+    "content": "green box next to blue box",
+    "description": {
+      "objects": [{"color": "green", "shape": "box"},  {"color": "blue", "shape": "box"}],
+      "relation": "next-to"},
+    "signal": "inform"
   }
 ]
