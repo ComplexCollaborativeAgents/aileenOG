@@ -94,7 +94,7 @@ class AileenSupervisor(Supervisor):
                                    'id': object_node.getId(),
                                    'position': object_node.getPosition(),
                                    'bounding_box': self.computeBoundingBox(object_node),
-                                   'bounding_box_camera': [im_x1, im_y1, im_x2, im_y2],
+                                   'bounding_box_camera': [im_x1, im_y2, im_x2, im_y1],
                                    'shape': self.get_object_shape(object_node),
                                    'color': self.get_object_color(object_node),
                                    'texture': self.get_object_texture(object_node),
