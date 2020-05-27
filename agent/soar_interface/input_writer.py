@@ -125,6 +125,14 @@ class InputWriter(object):
                     #  These are from the simulator
                     detections[i]['position_simulator'] = w['position']
                     detections[i]['bounding_box_simulator'] = w['bounding_box']
+
+                    ## SM: If matched, use image
+                    #detections[i]['position'] = [(detections[i]['bounding_box_camera'][0] + detections[i]['bounding_box_camera'][2])/2, None, (detections[i]['bounding_box_camera'][1] + detections[i]['bounding_box_camera'][3])/2]
+                    #detections[i]['bounding_box'] = [detections[i]['bounding_box_camera'][0], None, detections[i]['bounding_box_camera'][1], detections[i]['bounding_box_camera'][2], None, detections[i]['bounding_box_camera'][3]]
+
+                    detections[i]['position'] = w['position']
+                    detections[i]['bounding_box'] = w['bounding_box']
+
                     break
 
         return detections
