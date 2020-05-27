@@ -1,5 +1,11 @@
 [
   {
+    "signal": "verify",
+    "lesson-type": "visual-word",
+    "is_positive": "False",
+    "description": {"color": "green", "shape": "cone"}
+  },
+  {
     "lesson-type": "visual-word",
     "content": "box",
     "description": {"color": "red",

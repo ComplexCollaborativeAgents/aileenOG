@@ -87,8 +87,7 @@ class InputWriter(object):
             im = cv2.imdecode(np.fromfile(settings.CURRENT_IMAGE_PATH, dtype=np.uint8), 1)
             cv_detections = self.detector.run(im)
             objects_list = self.align_cv_detections_to_world(cv_detections, objects_list)
-            print("Aligned Detections: ")
-            print(objects_list)
+            logging.debug("Aligned Detections: {}".format(objects_list))
         else:
             objects_list = self.request_server_for_objects_info()
 
