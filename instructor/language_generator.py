@@ -17,7 +17,7 @@ class LanguageGenerator:
         if is_positive:
             return ' '.join(aileen_object._language)
         else:
-            return LanguageGenerator.generate_negative_language_for_object(aileen_object, distractors)
+            return ' '.join(LanguageGenerator.generate_negative_language_for_object(aileen_object, distractors))
 
     @staticmethod
     def generate_negative_language_for_object(target, distractors):

@@ -56,7 +56,6 @@ def run_curriculum(json_path):
             lesson = lesson_object.generate_lesson()
             scene_acknowledgement = world_server.set_scene(
                 {'configuration': lesson['scene'], 'label': lesson['interaction']['content']})
-
             logging.info("[aileen_instructor] :: received from world {}".format(scene_acknowledgement))
             gui.log('[instructor] {}: {}'.format(lesson['interaction']['signal'], lesson['interaction']['content']))
             agent_response = agent_server.process_interaction(lesson['interaction'])

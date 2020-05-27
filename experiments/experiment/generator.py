@@ -129,16 +129,9 @@ class Generator:
 
 if __name__ == '__main__':
 
-    rail = Generator("action-word")
-    test_gamut = rail.generate_verify_testing_gamut_generality()
-    print test_gamut
+    rail = Generator("visual-word")
+    test_gamut = rail.generate_verify_testing_gamut_specificity()
+    print json.dumps(test_gamut)
 
 
-    # print training_gamut
-    # for lesson in training_gamut:
-    #     print lesson
 
-    # test_gamut = rail.generate_verify_testing_gamut()
-    # for test in test_gamut:
-    #     print test
-    pass

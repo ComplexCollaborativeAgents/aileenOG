@@ -14,6 +14,7 @@ class VisualWordLesson:
         self._description = description
         self._distractors = distractors
         self._content = content
+        self._language = None
 
     def generate_lesson(self):
         """
@@ -25,6 +26,14 @@ class VisualWordLesson:
         self.generate_scene()
         lesson['scene'] = self._scene.generate_scene_world_config()
         lesson['interaction'] = self._interaction
+
+        lesson = {
+            'scene': self._scene.generate_scene_world_config(),
+            'interaction': {
+                'signal': self._signal,
+                'content': self._content if self._content is not None else self._language
+            }
+        }
         return lesson
 
     def generate_scene(self):
@@ -55,12 +64,8 @@ class VisualWordLesson:
             distractor.set_translation(AileenScene.randomizer.get_random_position_on_table())
             self._scene.add_object(distractor)
 
-        self._interaction['signal'] = self._signal
+        self._language = LanguageGenerator.generate_language_for_object(target, distractor_objects, self._is_positive)
 
-        self._interaction['content'] = LanguageGenerator.generate_language_for_object(target, distractor_objects, self._is_positive)
-
-        if self._content:
-            self._interaction['content'] = self._content
 
     def evaluate_agent_response(self, agent_response):
         if self._is_positive:
@@ -77,8 +82,9 @@ class VisualWordLesson:
     def administer_lesson(self, world, agent):
         lesson = self.generate_lesson()
         content = self._language
+        logging.error(lesson['interaction']['content'])
         scene_acknowledgement = world.set_scene(
-            {'configuration': lesson['scene'], 'label': lesson['interaction']['content']})
+             {'configuration': lesson['scene'], 'label': lesson['interaction']['content']})
         agent_response = agent.process_interaction(lesson['interaction'])
         evaluation = self.evaluate_agent_response(agent_response)
         score = evaluation['score']
