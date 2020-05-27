@@ -129,6 +129,8 @@ class InputWriter(object):
                     detections[i]['camera_bounding_box_simulator'] = w['bounding_box_camera']
                     break
 
+        # 'camera_bounding_box_yolo': [0.255859375, 0.15234375, 0.390625, 0.27734375],
+        # 'camera_bounding_box_simulator': [0.25140263755630665, 0.2879932711680643, 0.39618263755630656, 0.14319327116806402],
         return detections
 
     def write_qsrs_to_input_link(self, qsrs):
