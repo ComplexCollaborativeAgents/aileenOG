@@ -106,15 +106,16 @@ class InputWriter(object):
         for i in range(len(detections)):
             for w in world:
                 d = detections[i]
-                bbox1 = d['bounding_box_camera']
+                bbox1 = d['camera_bounding_box_yolo']
                 bbox2 = w['bounding_box_camera']
 
                 # detections should include the following fields, in addition to anything added below
                 # 'shape': e.g., CVCone
-                # 'bounding_box_camera': YOLO detection
-                # 'bounding_box_projected': World projection of YOLO detection
+                # 'camera_bounding_box_yolo': YOLO detection
+                # 'camera_bounding_box_yolo_proj_to_world': World projection of YOLO detection
                 # 'color': e.g., CVRed
-                # 'position_projected': World projection of YOLO bounding box centroid
+                # 'camera_yolo_position': YOLO bounding box centroid
+                # 'camera_yolo_position_proj_to_world': World projection of YOLO bounding box centroid
 
                 if Detector.bb_iou(bbox1, bbox2) > .7:
                     # Match
@@ -133,8 +134,11 @@ class InputWriter(object):
                     detections[i]['position'] = w['position']
                     detections[i]['bounding_box'] = w['bounding_box']
 
-                    break
+                    detections[i]['camera_bounding_box_simulator'] = w['bounding_box_camera']
 
+                    detections[i]['color_simulator'] = w['color']
+                    detections[i]['shape_simulator'] = w['shape']
+                    break
         return detections
 
     def write_qsrs_to_input_link(self, qsrs):
