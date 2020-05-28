@@ -102,6 +102,8 @@ class InputWriter(object):
         detections = cv_detections['objects']
         world = objects_list
 
+        updated_detections = []
+
         for i in range(len(detections)):
             for w in world:
                 d = detections[i]
@@ -135,8 +137,12 @@ class InputWriter(object):
                         detections[i]['color'] = w['color']
                         detections[i]['shape'] = w['shape']
 
+                    updated_detections.append(detections[i])
                     break
-        return detections
+
+
+
+        return updated_detections
 
     def write_qsrs_to_input_link(self, qsrs):
         self._soar_agent.delete_all_children(self._qsrs_link)
