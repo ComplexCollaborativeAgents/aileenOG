@@ -6,7 +6,7 @@
 ;;;;   Created: November  6, 2019 14:54:11
 ;;;;   Purpose: 
 ;;;; ----------------------------------------------------------------------------
-;;;;  Modified: Monday, April 27, 2020 at 11:32:54 by klenk
+;;;;  Modified: Thursday, May 28, 2020 at 15:06:05 by klenk
 ;;;; ----------------------------------------------------------------------------
 
 (in-package :aileen)
@@ -16,6 +16,7 @@
 
 (defparameter *assimilation-threshold* 0.01 "sage threshold for storing new cases. A low number means we want everything to be in one generalization and that we don't expect disjunctive concepts")
 (defparameter *match-threshold* 0.2 "sage threshold for matching to generalizations. because we are doing our own scoring this is low")
+(defparameter *projection-threshold* 0.003 "when projecting, we do not expect much overlap between the current situation and the generalization")
 (defparameter *probability-cutoff* 0.6 "facts below this threshold in generalizations do not contribute to score calculations")
 (defparameter *normalized-threshold* 0.75 "mapping threshold normalized against the target without the inference fact")
 ;;; Klenk tried making this .999, but I ran into a problem with some mapping scores not being as high expected in the relational cases
@@ -200,18 +201,19 @@
 		   (format t "~% match-scoring-sme rbrowse-sme: ~A url: ~A"
 			   sme::*sme*
 			   full))
-  (let ((score (sme::score (car (sme::mappings  sme::*sme*))))
-	(sme sme::*sme*))
-    (sme::clone-current-sme)
-    (format t "~% ~A" (sme::expressions (sme::target sme::*sme*)))
-    (remove-rel-from-dgroup (sme::target sme::*sme*) inference-rel)
-    (format t "~% ~A" (sme::expressions (sme::target sme::*sme*)))
-    (let ((normalized-score (/ score
-			       (sme::self-score-dgroup (sme::target sme::*sme*)
-						       (sme::mapping-parameters sme::*sme*)))))
-      (format t "~% ~A score: ~A normalized score: ~A" sme score normalized-score)
-      (sme::in-sme sme)
-      (> normalized-score *normalized-threshold*))))
+  (when (sme::mappings  sme::*sme*)
+    (let ((score (sme::score (car (sme::mappings  sme::*sme*))))
+	  (sme sme::*sme*))
+      (sme::clone-current-sme)
+      (format t "~% ~A" (sme::expressions (sme::target sme::*sme*)))
+      (remove-rel-from-dgroup (sme::target sme::*sme*) inference-rel)
+      (format t "~% ~A" (sme::expressions (sme::target sme::*sme*)))
+      (let ((normalized-score (/ score
+				 (sme::self-score-dgroup (sme::target sme::*sme*)
+							 (sme::mapping-parameters sme::*sme*)))))
+	(format t "~% ~A score: ~A normalized score: ~A" sme score normalized-score)
+	(sme::in-sme sme)
+	(> normalized-score *normalized-threshold*)))))
 
 
 ;;; We can roll this function back to the previous version
@@ -428,8 +430,11 @@
   (let* ((case-term `(d::KBCaseFn ,context))
 	 (gpool (get-concept-gpool action))
 	 (correspondences (determine-state-correspondences context gpool)))
+    (format t "~%~% ~A " (fire:ask-it `(d::gpoolAssimilationThreshold ,gpool ?x) :context gpool))
+    (format t "~%~%~% threshold : ~A" *projection-threshold*)
     (fire:kb-forget `(d::gpoolAssimilationThreshold ,gpool ?x):mt gpool)
-    (fire:kb-store `(d::gpoolAssimilationThreshold ,gpool ,*match-threshold*) :mt gpool) ;; This might have to be a lot lower
+    (fire:kb-store `(d::gpoolAssimilationThreshold ,gpool ,*projection-threshold*) :mt gpool)
+    (format t "~%~% ~A " (fire:ask-it `(d::gpoolAssimilationThreshold ,gpool ?x) :context gpool))
     (remove-facts-from-case case-term)
     (fire:clear-dgroup-caches)	       
     (fire:tell-it `(d::constructCaseInWM ,case-term))
@@ -444,6 +449,10 @@
 		:context gpool :response '?ci-context)))
       ;; Should we verify anything?
       ;; What kind of score should be required?
+
+    (fire:kb-forget `(d::gpoolAssimilationThreshold ,gpool ?x):mt gpool)
+    (fire:kb-store `(d::gpoolAssimilationThreshold ,gpool *match-threshold*) :mt gpool) 
+
       (multiple-value-bind (rbrowse full url) (rbrowse::browse-wm)
 	(declare (ignore url rbrowse))
 	(format t "~% rbrowse-wm after project query: ~A" full))
