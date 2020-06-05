@@ -30,7 +30,22 @@ sp {translate-to-facts*write-facts*action
     (<f>    ^lfirst <name>
             ^lsecond <obj-name1>
             ^lthird <obj-name2>)
-    }         
+    }
+
+sp {translate-to-facts*write-facts*trace*holdsInHand
+    (state <s>    ^name translate-to-facts
+                  ^facts <facts>
+                  ^trace.world <tw>)
+    (<tw>    ^memory-id <lab>)
+    (<tw>    ^holdsInHand.id_string <objid>)
+-->
+    (<facts>    ^fact <f>)
+    (<f>    ^lfirst holdsIn
+            ^lsecond (concat episode_ <lab>)
+            ^lthird <fpred>)
+    (<fpred>    ^lfirst holdsInHand
+                ^lsecond <objid>)
+    }
     
 sp {translate-to-facts*write-facts*trace*world*relations
     (state <s>    ^name translate-to-facts

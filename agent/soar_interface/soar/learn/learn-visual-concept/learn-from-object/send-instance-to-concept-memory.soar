@@ -27,6 +27,8 @@ sp {learn-from-object*apply*send-instance-to-concept-memory
     (<f>    ^lfirst isa
             ^lsecond <id_string>
             ^lthird <con>)
+      ### HACK:: elaborate the object with this symbol. Basically, the inference leads to a hypothesis that this has to be true. This labeling is also stored in memory.
+    #(<obj>    ^isa <con>)
     }
 
 sp {learn-from-object*apply*send-instance-to-concept-memory*object-attributes

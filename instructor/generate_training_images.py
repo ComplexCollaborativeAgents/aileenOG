@@ -45,13 +45,14 @@ class TrainingImage:
 
         # iw = input_writer.InputWriter(agent_server, world_server)
         counter = 1
-        while True:
+        while counter < 4000:
             num_obj = random.randint(1, 6)
             lesson = TrainingImage().generate_lesson(num_obj)
             scene_acknowledgement = world_server.set_scene(
                 {'configuration': lesson['scene'], 'label': lesson['interaction']})
             logging.info("[aileen_instructor] :: received from world {}".format(scene_acknowledgement))
-            binary_image = world_server.get_image()
+            data = world_server.get_image()
+            binary_image = data['image']
             im = cv2.imdecode(np.fromstring(binary_image.data, dtype=np.uint8), 1)
             cv2.imwrite(settings.TRAINING_DATA_FOLDER + '/frame_' + "{:0>6d}".format(counter) + '.jpg', im)
             meta = world_server.get_all()
@@ -68,7 +69,7 @@ class TrainingImage:
                 
                 # for calculating transform between 2D and 3D:
 
-                # Debugging
+                # # Debugging
                 # cv2.rectangle(im,
                 #               (int(512 * bb[0]), int(512 * bb[1])),
                 #               (int(512 * bb[2]), int(512 * bb[3])),
@@ -130,9 +131,6 @@ class TrainingImage:
                     f.write(settings.TRAINING_DATA_FOLDER + '/frame_' + "{:0>6d}".format(counter) + '.jpg\n')
 
             counter += 1
-
-            if counter > 2000:
-                break
 
 
 if __name__ == '__main__':

@@ -73,6 +73,15 @@ sp {aileen*elaborate*objects*update
                ^position <ipose>)
     }
 
+sp {aileen*elaborate*object*holdInHand
+    (state <s>    ^name aileen
+                  ^world <w>)
+    (<w>    ^objects.object <obj>)
+    (<obj>  ^held true)
+-->
+    (<w>    ^holdsInHand <obj>)
+    }
+
 sp {aileen*elaborate*add*qsrs
     :o-support
     (state <s>    ^name aileen

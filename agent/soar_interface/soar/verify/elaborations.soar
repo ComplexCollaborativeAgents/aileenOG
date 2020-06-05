@@ -24,7 +24,7 @@ sp {verify*elaborate*to-verify
     (state <s>    ^name verify
                   ^segment <seg>)
     (<seg>    ^parses.parse <p>)
-    (<p>    ^{<< obj-ref rel-ref >> <ref-type>} <ref-id>)
+    (<p>    ^{<< obj-ref rel-ref action-ref >> <ref-type>} <ref-id>)
 -->
     (<s>    ^to-verify <tv>)
     (<tv>    ^type <ref-type>

@@ -257,7 +257,7 @@ class AileenSupervisor(Supervisor):
                                    'id': object_node.getId(),
                                    'position': object_node.getPosition(),
                                    'bounding_box': self.computeBoundingBox(object_node),
-                                   'bounding_box_camera': [im_x1, im_y1, im_x2, im_y2],
+                                   'bounding_box_camera': [im_x1, im_y2, im_x2, im_y1],
                                    'shape': self.get_object_shape(object_node),
                                    'color': self.get_object_color(object_node),
                                    'texture': self.get_object_texture(object_node),
@@ -265,10 +265,8 @@ class AileenSupervisor(Supervisor):
                                    'held': 'false'}
                 objects.append(object_dict)
 
-
-
-
-        output_dict = {'objects': objects}
+        output_dict = {'objects': objects,
+                       'image': ''}
         return output_dict
 
     def get_object_name(self, object_node):
@@ -348,8 +346,26 @@ class AileenSupervisor(Supervisor):
             os.mkdir(dir_name)
         self._camera.saveImage(settings.CURRENT_IMAGE_PATH, 100)
         logging.debug("[aileen_supervisor] :: saved current image at {}".format(settings.CURRENT_IMAGE_PATH))
+
+        if settings.GET_IMAGE_RETURNS_IMAGE_BINARY:
+            with open(settings.CURRENT_IMAGE_PATH, "rb") as handle:
+                binary_image = xmlrpclib.Binary(handle.read())
+                output_dict['image'] = binary_image
+
         return output_dict
 
+    # def get_image_training(self):
+    #     logging.debug("[aileen_supervisor] :: processing get_image from client")
+    #     image_string = self._camera.getImage()
+    #     logging.debug("[aileen_supervisor] :: got current image")
+    #     dir_name = os.path.split(settings.CURRENT_IMAGE_PATH)[0]
+    #     if not os.path.exists(dir_name):
+    #         os.makedirs(dir_name)
+    #     self._camera.saveImage(settings.CURRENT_IMAGE_PATH, 100)
+    #     logging.debug("[aileen_supervisor] :: saved current image at {}".format(settings.CURRENT_IMAGE_PATH))
+    #     with open(settings.CURRENT_IMAGE_PATH, "rb") as handle:
+    #         binary_image = xmlrpclib.Binary(handle.read())
+    #         return binary_image
 
     def set_scene(self, scene_objects, label):
         self.clean_scene()
@@ -357,7 +373,7 @@ class AileenSupervisor(Supervisor):
         for scene_object in scene_objects:
             self._children.importMFNodeFromString(-1, scene_object)
 
-        self.setLabel(1, label, 0.02, 0.3, 0.1, 0x000000, 0, "Arial")
+        self.setLabel(1, str(label), 0.02, 0.3, 0.1, 0x000000, 0, "Arial")
         return True
 
     def clean_scene(self):

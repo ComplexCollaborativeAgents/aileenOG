@@ -17,7 +17,7 @@ CURRENT_IMAGE_PATH = path.join(ROOT_PATH, 'world', 'controllers', 'images', 'cur
 COLOR_PATH = path.join(ROOT_PATH, 'instructor', 'resources', 'colors.json')
 CV_NAMES = path.join(ROOT_PATH, 'agent', 'vision', 'aileen.names')  # TODO: This should be changed to setting.SHAPE_SET.
 CV_CONFIGURATION = path.join(ROOT_PATH, 'agent', 'vision', 'yolov3-tiny-aileen-test.cfg')
-CV_WEIGHTS = path.join(ROOT_PATH, 'agent', 'vision', 'yolov3-tiny-aileen_session2.weights')
+CV_WEIGHTS = path.join(ROOT_PATH, 'agent', 'vision', 'yolov3-tiny-aileen_final.weights')
 
 # Servers
 WORLD_HOST = 'localhost'
@@ -38,6 +38,15 @@ JOINT_NAMES = ['shoulder_pan_joint', 'shoulder_lift_joint', 'elbow_joint', 'wris
 START_LOCATION_1 = [0,-2.3562, 2.3562, 0, 0, 0]
 HOME_POSE = [1.57, -2.3562, 2.3562, -1.57, -1.57, 0]
 
+# Vision Module
+SHAPE_SET = ['cone', 'box', 'cylinder', 'sphere']
+COLOR_LABELS = ['blue', 'red']
+COLOR_VALUES = [[255, 0, 0], [0, 0, 255]]
+GET_IMAGE_RETURNS_IMAGE_BINARY = True
+TRAINING_DATA_FOLDER = './vision_training_data'
+TRAIN_FILES = TRAINING_DATA_FOLDER + '/train_files.txt'
+TEST_FILES = TRAINING_DATA_FOLDER + '/test_files.txt'
+
 # Instructor
 OBJECT_POSITION_MAX_X = 0.855
 OBJECT_POSITION_MIN_X = 0.356
@@ -53,10 +62,6 @@ OBJECT_POSITION_DELTA = 0.15
 OBJECT_STANDARD_HEIGHT = 0.1
 OBJECT_STANDARD_WIDTH_X = 0.1
 OBJECT_STANDARD_WIDTH_Z = 0.1
-
-SHAPE_SET = ['cone', 'box', 'cylinder', 'sphere']
-COLOR_LABELS = ['blue', 'red']
-COLOR_VALUES = [[255, 0, 0], [0, 0, 255]]
 
 SPATIAL_CONFIGURATION_FILE_NAME = 'spatial_configuration.json'
 SPATIAL_DEF_OBJECTS = 'objects'
@@ -76,20 +81,18 @@ ACTION_LESSON_STATE_END = 'end'
 ACTION_LESSON_STATE_COMPLETE = 'complete'
 ACTION_LESSON_STATE_BAD = 'bad'
 
-TRAINING_DATA_FOLDER = './vision_training_data'
-TRAIN_FILES = TRAINING_DATA_FOLDER + '/train_files.txt'
-TEST_FILES = TRAINING_DATA_FOLDER + '/test_files.txt'
-
 ## Agent
 AGENT_PARAM_RUNTIME_FILE = path.join(ROOT_PATH, 'agent', 'soar_interface', 'soar', '_agent_params_runtime.soar')
-AGENT_VISUAL_CONCEPTS_PARAM = 'external'
-AGENT_PRELOAD_VISUAL_CONCEPTS_PARAM = 'false'
+AGENT_VISUAL_CONCEPTS_PARAM = 'soar'
+AGENT_PRELOAD_VISUAL_CONCEPTS_PARAM = 'true'
 
-AGENT_SPATIAL_CONCEPTS_PARAM = 'external'
-AGENT_PRELOAD_SPATIAL_CONCEPTS_PARAM = 'false'
+AGENT_SPATIAL_CONCEPTS_PARAM = 'soar'
+AGENT_PRELOAD_SPATIAL_CONCEPTS_PARAM = 'true'
 
 AGENT_ACTION_CONCEPTS_PARAM = 'external'
 AGENT_PRELOAD_ACTION_CONCEPTS_PARAM = 'false'
+
+AGENT_RECOMPREHEND_AFTER_LEARN = 'false'
 
 
 ## Experiments

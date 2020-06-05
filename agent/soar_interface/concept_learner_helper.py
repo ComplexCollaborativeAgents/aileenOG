@@ -1,6 +1,6 @@
 from agent.log_config import logging
-from experiments.results_helper import ResultsHelper
-import settings
+from experiments.experiment.results_helper import ResultsHelper
+
 
 def process_concept_learner_request(commandId, concept_learner):
     logging.debug("[output_reader] :: processing concept_learner command")
@@ -9,6 +9,7 @@ def process_concept_learner_request(commandId, concept_learner):
         if cl_child:
             if cl_child.GetAttribute() == "store":
                 ResultsHelper.record_processing_phase("cm")
+                ResultsHelper.increase_store_instance_count()
                 return process_store_command(cl_child, concept_learner)
             else:
                 if cl_child.GetAttribute() == "query":
@@ -19,6 +20,7 @@ def process_concept_learner_request(commandId, concept_learner):
                     else:
                         if cl_child.GetAttribute() == "create":
                             ResultsHelper.record_processing_phase("cm")
+                            ResultsHelper.increase_create_concept_count()
                             return process_create_concept_command(cl_child, concept_learner)
                         else:
                             logging.error("[output_reader] :: concept learner does not implement this command")
@@ -41,7 +43,8 @@ def process_create_concept_command(create_command_id, concept_learner):
         response = concept_learner.create_new_concept(request)
         logging.debug("[concept-learner-helper] :: response from concept memory {}".format(response))
         if response is not None:
-            return {'status': 'success', 'gpool': response['gpool']}
+            return {'s'
+                    'tatus': 'success', 'gpool': response['gpool']}
         else:
             logging.error("[concept_learner_helper] :: concept memory returned with nothing. ill-formed command")
             return {'status': 'failure'}
@@ -82,7 +85,34 @@ def process_store_command(store_command_id, concept_learner):
         logging.error("[output_reader] :: incomplete store command")
         return {'status': 'failure'}
 
-def process_project_command(project_command_id):
+def process_project_command(project_command_id, concept_learner):
+    request = {}
+    logging.debug("[concept_learner_helper] :: processing project command")
+
+    added_facts = None
+    added_concept = None
+
+    for i in range(0, project_command_id.GetNumberChildren()):
+        child_id = project_command_id.GetChild(i)
+        if child_id.GetAttribute() == "facts":
+            request['facts'] = translate_soar_facts_to_tuple_list(child_id.ConvertToIdentifier())
+            added_facts = True
+        if child_id.GetAttribute() == "concept":
+            request['action'] = child_id.GetValueAsString()
+            added_concept = True
+
+    if added_facts and added_concept:
+        logging.debug("[concept-learner-helper] :: requesting concept memory {}".format(request))
+        response = concept_learner.project(request)
+        if response is not None:
+            logging.debug("[concept-learner-helper] :: response from concept memory {}".format(response))
+            return {'status': "success"}
+        else:
+            logging.debug("[concept-learner-helper] :: concept memory returned with nothing. ill-formed request")
+            return {'status':'failure'}
+    else:
+        logging.error("[output_reader] :: incomplete project command")
+        return {'status': 'failure'}
     pass
 
 def process_query_command(query_command_id, concept_learner):
@@ -133,5 +163,8 @@ def translate_soar_fact_to_tuple(fact_id):
                 fact_tuple[2] = child.GetValueAsString()
             else:
                 fact_tuple[2] = translate_soar_fact_to_tuple(child.ConvertToIdentifier())
+    for element in fact_tuple:
+        if element is None:
+            fact_tuple.remove(element)
     return fact_tuple
 

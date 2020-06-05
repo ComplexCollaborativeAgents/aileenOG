@@ -9,6 +9,7 @@ from threading import Thread
 import input_writer
 import output_reader
 import settings
+from experiments.experiment.results_helper import ResultsHelper
 
 try:
     import Python_sml_ClientInterface as sml
@@ -76,24 +77,29 @@ class SoarAgent(object):
         else:
             preload_action_concepts_param = settings.AGENT_PRELOAD_ACTION_CONCEPTS_PARAM
 
+        recomp_param = settings.AGENT_RECOMPREHEND_AFTER_LEARN
+
         params = """sp {{aileen*apply*init-agent*agent_params 
                     (state <s>    ^operator.name initialize-agent)
                     -->
                     (<s>    ^_params <p>)
                     (<p>    ^visual-concepts {v_param}
                             ^spatial-concepts {s_param}
-                            ^action-concepts {a_param})
+                            ^action-concepts {a_param}
+                            ^interaction <inter>)
                     (<p>    ^preload-visual-concepts {pv_param}
                             ^preload-spatial-concepts {ps_param}
                             ^preload-action-concepts {pa_param})
                     (<p>    ^relevant-percept-set <rps>)
                     (<rps>    ^type color shape)
+                    (<inter>    ^recomprehend {comp_param})
                     }}""".format(v_param=visual_concepts_param,
                                  s_param=spatial_concepts_param,
                                  a_param=action_concepts_param,
                                  pv_param=preload_visual_concepts_param,
                                  ps_param=preload_spatial_concepts_param,
-                                 pa_param=preload_action_concepts_param)
+                                 pa_param=preload_action_concepts_param,
+                                 comp_param=recomp_param)
 
         #logging.debug("[soar-agent] :: loading params into agent")
         self.execute_command(params)
@@ -196,11 +202,17 @@ class SoarAgent(object):
 
     def process_interaction(self, interaction_dictionary):
         logging.debug("[soar_agent] :: handling process_interaction request {}".format(interaction_dictionary))
+
+        ResultsHelper.reset_create_concept_count()
+        ResultsHelper.reset_store_instance_count()
+
         self._input_writer.set_interaction(interaction_dictionary)
         while self._output_reader._response is None:
             pass
         response = self._output_reader._response
         self._output_reader._response = None
+        response['create_concept_count'] = ResultsHelper.create_concept_count
+        response['store_instance_count'] = ResultsHelper.store_instance_count
         return response
 
     def delete_all_children(self, id):

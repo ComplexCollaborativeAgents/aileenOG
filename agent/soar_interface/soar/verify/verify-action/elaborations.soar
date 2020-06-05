@@ -5,7 +5,7 @@
 
 sp {verify-action*elaborate*action
     (state <s>    ^name verify-action
-                  ^superstate.operator.action <act>)
+                  ^grounding.action <act>)
 -->
     (<s>    ^action <act>)
     }
@@ -35,4 +35,14 @@ sp {verify-action*elaborate*concept
                   ^action._metadata.concept-structure <struct>)
 -->
     (<s>    ^concept-structure <struct>)
+    }
+
+sp {verify-action*superstate*write-not-verified
+    (state <s>    ^name verify-action
+                  ^superstate <ss>
+                  ^grounding <g>)
+    (<ss>    ^operator.ref <ref>)
+    (<g>    -^action <any>)
+-->
+    (<ss>    ^not-verified <ref>)
     }

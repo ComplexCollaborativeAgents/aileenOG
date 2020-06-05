@@ -43,13 +43,12 @@ sp {verify-action*propose*mark-overspecific-action-concept
     (<op>    ^name mark-overspecific-action-concept)
     }
 
-sp {verify-action*propose*report-succes
+sp {verify-action*propose*complete-verify-action
     (state <s>    ^name verify-action
-                  ^retrieved.match <any>
-                 )
+                  ^retrieved.match <any>)
 -->
-    (<s>    ^operator <op> + !)
-    (<op>    ^name report-success)
+    (<s>    ^operator <op> +)
+    (<op>    ^name complete-verify-action)
     }
 
 sp {verify-action*superstate*propose*report-succes
