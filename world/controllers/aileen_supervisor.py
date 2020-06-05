@@ -190,7 +190,7 @@ class AileenSupervisor(Supervisor):
             point = [np.random.random()*(settings.OBJECT_POSITION_MAX_X-settings.OBJECT_POSITION_MIN_X) + settings.OBJECT_POSITION_MIN_X,
                     np.random.random()*(settings.OBJECT_POSITION_MAX_Y-settings.OBJECT_POSITION_MIN_Y) + settings.OBJECT_POSITION_MIN_Y,
                     np.random.random()*(settings.OBJECT_POSITION_MAX_Z-settings.OBJECT_POSITION_MIN_Z) + settings.OBJECT_POSITION_MIN_Z]
-            self.indicate_object(tPoint)
+            self.indicate_object(point)
 
     def return_home(self):
         self.command_pose(settings.HOME_POSE)
@@ -370,7 +370,7 @@ class AileenSupervisor(Supervisor):
             object_node = self._children.getMFNode(i)
             object_name = object_node.getTypeName()
             if 'Solid' in object_name:
-                nodes_to_remove.append(object_node.getId())point
+                nodes_to_remove.append(object_node.getId())
 
         print len(nodes_to_remove)
         for i in range(0, len(nodes_to_remove)):
