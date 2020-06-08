@@ -1,0 +1,79 @@
+##!
+# @file
+#
+# @created smohan 20200514
+
+
+sp {add-world*elaborate*world
+    (state <s>    ^name add-world
+                  ^epmem.present-id <pid>)
+-->
+    (<s>    ^trace-world <tw>)
+    (<tw>    ^memory-id <pid>
+             ^objects <objs>
+             ^relations <rels>)
+    }
+
+sp {add-world*elaborate*relations
+    (state <s>    ^name add-world
+                  ^world.relations <wrels>
+                  ^trace-world.relations <twrels>)
+    (<wrels>    ^relation <rel>)
+-->
+    (<twrels>    ^relation <rel>)
+    }
+
+sp {add-world*elaborate*holdsInHand
+    (state <s>    ^name add-world
+                  ^world.holdsInHand <obj>
+                  ^trace-world <tw>)
+-->
+    (<tw>    ^holdsInHand <obj>)
+    }
+
+sp {add-world*elaborate*scene*objects
+    (state <s>    ^name add-world
+                  ^world.objects <wobjs>
+                  ^trace-world.objects <twobjs>)
+    (<wobjs>    ^object <obj>)
+-->
+    (<twobjs>    ^object <obj>)}
+
+sp {add-world*propose*complete-add-world
+    (state <s>    ^name add-world)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name complete-add-world)
+    }
+
+sp {add-world*write-to-trace*start
+    (state <s>    ^name add-world
+                  ^superstate <ss>
+                  ^world <w>
+                  ^trace-world <tw>
+                  ^operator.name complete-add-world)
+    (<ss>    ^operator <op>)
+    (<op> ^name add-world
+          ^start <t>)
+-->
+    (<t>    ^start <tw>
+            ^world <tw>)
+    (<ss>    ^added <w>)
+    }
+
+sp {add-world*write-to-trace*after
+    (state <s>    ^name add-world
+                  ^superstate <ss>
+                  ^trace-world <tw>
+                  ^world <w>
+                  ^operator.name complete-add-world)
+    (<op> ^name add-world
+          ^trace <t>
+          ^after <pw>)
+    (<ss>    ^operator <op>)
+-->
+    (<t>    ^after <af>
+            ^world <tw>)
+    (<af>    ^<tw> <pw>)
+    (<ss>    ^added <w>)}
+    

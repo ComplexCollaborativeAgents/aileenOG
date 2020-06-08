@@ -1,0 +1,14 @@
+##!
+# @file
+#
+# @created smohan 20200513
+
+sp {action*propose*point
+    (state <s>    ^name action
+                  ^objects.object <obj>
+                  ^desired <d>)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name op_point
+             ^argument1 <obj>)
+    }

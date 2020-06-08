@@ -6,3 +6,7 @@
 source "smem-operators/load.soar"
 
 source "concept-memory-operators/load.soar"
+
+source "search/selection.soar"
+
+source "search_old/selection-iterative-deepening.soar"

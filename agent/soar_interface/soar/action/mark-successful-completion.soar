@@ -1,0 +1,12 @@
+##!
+# @file
+#
+# @created smohan 20200519
+
+sp {action*apply*mark-successful-completion
+    (state <s>    ^name action
+                  ^operator.name mark-successful-completion
+                  ^segment.purpose <p>)
+-->
+    (<p>    ^completed true)
+    }

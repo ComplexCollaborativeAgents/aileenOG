@@ -6,7 +6,7 @@
 ;;;;   Created: November 13, 2019 16:35:48
 ;;;;   Purpose: 
 ;;;; ----------------------------------------------------------------------------
-;;;;  Modified: Friday, April 24, 2020 at 15:04:42 by klenk
+;;;;  Modified: Tuesday, May 19, 2020 at 15:46:37 by klenk
 ;;;; ----------------------------------------------------------------------------
 
 (load "server.lsp")
@@ -202,7 +202,7 @@
   ))
 
 (defun make-test-gen-rel-gpool ()
-  (let (res pattern)
+  (let (res )
     ;; TEST STORE
     (setq res (call-test-server "store"
                (pairlis '("facts" "context" "concept")
@@ -454,7 +454,8 @@
        (holdsIn Time12_2 (rRight Obj12A Obj12B))
        (isa Time12_0 AileenActionStartTime)
        (startsAfterEndingOf Time12_1 Time12_0)
-       (startsAfterEndingOf Time12_2 Time12_1) ;;Do we want to be explicit about T2 T0 relation, I think not
+       (startsAfterEndingOf Time12_2 Time12_1)
+       (aileenTerminalTransition Time12_2 Time12_1)
        ))
 
 ;;; move the box to the right of the cylinder
@@ -486,7 +487,8 @@
        (holdsIn Time13_2 (rRight Obj13B Obj13A))
        (isa Time13_0 AileenActionStartTime)
        (startsAfterEndingOf Time13_1 Time13_0)
-       (startsAfterEndingOf Time13_2 Time13_1) ;;Do we want to be explicit about T2 T0 relation, I think not
+       (startsAfterEndingOf Time13_2 Time13_1) 
+       (aileenTerminalTransition Time13_2 Time13_1) 
        ))
 
 
@@ -540,6 +542,7 @@
        (isa Time14_0 AileenActionStartTime)
        (startsAfterEndingOf Time14_1 Time14_0)
        (startsAfterEndingOf Time14_2 Time14_1)
+       (aileenTerminalTransition Time14_2 Time14_1)
        ))
 
 (defun query-test-gen-action-gpool ()
@@ -604,9 +607,17 @@
 				  (and (equal 'd::holdsIn (car fact))
 				       (equalp next-state (second fact))))
 			      cis)))
+      ;; Check if the inferences include holding the object in hand
       (assert (find `(d::holdsIn ,next-state
 				  (d::holdsInHand (d::AnalogySkolemFn d::Aileen1) d::Obj15A))
-		    next-state-facts :test #'equalp)))
+		    next-state-facts :test #'equalp))
+      ;; Check that the next state is not a terminal state
+      (assert (not (find-if #'(lambda (ci)
+				(and (eql 'd::aileenTerminalTransition (car ci))
+				     (equalp next-state (second ci))))
+			    cis))))
+
+    
     (setq res (call-test-server "project"
 				(pairlis '("facts" "action")
 					 (list (symbols->strs *action-test-case-15-1*)
@@ -619,10 +630,16 @@
 				  (and (equal 'd::holdsIn (car fact))
 				       (equalp next-state (second fact))))
 			      cis)))
+      ;;; Check that the next state includes the following spatial relationships
       (dolist (fact 'd::((dc Obj15B Obj15A)
 			 (rRight Obj15A Obj15B)
 			 (n Obj15A Obj15B)))
 	(assert (find `(d::holdsIn ,next-state ,fact) next-state-facts :test #'equalp)))
+      ;;; check that the next state is the last state of the action
+      (assert (find-if #'(lambda (ci)
+			   (and (eql 'd::aileenTerminalTransition (car ci))
+				(equalp next-state (second ci))))
+		       cis))
       )))
 
 
@@ -721,36 +738,36 @@
        (startsAfterEndingOf Time17_2 Time17_1) ;;Do we want to be explicit about T2 T0 relation, I think not
        ))
 
-(defun test-minmimal-ascension-action (&aux res)
-  (when clean? (restore-init))
-  (setq res (call-test-server
-	     "create_reasoning_predicate"
-	     (pairlis '("predicate")
-		      '("rRight"))))
-  (assert (equal (cdr (assoc :GPOOL res))
-		 "rRightMt"))
-  (setq res (call-test-server
-	     "create_reasoning_predicate"
-	     (pairlis '("predicate")
-		      '("rOn"))))
-  (assert (equal (cdr (assoc :GPOOL res))
-		 "rOnMt"))
-  (setq res (call-test-server
-	     "create_reasoning_action"
-	     (pairlis '("action" "arity")
-		      '("rMove" 2))))
-  (assert (equal (cdr (assoc :GPOOL res))
-		 "rMoveMt"))
+;; (defun test-minmimal-ascension-action (&aux res)
+;;   (when clean? (restore-init))
+;;   (setq res (call-test-server
+;; 	     "create_reasoning_predicate"
+;; 	     (pairlis '("predicate")
+;; 		      '("rRight"))))
+;;   (assert (equal (cdr (assoc :GPOOL res))
+;; 		 "rRightMt"))
+;;   (setq res (call-test-server
+;; 	     "create_reasoning_predicate"
+;; 	     (pairlis '("predicate")
+;; 		      '("rOn"))))
+;;   (assert (equal (cdr (assoc :GPOOL res))
+;; 		 "rOnMt"))
+;;   (setq res (call-test-server
+;; 	     "create_reasoning_action"
+;; 	     (pairlis '("action" "arity")
+;; 		      '("rMove" 2))))
+;;   (assert (equal (cdr (assoc :GPOOL res))
+;; 		 "rMoveMt"))
 
-  (setq res (call-test-server "store"
-			      (pairlis '("facts" "context" "concept")
-				       (symbols->strs *action-test-case-12*)
-				       "Test0" ;;Id
-				       "RRed")))
-  (assert (= (cdr (assoc :NUM-EXAMPLES res)) 1))
-  (assert (= (cdr (assoc :NUM-GENERALIZATIONS res)) 0))
+;;   (setq res (call-test-server "store"
+;; 			      (pairlis '("facts" "context" "concept")
+;; 				       (symbols->strs *action-test-case-12*)
+;; 				       "Test0" ;;Id
+;; 				       "RRed")))
+;;   (assert (= (cdr (assoc :NUM-EXAMPLES res)) 1))
+;;   (assert (= (cdr (assoc :NUM-GENERALIZATIONS res)) 0))
   
-  )
+;;   )
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

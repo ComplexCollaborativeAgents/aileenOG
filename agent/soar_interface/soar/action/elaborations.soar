@@ -22,6 +22,16 @@ sp {action*elaborate*state*action
             ^grounding <g>)
     }
 
+
+sp {action*elaborate*state*problemspace
+    (state <s>    ^name action)
+-->
+    (<s>    ^problem-space <ps>)
+    (<ps>    ^name generate-instruction
+            ^default-state-copy yes
+            ^two-level-attributes relations objects)
+    }
+
 sp {action*complete*action
     (state <s>    ^name action
                   ^action <act>
@@ -32,3 +42,21 @@ sp {action*complete*action
     (<p>    ^completed true
             ^status success)
     }
+
+sp {action*elaborate*objects*relations
+    (state <s>    ^name action
+                  ^world <w>)
+    (<w>    ^objects <objs>
+            ^relations <rels>)
+-->
+    (<s>    ^objects <objs>
+            ^relations <rels>)
+    }
+
+sp {action*elaborate*objects*holdsInHand
+    (state <s>    ^name action
+                  ^world.holdsInHand <obj>)
+-->
+    (<s>    ^holdsInHand <obj>)
+}
+

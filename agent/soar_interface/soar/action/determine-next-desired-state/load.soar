@@ -1,0 +1,16 @@
+##!
+# @file: 
+#
+# @created smohan 20200416
+
+source "elaborations.soar"
+
+source "proposals.soar"
+
+source add-to-trace/load.soar
+
+source "generate-next-desired-state/load.soar"
+
+source "complete-determine-next-state.soar"
+
+source "add-to-trace/load.soar"

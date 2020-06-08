@@ -1,0 +1,12 @@
+##!
+# @file
+#
+# @created smohan 20200514
+
+sp {add-to-trace*elaborate*trace
+    (state <s>    ^name add-to-trace
+                  ^superstate.operator.trace <trace>)
+-->
+    (<s>    ^trace <trace>)
+    }
+

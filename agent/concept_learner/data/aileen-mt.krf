@@ -18,6 +18,15 @@
 (isa AileenActionStartTime Collection)
 (comment AileenActionStartTime "These are temporal things that denote the start of an action")
 
+;; (isa AileenActionEndTime Collection)
+;; (comment AileenActionEndTime "These are temporal things that denote the end of an action")
+
+(isa aileenTerminalTransition Relation)
+(arity aileenTerminalTransition 2)
+(arg1Isa aileenTerminalTransition TemporalThing)
+(arg2Isa aileenTerminalTransition TemporalThing)
+(comment aileenTerminalTransition "arg1 is the terminal temporal thing of an aileen action being executed arg2")
+
 (isa AileenGPoolMt Collection)
 (comment AileenGPoolMt "These correspond to each AileenReasoningSymbol/Relation for controlling SAGE")
 

@@ -17,7 +17,8 @@ sp {all*elaborate*topstate
  }
 
 sp {all*elaborate*io
-    (state <s>    ^superstate.io <io>)
+    (state <s>    ^superstate.io <io>
+                  -^name evaluate-operator)
 -->
     (<s>    ^io <io>)
     }
@@ -58,3 +59,13 @@ sp {topstate*operator*elaborate*source*substate
     (<s>    ^source <source>)
     }
 
+
+sp {topstate*elaborate*translation*attr
+    (state <s>    ^name aileen
+                  ^_params <p>)
+-->
+    (<p>    ^translate <t>)
+    (<t>    ^rcc8 po dc ec
+            ^cardir s n e w se nw ne sw)
+    }
+    

@@ -13,4 +13,14 @@ source "compile-action-trace/load.soar"
 
 source "operator-tie/load.soar"
 
-source "determine-next-state/load.soar"
+source "determine-next-desired-state/load.soar"
+
+source "state-no-change/load.soar"
+
+source "initialize-action-tracking.soar"
+
+source "remove-desired.soar"
+
+source "elaborate-desired-state-match.soar"
+
+source "mark-successful-completion.soar"

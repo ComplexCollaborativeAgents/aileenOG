@@ -4,3 +4,7 @@
 # @created smohan 20191220
 
 source "pick-up.soar"
+
+source "place.soar"
+
+source "point.soar"

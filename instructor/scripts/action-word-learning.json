@@ -3,17 +3,45 @@
     "comment": "preload visual concepts used in this example",
     "lesson-type": "action-word",
     "description": {
-      "objects": ["<obj1>", "<obj2>"],
-      "relations": ["right-of"],
+      "objects": [
+        "<obj1>",
+        "<obj2>"
+      ],
+      "relations": [
+        "right-of"
+      ],
       "action": "move-right-of",
       "initial_configuration": [],
-          "trace-actions": [
-              {"name": "pick-up", "argument": "<obj1>"},
-              {"name": "place", "argument1": "<obj1>", "argument2": "<obj2>", "relation": "right-of"}],
-      "language": ["move", "<obj1>", "right of", "<obj2>"]
-    },
+      "trace-actions": [
+        {
+          "name": "pick-up",
+          "argument": "<obj1>"
+        },
+        {
+          "name": "place",
+          "argument1": "<obj1>",
+          "argument2": "<obj2>",
+          "relation": "right-of"
+        }
+      ],
+      "language": [
+        "move",
+        "<obj1>",
+        "right of",
+        "<obj2>"
+      ],
+      "<obj1>": {
+        "color": "red",
+        "shape": "box"
+      },
+      "<obj2>": {
+        "color": "blue",
+        "shape": "cylinder"
+      }
+    }
     "signal": "verify",
-    "distractors": 2
+    "distractors": 4,
+    "signal": "inform"
   },
   {
     "comment": "preload visual concepts used in this example",
@@ -68,5 +96,6 @@
     },
     "signal": "verify",
     "distractors": 0
+>>>>>>> master
   }
 ]
