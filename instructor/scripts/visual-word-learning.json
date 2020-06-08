@@ -2,8 +2,9 @@
   {
     "signal": "verify",
     "lesson-type": "visual-word",
-    "is_positive": "False",
-    "description": {"color": "green", "shape": "cone"}
+    "is_positive": "false",
+    "description": {"color": "green", "shape": "cone"},
+    "distractors":2
   },
   {
     "lesson-type": "visual-word",
