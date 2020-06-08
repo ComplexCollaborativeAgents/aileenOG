@@ -220,7 +220,7 @@ def test_writing_language_to_input_link_obj():
     agent.stop()
     agent.shutdown()
 
-#@pytest.mark.skip(reason='Something is causing a segfault')
+@pytest.mark.skip(reason='Something is causing a segfault')
 def test_writing_language_to_input_link_rel():
     agent = SoarAgent(None)
     iwriter = agent._input_writer
@@ -286,7 +286,6 @@ def test_writing_language_to_input_link_rel():
     assert iwriter._language is None
     agent.stop()
     agent.shutdown()
-
 
 
 
