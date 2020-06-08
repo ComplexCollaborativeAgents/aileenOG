@@ -1,5 +1,5 @@
 import settings
-from log_config import logging
+from agent.log_config import logging
 
 try:
     from qsrlib_io.world_trace import Object_State, World_State
