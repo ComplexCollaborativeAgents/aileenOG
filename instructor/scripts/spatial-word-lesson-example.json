@@ -1,11 +1,13 @@
 [
   {
     "lesson-type": "spatial-word",
-    "content": "blue cone left of red cylinder",
+    "content": "yellow cone left of red cylinder",
     "description": {
-      "objects": [{"color": "blue", "shape": "cone"},  {"color": "red", "rgb": [1, 0, 0], "shape": "cylinder"}],
+      "objects": [{"color": "yellow", "shape": "cone"},  {"color": "red", "shape": "cylinder"}],
       "relation": "left-of"},
-     "signal": "inform"
+     "signal": "inform",
+    "distractors": 2,
+    "is_positive": "False"
   },
     {
     "lesson-type": "spatial-word",

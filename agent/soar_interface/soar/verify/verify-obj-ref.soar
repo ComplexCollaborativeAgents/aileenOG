@@ -10,7 +10,7 @@ sp {verify*apply*verify-obj-ref
     (<op>    ^name verify-obj-ref
              ^ref <ref-id>)
     (<g>    ^entity <ent>)
-    (<rel>    ^_metadata.description <ref-id>)
+    (<ent>    ^_metadata.description <ref-id>)
 -->
     (<s>    ^verified <ref-id>)
     }

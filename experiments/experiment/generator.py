@@ -108,11 +108,12 @@ class Generator:
         return lessons
 
 
-    def _generate_action_word_lesson_descriptions(self, signal, distractors, is_positive, number_of_samples=5):
+    def _generate_action_word_lesson_descriptions(self, signal, distractors, is_positive, number_of_samples=8):
         action_configs = ActionWordLesson.get_action_definition_set()
         lessons = []
-        for i in range(0, number_of_samples):
-            for key in action_configs.keys():
+
+        for key in action_configs.keys():
+            for i in range(0, number_of_samples):
                 description = action_configs[key]
                 description['action'] = key
                 lesson = {
@@ -129,16 +130,9 @@ class Generator:
 
 if __name__ == '__main__':
 
-    rail = Generator("action-word")
-    test_gamut = rail.generate_verify_testing_gamut_generality()
-    print test_gamut
+    rail = Generator("visual-word")
+    test_gamut = rail.generate_verify_testing_gamut_specificity()
+    print json.dumps(test_gamut)
 
 
-    # print training_gamut
-    # for lesson in training_gamut:
-    #     print lesson
 
-    # test_gamut = rail.generate_verify_testing_gamut()
-    # for test in test_gamut:
-    #     print test
-    pass

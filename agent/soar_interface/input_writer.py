@@ -87,6 +87,7 @@ class InputWriter(object):
             im = cv2.imdecode(np.fromfile(settings.CURRENT_IMAGE_PATH, dtype=np.uint8), 1)
             cv_detections = self.detector.run(im)
             objects_list = self.align_cv_detections_to_world(cv_detections, objects_list)
+            logging.debug("Aligned Detections: {}".format(objects_list))
         else:
             objects_list = self.request_server_for_objects_info()
 
@@ -101,20 +102,47 @@ class InputWriter(object):
         detections = cv_detections['objects']
         world = objects_list
 
+        updated_detections = []
+
         for i in range(len(detections)):
             for w in world:
                 d = detections[i]
-                bbox1 = d['bounding_box_camera']
+                bbox1 = d['camera_bounding_box_yolo']
                 bbox2 = w['bounding_box_camera']
-                if Detector.bb_iou(bbox1, bbox2) > .85:
+
+                # detections should include the following fields, in addition to anything added below
+                # 'shape': e.g., CVCone
+                # 'camera_bounding_box_yolo': YOLO detection
+                # 'camera_bounding_box_yolo_proj_to_world': World projection of YOLO detection
+                # 'color': e.g., CVRed
+                # 'camera_yolo_position': YOLO bounding box centroid
+                # 'camera_yolo_position_proj_to_world': World projection of YOLO bounding box centroid
+
+                if Detector.bb_iou(bbox1, bbox2) > .7:
                     # Match
                     detections[i]['id'] = w['id']
                     detections[i]['id_name'] = w['id_name']
                     detections[i]['id_string'] = w['id_string']
                     detections[i]['held'] = w['held']
+                    #  These are from the simulator
+                    detections[i]['position_simulator'] = w['position']
+                    detections[i]['bounding_box_simulator'] = w['bounding_box']
+
+                    detections[i]['position'] = detections[i]['camera_yolo_position_proj_to_world']
+                    detections[i]['bounding_box'] = detections[i]['camera_bounding_box_yolo_proj_to_world']
+
+
+                    ## SM: if settings have preload visual concepts on, just use information from the world to ensure 100% detection
+                    if settings.AGENT_VISUAL_CONCEPTS_PARAM == 'soar' and settings.AGENT_PRELOAD_VISUAL_CONCEPTS_PARAM == 'true':
+                        detections[i]['color'] = w['color']
+                        detections[i]['shape'] = w['shape']
+
+                    updated_detections.append(detections[i])
                     break
 
-        return detections
+
+
+        return updated_detections
 
     def write_qsrs_to_input_link(self, qsrs):
         self._soar_agent.delete_all_children(self._qsrs_link)
@@ -248,7 +276,7 @@ class InputWriter(object):
                 size_id.CreateFloatWME('xsize', w_object['bounding_box'][3]-w_object['bounding_box'][0])
                 size_id.CreateFloatWME('zsize', w_object['bounding_box'][5]-w_object['bounding_box'][2])
             object_id.CreateStringWME('held', w_object['held'])
-            object_id.CreateStringWME('color', w_object['color'])
+            object_id.CreateStringWME('color', str(w_object['color']))
             object_id.CreateStringWME('shape', w_object['shape'])
             object_id.CreateStringWME('id_string', w_object['id_string'])
             object_id.CreateStringWME('id_uuid', w_object['id_name'])

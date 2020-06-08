@@ -94,7 +94,7 @@ class AileenSupervisor(Supervisor):
                                    'id': object_node.getId(),
                                    'position': object_node.getPosition(),
                                    'bounding_box': self.computeBoundingBox(object_node),
-                                   'bounding_box_camera': [im_x1, im_y1, im_x2, im_y2],
+                                   'bounding_box_camera': [im_x1, im_y2, im_x2, im_y1],
                                    'shape': self.get_object_shape(object_node),
                                    'color': self.get_object_color(object_node),
                                    'texture': self.get_object_texture(object_node),
@@ -210,7 +210,7 @@ class AileenSupervisor(Supervisor):
         for scene_object in scene_objects:
             self._children.importMFNodeFromString(-1, scene_object)
 
-        self.setLabel(1, label, 0.02, 0.3, 0.1, 0x000000, 0, "Arial")
+        self.setLabel(1, str(label), 0.02, 0.3, 0.1, 0x000000, 0, "Arial")
         return True
 
     def clean_scene(self):
