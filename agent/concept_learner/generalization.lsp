@@ -6,7 +6,7 @@
 ;;;;   Created: November  6, 2019 14:54:11
 ;;;;   Purpose: 
 ;;;; ----------------------------------------------------------------------------
-;;;;  Modified: Wednesday, May 13, 2020 at 08:46:32 by klenk
+;;;;  Modified: Thursday, May 28, 2020 at 15:06:05 by klenk
 ;;;; ----------------------------------------------------------------------------
 
 (in-package :aileen)
@@ -201,18 +201,19 @@
 		   (format t "~% match-scoring-sme rbrowse-sme: ~A url: ~A"
 			   sme::*sme*
 			   full))
-  (let ((score (sme::score (car (sme::mappings  sme::*sme*))))
-	(sme sme::*sme*))
-    (sme::clone-current-sme)
-    (format t "~% ~A" (sme::expressions (sme::target sme::*sme*)))
-    (remove-rel-from-dgroup (sme::target sme::*sme*) inference-rel)
-    (format t "~% ~A" (sme::expressions (sme::target sme::*sme*)))
-    (let ((normalized-score (/ score
-			       (sme::self-score-dgroup (sme::target sme::*sme*)
-						       (sme::mapping-parameters sme::*sme*)))))
-      (format t "~% ~A score: ~A normalized score: ~A" sme score normalized-score)
-      (sme::in-sme sme)
-      (> normalized-score *normalized-threshold*))))
+  (when (sme::mappings  sme::*sme*)
+    (let ((score (sme::score (car (sme::mappings  sme::*sme*))))
+	  (sme sme::*sme*))
+      (sme::clone-current-sme)
+      (format t "~% ~A" (sme::expressions (sme::target sme::*sme*)))
+      (remove-rel-from-dgroup (sme::target sme::*sme*) inference-rel)
+      (format t "~% ~A" (sme::expressions (sme::target sme::*sme*)))
+      (let ((normalized-score (/ score
+				 (sme::self-score-dgroup (sme::target sme::*sme*)
+							 (sme::mapping-parameters sme::*sme*)))))
+	(format t "~% ~A score: ~A normalized score: ~A" sme score normalized-score)
+	(sme::in-sme sme)
+	(> normalized-score *normalized-threshold*)))))
 
 
 ;;; We can roll this function back to the previous version
