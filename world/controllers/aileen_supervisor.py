@@ -31,8 +31,8 @@ class AileenSupervisor(Supervisor):
         T = self._ur10Chain.forward_kinematics(self.pose_to_ikpy(settings.HOME_POSE))
         self._home = T[0:3,3]
         self._orientation = T[0:3,0:3]
-        print('Home XYZ: {}'.format(self._home))
-        print('Home RPY: {}'.format(self._orientation))
+        #print('Home XYZ: {}'.format(self._home))
+        #print('Home RPY: {}'.format(self._orientation))
 
     def __init__(self):
         super(AileenSupervisor, self).__init__()
@@ -51,7 +51,7 @@ class AileenSupervisor(Supervisor):
 
         self._motorNodes = list()
         self._motorSensorNodes = list()
-
+        self._connectorNode = self.getConnector('connector')
         self._camera = self.getCamera('camera')
         self._camera.enable(settings.TIME_STEP)
         self.resX = self._camera.getWidth()
@@ -96,7 +96,7 @@ class AileenSupervisor(Supervisor):
                         )
 
         self.initialize_robot()
-        self.test_ikpy(n=10)
+        #self.test_ikpy(n=10)
 
     def pose_to_ikpy(self, joints):
         j = [0]
