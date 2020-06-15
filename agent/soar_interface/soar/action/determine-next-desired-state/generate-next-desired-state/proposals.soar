@@ -1,0 +1,36 @@
+##!
+# @file
+#
+# @created smohan 20200513
+sp {genrate-next-desired-state*propose*mark-as-non-terminal
+    (state <s>    ^name generate-next-desired-state
+                  ^projected-world <pw>)
+    (<pw>    -^type terminal
+             -^_is-terminal <any>)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name mark-terminal
+             ^flag false)
+    }
+
+
+sp {generate-next-desired-state*propose*mark-as-terminal
+    (state <s>    ^name generate-next-desired-state
+                  ^projected-world <pw>)
+    (<pw>    ^type AileenEndState
+             -^_is-terminal <any>)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name mark-terminal
+             ^flag true)
+    }
+    
+
+
+sp {generate-next-state*propose*complete-determine-next-state
+    (state <s>    ^name generate-next-desired-state
+                  ^projected-world <pw>)
+-->
+    (<s>    ^operator <op> + <)
+    (<op>    ^name complete-generate-next-desired-state)
+    }

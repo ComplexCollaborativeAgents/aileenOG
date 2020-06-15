@@ -10,6 +10,7 @@ from language_generator import LanguageGenerator
 from collections import OrderedDict
 from instructor import gui
 from copy import deepcopy
+import time
 
 
 class ActionWordLesson:
@@ -249,6 +250,7 @@ class ActionWordLesson:
             agent_response = self.deliver_action_lesson_segment(world, agent)
             if agent_response['status'] == 'failure':
                 break
+
         evaluation = self.evaluate_agent_response(agent_response)
         score = evaluation['score']
         agent_response = agent.process_interaction(evaluation)

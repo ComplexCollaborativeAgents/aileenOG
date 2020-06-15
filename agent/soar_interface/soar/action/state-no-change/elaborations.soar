@@ -1,0 +1,21 @@
+##!
+# @file
+#
+# @created smohan 20200514
+
+sp {action*state-no-change*propose*concept-superstate
+    (state <s>    ^choices none
+                  ^attribute state
+                   ^superstate <ss>)
+    (<ss>    ^name action
+             ^action <act>
+             ^segment.trace <t>
+             ^grounding <g>
+             -^desired <d>)
+-->
+    (<ss>    ^operator <op> + !)
+    (<op>    ^name determine-next-state
+             ^action <act>
+             ^trace <t>
+             ^grounding <g>)
+    }

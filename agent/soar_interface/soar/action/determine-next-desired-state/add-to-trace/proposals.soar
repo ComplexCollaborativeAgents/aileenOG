@@ -1,0 +1,60 @@
+##!
+# @file
+#
+# @created smohan 20200514
+
+sp {add-to-trace*propose*add-start
+    (state <s>    ^name add-to-trace
+                  ^trace <t>
+                  -^added <w>
+                  ^world <w>)
+    (<t>    -^start <any>)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name add-world
+             ^start <t>)
+    }
+
+sp {add-to-trace*propose*add-after-starte
+    (state <s>    ^name add-to-trace
+                  ^trace <t>
+                  -^added <w>
+                  ^world <w>)
+    (<t>    ^start <sw>
+            -^after <any>)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name add-world
+             ^after <sw>
+             ^trace <t>)
+    }
+             
+sp {add-to-trace*propose*add-after
+    (state <s>    ^name add-to-trace
+                  ^trace <t>
+                  -^added <w>)
+    (<t>    ^after <af1>)
+    (<af1>    ^<w1> <w2>)
+    -{(<t>    ^after <af2>)
+      (<af2>    ^<w2> <any>)}
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name add-world
+             ^after <w1>
+             ^trace <t>)}
+
+sp {add-to-trace*propose*complete-add-to-trace
+    (state <s>    ^name add-to-trace)
+-->
+    (<s>    ^operator <op> + <)
+    (<op>    ^name complete-add-to-trace)}
+
+sp {add-to-trace*apply*complete-add-to-trace
+    (state <s>    ^name add-to-trace
+                  ^world <w>
+                  ^operator.name complete-add-to-trace
+                  ^superstate <ss>)
+-->
+    (<ss>    ^added <w>)
+    }
+                  

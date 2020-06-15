@@ -5,8 +5,9 @@
 
 sp {action*propose*pick-up
     (state <s>    ^name action
-                  ^world.objects.object <obj>)
-    (<obj>    ^held false)
+                  ^objects.object <obj>
+                  -^holdsInHand <any>
+                  ^desired <d>)
 -->
     (<s>    ^operator <op> +)
     (<op>    ^name op_pick-up
@@ -25,3 +26,13 @@ sp {action*apply*pick-up
     (<act>    ^name pick-up
               ^id <id>)
 }
+
+sp {action*apply*pick-up*model
+    (state <s>    ^name action
+                  ^operator <op>
+                  -^io)
+    (<op>    ^name op_pick-up
+             ^argument1 <obj>)
+-->
+    (<s>    ^holdsInHand <obj>)
+    }

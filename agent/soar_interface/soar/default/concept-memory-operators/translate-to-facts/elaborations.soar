@@ -97,6 +97,22 @@ sp {translate-to-facts*write-facts*start
             ^lthird AileenActionStartTime)
     }
 
+sp {translate-to-facts*write-facts*end
+    (state <s>    ^name translate-to-facts
+                  ^facts <facts>
+                  ^trace <t>)
+    (<t>    ^end.memory-id <lab>
+            ^after <af>)
+    (<af>    ^<end-ep> <but>)
+    (<end-ep>    ^memory-id <lab>)
+    (<but>    ^memory-id <epid>)
+-->
+    (<facts>    ^fact <f>)
+    (<f>    ^lfirst aileenTerminalTransition
+            ^lsecond (concat episode_ <lab>)
+            ^lthird (concat episode_ <epid>))
+    }
+
 sp {translate-to-facts*write-facts*after
     (state <s>    ^name translate-to-facts
                   ^facts <facts>

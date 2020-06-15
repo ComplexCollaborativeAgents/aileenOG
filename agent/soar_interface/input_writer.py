@@ -167,7 +167,7 @@ class InputWriter(object):
 
     def write_concept_memory_status_to_input_link(self):
         new_status_link = self._concept_memory.CreateIdWME("result")
-        logging.debug("[input_writer] :: writing concept memory status to input link")
+        logging.debug("[input_writer] :: writing concept memory status to input link for keys {}".format(self._concept_memory_status.keys()))
 
         if 'status' in self._concept_memory_status:
             new_status_link.CreateStringWME("status", self._concept_memory_status['status'])
@@ -191,9 +191,38 @@ class InputWriter(object):
                             match_id.CreateStringWME("third", str(match[2]))
                             logging.debug(
                                         "[input-writer] :: wrote matches {}".format(self._concept_memory_status['status']))
+        if 'projections' in self._concept_memory_status.keys():
+            projects_id = new_status_link.CreateIdWME('projections')
+            filtered = self.filter_cis_for_next_state(self._concept_memory_status['projections'])
+            logging.debug("[input-writer] :: filtered cis {}".format(filtered))
+            for item in filtered:
+                if item is not None:
+                    logging.debug("[input_writer] :: match {}".format(item))
+                    item_id = projects_id.CreateIdWME("project")
+                    item_id.CreateStringWME("first", str(item[0]))
+                    item_id.CreateStringWME("second", str(item[1]))
+                    if len(item) == 3:
+                        item_id.CreateStringWME("third", str(item[2]))
+                    logging.debug("[input-writer] :: wrote projects {}".format(self._concept_memory_status['status']))
 
         self._concept_memory_status = None
         self._clean_concept_memory_flag = True
+
+    def filter_cis_for_next_state(self, candidate_inferences):
+        for ci in candidate_inferences:
+            if ci[0] == 'startsAfterEndingOf':
+                episode_identifier = ci[1]
+                candidate_inferences.remove(ci)
+
+        filtered = []
+        for ci in candidate_inferences:
+            if ci[1] == episode_identifier:
+                if ci[0] == 'aileenTerminalTransition':
+                    filtered.append(['type','terminal_state'])
+                else:
+                    filtered.append(ci[2])
+        return filtered
+
 
     def clean_language_link(self):
         self._soar_agent.delete_all_children(self._language_link)
@@ -237,10 +266,15 @@ class InputWriter(object):
         for w_object in objects_list:
             object_id = self._objects_link.CreateIdWME("object")
             object_id.CreateIntWME('id', w_object['id'])
-            #position_id = object_id.CreateIdWME('position')
-            # position_id.CreateFloatWME('x', w_object['position'][0])
-            # position_id.CreateFloatWME('y', w_object['position'][1])
-            # position_id.CreateFloatWME('z', w_object['position'][2])
+            if 'position' in w_object:
+                position_id = object_id.CreateIdWME('position')
+                position_id.CreateFloatWME('x', w_object['position'][0])
+                position_id.CreateFloatWME('y', w_object['position'][1])
+                position_id.CreateFloatWME('z', w_object['position'][2])
+            if 'bounding_box' in w_object:
+                size_id = object_id.CreateIdWME('size')
+                size_id.CreateFloatWME('xsize', w_object['bounding_box'][3]-w_object['bounding_box'][0])
+                size_id.CreateFloatWME('zsize', w_object['bounding_box'][5]-w_object['bounding_box'][2])
             object_id.CreateStringWME('held', w_object['held'])
             object_id.CreateStringWME('color', str(w_object['color']))
             object_id.CreateStringWME('shape', w_object['shape'])

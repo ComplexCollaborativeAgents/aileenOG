@@ -1,0 +1,25 @@
+##!
+# @file
+#
+# @created smohan 20200513
+
+
+sp {determine-next-state*apply*complete-determine-next-state
+    (state <s>    ^name determine-next-state
+                  ^projected-world <pw>
+                  ^operator.name complete-determine-next-state
+                  ^superstate <ss>)
+-->
+    (<ss>    ^desired <pw>)
+    }
+
+sp {determine-next-state*apply*complete-determine-next-state*action-tracking
+    (state <s>    ^name determine-next-state
+                  ^projected-world <pw>
+                  ^operator.name complete-determine-next-state
+                  ^superstate.operator <sop>)
+    (<sop>    ^action-tracking <track>
+             ^attribute <attr>)
+-->
+    (<track>    ^<attr> <pw>)
+    }

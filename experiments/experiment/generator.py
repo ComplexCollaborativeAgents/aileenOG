@@ -108,11 +108,12 @@ class Generator:
         return lessons
 
 
-    def _generate_action_word_lesson_descriptions(self, signal, distractors, is_positive, number_of_samples=5):
+    def _generate_action_word_lesson_descriptions(self, signal, distractors, is_positive, number_of_samples=8):
         action_configs = ActionWordLesson.get_action_definition_set()
         lessons = []
-        for i in range(0, number_of_samples):
-            for key in action_configs.keys():
+
+        for key in action_configs.keys():
+            for i in range(0, number_of_samples):
                 description = action_configs[key]
                 description['action'] = key
                 lesson = {
