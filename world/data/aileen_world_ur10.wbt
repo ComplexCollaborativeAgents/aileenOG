@@ -33,8 +33,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation -0.09717448860511319 -0.9648987881877319 -0.24398247338319437 2.5108806224728855
-  position -1.582861256684732 2.4525599275996424 -2.10583055198071
+  orientation 0.5751965537398007 -0.8142112655775492 -0.07879682463438767 5.671501350994755
+  position 0.8226950712790977 0.765833567089565 0.40999572472866386
   follow "floor"
   followOrientation TRUE
 }
@@ -54,6 +54,14 @@ DEF ur10 UR10e {
   rotation -0.5773502691896258 -0.5773502691896258 -0.5773502691896258 2.0944
   controller "<extern>"
   supervisor TRUE
+  toolSlot [
+    Connector {
+      rotation -1 0 0 1.57
+      type "active"
+      rotationTolerance 0
+      numberOfRotations 0
+    }
+  ]
   bodySlot [
     Camera {
       translation 0 0.6 1.2
@@ -66,4 +74,36 @@ DEF ur10 UR10e {
       }
     }
   ]
+}
+Solid {
+  translation 0.55 0.5 -0.03
+  children [
+    Connector {
+      translation 0 0.05 0
+      rotation -1 0 0 1.57
+      physics Physics {
+      }
+      type "passive"
+      distanceTolerance 0.05
+      axisTolerance 0.5
+      rotationTolerance 0
+      numberOfRotations 0
+    }
+    Shape {
+      appearance PBRAppearance {
+        emissiveColor 1 0 0
+      }
+      geometry Cylinder {
+        height 0.1
+        radius 0.05
+      }
+      castShadows FALSE
+    }
+  ]
+  boundingObject Cylinder {
+    height 0.1
+    radius 0.05
+  }
+  physics Physics {
+  }
 }

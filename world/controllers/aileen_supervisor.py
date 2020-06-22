@@ -10,29 +10,10 @@ import json
 
 from ikpy.chain import Chain
 from ikpy.link import OriginLink, URDFLink
-from ikpy.geometry_utils import *
+from ikpy.utils.geometry import *
 import numpy as np
 
 class AileenSupervisor(Supervisor):
-
-    def initialize_robot(self):
-        logging.info('[aileen_supervisor] :: initializing robot')
-        for name in settings.JOINT_NAMES:
-            self._motorNodes.append(self.getMotor(name))
-            self._motorSensorNodes.append(self.getPositionSensor(name+'_sensor'))
-            self._motorSensorNodes[-1].enable(settings.TIME_STEP)
-        logging.info('[aileen_supervisor] :: got {} motors and {} position sensors'.format(len(self._motorNodes), len(self._motorSensorNodes)))
-        logging.info('[aileen_supervisor] :: moving to start position')
-        self.command_pose(settings.START_LOCATION_1)
-        self.wait_for_motion_complete()
-        self.command_pose(settings.HOME_POSE)
-        self.wait_for_motion_complete()
-        logging.info('[aileen_supervisor] :: reached start position')
-        T = self._ur10Chain.forward_kinematics(self.pose_to_ikpy(settings.HOME_POSE))
-        self._home = T[0:3,3]
-        self._orientation = T[0:3,0:3]
-        #print('Home XYZ: {}'.format(self._home))
-        #print('Home RPY: {}'.format(self._orientation))
 
     def __init__(self):
         super(AileenSupervisor, self).__init__()
@@ -48,7 +29,6 @@ class AileenSupervisor(Supervisor):
         self._held_node = None
 
         self._numDevices = self.getNumberOfDevices()
-
         self._motorNodes = list()
         self._motorSensorNodes = list()
         self._connectorNode = self.getConnector('connector')
@@ -57,7 +37,6 @@ class AileenSupervisor(Supervisor):
         self.resX = self._camera.getWidth()
         self.resY = self._camera.getHeight()
         logging.info("[aileen_supervisor] :: enabled camera")
-
         self._color_definitions = self.get_colors()
 
         self._world_thread = None
@@ -94,9 +73,26 @@ class AileenSupervisor(Supervisor):
                                     rotation=[0,0,1])],
                             active_links_mask=[True, True, True, True, True, True, True, True]
                         )
-
         self.initialize_robot()
-        #self.test_ikpy(n=10)
+
+    def initialize_robot(self):
+        logging.info('[aileen_supervisor] :: initializing robot')
+        for name in settings.JOINT_NAMES:
+            self._motorNodes.append(self.getMotor(name))
+            self._motorSensorNodes.append(self.getPositionSensor(name+'_sensor'))
+            self._motorSensorNodes[-1].enable(settings.TIME_STEP)
+        logging.info('[aileen_supervisor] :: got {} motors and {} position sensors'.format(len(self._motorNodes), len(self._motorSensorNodes)))
+        logging.info('[aileen_supervisor] :: moving to start position')
+        self.command_pose(settings.START_LOCATION_1)
+        self.wait_for_motion_complete()
+        self.command_pose(settings.HOME_POSE)
+        self.wait_for_motion_complete()
+        logging.info('[aileen_supervisor] :: reached start position')
+        T = self._ur10Chain.forward_kinematics(self.pose_to_ikpy(settings.HOME_POSE))
+        self._home = T[0:3,3]
+        #self._orientation = T[0:3,0:3]
+        #print(self._orientation)
+        self._orientation = [0, -1, 0]
 
     def pose_to_ikpy(self, joints):
         j = [0]
@@ -113,13 +109,19 @@ class AileenSupervisor(Supervisor):
         Assumes point is only XYZ coord right now.  Assuming fixed orientation is correct.  can change in future
         point should be a list: [X, Y, Z]
         """
-        return self.pose_from_ikpy(self._ur10Chain.inverse_kinematics(to_transformation_matrix(point, self._orientation),initial_position=self.pose_to_ikpy(self.get_current_position())))
+        #Tmat = to_transformation_matrix(point, self._orientation)
+        #tpoint = self.transform_point_to_robot_frame(point)
+        init_pos = self.pose_to_ikpy(self.get_current_position())
+        ikpy_pose = self._ur10Chain.inverse_kinematics(target_position=point, target_orientation=self._orientation, initial_position=init_pos, max_iter=50000)
+        return self.pose_from_ikpy(ikpy_pose)
 
     def go_to_point(self, point, wait=True):
         """
-        point should be a list: [X, Y, Z]
+        point should be a list: [X, Y, Z] IN WORLD FRAME
         """
+        logging.info('current position {}'.format(self.get_current_position()))
         pose = self.find_pose(point)
+        logging.info('target position {}'.format(pose))
         self.command_pose(pose)
         if wait:
             self.wait_for_motion_complete()
@@ -146,6 +148,7 @@ class AileenSupervisor(Supervisor):
     def command_pose(self, pose):
         for i in range(len(pose)):
             self._motorNodes[i].setPosition(pose[i])
+        self.wait_for_motion_complete()
 
     def print_status(self):
         for i in range(len(self._motorNodes)):
@@ -170,6 +173,8 @@ class AileenSupervisor(Supervisor):
         newpoint2 = np.matmul(T2, np.matmul(T1,pArr))
         return list(newpoint2[0:3])
 
+    """==========================================================Motion Commands================================================="""
+
     def indicate_object(self, point):
         logging.info('[aileen supervisor] :: Indicating Object')
         tPoint = self.transform_point_to_robot_frame(point)
@@ -183,6 +188,21 @@ class AileenSupervisor(Supervisor):
         #self.print_status()
         self.return_home()
         #self.print_status()
+
+    def pick_object(self, position, wait=True):
+        """
+            position: list [X, Y, Z] of object to pick in world frame
+        """
+        logging.info('[aileen supervisor] :: Picking Object')
+        position = [position[0], position[1]+.051, position[2]]
+        self.go_to_point(self.transform_point_to_robot_frame(position))
+        logging.info('[aileen supervisor] :: Locking')
+        self._connectorNode.lock()
+        currJnts = self.get_current_position()
+        newJnts = currJnts
+        newJnts[2] -= 3.14/4
+        self.command_pose(newJnts)
+        self.return_home()
 
     def test_ikpy(self, n=5):
         #generate faux object location, move to directly above it, move down, move up, move home
@@ -282,7 +302,7 @@ class AileenSupervisor(Supervisor):
                 geometry_string = geometry_node.getTypeName()
                 label_string = "CV{}".format(geometry_string.title())
                 return label_string
-
+        import pdb; pdb.set_trace()
     def get_object_color(self, object_node):
         children = object_node.getField('children')
         for i in range(0, children.getCount()):

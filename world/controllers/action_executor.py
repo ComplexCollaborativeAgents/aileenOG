@@ -62,10 +62,9 @@ class ActionExecutor:
         node = self._supervisor.getFromId(int(object_id))
         logging.debug("[action_executor] :: picking up object id {}".format(object_id))
         translation = node.getField('translation')
-        translation.setSFVec3f(settings.ROBOT_PLATE_LOCATION)
-        """
-        Need to implement picking action here
-        """
+        pos = translation.getSFVec3f()
+        #translation.setSFVec3f(settings.ROBOT_PLATE_LOCATION)
+        self._supervisor.pick_object(pos)
         logging.debug("[action_executor] :: object {} moved to {}".format(object_id, node.getPosition()))
         self._supervisor.set_held_node(node)
         return True
