@@ -1,0 +1,9 @@
+[{
+    "lesson-type": "spatial-word",
+    "content": "yellow cone left of red cylinder",
+    "description": {
+      "objects": [{"color": "red", "shape": "cone"},  {"color": "red", "shape": "box"}],
+      "relation": "left-of"},
+     "signal": "verify"
+  }
+]
