@@ -53,7 +53,9 @@ class AileenObject:
         description += "        castShadows FALSE\n"
         description += "        }\n"
         description += "        Connector {\n"
-        description += "          autoLock True\n"
+        description += '          type "passive"\n'
+        description += "          distanceTolerance .1\n"
+        description += "          axisTolerance .5\n"
         description += "          rotationTolerance 0\n"
         description += "          numberOfRotations 0\n"
         description += "          rotation 1 0 0 -1.57\n"

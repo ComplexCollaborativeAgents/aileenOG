@@ -36,7 +36,7 @@ IN_POS_THRESH = .001
 #Robot Config
 JOINT_NAMES = ['shoulder_pan_joint', 'shoulder_lift_joint', 'elbow_joint', 'wrist_1_joint', 'wrist_2_joint', 'wrist_3_joint']
 START_LOCATION_1= [0,-2.3562, 2.3562, 0, 0, 0]
-HOME_POSE = [1.57, -2.3562, 2.3562, -1.57, -1.57, 0]
+HOME_POSE = [1.57, -2.3562, 2.1562, -1.57, -1.57, 0]
 
 # Vision Module
 SHAPE_SET = ['cone', 'box', 'cylinder', 'sphere']

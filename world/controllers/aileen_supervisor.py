@@ -149,6 +149,7 @@ class AileenSupervisor(Supervisor):
         for i in range(len(pose)):
             self._motorNodes[i].setPosition(pose[i])
         self.wait_for_motion_complete()
+        return None
 
     def print_status(self):
         for i in range(len(self._motorNodes)):
@@ -188,6 +189,7 @@ class AileenSupervisor(Supervisor):
         #self.print_status()
         self.return_home()
         #self.print_status()
+        return None
 
     def pick_object(self, position, wait=True):
         """
@@ -202,7 +204,9 @@ class AileenSupervisor(Supervisor):
         newJnts = currJnts
         newJnts[2] -= 3.14/4
         self.command_pose(newJnts)
+        logging.debug('[aileen supervisor] :: Returning Home')
         self.return_home()
+        return None
 
     def place_object(self, target, wait=True):
         logging.info('[aileen supervisor] :: Placing Object')
@@ -216,6 +220,7 @@ class AileenSupervisor(Supervisor):
         newJnts[2] -= 3.14/4
         self.command_pose(newJnts)
         self.return_home()
+        return None
 
     def test_ikpy(self, n=5):
         #generate faux object location, move to directly above it, move down, move up, move home
