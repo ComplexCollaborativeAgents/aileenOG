@@ -75,10 +75,12 @@ class ActionExecutor:
             logging.debug("[action_executor] :: currently holding node {}".format(node.getId()))
             if location == 'proxy':
                 translation = node.getField('translation')
-                translation.setSFVec3f(settings.TEST_LOCATION)
+                #translation.setSFVec3f(settings.TEST_LOCATION)
+                self._supervisor.place_object(settings.TEST_LOCATION)
             else:
                 translation = node.getField('translation')
-                translation.setSFVec3f(location)
+                #translation.setSFVec3f(location)
+                self._supervisor.place_object(location)
             self._supervisor.set_held_node(None)
         else:
             logging.error("[action_executor] :: asked to place when no object is held")

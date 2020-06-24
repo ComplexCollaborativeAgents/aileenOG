@@ -35,12 +35,16 @@ if __name__ == "__main__":
     obj = world_server.get_all()
     #Grab objects and throw them down on the ground
     pick_locs = []
-    for object in obj['objects']:
-        #Create Fake Action Command
-        act = {'name':'pick-up', 'id':object['id']}
-        #Pass to executor to execute
-        aileen_executor.process_action_command(act)
 
+    for object in obj['objects']:
+        #Create Fake Pick Command
+        pick = {'name':'pick-up', 'id':object['id']}
+        #Pass to executor to execute
+        aileen_executor.process_action_command(pick)
+        place_pos = object['position']
+        place_pos[0] += .15
+        place = {'name':'place', 'location':object['position']}
+        aileen_executor.process_action_command(place)
     """
     for loc in pick_locs:
         loc = [loc[0], loc[1]+.051, loc[2]]

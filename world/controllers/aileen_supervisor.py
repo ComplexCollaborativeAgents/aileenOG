@@ -117,7 +117,7 @@ class AileenSupervisor(Supervisor):
 
     def go_to_point(self, point, wait=True):
         """
-        point should be a list: [X, Y, Z] IN WORLD FRAME
+        point should be a list: [X, Y, Z] IN ROBOT FRAME
         """
         logging.info('current position {}'.format(self.get_current_position()))
         pose = self.find_pose(point)
@@ -204,6 +204,19 @@ class AileenSupervisor(Supervisor):
         self.command_pose(newJnts)
         self.return_home()
 
+    def place_object(self, target, wait=True):
+        logging.info('[aileen supervisor] :: Placing Object')
+        above_target = [target[0], target[1]+.3, target[2]]
+        target = [target[0], target[1]+.051, target[2]]
+        self.go_to_point(self.transform_point_to_robot_frame(above_target))
+        self.go_to_point(self.transform_point_to_robot_frame(target))
+        self._connectorNode.unlock()
+        currJnts = self.get_current_position()
+        newJnts = currJnts
+        newJnts[2] -= 3.14/4
+        self.command_pose(newJnts)
+        self.return_home()
+
     def test_ikpy(self, n=5):
         #generate faux object location, move to directly above it, move down, move up, move home
         for i in range(n):
@@ -228,9 +241,9 @@ class AileenSupervisor(Supervisor):
     def set_held_node(self, node):
         self._held_node = node
         if self._held_node is not None:
-            logging.info("[action_supervisor] :: held object is {}".format(self._held_node.getId()))
+            logging.info("[aileen_supervisor] :: held object is {}".format(self._held_node.getId()))
         else:
-            logging.info("[action_supervisor] :: no object is currently held")
+            logging.info("[aileen_supervisor] :: no object is currently held")
 
     def get_held_node(self):
         return self._held_node
