@@ -40,9 +40,9 @@ def test_action_word_segment():
                            '0.05 0\n        }\n    ]\n    name "object2"\n   boundingObject Box {\n     size 0.1 '
                            '0.1 0.1\n   }\n   physics Physics {\n}}']}
     segment = lesson1.get_next_segment()
-    assert segment == {'action': {'name': 'pick-up', 'uuid': 'object1'}, 'interaction': {'marker':'trace'}}
+    assert segment == {'action': {'name': 'pick-up', 'requester': 'instructor', 'uuid': 'object1'}, 'interaction': {'marker':'trace'}}
     segment = lesson1.get_next_segment()
-    assert segment == {'action': {'location': [0.676147498734, 0.45, -0.0202334240995], 'name': 'place'},
+    assert segment == {'action': {'location': [0.676147498734, 0.45, -0.0202334240995], 'name': 'place', 'requester': 'instructor'},
                        'interaction': {'marker':'trace'}}
     segment = lesson1.get_next_segment()
     assert segment == None
