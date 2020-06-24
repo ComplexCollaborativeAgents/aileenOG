@@ -1,0 +1,9 @@
+[
+  {
+    "signal": "verify",
+    "lesson-type": "visual-word",
+    "description": {"color": "green", "shape": "cone"},
+    "content": "box",
+    "distractors":2
+  }
+]
