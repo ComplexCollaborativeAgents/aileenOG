@@ -8,6 +8,11 @@ from action_executor import ActionExecutor
 from world.log_config import logging
 import json
 
+from ikpy.chain import Chain
+from ikpy.link import OriginLink, URDFLink
+from ikpy.utils.geometry import *
+import numpy as np
+
 class AileenSupervisor(Supervisor):
 
     def __init__(self):
@@ -23,15 +28,211 @@ class AileenSupervisor(Supervisor):
 
         self._held_node = None
 
+        self._numDevices = self.getNumberOfDevices()
+        self._motorNodes = list()
+        self._motorSensorNodes = list()
+        self._connectorNode = self.getConnector('connector')
         self._camera = self.getCamera('camera')
         self._camera.enable(settings.TIME_STEP)
         self.resX = self._camera.getWidth()
         self.resY = self._camera.getHeight()
         logging.info("[aileen_supervisor] :: enabled camera")
-
         self._color_definitions = self.get_colors()
 
         self._world_thread = None
+
+        self._ur10Chain = Chain( links=[
+                            OriginLink(),
+                            URDFLink(name='shoulder_pan_joint',
+                                     translation_vector=[0,0,.1273],
+                                     orientation=[0,0,0],
+                                     rotation=[0,0,1]),
+                            URDFLink(name='shoulder_lift_joint',
+                                    translation_vector=[0, .220941, 0],
+                                    orientation=[0, 1.57, 0],
+                                    rotation=[0,1,0]),
+                            URDFLink(name='elbow_joint',
+                                    translation_vector=[0, -.1719, .612],
+                                    orientation=[0,0,0],
+                                    rotation=[0,1,0]),
+                            URDFLink(name='wrist_1_joint',
+                                    translation_vector=[0, 0, .5723],
+                                    orientation=[0, 1.57,0],
+                                    rotation=[0,1,0]),
+                            URDFLink(name='wrist_2_joint',
+                                    translation_vector=[0, .1149, 0],
+                                    orientation=[0,0,0],
+                                    rotation=[0,0,1]),
+                            URDFLink(name='wrist_3_joint',
+                                    translation_vector=[0,0,.1157],
+                                    orientation=[0,0,0],
+                                    rotation=[0,1,0]),
+                            URDFLink(name='ee',
+                                    translation_vector=[0, .0922,0],
+                                    orientation=[0,0,1.57],
+                                    rotation=[0,0,1])],
+                            active_links_mask=[True, True, True, True, True, True, True, True]
+                        )
+        self.initialize_robot()
+
+    def initialize_robot(self):
+        logging.info('[aileen_supervisor] :: initializing robot')
+        for name in settings.JOINT_NAMES:
+            self._motorNodes.append(self.getMotor(name))
+            self._motorSensorNodes.append(self.getPositionSensor(name+'_sensor'))
+            self._motorSensorNodes[-1].enable(settings.TIME_STEP)
+        logging.info('[aileen_supervisor] :: got {} motors and {} position sensors'.format(len(self._motorNodes), len(self._motorSensorNodes)))
+        logging.info('[aileen_supervisor] :: moving to start position')
+        self.command_pose(settings.START_LOCATION_1)
+        self.wait_for_motion_complete()
+        self.command_pose(settings.HOME_POSE)
+        self.wait_for_motion_complete()
+        logging.info('[aileen_supervisor] :: reached start position')
+        T = self._ur10Chain.forward_kinematics(self.pose_to_ikpy(settings.HOME_POSE))
+        self._home = T[0:3,3]
+        #self._orientation = T[0:3,0:3]
+        #print(self._orientation)
+        self._orientation = [0, -1, 0]
+
+    def pose_to_ikpy(self, joints):
+        j = [0]
+        for item in joints:
+            j.append(item)
+        j.append(0)
+        return j
+
+    def pose_from_ikpy(self, pose):
+        return pose[1:-1]
+
+    def find_pose(self, point):
+        """
+        Assumes point is only XYZ coord right now.  Assuming fixed orientation is correct.  can change in future
+        point should be a list: [X, Y, Z]
+        """
+        #Tmat = to_transformation_matrix(point, self._orientation)
+        #tpoint = self.transform_point_to_robot_frame(point)
+        init_pos = self.pose_to_ikpy(self.get_current_position())
+        ikpy_pose = self._ur10Chain.inverse_kinematics(target_position=point, target_orientation=self._orientation, initial_position=init_pos, max_iter=50000)
+        return self.pose_from_ikpy(ikpy_pose)
+
+    def go_to_point(self, point, wait=True):
+        """
+        point should be a list: [X, Y, Z] IN ROBOT FRAME
+        """
+        logging.info('current position {}'.format(self.get_current_position()))
+        pose = self.find_pose(point)
+        logging.info('target position {}'.format(pose))
+        self.command_pose(pose)
+        if wait:
+            self.wait_for_motion_complete()
+
+    def get_current_position(self):
+        pose = list()
+        for i in range(len(self._motorNodes)):
+            pose.append(self._motorSensorNodes[i].getValue())
+        return pose
+
+    def wait_for_motion_complete(self):
+        while not self.check_in_position():
+            self.step(settings.TIME_STEP)
+
+    def check_in_position(self, motor=-1):
+        if motor < 0:
+            truth = list()
+            for i in range(len(self._motorNodes)):
+                truth.append(abs(self._motorNodes[i].getTargetPosition() - self._motorSensorNodes[i].getValue()) < settings.IN_POS_THRESH)
+            return all(truth)
+        else:
+            return abs(self._motorNodes[motor].getTargetPosition() - self._motorSensorNodes[motor].getValue()) < settings.IN_POS_THRESH
+
+    def command_pose(self, pose):
+        for i in range(len(pose)):
+            self._motorNodes[i].setPosition(pose[i])
+        self.wait_for_motion_complete()
+        return None
+
+    def print_status(self):
+        for i in range(len(self._motorNodes)):
+            print('MOTOR {}: POS: {} TAR: {}'.format(i,self._motorSensorNodes[i].getValue(),self._motorNodes[i].getTargetPosition()))
+        print('===================')
+
+    def transform_point_to_robot_frame(self, point):
+        """
+        The whole webots world is rotated 90 degrees for some reason.  To avoid breaking anything, I am working around this, but this should really be rectified at some point
+        """
+        newpoint = [x for x in point]
+        newpoint.append(1)
+        pArr = np.array(newpoint)
+        T1 = np.array([[1, 0, 0, 0],
+                    [0, 0, -1, 0],
+                    [0, 1, 0, 0],
+                    [0, 0, 0, 1]])
+        T2 = np.array([[0, -1, 0, 0],
+                    [1, 0, 0, 0],
+                    [0, 0, 1, 0],
+                    [0, 0, 0, 1]])
+        newpoint2 = np.matmul(T2, np.matmul(T1,pArr))
+        return list(newpoint2[0:3])
+
+    """==========================================================Motion Commands================================================="""
+
+    def indicate_object(self, point):
+        logging.info('[aileen supervisor] :: Indicating Object')
+        tPoint = self.transform_point_to_robot_frame(point)
+        above = [tPoint[0], tPoint[1], tPoint[2]+.2]
+        down = [tPoint[0], tPoint[1], tPoint[2]+.1]
+        self.go_to_point(above)
+        #self.print_status()
+        self.go_to_point(down)
+        #self.print_status()
+        self.go_to_point(above)
+        #self.print_status()
+        self.return_home()
+        #self.print_status()
+        return None
+
+    def pick_object(self, position, wait=True):
+        """
+            position: list [X, Y, Z] of object to pick in world frame
+        """
+        logging.info('[aileen supervisor] :: Picking Object')
+        position = [position[0], position[1]+.051, position[2]]
+        self.go_to_point(self.transform_point_to_robot_frame(position))
+        logging.info('[aileen supervisor] :: Locking')
+        self._connectorNode.lock()
+        currJnts = self.get_current_position()
+        newJnts = currJnts
+        newJnts[2] -= 3.14/4
+        self.command_pose(newJnts)
+        logging.debug('[aileen supervisor] :: Returning Home')
+        self.return_home()
+        return None
+
+    def place_object(self, target, wait=True):
+        logging.info('[aileen supervisor] :: Placing Object')
+        above_target = [target[0], target[1]+.3, target[2]]
+        target = [target[0], target[1]+.051, target[2]]
+        self.go_to_point(self.transform_point_to_robot_frame(above_target))
+        self.go_to_point(self.transform_point_to_robot_frame(target))
+        self._connectorNode.unlock()
+        currJnts = self.get_current_position()
+        newJnts = currJnts
+        newJnts[2] -= 3.14/4
+        self.command_pose(newJnts)
+        self.return_home()
+        return None
+
+    def test_ikpy(self, n=5):
+        #generate faux object location, move to directly above it, move down, move up, move home
+        for i in range(n):
+            point = [np.random.random()*(settings.OBJECT_POSITION_MAX_X-settings.OBJECT_POSITION_MIN_X) + settings.OBJECT_POSITION_MIN_X,
+                    np.random.random()*(settings.OBJECT_POSITION_MAX_Y-settings.OBJECT_POSITION_MIN_Y) + settings.OBJECT_POSITION_MIN_Y,
+                    np.random.random()*(settings.OBJECT_POSITION_MAX_Z-settings.OBJECT_POSITION_MIN_Z) + settings.OBJECT_POSITION_MIN_Z]
+            self.indicate_object(point)
+
+    def return_home(self):
+        self.command_pose(settings.HOME_POSE)
+        self.wait_for_motion_complete()
 
     def run_in_background(self):
         self._world_thread = Thread(target=self.run_world_loop)
@@ -45,9 +246,9 @@ class AileenSupervisor(Supervisor):
     def set_held_node(self, node):
         self._held_node = node
         if self._held_node is not None:
-            logging.info("[action_supervisor] :: held object is {}".format(self._held_node.getId()))
+            logging.info("[aileen_supervisor] :: held object is {}".format(self._held_node.getId()))
         else:
-            logging.info("[action_supervisor] :: no object is currently held")
+            logging.info("[aileen_supervisor] :: no object is currently held")
 
     def get_held_node(self):
         return self._held_node
@@ -119,7 +320,7 @@ class AileenSupervisor(Supervisor):
                 geometry_string = geometry_node.getTypeName()
                 label_string = "CV{}".format(geometry_string.title())
                 return label_string
-
+        import pdb; pdb.set_trace()
     def get_object_color(self, object_node):
         children = object_node.getField('children')
         for i in range(0, children.getCount()):
