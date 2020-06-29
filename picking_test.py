@@ -38,12 +38,13 @@ if __name__ == "__main__":
 
     for object in obj['objects']:
         #Create Fake Pick Command
-        pick = {'name':'pick-up', 'id':object['id']}
+        pick = {'name':'pick-up', 'id':object['id'], 'requestor':'instructor'}
         #Pass to executor to execute
         aileen_executor.process_action_command(pick)
         place_pos = object['position']
         place_pos[0] += .15
-        place = {'name':'place', 'location':object['position']}
+        time.sleep(3)
+        place = {'name':'place', 'location':object['position'], 'requestor':'instructor'}
         aileen_executor.process_action_command(place)
     """
     for loc in pick_locs:

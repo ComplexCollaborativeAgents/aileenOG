@@ -32,6 +32,8 @@ ROBOT_PLATE_LOCATION = [-0.1, 0.2, 0]
 TIME_STEP = 32
 TEST_LOCATION = [0.771, 0.5610656650000001, -0.199]
 IN_POS_THRESH = .001
+INSTRUCTOR_VELOCITY = 0.15
+INSTRUCTOR_HOLD_POSITION = [1.2, 0.6, 0]
 
 #Robot Config
 JOINT_NAMES = ['shoulder_pan_joint', 'shoulder_lift_joint', 'elbow_joint', 'wrist_1_joint', 'wrist_2_joint', 'wrist_3_joint']
@@ -97,7 +99,6 @@ AGENT_RECOMPREHEND_AFTER_LEARN = 'false'
 
 ## Experiments
 RUN_DATA_FILE_PATH = path.join(ROOT_PATH, 'experiments', 'results', 'run.csv')
-
 
 try:
     from local_settings import *
