@@ -25,7 +25,13 @@ class ActionExecutor:
                         if action['name'] == 'indicate' and 'uuid' in action:
                             return self.indicate_object_by_uuid(action['uuid'])
                         else:
-                            logging.error("[action_executor] :: receive a malformed action request")
+                            if action['name'] == 'stack' and 'ids' in action:
+                                """
+                                    I only support stack with two plain ids at this time.  ids value should be a list of length 2.  first item is  the bottom object, the 2nd is the one that goes on top
+                                """
+                                return self.stack_objects(action['ids'])
+                            else:
+                                logging.error("[action_executor] :: receive a malformed action request")
 
     def indicate_object_by_uuid(self, object_uuid):
         for i in range(self._supervisor._children.getCount()):
@@ -75,6 +81,9 @@ class ActionExecutor:
         return True
 
     def place_object(self, location):
+        """
+            Location defines the point where I want the center of the object to go.
+        """
         node = self._supervisor.get_held_node()
         if node is not None:
             logging.debug("[action_executor] :: currently holding node {}".format(node.getId()))
@@ -93,5 +102,16 @@ class ActionExecutor:
             self._supervisor.set_held_node(None)
         else:
             logging.error("[action_executor] :: asked to place when no object is held")
+        return True
 
+    def stack_objects(self, id_list):
+        """
+            obj1 is the bottom.  obj2 goes on top.
+        """
+        obj1 = self._supervisor.getFromId(int(id_list[0]))
+        translation = obj1.getField('translation')
+        place_loc = translation.getSFVec3f()
+        place_loc[1] += settings.OBJECT_STANDARD_HEIGHT
+        self.pick_up_object(id_list[1])
+        self.place_object(place_loc)
         return True

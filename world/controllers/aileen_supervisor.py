@@ -92,7 +92,7 @@ class AileenSupervisor(Supervisor):
         self._home = T[0:3,3]
         #self._orientation = T[0:3,0:3]
         #print(self._orientation)
-        self._orientation = [0, -1, 0]
+        self._orientation = [0, 1, 0]
 
     def pose_to_ikpy(self, joints):
         j = [0]
@@ -112,7 +112,7 @@ class AileenSupervisor(Supervisor):
         #Tmat = to_transformation_matrix(point, self._orientation)
         #tpoint = self.transform_point_to_robot_frame(point)
         init_pos = self.pose_to_ikpy(self.get_current_position())
-        ikpy_pose = self._ur10Chain.inverse_kinematics(target_position=point, target_orientation=self._orientation, initial_position=init_pos, max_iter=50000)
+        ikpy_pose = self._ur10Chain.inverse_kinematics(target_position=point, target_orientation=self._orientation, orientation_mode="Z", initial_position=init_pos, max_iter=50000)
         return self.pose_from_ikpy(ikpy_pose)
 
     def go_to_point(self, point, wait=True):
@@ -210,7 +210,7 @@ class AileenSupervisor(Supervisor):
 
     def place_object(self, target):
         logging.info('[aileen supervisor] :: Placing Object')
-        above_target = [target[0], target[1]+.3, target[2]]
+        above_target = [target[0], target[1]+.25, target[2]]
         target = [target[0], target[1]+.051, target[2]]
         self.go_to_point(self.transform_point_to_robot_frame(above_target))
         self.go_to_point(self.transform_point_to_robot_frame(target))
