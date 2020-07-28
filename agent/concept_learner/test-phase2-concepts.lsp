@@ -6,7 +6,7 @@
 ;;;;   Created: June 16, 2020 09:55:54
 ;;;;   Purpose: 
 ;;;; ----------------------------------------------------------------------------
-;;;;  Modified: Monday, July 27, 2020 at 17:24:14 by klenk
+;;;;  Modified: Tuesday, July 28, 2020 at 07:01:13 by klenk
 ;;;; ----------------------------------------------------------------------------
 
 (in-package :aileen)
@@ -58,7 +58,6 @@
 ;  (when clean? (restore-init))
   )
 
-
 (defun test-phase2-reasoning-symbols ()
   (let (res)
     (setq res (call-test-server
@@ -83,8 +82,53 @@
 
 
 (defun test-primary ()
-  (assert t)
+  (test-primary-basic)
   )
+
+(defun test-primary-basic ()
+  (let (res pattern)
+    (setq res (call-test-server "store"
+               (pairlis '("facts" "context" "concept")
+                        (list (list (list "isa" "O0" "RPrimary")
+                                    (list "isa" "O0" "CVRed")
+                                    (list "isa" "O0" "CVCylinder"))
+                              "Test0P2A" ;;Id
+                              "RPrimary"))))
+    (assert (= (cdr (assoc :NUM-EXAMPLES res)) 1))
+    (assert (= (cdr (assoc :NUM-GENERALIZATIONS res)) 0))
+    (setq res (call-test-server "store"
+               (pairlis '("facts" "context" "concept")
+                        (list (list (list "isa" "O1" "RPrimary")
+                                    (list "isa" "O1" "CVRed")
+                                    (list "isa" "O1" "CVCube"))
+                              "Test1P2A" ;;Id
+                              "RPrimary"))))
+    (assert (= (cdr (assoc :NUM-EXAMPLES res)) 0))  
+    (assert (= (cdr (assoc :NUM-GENERALIZATIONS res)) 1)) ;; A good generalization
+    
+    (setq res (call-test-server "store"
+               (pairlis '("facts" "context" "concept")
+                        (list (list (list "isa" "O0" "RPrimary")
+                                    (list "isa" "O0" "CVYellow")
+                                    (list "isa" "O0" "CVCylinder"))
+                              "Test2P2A" ;;Id
+                              "RPrimary"))))
+    (assert (= (cdr (assoc :NUM-EXAMPLES res)) 1))
+    (assert (= (cdr (assoc :NUM-GENERALIZATIONS res)) 1)) ;;; ungeneralized exemplar
+    (setq res (call-test-server "store"
+               (pairlis '("facts" "context" "concept")
+                        (list (list (list "isa" "O1" "RPrimary")
+                                    (list "isa" "O1" "CVBlue")
+                                    (list "isa" "O1" "CVCylinder"))
+                              "Test3P2A" ;;Id
+                              "RPrimary"))))
+    (assert (= (cdr (assoc :NUM-EXAMPLES res)) 0)) 
+    (assert (= (cdr (assoc :NUM-GENERALIZATIONS res)) 2)) ;;;A Bad generalization!
+
+    
+    ))
+
+
 
 (defun test-above ()
   (test-above-basic))
