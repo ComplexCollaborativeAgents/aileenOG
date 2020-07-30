@@ -18,6 +18,7 @@ COLOR_PATH = path.join(ROOT_PATH, 'instructor', 'resources', 'colors.json')
 CV_NAMES = path.join(ROOT_PATH, 'agent', 'vision', 'aileen.names')  # TODO: This should be changed to setting.SHAPE_SET.
 CV_CONFIGURATION = path.join(ROOT_PATH, 'agent', 'vision', 'yolov3-tiny-aileen-test.cfg')
 CV_WEIGHTS = path.join(ROOT_PATH, 'agent', 'vision', 'yolov3-tiny-aileen_final.weights')
+SIZE_PATH = path.join(ROOT_PATH, 'instructor', 'resources', 'sizes.json')
 
 # Servers
 WORLD_HOST = 'localhost'
@@ -61,9 +62,10 @@ OBJECT_POSITION_MIN_Z = -0.245
 
 OBJECT_POSITION_DELTA = 0.15
 
-OBJECT_STANDARD_HEIGHT = 0.1
-OBJECT_STANDARD_WIDTH_X = 0.1
-OBJECT_STANDARD_WIDTH_Z = 0.1
+#DEPRECATED! SIZES DEFINED IN instructor/resources/sizes.json
+#OBJECT_STANDARD_HEIGHT = 0.1
+#OBJECT_STANDARD_WIDTH_X = 0.1
+#OBJECT_STANDARD_WIDTH_Z = 0.1
 
 SPATIAL_CONFIGURATION_FILE_NAME = 'spatial_configuration.json'
 SPATIAL_DEF_OBJECTS = 'objects'
