@@ -5,6 +5,7 @@ channels:
   - menpo
 dependencies:
   - python=2.7
+  - seaborn
   - scikit-learn
   - pandas
   - torchvision
