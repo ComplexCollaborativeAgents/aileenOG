@@ -5,6 +5,10 @@ channels:
   - menpo
 dependencies:
   - python=2.7
+  - scikit-learn
+  - pandas
+  - torchvision
+  - matplotlib
   - coloredlogs
   - enum
   - typing
