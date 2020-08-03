@@ -42,11 +42,7 @@ class InputWriter(object):
             self._clean_concept_memory_flag = False
 
         if settings.SOAR_CV:
-            # ToDo: Move the input to Detector to the config file.
-            self.detector = Detector(settings.CV_NAMES,
-                                     settings.CV_CONFIGURATION,
-                                     settings.CV_WEIGHTS,
-                                     'color')
+            self.detector = Detector()
 
     def set_concept_memory_status(self, concept_memory_status_dictionary):
         self._concept_memory_status = concept_memory_status_dictionary
