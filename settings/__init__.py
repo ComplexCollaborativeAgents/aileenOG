@@ -50,6 +50,10 @@ TRAINING_DATA_FOLDER = './vision_training_data'
 TRAIN_FILES = TRAINING_DATA_FOLDER + '/train_files.txt'
 TEST_FILES = TRAINING_DATA_FOLDER + '/test_files.txt'
 
+# Arbitrary size boudnaries
+SIZE_SM = (.075*.075)
+SIZE_ML = (1.25*1.25)
+
 # Instructor
 OBJECT_POSITION_MAX_X = 0.855
 OBJECT_POSITION_MIN_X = 0.356
