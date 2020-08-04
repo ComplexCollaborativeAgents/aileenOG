@@ -21,6 +21,7 @@ class AileenObject:
         self._translation = translation
         self._name = "object{}".format(AileenObject.randomizer.uuid4())
         self._language = None
+        self._connector_dim = None
         logging.debug("[aileen_object] :: created a new object")
 
     def __eq__(self, other):
@@ -51,6 +52,15 @@ class AileenObject:
         description += "        geometry {}\n".format(self.get_geometry_description())
         description += "        castShadows FALSE\n"
         description += "        }\n"
+        description += "        Connector {\n"
+        description += '          type "passive"\n'
+        description += "          distanceTolerance .1\n"
+        description += "          axisTolerance .5\n"
+        description += "          rotationTolerance 0\n"
+        description += "          numberOfRotations 0\n"
+        description += "          rotation 1 0 0 -1.57\n"
+        description += "          translation 0 {} 0\n".format(self._connector_dim)
+        description += "        }\n"
         description += "    ]\n"
         description += "    name \"{}\"\n".format(self._name)
         description += "   boundingObject {}".format(self.get_bounding_object_description())
@@ -74,23 +84,27 @@ class AileenObject:
             description += "          bottomRadius {}\n".format(self._width_x / 2)
             description += "          height {}\n".format(self._height_y)
             description += "        }"
+            self._connector_dim = self._height_y/2
             return description
 
         if self._shape == "box":
             description += "          size {} {} {}\n".format(self._width_x, self._height_y, self._width_z)
             description += "        }"
+            self._connector_dim = self._height_y/2
             return description
 
         if self._shape == "cylinder":
             description += "          radius {}\n".format(self._width_x / 2)
             description += "          height {}\n".format(self._height_y)
             description += "        }"
+            self._connector_dim = self._height_y/2
             return description
 
         if self._shape == "sphere":
             description += "          radius {}\n".format(self._width_x / 2)
             description += "          subdivision 3\n"
             description += "        }"
+            self._connector_dim = self._width_x/2
             return description
 
     def set_translation(self, position_vector):

@@ -133,6 +133,7 @@ class ActionWordLesson:
         action_dict = {'name': 'pick-up'}
         scene_object = self._scene_objects[trace_action['argument']]
         action_dict['uuid'] = scene_object._name
+        action_dict['requester'] = 'instructor'
         return action_dict
 
     def get_structure_for_place_action(self, trace_action):
@@ -148,6 +149,7 @@ class ActionWordLesson:
                                                                       scene_objects=self._scene_objects,
                                                                       configuration_definition=relation_qsr)
             action_dict['location'] = position
+            action_dict['requester'] = 'instructor'
             return action_dict
         except ValueError:
             logging.error("[action_word_lesson] :: bad lesson")
