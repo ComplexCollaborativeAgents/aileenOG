@@ -38,9 +38,7 @@
         "color": "blue",
         "shape": "cylinder"
       }
-    }
-    "signal": "verify",
-    "distractors": 4,
+    },
     "signal": "inform"
   },
   {
@@ -96,6 +94,5 @@
     },
     "signal": "verify",
     "distractors": 0
->>>>>>> master
   }
 ]

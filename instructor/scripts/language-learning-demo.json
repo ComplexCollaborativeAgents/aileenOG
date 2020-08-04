@@ -2,8 +2,35 @@
   {
     "signal": "verify",
     "lesson-type": "visual-word",
+    "description": {"color": "blue", "shape": "cone"},
+    "content": "lox"
+  },
+  {
+    "signal": "inform",
+    "lesson-type": "visual-word",
     "description": {"color": "green", "shape": "cone"},
-    "content": "box",
-    "distractors":2
+    "content": "lox"
+  },
+  {
+    "signal": "inform",
+    "lesson-type": "visual-word",
+    "description": {"color": "red", "shape": "cone"},
+    "content": "lox"
+  },
+  {
+    "signal": "verify",
+    "lesson-type": "visual-word",
+    "description": {"color": "blue", "shape": "cone"},
+    "content": "lox"
+  },
+ {
+    "comment": "test spatial concept right-of",
+    "lesson-type": "spatial-word",
+    "content": "red lox right of green lox",
+    "description": {
+      "objects": [{"color": "red", "shape": "cone"},  {"color": "green", "shape": "cone"}],
+      "relation": "right-of"},
+    "signal": "verify",
+    "distractors": 0
   }
 ]
