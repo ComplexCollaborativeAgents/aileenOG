@@ -1,16 +1,21 @@
 from agent.log_config import logging
 import xmlrpclib
 from agent.language.aileen_grammar import AileenGrammar
+from agent.language.language_learner import LanguageLearner
 from agent.concept_learner.concept_learner import ConceptLearner
 from agent.soar_interface import concept_learner_helper
 from agent.soar_interface import action_helper
+import settings
 
 
 class OutputReader(object):
     def __init__(self, soar_agent, world_server):
         self._soar_agent = soar_agent
-        self._grammar = AileenGrammar()
-        self._grammar.use_default_rules()
+        if not settings.AGENT_LANGUAGE_LEARNING:
+            self._grammar = AileenGrammar()
+            self._grammar.use_default_rules()
+        else:
+            self._grammar = LanguageLearner()
         self._response = None
         self._concept_learner = ConceptLearner()
         self._context_counter = 0
@@ -73,7 +78,7 @@ class OutputReader(object):
             if child.GetAttribute() == 'parse-content':
                 content = child.GetValueAsString().strip()
                 logging.info("[output-reader] :: received parse-content command for {}".format(content))
-                parsed_content = self._grammar.parse(content)
+                parsed_content = self._grammar.parse_description(content)
                 logging.debug("[output-reader] :: parsed content to {}".format(parsed_content))
                 self._soar_agent._input_writer.set_language({'parses': parsed_content})
         commandID.AddStatusComplete()

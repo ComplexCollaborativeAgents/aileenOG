@@ -10,6 +10,7 @@ class LanguageLearner:
     def __init__(self, grammar=None):
         if grammar == None:
             grammar = aileen_grammar.AileenGrammar()
+            grammar.use_default_rules()
         self.grammar = grammar
     
     def parse_description(self, sentence, scene=None):
