@@ -127,6 +127,8 @@ class InputWriter(object):
                     detections[i]['position'] = detections[i]['camera_yolo_position_proj_to_world']
                     detections[i]['bounding_box'] = detections[i]['camera_bounding_box_yolo_proj_to_world']
 
+                    if settings.DETECTOR_MODE == 2:
+                        detections[i]['cluster_id'] = detections[i]['cluster_id']
 
                     ## SM: if settings have preload visual concepts on, just use information from the world to ensure 100% detection
                     if settings.AGENT_VISUAL_CONCEPTS_PARAM == 'soar' and settings.AGENT_PRELOAD_VISUAL_CONCEPTS_PARAM == 'true':
