@@ -83,6 +83,9 @@ ACTION_LESSON_STATE_BAD = 'bad'
 
 ## Agent
 AGENT_PARAM_RUNTIME_FILE = path.join(ROOT_PATH, 'agent', 'soar_interface', 'soar', '_agent_params_runtime.soar')
+
+AGENT_LANGUAGE_LEARNING = False
+
 AGENT_VISUAL_CONCEPTS_PARAM = 'soar'
 AGENT_PRELOAD_VISUAL_CONCEPTS_PARAM = 'true'
 
