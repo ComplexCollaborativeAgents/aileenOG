@@ -26,7 +26,7 @@ class AileenObject:
         logging.debug("[aileen_object] :: created a new object")
 
     def __eq__(self, other):
-        return self._shape == other._shape and self._color.name == other._color.name and self._size == other._size
+        return self._shape == other._shape and self._color.name == other._color.name and self._size.name == other._size.name
 
     def __ne__(self, other):
         return not self.__eq__(other)

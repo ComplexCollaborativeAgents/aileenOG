@@ -101,6 +101,9 @@ class ObjectRandomizer:
     shapes = ['cylinder', 'box']
     shape_index = -1
 
+    sizes = ['small','large']
+    sizes_index = -1
+
     uuid = 0
 
     def get_random_color(self):
@@ -109,6 +112,14 @@ class ObjectRandomizer:
 
     def get_color_vector_sample(self, color_symbol):
         return AileenObject.get_colors()[color_symbol][0]
+
+    def get_size_vector_sample(self, size_name):
+        return AileenObject.get_sizes()[size_name][0]
+
+    def get_random_size(self):
+        #sizes = AileenObject.get_sizes().keys()
+        self.sizes_index += 1
+        return self.sizes[self.sizes_index % len(self.sizes)]
 
     def get_random_shape(self):
         self.shape_index += 13
