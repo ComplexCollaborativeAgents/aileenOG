@@ -1,0 +1,45 @@
+[
+  {
+    "signal": "inform",
+    "lesson-type": "visual-word",
+    "is_positive": "true",
+    "description": {"color": "green", "shape":  "box"},
+    "content": "grox"
+  },
+  {
+    "signal": "inform",
+    "lesson-type": "visual-word",
+    "is_positive": "true",
+    "description": {"color": "green", "shape":  "box"},
+    "content": "grox"
+  },
+  {
+    "signal": "inform",
+    "lesson-type": "visual-word",
+    "is_positive": "true",
+    "description": {"color": "green", "shape":  "box"},
+    "content": "grox"
+  },
+  {
+    "signal": "verify",
+    "lesson-type": "visual-word",
+    "is_positive": "true",
+    "description": {"color": "green", "shape":  "box"},
+    "content": "grox",
+    "distractors": 2
+  },
+   {
+    "signal": "verify",
+    "lesson-type": "visual-word",
+    "is_positive": "False",
+    "description": {"color": "blue", "shape":  "box"},
+    "content": "grox"
+  },
+  {
+    "signal": "verify",
+    "lesson-type": "visual-word",
+    "is_positive": "False",
+    "description": {"color": "green", "shape":  "cylinder"},
+    "content": "grox"
+  }
+]

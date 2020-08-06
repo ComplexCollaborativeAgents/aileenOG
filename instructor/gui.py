@@ -17,7 +17,7 @@ class TextScrollCombo(Tkinter.Frame):
         # create a Text widget
         self.txt = Tkinter.Text(self, state=Tkinter.DISABLED)
         self.txt.grid(row=0, column=0, sticky="nsew")
-        self.txt.config(undo=True, wrap="word", font=("Ubuntu", 16))
+        self.txt.config(undo=True, wrap="word", font=("Ubuntu", 24))
         self.txt.tag_configure("signal", foreground="blue")
         self.txt.tag_configure("success", foreground="green")
         self.txt.tag_configure("failure", foreground="red")

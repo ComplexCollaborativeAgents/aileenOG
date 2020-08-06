@@ -15,10 +15,14 @@ SOAR_SVS = False
 SOAR_CV = True
 CURRENT_IMAGE_PATH = path.join(ROOT_PATH, 'world', 'controllers', 'images', 'current_image.png')
 COLOR_PATH = path.join(ROOT_PATH, 'instructor', 'resources', 'colors.json')
+<<<<<<< HEAD
 CV_NAMES = path.join(ROOT_PATH, 'agent', 'vision', 'aileen.names')  # TODO: This should be changed to setting.SHAPE_SET.
 CV_CONFIGURATION = path.join(ROOT_PATH, 'agent', 'vision', 'yolov3-tiny-aileen-test.cfg')
 CV_WEIGHTS = path.join(ROOT_PATH, 'agent', 'vision', 'yolov3-tiny-aileen_final.weights')
 SIZE_PATH = path.join(ROOT_PATH, 'instructor', 'resources', 'sizes.json')
+=======
+
+>>>>>>> master
 
 # Servers
 WORLD_HOST = 'localhost'
@@ -49,6 +53,13 @@ GET_IMAGE_RETURNS_IMAGE_BINARY = True
 TRAINING_DATA_FOLDER = './vision_training_data'
 TRAIN_FILES = TRAINING_DATA_FOLDER + '/train_files.txt'
 TEST_FILES = TRAINING_DATA_FOLDER + '/test_files.txt'
+YOLO_WEIGHTS = path.join(ROOT_PATH, 'agent', 'vision', 'yolov3-tiny-aileen_final.weights')
+YOLO_CFG = path.join(ROOT_PATH, 'agent', 'vision', 'yolov3-tiny-aileen-test.cfg')
+K_MEANS_MODEL = path.join(ROOT_PATH, 'agent', 'vision', 'k_means_shape_color')
+REPRESENTATION_WEIGHTS = path.join(ROOT_PATH, 'agent', 'vision', 'autoencoder_final.pkl')
+BACKGROUND_IMG = path.join(ROOT_PATH, 'agent', 'vision', 'background_image.jpg')
+NAMES_FILE = path.join(ROOT_PATH, 'agent', 'vision', 'aileen.names')
+DETECTOR_MODE = 2  # 1: YOLO Only, 2: YOLO + Self Supervised Representations, 3: (todo: Object Det + SS Representations)
 
 # Arbitrary size boudnaries
 SIZE_SM = (.075*.075)
@@ -91,6 +102,9 @@ ACTION_LESSON_STATE_BAD = 'bad'
 
 ## Agent
 AGENT_PARAM_RUNTIME_FILE = path.join(ROOT_PATH, 'agent', 'soar_interface', 'soar', '_agent_params_runtime.soar')
+
+AGENT_LANGUAGE_LEARNING = False
+
 AGENT_VISUAL_CONCEPTS_PARAM = 'soar'
 AGENT_PRELOAD_VISUAL_CONCEPTS_PARAM = 'true'
 

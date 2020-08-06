@@ -18,7 +18,7 @@ sp {verify-action*apply*mark-overspecific-action-concept*inform
     (<ps>    ^type overspecific-action-concept
              ^information <info>
              ^source <source>)
-    (<info>    ^concept-structure <con>
+    (<info>    ^concept-structure <struct>
                ^grounding <g>)
     }
 
