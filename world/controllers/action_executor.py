@@ -71,11 +71,13 @@ class ActionExecutor:
         logging.debug("[action_executor] :: picking up object id {}".format(object_id))
         translation = node.getField('translation')
         pos = translation.getSFVec3f()
-        #translation.setSFVec3f(settings.ROBOT_PLATE_LOCATION)
-        if self._requestor == 'agent':
-            self._supervisor.pick_object(pos)
+        if settings.SIMULATE_ACTIONS:
+            if self._requestor == 'agent':
+                self._supervisor.pick_object(pos)
+            else:
+                self._supervisor.pick_object_instructor(node, pos)
         else:
-            self._supervisor.pick_object_instructor(node, pos)
+            translation.setSFVec3f(settings.ROBOT_PLATE_LOCATION)
         logging.debug("[action_executor] :: object {} moved to {}".format(object_id, node.getPosition()))
         self._supervisor.set_held_node(node)
         return True
@@ -89,16 +91,22 @@ class ActionExecutor:
             logging.debug("[action_executor] :: currently holding node {}".format(node.getId()))
             if location == 'proxy':
                 translation = node.getField('translation')
-                if self._requestor == 'agent':
-                    self._supervisor.place_object(settings.TEST_LOCATION)
+                if settings.SIMULATE_ACTIONS:
+                    if self._requestor == 'agent':
+                        self._supervisor.place_object(settings.TEST_LOCATION)
+                    else:
+                        self._supervisor.place_object_instructor(settings.TEST_LOCATION)
                 else:
-                    self._supervisor.place_object_instructor(settings.TEST_LOCATION)
+                    translation.setSFVec3f(settings.TEST_LOCATION)
             else:
                 translation = node.getField('translation')
-                if self._requestor == 'agent':
-                    self._supervisor.place_object(location)
+                if settings.SIMULATE_ACTIONS:
+                    if self._requestor == 'agent':
+                        self._supervisor.place_object(location)
+                    else:
+                        self._supervisor.place_object_instructor(node, location)
                 else:
-                    self._supervisor.place_object_instructor(node, location)
+                    translation.setSFVec3f(location)
             self._supervisor.set_held_node(None)
         else:
             logging.error("[action_executor] :: asked to place when no object is held")

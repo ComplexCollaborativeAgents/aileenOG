@@ -25,3 +25,4 @@ dependencies:
       - strands_qsr_lib/qsr_lib/
       - agent/vision/
       - -e .
+      - ikpy
