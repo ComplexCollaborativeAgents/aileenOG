@@ -6,7 +6,7 @@
 ;;;;   Created: November  6, 2019 14:54:11
 ;;;;   Purpose: 
 ;;;; ----------------------------------------------------------------------------
-;;;;  Modified: Thursday, May 28, 2020 at 15:06:05 by klenk
+;;;;  Modified: Tuesday, August 25, 2020 at 15:26:13 by klenk
 ;;;; ----------------------------------------------------------------------------
 
 (in-package :aileen)
@@ -14,7 +14,7 @@
 ;; (load "analogystack/qrgsetup.lsp")
 ;; (require-module "fire" :fire)
 
-(defparameter *assimilation-threshold* 0.01 "sage threshold for storing new cases. A low number means we want everything to be in one generalization and that we don't expect disjunctive concepts")
+(defparameter *assimilation-threshold* 0.5 "sage threshold for storing new cases. For Phase 1 we used 0.01, but for Phase 2, we need a higher number for disjunctive concepts.")
 (defparameter *match-threshold* 0.2 "sage threshold for matching to generalizations. because we are doing our own scoring this is low")
 (defparameter *projection-threshold* 0.003 "when projecting, we do not expect much overlap between the current situation and the generalization")
 (defparameter *probability-cutoff* 0.6 "facts below this threshold in generalizations do not contribute to score calculations")
@@ -36,9 +36,9 @@
   (let ((gpool (get-concept-gpool symbol)))
     (cl-user::nuke-gpool gpool)
     (dolist (fact (fire:retrieve-it '?x :context gpool :response '?x))
-      (format t "Forgetting ~A in ~A~%" fact gpool)
+      ;;(format t "Forgetting ~A in ~A~%" fact gpool)
       (fire:kb-forget fact :mt gpool))
-    (cl-user::setup-gpool gpool  :strategy :gel
+    (cl-user::setup-gpool gpool  :strategy :bestgel
 			  :probability-cutoff *probability-cutoff*)  
     (fire:kb-store `d::(genls ,aileen::symbol AileenReasoningSymbol) :mt 'd::BaseKB)
     (fire:kb-store `d::(isa ,aileen::symbol Collection) :mt 'd::BaseKB)
@@ -49,9 +49,9 @@
   (let ((gpool (get-concept-gpool pred)))
     (cl-user::nuke-gpool gpool)
     (dolist (fact (fire:retrieve-it '?x :context gpool :response '?x))
-      (format t "Forgetting ~A in ~A~%" fact gpool)
+      ;;(format t "Forgetting ~A in ~A~%" fact gpool)
       (fire:kb-forget fact :mt gpool))
-    (cl-user::setup-gpool gpool :strategy :gel  :context 'd::DummyMt)
+    (cl-user::setup-gpool gpool :strategy :bestgel  :context 'd::DummyMt)
     (fire:kb-store `d::(isa ,aileen::pred AileenReasoningPredicate) :mt 'd::BaseKB)
     (fire:kb-store `d::(arity ,aileen::pred
 			      ,aileen::arity) :mt 'd::BaseKB)
@@ -63,7 +63,7 @@
   (let ((gpool (get-concept-gpool action)))
     (cl-user::nuke-gpool gpool)
     (dolist (fact (fire:retrieve-it '?x :context gpool :response '?x))
-      (format t "Forgetting ~A in ~A~%" fact gpool)
+      ;;;(format t "Forgetting ~A in ~A~%" fact gpool)
       (fire:kb-forget fact :mt gpool))
     (cl-user::setup-gpool gpool :strategy :gel )  
     (fire:kb-store `d::(isa ,aileen::action AileenReasoningAction) :mt 'd::BaseKB)
@@ -108,9 +108,9 @@
   )
 
 (defun remove-facts-from-case (context)
-  (format t "Removing ~A~%" context)
+  ;;(format t "Removing ~A~%" context)
   (dolist (fact (fire:retrieve-it '?x :context context :response '?x))
-    (format t "Forgetting ~A in ~A~%" fact context)
+    ;;(format t "Forgetting ~A in ~A~%" fact context)
     (fire:kb-forget fact :mt context)))
   
 ;;; this may go away
@@ -198,16 +198,14 @@
 				 ,constraints ?target))
   (multiple-value-bind (rbrowse full url) (rbrowse::browse-sme sme::*sme*)
     (declare (ignore url rbrowse))
-		   (format t "~% match-scoring-sme rbrowse-sme: ~A url: ~A"
-			   sme::*sme*
-			   full))
+    (format t "~% match-scoring-sme rbrowse-sme: ~A url: ~A" sme::*sme* full))
   (when (sme::mappings  sme::*sme*)
     (let ((score (sme::score (car (sme::mappings  sme::*sme*))))
 	  (sme sme::*sme*))
       (sme::clone-current-sme)
-      (format t "~% ~A" (sme::expressions (sme::target sme::*sme*)))
+;      (format t "~% ~A" (sme::expressions (sme::target sme::*sme*)))
       (remove-rel-from-dgroup (sme::target sme::*sme*) inference-rel)
-      (format t "~% ~A" (sme::expressions (sme::target sme::*sme*)))
+;      (format t "~% ~A" (sme::expressions (sme::target sme::*sme*)))
       (let ((normalized-score (/ score
 				 (sme::self-score-dgroup (sme::target sme::*sme*)
 							 (sme::mapping-parameters sme::*sme*)))))
@@ -321,6 +319,7 @@
 
 ;; repeat? is only included as we had strange behavior where a match did not work the first time we tried it
 (defun match-query-against-gpool (context gpool pattern &optional repeat?)
+  (fire:update-special-analogy-predicates! (fire:analogy-source-of fire:*reasoner*) context)
   (sme:with-sme-type
     ;  'sme::exhaustive-sme  ;;;DOESN'T WORK WITH FILTERS  ;;;annoyingly missing a greedy merge in a test case 
       'sme::sme
@@ -335,7 +334,7 @@
     (fire:tell-it `(d::constructCaseInWM ,case-term))
     (fire:tell-it `(d::copyWMCaseToKB ,case-term ,case-term)) ;;could have an explicit query context here for easier clean up?
     (dolist (obj objs) ;; analogy control predicates
-      (format t "~% (d::sageRequireInMapping ~A)" obj)
+      ;;;(format t "~% (d::sageRequireInMapping ~A)" obj)
       (fire:kb-store `(d::sageRequireInMapping ,obj) :mt case-term))
     (let ((ci-found? (fire:ask-it
 	   `(d::reverseCIsAllowed
@@ -349,7 +348,8 @@
 	   :context gpool :response '?ret)))
       (multiple-value-bind (rbrowse full url) (rbrowse::browse-sme sme::*sme*)
 	(declare (ignore rbrowse url))
-	(format t "~% rbrowse-sme: ~A base: ~A target: ~A url: ~A"
+	(format t "~% ci: ~A rbrowse-sme: ~A base: ~A target: ~A url: ~A~%"
+		(not (not ci-found?))
 		sme::*sme*
 		case-term
 		gpool
@@ -363,9 +363,12 @@
 						 (third pattern)
 						 (car pattern)))) ;;This used to be aileen-symbols-in-patter
 	    ((and (not repeat?)
-		  (or (and (sme:mappings sme::*sme*)
-			   (= (sme:score (car (sme:mappings sme::*sme*))) 0))
-		      (not (sme:mappings sme::*sme*))))
+		  (or (and
+		       (sme:mappings sme::*sme*)
+		       (= (sme:score (car (sme:mappings sme::*sme*))) 0))
+		      (not (sme:mappings sme::*sme*))
+		      ;;(not ci-found?) ;;; sageRequiredCorrespondences is in a dgroup the first call, but not the second?
+		      ))
 	     (format t "~% Strange bug of mapping with a score of 0 that is corrected with a repeated call")
 	     (match-query-against-gpool context gpool pattern t))
 	    (t nil)

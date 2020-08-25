@@ -6,7 +6,7 @@
 ;;;;   Created: June 16, 2020 09:55:54
 ;;;;   Purpose: 
 ;;;; ----------------------------------------------------------------------------
-;;;;  Modified: Tuesday, July 28, 2020 at 07:01:13 by klenk
+;;;;  Modified: Tuesday, August 25, 2020 at 15:14:13 by klenk
 ;;;; ----------------------------------------------------------------------------
 
 (in-package :aileen)
@@ -85,6 +85,7 @@
   (test-primary-basic)
   )
 
+;; red or blue or green
 (defun test-primary-basic ()
   (let (res pattern)
     (setq res (call-test-server "store"
@@ -124,7 +125,6 @@
                               "RPrimary"))))
     (assert (= (cdr (assoc :NUM-EXAMPLES res)) 0)) 
     (assert (= (cdr (assoc :NUM-GENERALIZATIONS res)) 2)) ;;;A Bad generalization!
-
     
     ))
 
@@ -202,8 +202,64 @@
     (assert (= (cdr (assoc :NUM-GENERALIZATIONS res)) 1))
 
 ;;; Set up tests for query of the nw example and then the n example (which will fail)
-    
 
+    (format t "~% Testing Exact Match ~%")
+    (setq res (call-test-server
+	       "query"
+	       (pairlis '("facts" "pattern")
+			'((("isa" "Obj11A" "CVCylinder")
+			   ("isa" "Obj11A" "CVGreen")
+			   ("isa" "Obj11B" "CVCylinder")
+			   ("isa" "Obj11B" "CVBlue")
+			   ("n" "Obj11A" "Obj11B")
+			   ("dc" "Obj11A" "Obj11B"))
+			  ("rAbove" "Obj11A" "Obj11B")))))
+    (assert (= 1 (length (cdr (assoc :MATCHES res))))) ;;exact match should work
+    (assert (equal '("rAbove" "Obj11A" "Obj11B")
+		   (car (cdr (assoc :MATCHES res)))))
+
+    (format t "~% Testing No Generalization Created for n ~%")
+    (setq res (call-test-server
+	       "query"
+	       (pairlis '("facts" "pattern")
+			'((("isa" "Obj11A" "CVCylinder")
+			   ("isa" "Obj11A" "CVBlue")
+			   ("isa" "Obj11B" "CVCube")
+			   ("isa" "Obj11B" "CVGreen")
+			   ("n" "Obj11A" "Obj11B")
+			   ("dc" "Obj11A" "Obj11B"))
+			  ("rAbove" "Obj11A" "Obj11B")))))
+    (assert (= 0 (length (cdr (assoc :MATCHES res))))) ;; No generalization (changed colors and objects)
+
+
+    (format t "~% Testing nw Generalization 1 ~%")
+    ;; nw is generalized, so we should be able to find this conecpt whatever the objects
+    (setq res (call-test-server
+	       "query"
+	       (pairlis '("facts" "pattern")
+			'((("isa" "Obj11A" "CVCylinder")
+			   ("isa" "Obj11A" "CVBlue")
+			   ("isa" "Obj11B" "CVCube")
+			   ("isa" "Obj11B" "CVGreen")
+			   ("nw" "Obj11A" "Obj11B")
+			   ("dc" "Obj11A" "Obj11B"))
+			  ("rAbove" "Obj11A" "Obj11B")))))
+    (assert (= 1 (length (cdr (assoc :MATCHES res))))) 
+
+    (format t "~% Testing nw Generalization 2 ~%")
+    (setq res (call-test-server
+	       "query"
+	       (pairlis '("facts" "pattern")
+			'((("isa" "Obj11A" "CVCube")
+			   ("isa" "Obj11A" "CVGreen")
+			   ("isa" "Obj11B" "CVCylinder")
+			   ("isa" "Obj11B" "CVBlue")
+			   ("nw" "Obj11A" "Obj11B")
+			   ("dc" "Obj11A" "Obj11B"))
+			  ("rAbove" "Obj11A" "Obj11B")))))
+    (assert (= 1 (length (cdr (assoc :MATCHES res)))))o
+
+ 
     
     ))
 
