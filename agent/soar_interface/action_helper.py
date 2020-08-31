@@ -43,6 +43,7 @@ def process_place_command(commandID):
     logging.debug("[action_helper] :: configuration definition is {}".format(config))
 
     action_dict['location'] = place_object_in_configuration_with(target, reference, config)
+    action_dict['requester'] = 'agent'
     return action_dict
 
 

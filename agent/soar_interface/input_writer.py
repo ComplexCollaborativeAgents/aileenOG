@@ -42,11 +42,7 @@ class InputWriter(object):
             self._clean_concept_memory_flag = False
 
         if settings.SOAR_CV:
-            # ToDo: Move the input to Detector to the config file.
-            self.detector = Detector(settings.CV_NAMES,
-                                     settings.CV_CONFIGURATION,
-                                     settings.CV_WEIGHTS,
-                                     'color')
+            self.detector = Detector()
 
     def set_concept_memory_status(self, concept_memory_status_dictionary):
         self._concept_memory_status = concept_memory_status_dictionary
@@ -131,6 +127,8 @@ class InputWriter(object):
                     detections[i]['position'] = detections[i]['camera_yolo_position_proj_to_world']
                     detections[i]['bounding_box'] = detections[i]['camera_bounding_box_yolo_proj_to_world']
 
+                    if settings.DETECTOR_MODE == 2:
+                        detections[i]['cluster_id'] = detections[i]['cluster_id']
 
                     ## SM: if settings have preload visual concepts on, just use information from the world to ensure 100% detection
                     if settings.AGENT_VISUAL_CONCEPTS_PARAM == 'soar' and settings.AGENT_PRELOAD_VISUAL_CONCEPTS_PARAM == 'true':

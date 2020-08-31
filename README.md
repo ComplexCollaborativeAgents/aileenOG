@@ -8,7 +8,7 @@
    ```bash
    sudo apt install qhull-bin
    ```
-2. Download [Soar 9.6.0](https://soar.eecs.umich.edu/) and extract the files to 
+2. Download [Soar 9.6.0](https://soar.eecs.umich.edu/) and extract the files to
    `/usr/local/SoarSuite_9.6.0-Multiplatform_64bit` and run `SoarJavaDebugger.sh` once:
    ```bash
    wget http://soar.eecs.umich.edu/downloads/SoarSuite/SoarSuite_9.6.0-Multiplatform_64bit.zip
@@ -23,8 +23,8 @@
 4. Clone this repository and its submodules:
    ```bash
    git clone --recurse-submodules git@gitlab-external.parc.com:aileen/aileen-agent.git
-   ``` 
-5. Run the `bootstrap.sh` script to set up the Conda environment and build the Python dependencies, such as 
+   ```
+5. Run the `bootstrap.sh` script to set up the Conda environment and build the Python dependencies, such as
    [Pynini](http://www.openfst.org/twiki/bin/view/GRM/Pynini) and [Darknet](https://pjreddie.com/darknet/):
    ```bash
    cd aileen-agent
@@ -38,6 +38,30 @@
    > ```bash
    > conda env update -f environment.yml
    > ```
+
+### IKPY Setup for EXISTING Aileen environment
+
+World now uses ikpy to simulate robotic actions.  These instructions are for configuring IKPY into an existing AILEEN environment.  
+
+#### Install Instructions
+
+Activate aileen env
+
+`conda activate aileen`
+
+Install IKPY
+
+`pip install ikpy`
+
+We have a custom UR10 proto file that needs to replace the one in the webots directory
+
+`sudo cp ./world/data/UR10e.proto /usr/local/webots/projects/robots/universal_robots/protos`
+
+The webots_headless script should be pointed at the correct world file, but I think it's useful to just go ahead and check.  Open webots and open the world entitled:
+
+`aileen_world_ur10.wbt`
+
+That should be it!
 
 ### Run
 1. Open Webots and load the world: "File", "Open World...", and select `world/data/aileen_world.wbt`.
@@ -127,7 +151,7 @@ Grounded language learning agent based on Soar cognitive architecture
 ### Install and Build
 #### Prerequisites
 * Anaconda
-* Python 2 
+* Python 2
 * Soar cognitive architecture
 * [aileen_world](https://gitlab-external.parc.com/aileen/aileen-world)
 * qhull (needed for running svs_viewer; ubuntu `sudo apt install qhull-bin`)
@@ -140,7 +164,7 @@ Grounded language learning agent based on Soar cognitive architecture
    `git submodule update --init`
 * Edit the `Soar`  `path` element in `config.json` to point to your `/local/soar/installation/bin/linux64`
 * Ignore changes to config.json by the command `git update-index --assume-unchanged config.json`
-   
+
 * Configure a Python2 conda environment
 
        `conda create --name aileen python=2.7`
@@ -148,7 +172,7 @@ Grounded language learning agent based on Soar cognitive architecture
        `conda install coloredlogs numpy pyyaml yaml shapely pytest`
 
        `conda install -c marufr python-igraph`
-    
+
 * On the Mac using Python2, you will also need to:
 
 	cd /usr/local/opt/python
@@ -174,7 +198,7 @@ Be sure to get the specified versions of openfst and re2 and to configure openfs
 * Activate the conda environment `conda activate aileen`
 * Run aileen `python aileen.py`
   * Assuming webots and aileen-world are running, then should see debug messages in both aileen-world and aileen-agent about the objects detected.
- 
+
 This should startup the SoarJavaDebugger window that lets us inspect the state of Soar kernel.
 
 
@@ -183,13 +207,13 @@ An overview of how `aileen-agent` fits with the rest of the [architecture](https
 
 
 ### Structure and Editing
-* aileen-agent has the following components: 
+* aileen-agent has the following components:
     1. a python client to aileen-world `aileen-agent/aileen.py`. This module makes requests as described in the [protocol](https://gitlab-external.parc.com/aileen/aileen-world/wikis/communication-protocol).
     2. a python interface to Soar kernel `aileen-agent/soar_interface` that uses python SWIG bindings to the Soar kernel
     2. a set of rules that guide reasoning in Soar in `aileen-agent/agent`
-    
+
   Python client and the interface are easily edited in PyCharm. Rules can be edited in Eclipse using [Soar IDE](https://github.com/soartech/soaride).
-  
+
 ### Misc
 * My setup is throwing a lot of warnings. They are coming from SoarJavaDebugger that seems to be built for GTK-2. Adding the following environment variable should be useful in cutting down the warnings.
 `export SWT_GTK3=0`
@@ -207,11 +231,11 @@ An overview of how `aileen-agent` fits with the rest of the [architecture](https
 
 
 ## aileen-world
-A simple xmlrpc python server to receive requests from the agent client and update the world accordingly. 
+A simple xmlrpc python server to receive requests from the agent client and update the world accordingly.
 ### Pre-requisites
 * Anaconda
 * Python 2
-* Webots 
+* Webots
 
 ### Steps
 * Download [Webots](https://www.cyberbotics.com/) and perform the standard install. Typically on Ubuntu, it will install it at `/usr/local/webots`.
@@ -221,7 +245,7 @@ A simple xmlrpc python server to receive requests from the agent client and upda
    `conda create --name aileen_env python=2.7`
 * Install relevant python packages
     `conda install coloredlogs`
-    
+
 ### Usage
 * Activate the conda environment
     `conda activate aileen_env`
@@ -229,7 +253,7 @@ A simple xmlrpc python server to receive requests from the agent client and upda
     * `WEBOTS_HOME` to your installation path /usr/local/webots recommended
     * `PYTHONPATH` to include `$WEBOTS_HOME/lib/python2.7` if you have the standard install
     * `LD_LIBRARY_PATH` to include `$WEBOTS_HOME/lib`
-* Start webots on a terminal or from the GUI shell 
+* Start webots on a terminal or from the GUI shell
     `webots`
 * Click on `File > Open World` and navigate to `aileen_world/worlds/aileen_world.wbt`. This should start the example world in webots. You can pause and play the world using control buttons in the webots application.
 * On a separate terminal window, run aileen_world. Note, that the server will not run properly until the webots simulation is actually 'playing'. You will see a message stating taht the aileen world server is starting.
