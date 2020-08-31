@@ -1,0 +1,40 @@
+{
+  "move-behind": {
+    "objects": ["<obj1>", "<obj2>"],
+    "relations": ["behind"],
+    "initial_configuration": [],
+    "trace-actions": [
+      {"name": "pick-up", "argument": "<obj1>"},
+      {"name": "place", "argument1": "<obj1>", "argument2": "<obj2>", "relation": "behind"}],
+    "language": ["move", "<obj1>", "behind", "<obj2>"]
+  },
+
+  "move-in-front-of": {
+    "objects": ["<obj1>", "<obj2>"],
+    "relations": ["front-of"],
+    "initial_configuration": [],
+    "trace-actions": [
+      {"name": "pick-up", "argument": "<obj1>"},
+      {"name": "place", "argument1": "<obj1>", "argument2": "<obj2>", "relation": "front-of"}],
+    "language": ["move", "<obj1>", "in front of", "<obj2>"]
+  },
+
+  "move-right-of": {
+    "objects": ["<obj1>", "<obj2>"],
+    "relations": ["right-of"],
+    "initial_configuration": [],
+    "trace-actions": [
+      {"name": "pick-up", "argument": "<obj1>"},
+      {"name": "place", "argument1": "<obj1>", "argument2": "<obj2>", "relation": "right-of"}],
+    "language": ["move", "<obj1>", "right of", "<obj2>"]
+  },
+   "move-left-of": {
+    "objects": ["<obj1>", "<obj2>"],
+    "relations": ["left-of"],
+     "initial_configuration": [],
+    "trace-actions": [
+      {"name": "pick-up", "argument": "<obj1>"},
+      {"name": "place", "argument1": "<obj1>", "argument2": "<obj2>", "relation": "left-of"}],
+    "language": ["move", "<obj1>", "left of", "<obj2>"]
+  }
+}

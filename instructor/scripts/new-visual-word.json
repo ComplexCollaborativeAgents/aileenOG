@@ -1,0 +1,33 @@
+[
+  {
+    "comment": "train the concept cube",
+    "lesson-type": "visual-word",
+    "content": "kube",
+    "description": {"color": "red",
+                    "shape": "box"},
+    "signal": "inform"
+  },
+  {
+    "comment": "train the concept box",
+    "lesson-type": "visual-word",
+    "content": "kube",
+    "description": {"color": "blue",
+                    "shape": "box"},
+    "signal": "inform"
+  },
+  {
+    "signal": "verify",
+    "lesson-type": "visual-word",
+    "is_positive": "true",
+    "description": {"color": "red", "shape":  "box"},
+    "content": "kube",
+    "distractors": 2
+  },
+  {
+    "signal": "verify",
+    "lesson-type": "visual-word",
+    "is_positive": "False",
+    "description": {"color": "blue", "shape":  "cylinder"},
+    "content": "kube"
+  }
+]

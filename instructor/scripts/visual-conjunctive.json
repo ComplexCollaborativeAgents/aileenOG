@@ -3,29 +3,29 @@
     "signal": "inform",
     "lesson-type": "visual-word",
     "is_positive": "true",
-    "description": {"color": "green", "shape":  "box"},
-    "content": "grox"
+    "description": {"color": "red", "shape":  "box"},
+    "content": "rox"
   },
   {
     "signal": "inform",
     "lesson-type": "visual-word",
     "is_positive": "true",
-    "description": {"color": "green", "shape":  "box"},
-    "content": "grox"
+    "description": {"color": "red", "shape":  "box"},
+    "content": "rox"
   },
   {
     "signal": "inform",
     "lesson-type": "visual-word",
     "is_positive": "true",
-    "description": {"color": "green", "shape":  "box"},
-    "content": "grox"
+    "description": {"color": "red", "shape":  "box"},
+    "content": "rox"
   },
   {
     "signal": "verify",
     "lesson-type": "visual-word",
     "is_positive": "true",
-    "description": {"color": "green", "shape":  "box"},
-    "content": "grox",
+    "description": {"color": "red", "shape":  "box"},
+    "content": "rox",
     "distractors": 2
   },
    {
@@ -33,13 +33,13 @@
     "lesson-type": "visual-word",
     "is_positive": "False",
     "description": {"color": "blue", "shape":  "box"},
-    "content": "grox"
+    "content": "rox"
   },
   {
     "signal": "verify",
     "lesson-type": "visual-word",
     "is_positive": "False",
-    "description": {"color": "green", "shape":  "cylinder"},
-    "content": "grox"
+    "description": {"color": "red", "shape":  "cylinder"},
+    "content": "rox"
   }
 ]
