@@ -5,7 +5,7 @@
     "content": "yellow box next to red box",
     "description": {
       "objects": [{"color": "yellow", "shape": "box"},  {"color": "red", "shape": "box"}],
-      "relation": "next-to"},
+      "relation": "right-of-ec"},
     "signal": "inform"
   },
   {
@@ -14,7 +14,7 @@
     "content": "blue box next to purple box",
     "description": {
       "objects": [{"color": "blue", "shape": "box"},  {"color": "purple", "shape": "box"}],
-      "relation": "next-to"},
+      "relation": "left-of-ec"},
     "signal": "inform"
   },
   {
@@ -23,7 +23,7 @@
     "content": "green box next to blue box",
     "description": {
       "objects": [{"color": "green", "shape": "box"},  {"color": "blue", "shape": "box"}],
-      "relation": "next-to"},
+      "relation": "front-of-ec"},
     "signal": "inform"
   },
   {
@@ -32,7 +32,7 @@
     "content": "blue box next to red box",
     "description": {
       "objects": [{"color": "blue", "shape": "box"},  {"color": "red", "shape": "box"}],
-      "relation": "next-to"},
+      "relation": "behind-ec"},
     "signal": "inform"
   },
   {
@@ -42,7 +42,7 @@
     "description": {
       "objects": [{"color": "green", "shape": "box"},  {"color": "purple", "shape": "box"}],
       "relation": "next-to"},
-    "signal": "inform"
+    "signal": "verify"
   },
   {
     "comment": "preload visual concepts used in this example",
@@ -51,6 +51,6 @@
     "description": {
       "objects": [{"color": "green", "shape": "cylinder"},  {"color": "purple", "shape": "cylinder"}],
       "relation": "next-to"},
-    "signal": "inform"
+    "signal": "verify"
   }
 ]
