@@ -4,9 +4,19 @@
         "definition": [["s" , "<obj2>", "<obj1>"], ["dc", "<obj2>", "<obj1>"]],
         "language": ["<obj1>", "left of","<obj2>"]
     },
+    "left-of-ec": {
+        "objects": ["<obj1>", "<obj2>"],
+        "definition": [["s" , "<obj2>", "<obj1>"], ["ec", "<obj2>", "<obj1>"]],
+        "language": ["<obj1>", "left of","<obj2>"]
+    },
     "right-of": {
         "objects": ["<obj1>", "<obj2>"],
         "definition": [["n" , "<obj2>", "<obj1>"], ["dc", "<obj2>", "<obj1>"]],
+        "language": ["<obj1>", "right of","<obj2>"]
+    },
+     "right-of-ec": {
+        "objects": ["<obj1>", "<obj2>"],
+        "definition": [["n" , "<obj2>", "<obj1>"], ["ec", "<obj2>", "<obj1>"]],
         "language": ["<obj1>", "right of","<obj2>"]
     },
     "front-of": {
@@ -14,9 +24,40 @@
         "definition": [["w" , "<obj2>", "<obj1>"], ["dc", "<obj2>", "<obj1>"]],
         "language": ["<obj1>", "in front of","<obj2>"]
     },
+    "front-of-ec": {
+        "objects": ["<obj1>", "<obj2>"],
+        "definition": [["w" , "<obj2>", "<obj1>"], ["ec", "<obj2>", "<obj1>"]],
+        "language": ["<obj1>", "in front of","<obj2>"]
+    },
     "behind": {
         "objects": ["<obj1>", "<obj2>"],
         "definition": [["e" , "<obj2>", "<obj1>"], ["dc", "<obj2>", "<obj1>"]],
         "language": ["<obj1>", "behind","<obj2>"]
+    },
+    "behind-ec": {
+        "objects": ["<obj1>", "<obj2>"],
+        "definition": [["e" , "<obj2>", "<obj1>"], ["ec", "<obj2>", "<obj1>"]],
+        "language": ["<obj1>", "behind","<obj2>"]
+    },
+    "behind1": {
+        "objects": ["<obj1>", "<obj2>"],
+        "definition": [["e" , "<obj2>", "<obj1>"], ["dc", "<obj2>", "<obj1>"]],
+        "language": ["<obj1>", "behind","<obj2>"]
+    },
+    "behind2": {
+        "objects": ["<obj1>", "<obj2>"],
+        "definition": [["ne" , "<obj2>", "<obj1>"], ["dc", "<obj2>", "<obj1>"]],
+        "language": ["<obj1>", "behind","<obj2>"]
+    },
+    "behind3": {
+        "objects": ["<obj1>", "<obj2>"],
+        "definition": [["se" , "<obj2>", "<obj1>"], ["dc", "<obj2>", "<obj1>"]],
+        "language": ["<obj1>", "behind","<obj2>"]
+    },
+    "next-to": {
+        "comment": "with our current assumptions about the concept learner and interactive learning, we are unable to learn correct next-to",
+        "objects": ["<obj1>", "<obj2>"],
+        "definition": [["ec", "<obj2>", "<obj1>"]],
+        "language": ["<obj1>", "next to", "<obj2>"]
     }
 }

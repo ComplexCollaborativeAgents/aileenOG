@@ -32,6 +32,7 @@ def parse():
     parser = argparse.ArgumentParser(description='Aileen instructor.')
     parser.add_argument('--train-vision', action='store_true', help='Run vision training scripts')
     parser.add_argument('--json', help='Use curriculum from JSON file')
+    parser.add_argument('--test-action', help='Test available actions', action='store_true')
     return parser.parse_args()
 
 
@@ -84,6 +85,16 @@ if __name__ == '__main__':
         curriculum_thread.daemon = True
         curriculum_thread.start()
         gui.run()
+    elif arguments.test-action:
+        """
+        Insert action testing here
+            - find object
+            - go to
+            - pick up
+            - put behind
+            - drop
+        """
+        pass
     else:
         VisualWordLesson.administer_curriculum(world_server, agent_server)
         # SpatialWordLesson.administer_curriculum(world_server, agent_server)

@@ -1,0 +1,213 @@
+[
+  {
+    "comment": "test the concept cone",
+    "lesson-type": "visual-word",
+    "content": "cone",
+    "description": {"color": "green",
+                    "shape": "cone"},
+    "signal": "verify"
+  },
+  {
+    "comment": "train the concept green",
+    "lesson-type": "visual-word",
+    "content": "green cone",
+    "description": {"color": "green",
+                    "shape": "cone"},
+    "signal": "inform"
+  },
+   {
+    "comment": "train the concept blue",
+    "lesson-type": "visual-word",
+    "content": "blue cone",
+    "description": {"color": "blue",
+                    "shape": "cone"},
+    "signal": "inform"
+  },
+  {
+    "comment": "test the concept con",
+    "lesson-type": "visual-word",
+    "content": "cone",
+    "description": {"color": "red",
+                    "shape": "cone"},
+    "signal": "verify",
+    "distractors": 2
+  },
+  {
+    "comment": "train the concept green and cylinder",
+    "lesson-type": "visual-word",
+    "content": "green cylinder",
+    "description": {"color": "green",
+                    "shape": "cylinder"},
+    "signal": "inform"
+  },
+  {
+    "comment": "train the concept red and cylinder",
+    "lesson-type": "visual-word",
+    "content": "red cylinder",
+    "description": {"color": "red",
+                    "shape": "cylinder"},
+    "signal": "inform"
+  },
+   {
+    "comment": "train the concept red and cone",
+    "lesson-type": "visual-word",
+    "content": "red cone",
+    "description": {"color": "red",
+                    "shape": "cone"},
+    "signal": "inform"
+  },
+  {
+    "comment": "train the concept red and cone",
+    "lesson-type": "visual-word",
+    "content": "blue cylinder",
+    "description": {"color": "blue",
+                    "shape": "cylinder"},
+    "signal": "inform"
+  },
+  {
+    "comment": "test spatial concept right-of",
+    "lesson-type": "spatial-word",
+    "content": "red cylinder right of green cylinder",
+    "description": {
+      "objects": [{"color": "red", "shape": "cylinder"},  {"color": "green", "shape": "cylinder"}],
+      "relation": "right-of"},
+    "signal": "verify",
+    "distractors": 0
+  },
+  {
+    "comment": "train spatial concept right-of",
+    "lesson-type": "spatial-word",
+    "content": "red cylinder right of green cone",
+    "description": {
+      "objects": [{"color": "red", "shape": "cylinder"},  {"color": "green", "shape": "cone"}],
+      "relation": "right-of"},
+    "signal": "inform"
+  },
+  {
+    "comment": "train spatial concept right-of",
+    "lesson-type": "spatial-word",
+    "content": "blue cone right of red cylinder",
+    "description": {
+      "objects": [{"color": "blue", "shape": "cone"},  {"color": "red", "shape": "cylinder"}],
+      "relation": "right-of"},
+    "signal": "inform",
+    "distractors": 1
+  },
+  {
+    "comment": "train the concept cube",
+    "lesson-type": "visual-word",
+    "content": "kube",
+    "description": {"color": "red",
+                    "shape": "box"},
+    "signal": "inform"
+  },
+  {
+    "comment": "train the concept box",
+    "lesson-type": "visual-word",
+    "content": "kube",
+    "description": {"color": "blue",
+                    "shape": "box"},
+    "signal": "inform"
+  },
+  {
+    "comment": "test spatial concept right-of",
+    "lesson-type": "spatial-word",
+    "content": "green kube right of red kube",
+    "description": {
+      "objects": [{"color": "green", "shape": "box"},  {"color": "red", "shape": "box"}],
+      "relation": "right-of"},
+    "signal": "verify",
+    "distractors": 1
+  },
+  {
+    "comment": "Provide a grounded example of action",
+    "lesson-type": "action-word",
+    "description": {
+      "objects": ["<obj1>", "<obj2>"],
+      "relations": ["right-of"],
+      "action": "move-right-of",
+      "initial_configuration": [[["not","n"], "<obj2>", "<obj1>"], ["dc", "<obj2>", "<obj1>"]],
+          "trace-actions": [
+              {"name": "pick-up", "argument": "<obj1>"},
+              {"name": "place", "argument1": "<obj1>", "argument2": "<obj2>", "relation": "right-of"}],
+      "language": ["move", "<obj1>", "right of", "<obj2>"],
+      "<obj1>": {"color": "red", "shape": "cone"},
+      "<obj2>": {"color": "blue", "shape": "cone"}
+    },
+    "content": "move red cone right of blue cone",
+    "signal": "inform"
+  },
+  {
+    "comment": "Provide another grounded example of action",
+    "lesson-type": "action-word",
+    "description": {
+      "objects": ["<obj1>", "<obj2>"],
+      "relations": ["right-of"],
+      "action": "move-right-of",
+      "initial_configuration": [[["not","n"], "<obj2>", "<obj1>"], ["dc", "<obj2>", "<obj1>"]],
+          "trace-actions": [
+              {"name": "pick-up", "argument": "<obj1>"},
+              {"name": "place", "argument1": "<obj1>", "argument2": "<obj2>", "relation": "right-of"}],
+      "language": ["move", "<obj1>", "right of", "<obj2>"],
+      "<obj1>": {"color": "blue", "shape": "cylinder"},
+      "<obj2>": {"color": "red", "shape": "cylinder"}
+    },
+    "content": "move blue cylinder right of red cylinder",
+    "signal": "inform",
+    "distractors": 1
+  },
+  {
+    "comment": "train the concept gola",
+    "lesson-type": "visual-word",
+    "content": "gola",
+    "description": {"color": "green",
+                    "shape": "sphere"},
+    "signal": "inform"
+  },
+  {
+    "comment": "train the concept gola",
+    "lesson-type": "visual-word",
+    "content": "gola",
+    "description": {"color": "blue",
+                    "shape": "sphere"},
+    "signal": "inform"
+  },
+  {
+    "comment": "Recognize action",
+    "lesson-type": "action-word",
+    "description": {
+      "objects": ["<obj1>", "<obj2>"],
+      "relations": ["right-of"],
+      "action": "move-right-of",
+      "initial_configuration": [[["not","n"], "<obj2>", "<obj1>"], ["dc", "<obj2>", "<obj1>"]],
+          "trace-actions": [
+              {"name": "pick-up", "argument": "<obj1>"},
+              {"name": "place", "argument1": "<obj1>", "argument2": "<obj2>", "relation": "right-of"}],
+      "language": ["move", "<obj1>", "right of", "<obj2>"],
+      "<obj1>": {"color": "green", "shape": "sphere"},
+      "<obj2>": {"color": "blue", "shape": "cylinder"}
+    },
+    "content": "move green gola right of blue cylinder",
+    "signal": "verify",
+    "distractors": 2
+  },
+  {
+    "comment": "Try to do exactly what was taught.",
+    "lesson-type": "action-word",
+    "description": {
+      "objects": ["<obj1>", "<obj2>"],
+      "relations": ["right-of"],
+      "action": "move-right-of",
+      "initial_configuration": [[["not","n"], "<obj2>", "<obj1>"], ["dc", "<obj2>", "<obj1>"]],
+          "trace-actions": [
+              {"name": "pick-up", "argument": "<obj1>"},
+              {"name": "place", "argument1": "<obj1>", "argument2": "<obj2>", "relation": "right-of"}],
+      "language": ["move", "<obj1>", "right of", "<obj2>"],
+      "<obj1>": {"color": "green", "shape": "box"},
+      "<obj2>": {"color": "red", "shape": "sphere"}
+    },
+    "content": "move green kube right of red gola",
+    "signal": "react"
+  }
+]
+
