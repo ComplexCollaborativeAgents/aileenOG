@@ -6,7 +6,7 @@
 ;;;;   Created: November  6, 2019 14:54:11
 ;;;;   Purpose: 
 ;;;; ----------------------------------------------------------------------------
-;;;;  Modified: Tuesday, August 25, 2020 at 15:26:13 by klenk
+;;;;  Modified: Monday, September  7, 2020 at 11:19:50 by klenk
 ;;;; ----------------------------------------------------------------------------
 
 (in-package :aileen)
@@ -18,7 +18,7 @@
 (defparameter *match-threshold* 0.2 "sage threshold for matching to generalizations. because we are doing our own scoring this is low")
 (defparameter *projection-threshold* 0.003 "when projecting, we do not expect much overlap between the current situation and the generalization")
 (defparameter *probability-cutoff* 0.6 "facts below this threshold in generalizations do not contribute to score calculations")
-(defparameter *normalized-threshold* 0.75 "mapping threshold normalized against the target without the inference fact")
+(defparameter *normalized-threshold* 0.90 "mapping threshold normalized against the target without the inference fact")
 ;;; Klenk tried making this .999, but I ran into a problem with some mapping scores not being as high expected in the relational cases
 
 (defun make-reasoner (&key (kbdir "nextkb"))
@@ -67,6 +67,7 @@
       (fire:kb-forget fact :mt gpool))
     (cl-user::setup-gpool gpool :strategy :gel )  
     (fire:kb-store `d::(isa ,aileen::action AileenReasoningAction) :mt 'd::BaseKB)
+    (fire:kb-store `d::(isa ,aileen::action Relation) :mt 'd::BaseKB)
     (fire:kb-store `d::(arity ,aileen::action ,aileen::arity) :mt 'd::BaseKB)
     (values (length (fire:ask-it `d::(isa ?x AileenReasoningAction)))
 	    gpool)))
@@ -199,13 +200,19 @@
   (multiple-value-bind (rbrowse full url) (rbrowse::browse-sme sme::*sme*)
     (declare (ignore url rbrowse))
     (format t "~% match-scoring-sme rbrowse-sme: ~A url: ~A" sme::*sme* full))
-  (when (sme::mappings  sme::*sme*)
+    (when (sme::mappings  sme::*sme*)
+    
     (let ((score (sme::score (car (sme::mappings  sme::*sme*))))
 	  (sme sme::*sme*))
       (sme::clone-current-sme)
-;      (format t "~% ~A" (sme::expressions (sme::target sme::*sme*)))
+      ;(format t "~% before remove: ~A" (sme::self-score-dgroup (sme::target sme::*sme*)
+	;						       (sme::mapping-parameters sme::*sme*)))
+      ;(format t "~% ~A" (sme::expressions (sme::target sme::*sme*)))
       (remove-rel-from-dgroup (sme::target sme::*sme*) inference-rel)
-;      (format t "~% ~A" (sme::expressions (sme::target sme::*sme*)))
+      ;(format t "~% ~A" (sme::expressions (sme::target sme::*sme*)))
+      ;(format t "~% after remove: ~A" (sme::self-score-dgroup (sme::target sme::*sme*)
+;							       (sme::mapping-parameters sme::*sme*)))
+
       (let ((normalized-score (/ score
 				 (sme::self-score-dgroup (sme::target sme::*sme*)
 							 (sme::mapping-parameters sme::*sme*)))))
@@ -223,24 +230,24 @@
 	       :key #'(lambda (expr) (sme:name (car expr)))))
 	(unlikely-facts nil))
 	; (mapcar #'car (getf (sme:plist (sme::target sme::*sme*)) :unlikely-facts))))
-;    (format t "~%old:~A" (sme::expressions dgroup))
-;    (format t "~% REMOVING: ~A and ~A" expr unlikely-facts)
+    ;(format t "~%old:~A" (sme::expressions dgroup))
+    ;(format t "~% REMOVING: ~A and ~A" expr unlikely-facts)
     (let (new)
       (dolist (expr2 (sme::expressions dgroup))
-;	(format t "~% expr2: ~A" expr2)
+	;(format t "~% expr2: ~A" expr2)
 	(unless (or (equalp expr expr2)
 		    (member (sme:lisp-form (second expr2)) unlikely-facts :test #'equalp))
-;	  (format t "~% keep it")
-	  (push expr new)))
+	  ;(format t "~% keep it")
+	  (push expr2 new)))
       (setf (sme::expressions dgroup) new))
- ;   (format t "~%new:~A~%~%~%" (sme::expressions dgroup))
+    ;(format t "~%new:~A~%~%~%" (sme::expressions dgroup))
     (dolist (entity (sme::entities dgroup))
       (let (new)
 	(dolist (exp (sme::parents entity))
-;	  (format t "~% exp: ~A" exp)
+	  ;(format t "~% exp: ~A" exp)
 	  (unless (or (equalp (second expr) exp)
 		      (member (sme:lisp-form exp) unlikely-facts :test #'equalp))
-;	    (format t "~% keep")
+	    ;(format t "~% keep")
 	    (push exp new)))
 	(setf (sme::parents entity) new)))))
 

@@ -6,7 +6,7 @@
 ;;;;   Created: April 26, 2020 06:11:24
 ;;;;   Purpose: 
 ;;;; ----------------------------------------------------------------------------
-;;;;  Modified: Monday, April 27, 2020 at 10:23:43 by klenk
+;;;;  Modified: Thursday, September  3, 2020 at 15:20:12 by klenk
 ;;;; ----------------------------------------------------------------------------
 
 (in-package :aileen)
@@ -38,7 +38,7 @@
 	((starts-with-p str "Creating Reasoning Symbol2")
 	 (list #'create-reasoning-symbol-helper (json-in-str str)))
 	((starts-with-p str "Creating Reasoning Predicate")
-	 str)
+	 (list #'create-reasoning-predicate-helper (json-in-str str)))
 	(t nil)))
 	 
 (defun starts-with-p (str1 str2)
