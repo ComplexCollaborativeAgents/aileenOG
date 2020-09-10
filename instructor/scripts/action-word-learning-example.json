@@ -13,7 +13,7 @@
       "language": ["move", "<obj1>", "right of", "<obj2>"]
     },
     "signal": "verify",
-    "distractors": 2
+    "distractors": 0
   },
   {
     "comment": "preload visual concepts used in this example",
