@@ -151,15 +151,7 @@ class InputWriter(object):
                     qsr_id = self._qsrs_link.CreateIdWME('qsr')
                     qsr_id.CreateIntWME("root", int(root_obj_id))
                     qsr_id.CreateIntWME("target", int(target_obj_id))
-                    if qsr_type == "rcc8":
-                        qsr_id.CreateStringWME("rcc8", qsr_value)
-                    else:
-                        if qsr_type == "cardir":
-                            qsr_id.CreateStringWME("cardir", qsr_value)
-                        elif qsr_type == 'ra':
-                            qsr_id.CreateStringWME('ra', qsr_value)
-                        elif qsr_type == '3dcd':
-                            qsr_id.CreateStringWME('3dcd', qsr_value)
+                    qsr_id.CreateStringWME(qsr_type, qsr_value)
 
     def clean_concept_memory(self):
         self._soar_agent.delete_all_children(self._concept_memory)
@@ -347,7 +339,6 @@ objects = [{'orientation': [1.0, -5.75539615965681e-17, 3.38996313371214e-17, 5.
             for k, v in zip(qsrlib_response_message.qsrs.trace[t].qsrs.keys(),
                             qsrlib_response_message.qsrs.trace[t].qsrs.values()):
                 args = k.split(',')
-                logging.debug("[input_writer] :: qsrs computed {} {}".format(k, v.qsr.keys()))
                 if args[0] not in ret:
                     ret[args[0]] = {}
                 if 'ra' in v.qsr.keys():
