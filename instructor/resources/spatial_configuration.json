@@ -1,22 +1,22 @@
 {
     "left-of": {
         "objects": ["<obj1>", "<obj2>"],
-        "definition": [["s" , "<obj2>", "<obj1>"], ["dc", "<obj2>", "<obj1>"]],
+        "definition": [["s" , "<obj2>", "<obj1>"], ["dc", "<obj2>", "<obj1>"], ["o", "<obj2>", "<obj1>"]],
         "language": ["<obj1>", "left of","<obj2>"]
     },
     "right-of": {
         "objects": ["<obj1>", "<obj2>"],
-        "definition": [["n" , "<obj2>", "<obj1>"], ["dc", "<obj2>", "<obj1>"]],
+        "definition": [["n" , "<obj2>", "<obj1>"], ["dc", "<obj2>", "<obj1>"], ["o", "<obj2>", "<obj1>"]],
         "language": ["<obj1>", "right of","<obj2>"]
     },
     "front-of": {
         "objects": ["<obj1>", "<obj2>"],
-        "definition": [["w" , "<obj2>", "<obj1>"], ["dc", "<obj2>", "<obj1>"]],
+        "definition": [["w" , "<obj2>", "<obj1>"], ["dc", "<obj2>", "<obj1>"], ["o", "<obj2>", "<obj1>"]],
         "language": ["<obj1>", "in front of","<obj2>"]
     },
     "behind": {
         "objects": ["<obj1>", "<obj2>"],
-        "definition": [["e" , "<obj2>", "<obj1>"], ["dc", "<obj2>", "<obj1>"]],
+        "definition": [["e" , "<obj2>", "<obj1>"], ["dc", "<obj2>", "<obj1>"], ["o", "<obj2>", "<obj1>"]],
         "language": ["<obj1>", "behind","<obj2>"]
     }
 }
