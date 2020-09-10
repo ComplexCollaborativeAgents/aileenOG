@@ -341,17 +341,19 @@ objects = [{'orientation': [1.0, -5.75539615965681e-17, 3.38996313371214e-17, 5.
                                   zsize=obj['bounding_box'][4]-obj['bounding_box'][1]
                     )])
         qsrlib_request_message = QSRlib_Request_Message(["rcc8","cardir","ra", "3dcd"], world)
-        #qsrlib_request_message = QSRlib_Request_Message(["rcc8", "cardir"], world)
         qsrlib_response_message = qsrlib.request_qsrs(req_msg=qsrlib_request_message)
         ret = {}
         for t in qsrlib_response_message.qsrs.get_sorted_timestamps():
             for k, v in zip(qsrlib_response_message.qsrs.trace[t].qsrs.keys(),
                             qsrlib_response_message.qsrs.trace[t].qsrs.values()):
                 args = k.split(',')
+                logging.debug("[input_writer] :: qsrs computed {} {}".format(k, v.qsr.keys()))
                 if args[0] not in ret:
                     ret[args[0]] = {}
                 if 'ra' in v.qsr.keys():
                     v.qsr['ra'] = self.get_rcc8_symbols_for_allen_intervals(v.qsr['ra'])
+                if '3dcd' in v.qsr.keys():
+                    v.qsr['depth'] = v.qsr['3dcd'][-1].lower()
                 ret[args[0]][args[1]] = v.qsr
         logging.debug("[input_writer] :: qsrs computed {}".format(ret))
         return ret
