@@ -43,5 +43,11 @@
                         ]
                     ],
       "language": ["<obj2>", "between", "<obj1>", "<obj3>"]
+    },
+  "next-to": {
+        "comment": "with our current assumptions about the concept learner and interactive learning, we are unable to learn correct next-to",
+        "objects": ["<obj1>", "<obj2>"],
+        "definition": [["ec", "<obj2>", "<obj1>"]],
+        "language": ["<obj1>", "next to", "<obj2>"]
     }
   }
