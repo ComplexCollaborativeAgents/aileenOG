@@ -2,6 +2,7 @@ import random
 import sys
 import json
 import settings
+from experiments.log_config import logging
 
 from instructor.curriculum import Curriculum
 from instructor.spatial_word_lesson import SpatialWordLesson
@@ -9,9 +10,12 @@ from instructor.action_word_lesson import ActionWordLesson
 
 
 class Generator:
-    def __init__(self, lesson_type="visual-word"):
+    def __init__(self, lesson_type="visual-word", experiment_concept=None, num_episodes_per_concept=1, exam_length=1, max_distractors=0):
         self._lesson_type = lesson_type
-
+        self._experiment_concept = experiment_concept
+        self._num_episodes_per_concept = num_episodes_per_concept
+        self._exam_length = exam_length
+        self._max_distractors = max_distractors
         pass
 
     def generate_inform_training_gamut(self):
@@ -23,7 +27,8 @@ class Generator:
         if self._lesson_type == "spatial-word":
             lesson_config = self._generate_spatial_word_lesson_descriptions(signal='inform',
                                                                             distractors=None,
-                                                                            is_positive=True)
+                                                                            is_positive=True,
+                                                                            number_of_samples=self._num_episodes_per_concept)
         if self._lesson_type == "action-word":
             lesson_config = self._generate_action_word_lesson_descriptions(signal='inform',
                                                                            distractors=None,
@@ -38,8 +43,9 @@ class Generator:
                                                                             is_positive=True)
         if self._lesson_type == "spatial-word":
             lesson_config = self._generate_spatial_word_lesson_descriptions(signal='verify',
-                                                                             distractors=(0,3),
-                                                                             is_positive=True)
+                                                                            distractors=(0, self._max_distractors),
+                                                                            is_positive=True,
+                                                                            number_of_samples = self._exam_length)
         if self._lesson_type == "action-word":
             lesson_config = self._generate_action_word_lesson_descriptions(signal='verify',
                                                                            distractors=(0,3),
@@ -55,8 +61,9 @@ class Generator:
 
         if self._lesson_type == "spatial-word":
             lessons_config = self._generate_spatial_word_lesson_descriptions(signal='verify',
-                                                                            distractors=(0, 3),
-                                                                            is_positive=False)
+                                                                            distractors=(0, self._max_distractors),
+                                                                            is_positive=False,
+                                                                            number_of_samples = self._exam_length)
         if self._lesson_type == "action-word":
             lessons_config = self._generate_action_word_lesson_descriptions(signal='verify',
                                                                            distractors=(0,3),
@@ -90,7 +97,14 @@ class Generator:
         return lessons
 
     def _generate_spatial_word_lesson_descriptions(self, signal, distractors, is_positive, number_of_samples=5):
-        relation_configs = SpatialWordLesson.get_spatial_configurations_set()
+        relation_configs_list = SpatialWordLesson.get_spatial_configurations_set()
+        relation_configs = {}
+        if self._experiment_concept:
+            relation_configs[self._experiment_concept] = relation_configs_list[self._experiment_concept]
+        else:
+            relation_configs = relation_configs_list
+
+        logging.debug("[generator] :: relation list is {}".format(relation_configs))
 
         lessons = []
         for i in range(0, number_of_samples):
