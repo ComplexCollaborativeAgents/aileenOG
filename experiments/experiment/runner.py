@@ -29,7 +29,7 @@ def parse():
     parser.add_argument('--concept', help='only generate examples of this concept')
     parser.add_argument('--episodes', help='number of tranining instances per concetp')
     parser.add_argument('--exam_length', help='number of samples in exams')
-    parse.add_argument('--distractors', help='number of distractors in exams')
+    parser.add_argument('--distractors', help='number of distractors in exams')
     return parser.parse_args()
 
 
@@ -51,15 +51,20 @@ if __name__ == '__main__':
     else:
         experiment_concept = None
 
-    if arguments.num_episodes_per_concept:
-        num_episodes_per_concept = arguments.num_episodes_per_concept
+    if arguments.episodes:
+        num_episodes_per_concept = int(arguments.episodes)
     else:
         num_episodes_per_concept = 1
 
     if arguments.exam_length:
-        exam_length = arguments.exam_length
+        exam_length = int(arguments.exam_length)
     else:
         exam_length = 1
+
+    if arguments.exam_length:
+        distractors = int(arguments.distractors)
+    else:
+        distractors = 0
 
     lesson_number = 0
 
@@ -68,7 +73,7 @@ if __name__ == '__main__':
 
     ResultsHelper.reset_results_file()
 
-    rails = Generator(experiment_type, experiment_concept, num_episodes_per_concept, exam_length)
+    rails = Generator(experiment_type, experiment_concept, num_episodes_per_concept, exam_length, distractors)
     lessons = rails.generate_inform_training_gamut()
     g_exams = rails.generate_verify_testing_gamut_generality()
     logging.debug("[runner] :: generality test {}".format(g_exams))
