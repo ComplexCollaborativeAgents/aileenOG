@@ -23,7 +23,8 @@ class Generator:
         if self._lesson_type == "visual-word":
             lesson_config = self._generate_visual_word_lesson_descriptions(signal='inform',
                                                                            distractors=None,
-                                                                           is_positive=True)
+                                                                           is_positive=True,
+                                                                           number_of_samples=self._num_episodes_per_concept)
         if self._lesson_type == "spatial-word":
             lesson_config = self._generate_spatial_word_lesson_descriptions(signal='inform',
                                                                             distractors=None,
@@ -71,7 +72,7 @@ class Generator:
 
         return lessons_config
 
-    def _generate_visual_word_lesson_descriptions(self, signal, distractors, is_positive):
+    def _generate_visual_word_lesson_descriptions(self, signal, distractors, is_positive, number_of_samples=1):
         shapes = settings.SHAPE_SET
         with open(settings.COLOR_PATH, 'r') as f:
             colors = json.load(f).keys()
@@ -90,10 +91,24 @@ class Generator:
                 lesson['signal'] = signal
             return lesson
 
-        lessons = [generate_lesson_description(c, s, distractors, signal, is_positive) for s in shapes for c in colors]
-        lessons += [generate_lesson_description(None, s, distractors, signal, is_positive) for s in shapes]
-        # lessons += [generate_lesson_description(signal, distractors, color=c) for c in colors]
-        random.shuffle(lessons)
+        if self._experiment_concept and number_of_samples > 1:
+            lessons = []
+            if self._experiment_concept in shapes:
+                for i in range(0, number_of_samples):
+                    lessons += [generate_lesson_description(random.choice(colors), self._experiment_concept, distractors, signal, is_positive)]
+            if self._experiment_concept in colors:
+                for i in range(0, number_of_samples):
+                    lessons += [generate_lesson_description(self._experiment_concept, random.choice(shapes), distractors, signal, is_positive)]
+            return lessons
+
+        else:
+            if number_of_samples > 1:
+                logging.warning("[generator] :: ignoring number of samples and generating unique combinations; unimplemented")
+            lessons = [generate_lesson_description(c, s, distractors, signal, is_positive) for s in shapes for c in colors]
+            if self._experiment_concept is None:
+                lessons += [generate_lesson_description(None, s, distractors, signal, is_positive) for s in shapes]
+            # lessons += [generate_lesson_description(signal, distractors, color=c) for c in colors]
+            random.shuffle(lessons)
         return lessons
 
     def _generate_spatial_word_lesson_descriptions(self, signal, distractors, is_positive, number_of_samples=5):
