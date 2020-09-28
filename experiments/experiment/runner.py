@@ -90,14 +90,14 @@ if __name__ == '__main__':
         lesson_number = lesson_number + 1
         if g_exams is not None:
             score = 0
-            for exam in Curriculum(g_exams[0:5]):
+            for exam in Curriculum(g_exams):
                 exam_object = exam['object']
                 e_score, content = exam_object.administer_lesson(world, agent)
                 score = score + e_score
             ResultsHelper.record_performance_score(score)
         if s_exams is not None:
             score = 0
-            for exam in Curriculum(s_exams[0:5]):
+            for exam in Curriculum(s_exams):
                 exam_object = exam['object']
                 e_score, content = exam_object.administer_lesson(world, agent)
                 score = score + e_score
