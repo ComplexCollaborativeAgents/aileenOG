@@ -78,6 +78,103 @@
 (comment CVCone "An object with property Cone")
 (isa CVCone AileenCVSymbol)
 
+;; Cluster ids from self-supervised clustering
+(isa CVc1 Collection)
+(comment CVc1 "self-supervised cluster id")
+(isa CVc1 AileenCVSymbol)
+
+(isa CVc2 Collection)
+(comment CVc2 "self-supervised cluster id")
+(isa CVc2 AileenCVSymbol)
+
+(isa CVc3 Collection)
+(comment CVc3 "self-supervised cluster id")
+(isa CVc3 AileenCVSymbol)
+
+(isa CVc4 Collection)
+(comment CVc4 "self-supervised cluster id")
+(isa CVc4 AileenCVSymbol)
+
+(isa CVc5 Collection)
+(comment CVc5 "self-supervised cluster id")
+(isa CVc5 AileenCVSymbol)
+
+(isa CVc6 Collection)
+(comment CVc6 "self-supervised cluster id")
+(isa CVc6 AileenCVSymbol)
+
+(isa CVc7 Collection)
+(comment CVc7 "self-supervised cluster id")
+(isa CVc7 AileenCVSymbol)
+
+(isa CVc8 Collection)
+(comment CVc8 "self-supervised cluster id")
+(isa CVc8 AileenCVSymbol)
+
+(isa CVc9 Collection)
+(comment CVc9 "self-supervised cluster id")
+(isa CVc9 AileenCVSymbol)
+
+(isa CVc10 Collection)
+(comment CVc10 "self-supervised cluster id")
+(isa CVc10 AileenCVSymbol)
+
+(isa CVc11 Collection)
+(comment CVc11 "self-supervised cluster id")
+(isa CVc11 AileenCVSymbol)
+
+(isa CVc12 Collection)
+(comment CVc12 "self-supervised cluster id")
+(isa CVc12 AileenCVSymbol)
+
+(isa CVc13 Collection)
+(comment CVc13 "self-supervised cluster id")
+(isa CVc13 AileenCVSymbol)
+
+(isa CVc14 Collection)
+(comment CVc14 "self-supervised cluster id")
+(isa CVc14 AileenCVSymbol)
+
+(isa CVc15 Collection)
+(comment CVc15 "self-supervised cluster id")
+(isa CVc15 AileenCVSymbol)
+
+(isa CVc16 Collection)
+(comment CVc16 "self-supervised cluster id")
+(isa CVc16 AileenCVSymbol)
+
+(isa CVc17 Collection)
+(comment CVc17 "self-supervised cluster id")
+(isa CVc17 AileenCVSymbol)
+
+(isa CVc18 Collection)
+(comment CVc18 "self-supervised cluster id")
+(isa CVc18 AileenCVSymbol)
+
+(isa CVc19 Collection)
+(comment CVc19 "self-supervised cluster id")
+(isa CVc19 AileenCVSymbol)
+
+(isa CVc20 Collection)
+(comment CVc20 "self-supervised cluster id")
+(isa CVc20 AileenCVSymbol)
+
+(isa CVc21 Collection)
+(comment CVc21 "self-supervised cluster id")
+(isa CVc21 AileenCVSymbol)
+
+(isa CVc22 Collection)
+(comment CVc22 "self-supervised cluster id")
+(isa CVc22 AileenCVSymbol)
+
+(isa CVc23 Collection)
+(comment CVc23 "self-supervised cluster id")
+(isa CVc23 AileenCVSymbol)
+
+(isa CVc24 Collection)
+(comment CVc24 "self-supervised cluster id")
+(isa CVc24 AileenCVSymbol)
+
 ;;; Positional Relations
 ;;;  Only define 4 of the positional relationships
 (isa w Relation)
