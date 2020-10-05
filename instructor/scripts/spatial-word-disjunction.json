@@ -43,6 +43,5 @@
       "objects": [{"color": "blue", "shape": "cylinder"},  {"color": "green", "shape": "box"}],
       "relation": "right-of"},
     "signal": "verify"
-  },
-
+  }
 ]
