@@ -100,8 +100,14 @@ class InputWriter(object):
 
         updated_detections = []
 
+        mapped = np.zeros(len(world))
         for i in range(len(detections)):
+            w_index = -1
             for w in world:
+                w_index += 1
+                if mapped[w_index]:
+                    continue
+
                 d = detections[i]
                 bbox1 = d['camera_bounding_box_yolo']
                 bbox2 = w['bounding_box_camera']
@@ -116,6 +122,7 @@ class InputWriter(object):
 
                 if Detector.bb_iou(bbox1, bbox2) > .7:
                     # Match
+                    mapped[w_index] = 1
                     detections[i]['id'] = w['id']
                     detections[i]['id_name'] = w['id_name']
                     detections[i]['id_string'] = w['id_string']
@@ -130,15 +137,13 @@ class InputWriter(object):
                     if settings.DETECTOR_MODE == 2:
                         detections[i]['cluster_id'] = detections[i]['cluster_id']
 
-                    ## SM: if settings have preload visual concepts on, just use information from the world to ensure 100% detection
+                    ##  SM: if settings have preload visual concepts on, just use information from the world to ensure 100% detection
                     if settings.AGENT_VISUAL_CONCEPTS_PARAM == 'soar' and settings.AGENT_PRELOAD_VISUAL_CONCEPTS_PARAM == 'true':
                         detections[i]['color'] = w['color']
                         detections[i]['shape'] = w['shape']
 
                     updated_detections.append(detections[i])
                     break
-
-
 
         return updated_detections
 
