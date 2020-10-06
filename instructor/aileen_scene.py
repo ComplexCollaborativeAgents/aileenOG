@@ -6,7 +6,7 @@ from log_config import logging
 try:
     from qsrlib_io.world_trace import Object_State, World_State
     from qsrlib import qsr_realization
-    from qsrlib.qsr_realization import compute_region_for_relations
+    from qsrlib.qsr_realization import compute_region_for_relations, check_for_3d_qsrs
     from shapely.geometry import Point
 except ImportError:
     logging.fatal("[aileen_scene] :: cannot find spatial reasoning library")
@@ -46,8 +46,11 @@ class AileenScene:
             qsr_reference_object = Object_State(name=str(reference_object_name), timestamp=0,
                                             x=new_reference_object_position[0],
                                             y=new_reference_object_position[2],
+                                            z=new_reference_object_position[1],
                                             xsize=reference_object._width_x,
-                                            ysize=reference_object._width_z)
+                                            ysize=reference_object._width_z,
+                                            zsize=reference_object._height_y)
+
             world.add_object_state(qsr_reference_object)
             logging.debug("[aileen_scene] :: added reference object {} to QSRLib scene".format(str(reference_object_name)))
             translations[reference_object_name] = new_reference_object_position
@@ -56,13 +59,17 @@ class AileenScene:
             qsr_target_object = Object_State(name=str(target_object_name), timestamp=0,
                                                  x=position[0],
                                                  y=position[2],
+                                                 z=position[1],
                                                  xsize=target_object._width_x,
-                                                 ysize=target_object._width_z)
+                                                 ysize=target_object._width_z,
+                                                 zsize=target_object._height_y)
 
             try:
                 region = compute_region_for_relations(world, configuration_definition, qsr_target_object, table)
                 found_target_object_position = AileenScene.randomizer.sample_position_from_region(region)
                 position = [found_target_object_position.x, settings.OBJECT_POSITION_MAX_Y, found_target_object_position.y]
+                #this will only overwrite if a 3d qsr is found
+                position = check_for_3d_qsrs(world, configuration_definition, target, position)
                 translations[target_object_name] = position
             except (ValueError, AttributeError):
                 pass
@@ -182,9 +189,14 @@ class AileenScene:
 
         def get_random_position_on_table(self):
             position = [uniform(settings.OBJECT_POSITION_MIN_X, settings.OBJECT_POSITION_MAX_X),
-                        uniform(settings.OBJECT_POSITION_MIN_Y, settings.OBJECT_POSITION_MAX_Y),
+                        uniform(settings.OBJECT_POSITION_TABLE_Y, settings.OBJECT_POSITION_TABLE_Y),
                         uniform(settings.OBJECT_POSITION_MIN_Z, settings.OBJECT_POSITION_MAX_Z)]
             return position
+
+        def get_random_position_general(self):
+            position = [uniform(settings.OBJECT_POSITION_MIN_X, settings.OBJECT_POSITION_MAX_X),
+                        uniform(settings.OBJECT_POSITION_MIN_Y, settings.OBJECT_POSITION_MAX_Y),
+                        uniform(settings.OBJECT_POSITION_MIN_Z, settings.OBJECT_POSITION_MAX_Z)]
 
         def sample_position_from_region(self, region):
             return qsr_realization.sample_position_from_region(region)

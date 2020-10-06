@@ -50,7 +50,9 @@ TRAIN_FILES = TRAINING_DATA_FOLDER + '/train_files.txt'
 TEST_FILES = TRAINING_DATA_FOLDER + '/test_files.txt'
 YOLO_WEIGHTS = path.join(ROOT_PATH, 'agent', 'vision', 'yolov3-tiny-aileen_final.weights')
 YOLO_CFG = path.join(ROOT_PATH, 'agent', 'vision', 'yolov3-tiny-aileen-test.cfg')
-K_MEANS_MODEL = path.join(ROOT_PATH, 'agent', 'vision', 'k_means_shape_color')
+K_MEANS_MODEL = path.join(ROOT_PATH, 'agent', 'visiosettings.OBJECT_POSITION_MIN_X,
+                    settings.OBJECT_POSITION_MIN_Z,
+                    settings.OBJECT_POSITION_MAX_Xn', 'k_means_shape_color')
 REPRESENTATION_WEIGHTS = path.join(ROOT_PATH, 'agent', 'vision', 'autoencoder_final.pkl')
 BACKGROUND_IMG = path.join(ROOT_PATH, 'agent', 'vision', 'background_image.jpg')
 NAMES_FILE = path.join(ROOT_PATH, 'agent', 'vision', 'aileen.names')
@@ -64,7 +66,9 @@ SIZE_ML = (1.25*1.25)
 OBJECT_POSITION_MAX_X = 0.855
 OBJECT_POSITION_MIN_X = 0.356
 
-OBJECT_POSITION_MAX_Y = 0.45
+OBJECT_POSITION_TABLE_Y = 0.45
+
+OBJECT_POSITION_MAX_Y = 1.00
 OBJECT_POSITION_MIN_Y = 0.45
 
 OBJECT_POSITION_MAX_Z = 0.242
@@ -72,6 +76,7 @@ OBJECT_POSITION_MIN_Z = -0.245
 
 OBJECT_POSITION_DELTA = 0.15
 
+QSRS_3D = ['3dcd']
 QUANTISATION_FACTOR = .001
 
 #DEPRECATED! SIZES DEFINED IN instructor/resources/sizes.json
