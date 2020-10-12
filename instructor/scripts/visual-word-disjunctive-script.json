@@ -1,0 +1,35 @@
+[
+  {
+    "signal": "inform",
+    "content": "box",
+    "lesson-type": "visual-word",
+    "description": {"color": "red", "shape": "box"}
+  },
+  {
+    "lesson-type": "visual-word",
+    "content": "box",
+    "description": {"color": "red",
+                    "shape": "box"},
+    "signal": "inform"
+  },
+  {
+    "lesson-type": "visual-word",
+    "content": "box",
+    "description": {"color": "red",
+                    "shape": "box"},
+    "signal": "inform"
+  },
+  {
+    "lesson-type": "visual-word",
+    "content": "box",
+    "description": {"color": "red",
+                    "shape": "box"},
+    "signal": "verify"
+  },
+  {
+    "lesson-type": "visual-word",
+    "description": {"color": "red",
+                    "shape": "box"},
+    "signal": "verify"
+  }
+]
