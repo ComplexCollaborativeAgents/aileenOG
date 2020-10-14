@@ -5,12 +5,11 @@
     "lesson-type": "visual-word",
     "description": {"color": "red", "shape": "box"}
   },
-  {
-    "lesson-type": "visual-word",
+   {
+    "signal": "inform",
     "content": "box",
-    "description": {"color": "red",
-                    "shape": "box"},
-    "signal": "inform"
+    "lesson-type": "visual-word",
+    "description": {"color": "green", "shape": "box"}
   },
   {
     "lesson-type": "visual-word",
@@ -18,6 +17,38 @@
     "description": {"color": "red",
                     "shape": "box"},
     "signal": "inform"
+  },
+   {
+    "signal": "inform",
+    "content": "box",
+    "lesson-type": "visual-word",
+    "description": {"color": "blue", "shape": "box"}
+  },
+  {
+    "lesson-type": "visual-word",
+    "content": "box",
+    "description": {"color": "red",
+                    "shape": "box"},
+    "signal": "inform"
+  },
+   {
+    "signal": "inform",
+    "content": "box",
+    "lesson-type": "visual-word",
+    "description": {"color": "green", "shape": "box"}
+  },
+  {
+    "lesson-type": "visual-word",
+    "content": "box",
+    "description": {"color": "red",
+                    "shape": "box"},
+    "signal": "inform"
+  },
+   {
+    "signal": "inform",
+    "content": "box",
+    "lesson-type": "visual-word",
+    "description": {"color": "blue", "shape": "box"}
   },
   {
     "lesson-type": "visual-word",
@@ -28,8 +59,10 @@
   },
   {
     "lesson-type": "visual-word",
-    "description": {"color": "red",
-                    "shape": "box"},
+    "content": "box",
+    "description": { "color": "blue",
+      "shape": "cylinder"
+    },
     "signal": "verify"
   }
 ]
