@@ -78,6 +78,7 @@ class SoarAgent(object):
             preload_action_concepts_param = settings.AGENT_PRELOAD_ACTION_CONCEPTS_PARAM
 
         recomp_param = settings.AGENT_RECOMPREHEND_AFTER_LEARN
+        percept_param = settings.AGENT_PERCEPT_SYMBOLS_ATTR
 
         params = """sp {{aileen*apply*init-agent*agent_params 
                     (state <s>    ^operator.name initialize-agent)
@@ -91,7 +92,7 @@ class SoarAgent(object):
                             ^preload-spatial-concepts {ps_param}
                             ^preload-action-concepts {pa_param})
                     (<p>    ^relevant-percept-set <rps>)
-                    (<rps>    ^type color shape)
+                    (<rps>    ^type {p_set})
                     (<inter>    ^recomprehend {comp_param})
                     }}""".format(v_param=visual_concepts_param,
                                  s_param=spatial_concepts_param,
@@ -99,6 +100,7 @@ class SoarAgent(object):
                                  pv_param=preload_visual_concepts_param,
                                  ps_param=preload_spatial_concepts_param,
                                  pa_param=preload_action_concepts_param,
+                                 p_set=percept_param,
                                  comp_param=recomp_param)
 
         #logging.debug("[soar-agent] :: loading params into agent")

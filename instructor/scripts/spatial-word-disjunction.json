@@ -5,7 +5,7 @@
     "content": "yellow box behind red box",
     "description": {
       "objects": [{"color": "yellow", "shape": "box"},  {"color": "red", "shape": "box"}],
-      "relation": "behind1"},
+      "relation": "behind-disjunctive"},
     "signal": "inform"
   },
   {
