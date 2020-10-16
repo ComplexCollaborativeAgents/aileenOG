@@ -69,7 +69,7 @@ class AileenScene:
                 found_target_object_position = AileenScene.randomizer.sample_position_from_region(region)
                 position = [found_target_object_position.x, settings.OBJECT_POSITION_MAX_Y, found_target_object_position.y]
                 #this will only overwrite if a 3d qsr is found
-                position = check_for_3d_qsrs(world, configuration_definition, target, position)
+                #position = check_for_3d_qsrs(world, configuration_definition, target, position)
                 translations[target_object_name] = position
             except (ValueError, AttributeError):
                 pass
