@@ -6,18 +6,19 @@ import settings
 from log_config import logging
 
 Color = namedtuple('Color', ['name', 'rgb'])
-
+Size = namedtuple('Size', ['name', 'xyz'])
 
 class AileenObject:
 
-    def __init__(self, shape, color, translation=[0, 0, 0], height_y=settings.OBJECT_STANDARD_HEIGHT,
-                 width_x=settings.OBJECT_STANDARD_WIDTH_X, width_z=settings.OBJECT_STANDARD_WIDTH_Z):
-
+    #def __init__(self, shape, color, translation=[0, 0, 0], height_y=settings.OBJECT_STANDARD_HEIGHT,
+    #             width_x=settings.OBJECT_STANDARD_WIDTH_X, width_z=settings.OBJECT_STANDARD_WIDTH_Z):
+    def __init__(self, shape, color, size, translation=[0, 0, 0]):
         self._shape = shape
         self._color = color
-        self._height_y = height_y
-        self._width_x = width_x
-        self._width_z = width_z
+        self._size = size
+        self._height_y = self._size.xyz[1]
+        self._width_x = self._size.xyz[0]
+        self._width_z = self._size.xyz[2]
         self._translation = translation
         self._name = "object{}".format(AileenObject.randomizer.uuid4())
         self._language = None
@@ -25,7 +26,7 @@ class AileenObject:
         logging.debug("[aileen_object] :: created a new object")
 
     def __eq__(self, other):
-        return self._shape == other._shape and self._color.name == other._color.name
+        return self._shape == other._shape and self._color.name == other._color.name and self._size.name == other._size.name
 
     def __ne__(self, other):
         return not self.__eq__(other)
@@ -121,14 +122,27 @@ class AileenObject:
         return colors
 
     @staticmethod
+    def get_sizes():
+        with open(settings.SIZE_PATH) as f:
+            sizes = json.load(f)
+        return sizes
+
+    @staticmethod
     def generate_random_object():
         scene_object_color = AileenObject.randomizer.get_random_color()
         scene_object_color_vector = AileenObject.randomizer.get_color_vector_sample(scene_object_color)
         color = Color(scene_object_color, scene_object_color_vector)
+
         scene_object_shape = AileenObject.randomizer.get_random_shape()
+
+        scene_object_size = AileenObject.randomizer.get_random_size()
+        scene_object_color_vector = AileenObject.randomizer.get_size_vector_sample(scene_object_size)
+        size = Size(scene_object_size, scene_object_color_vector)
+
         scene_object = AileenObject(shape=scene_object_shape,
-                                    color=color)
-        scene_object._language = [scene_object_color, scene_object_shape]
+                                    color=color,
+                                    size=size)
+        scene_object._language = [scene_object_color, scene_object_shape, size.name]
         return scene_object
 
     @staticmethod
@@ -137,8 +151,11 @@ class AileenObject:
         scene_object_color_vector = description.get('rgb', AileenObject.randomizer.get_color_vector_sample(color))
         color = Color(color, scene_object_color_vector)
         shape = description.get('shape', AileenObject.randomizer.get_random_shape())
-        scene_object = AileenObject(shape=shape, color=color)
-        scene_object._language = [color.name, shape]
+        size = description.get('size', AileenObject.randomizer.get_random_size())
+        size_vector = description.get('xyz', AileenObject.randomizer.get_size_vector_sample(size))
+        size = Size(size, size_vector)
+        scene_object = AileenObject(shape=shape, color=color, size=size)
+        scene_object._language = [color.name, shape, size.name]
         return scene_object
 
 
@@ -147,10 +164,11 @@ class AileenObject:
         """Generate n random unique objects."""
         colors = AileenObject.get_colors().keys()
         shapes = settings.SHAPE_SET
+        sizes = AileenObject.get_sizes().keys()
         objects = []
-        if n > len(colors) * len(shapes):
+        if n > len(colors) * len(shapes) * len(sizes):
             logging.error("[aileen_object] :: Can't generate more than {} unique random objects".format(
-                len(colors) * len(shapes)))
+                len(colors) * len(shapes) * len(sizes)))
             return objects
 
         while n:
@@ -189,6 +207,13 @@ class AileenObject:
 
         def get_color_vector_sample(self, color_symbol):
             return choice(AileenObject.get_colors()[color_symbol])
+
+        def get_size_vector_sample(self, size_name):
+            return choice(AileenObject.get_sizes()[size_name])
+
+        def get_random_size(self):
+            sizes = AileenObject.get_sizes().keys()
+            return choice(sizes)
 
         def get_random_shape(self):
             return choice(settings.SHAPE_SET)

@@ -163,6 +163,10 @@ class InputWriter(object):
                     else:
                         if qsr_type == "cardir":
                             qsr_id.CreateStringWME("cardir", qsr_value)
+                        elif qsr_type == 'ra':
+                            qsr_id.createStringWME('ra', qsr_value)
+                        elif qsr_type == '3dcd':
+                            qsr_id.createStringWME('3dcd', qsr_value)
 
     def clean_concept_memory(self):
         self._soar_agent.delete_all_children(self._concept_memory)
@@ -278,6 +282,8 @@ class InputWriter(object):
                 size_id = object_id.CreateIdWME('size')
                 size_id.CreateFloatWME('xsize', w_object['bounding_box'][3]-w_object['bounding_box'][0])
                 size_id.CreateFloatWME('zsize', w_object['bounding_box'][5]-w_object['bounding_box'][2])
+                size_id.CreateFloatWME('ysize', w_object['bounding_box'][4]-w_object['bounding_box'][1])
+                object_id.createStringWME('object_size', self.size_from_bounding_box(w_object['bounding_box']))
             object_id.CreateStringWME('held', w_object['held'])
             object_id.CreateStringWME('color', str(w_object['color']))
             object_id.CreateStringWME('shape', w_object['shape'])
@@ -336,10 +342,12 @@ objects = [{'orientation': [1.0, -5.75539615965681e-17, 3.38996313371214e-17, 5.
                     [Object_State(name=str(obj['id']),timestamp=0,
                                   x=obj['position'][0],
                                   y=obj['position'][2],
+                                  z=obj['position'][1],
                                   xsize=obj['bounding_box'][3]-obj['bounding_box'][0],
-                                  ysize=obj['bounding_box'][5]-obj['bounding_box'][2]
+                                  ysize=obj['bounding_box'][5]-obj['bounding_box'][2],
+                                  zsize=obj['bounding_box'][4]-obj['bounding_box'][1]
                     )])
-        qsrlib_request_message = QSRlib_Request_Message(["rcc8","cardir"], world)
+        qsrlib_request_message = QSRlib_Request_Message(["rcc8","cardir","ra", "3dcd"], world)
         qsrlib_response_message = qsrlib.request_qsrs(req_msg=qsrlib_request_message)
         ret = {}
         for t in qsrlib_response_message.qsrs.get_sorted_timestamps():
@@ -348,6 +356,65 @@ objects = [{'orientation': [1.0, -5.75539615965681e-17, 3.38996313371214e-17, 5.
                 args = k.split(',')
                 if args[0] not in ret:
                     ret[args[0]] = {}
+                if 'ra' in v.qsr.keys():
+                    v.qsr['ra'] = get_rcc8_symbols_for_allen_intervals(v.qsr['ra'])
                 ret[args[0]][args[1]] = v.qsr
         logging.debug("[input_writer] :: qsrs computed {}".format(ret))
         return ret
+
+    def size_from_bounding_box(self, bbox):
+        """
+        Place holder for something more principled.
+        Arbitrary thresholds as a first pass -> clustering on witnessed examples later
+        """
+        area = abs((bbox[3] - bbox[0]) * (bbox[5] - bbox[2]))
+        if area < settings.SIZE_SM:
+            return 'small'
+        elif area < settings.SIZE_ML:
+            return 'medium'
+        else:
+            return 'large'
+
+    def get_rcc8_symbols_for_allen_intervals(symbols):
+        """
+        We lose a bit of information here, but it works with the current concept learner so we have it as a stopgap
+        mapping:
+        <   dc
+        >   dc
+        =   eq
+        m   ec
+        mi  ec
+        o   po
+        oi  po
+        d   ntpp
+        di  ntppi
+        s   tpp
+        si  tppi
+        f   tpp
+        fi  tppi
+        """
+
+        symbol_split = symbols.split(',')
+        new_symbols = ''
+        count = 0
+        for symbol in symbol_split:
+            count += 1
+            if symbol == '<' or symbol == '>':
+                new_symbols += 'dc'
+            if symbol == '=':
+                new_symbols += 'eq'
+            if symbol == 'm' or symbol == 'mi':
+                new_symbols += 'ec'
+            if symbol == 'o' or symbol == 'oi':
+                new_symbols += 'po'
+            if symbol == 'd':
+                new_symbols += 'ntpp'
+            if symbol == 'di':
+                new_symbols += 'ntppi'
+            if symbol in ['s','f']:
+                new_symbols += 'tpp'
+            if symbol in ['si', 'fi']:
+                new_symbols += 'tppi'
+            if count != len(symbol_split):
+                new_symbols += ','
+        return new_symbols

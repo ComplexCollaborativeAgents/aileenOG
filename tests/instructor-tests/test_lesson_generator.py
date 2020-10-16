@@ -19,26 +19,26 @@ def test_action_word_segment():
     lesson1 = ActionWordLesson(is_positive=True, signal='verify', description=None, distractors=None, content=None)
     lesson1.generate_lesson()
     segment = lesson1.get_next_segment()
-    assert segment == {'interaction': {'marker': 'start', 'content': 'move blue cylinder left of blue box', 'signal': 'verify'},
+    assert segment == {'interaction': {'marker': 'start', 'content': 'move blue cylinder small left of blue box large', 'signal': 'verify'},
                        'scene': [
                            'Solid {\n   recognitionColors 0 0 1\n   translation 0.586304972021 0.45 0.092\n   '
                            'children [\n       Shape {\n          appearance PBRAppearance {\n          baseColor 0 0 '
                            '1\n          metalness 0\n          emissiveColor 0 0 1\n        }\n        geometry '
-                           'Cylinder {\n          radius 0.05\n          height 0.1\n        }\n        castShadows '
+                           'Cylinder {\n          radius 0.02\n          height 0.04\n        }\n        castShadows '
                            'FALSE\n        }\n        Connector {\n          type "passive"\n          '
                            'distanceTolerance .1\n          axisTolerance .5\n '
                   '         rotationTolerance 0\n          numberOfRotations 0\n          rotation 1 0 0 -1.57\n          translation 0 '
-                           '0.05 0\n        }\n    ]\n    name "object1"\n   boundingObject Box {\n     size 0.1 '
-                           '0.1 '
-                           '0.1\n   }\n   physics Physics {\n}}',
+                           '0.02 0\n        }\n    ]\n    name "object1"\n   boundingObject Box {\n     size 0.04 '
+                           '0.04 '
+                           '0.04\n   }\n   physics Physics {\n}}',
                            'Solid {\n   recognitionColors 0 0 1\n   translation 0.506 0.45 -0.095\n   children [\n    '
                            '   Shape {\n          appearance PBRAppearance {\n          baseColor 0 0 1\n          '
                            'metalness 0\n          emissiveColor 0 0 1\n        }\n        geometry Box {\n          '
-                           'size 0.1 0.1 0.1\n        }\n        castShadows FALSE\n        }\n        Connector {\n  '
+                           'size 0.14 0.14 0.14\n        }\n        castShadows FALSE\n        }\n        Connector {\n  '
                            '        type "passive"\n          distanceTolerance .1\n          axisTolerance .5\n '
                   '         rotationTolerance 0\n          numberOfRotations 0\n          rotation 1 0 0 -1.57\n          translation 0 '
-                           '0.05 0\n        }\n    ]\n    name "object2"\n   boundingObject Box {\n     size 0.1 '
-                           '0.1 0.1\n   }\n   physics Physics {\n}}']}
+                           '0.07 0\n        }\n    ]\n    name "object2"\n   boundingObject Box {\n     size 0.14 '
+                           '0.14 0.14\n   }\n   physics Physics {\n}}']}
     segment = lesson1.get_next_segment()
     assert segment == {'action': {'name': 'pick-up', 'requester': 'instructor', 'uuid': 'object1'}, 'interaction': {'marker':'trace'}}
     segment = lesson1.get_next_segment()
@@ -59,18 +59,18 @@ def test_spatial_word_lesson():
                                 description=None,
                                 distractors=None,
                                 content=None)
-    assert lesson1.generate_lesson() == {'interaction': {'content': 'blue cylinder right of blue box','signal': 'verify'}, 'scene': [
+    assert lesson1.generate_lesson() == {'interaction': {'content': 'blue cylinder small right of blue box large','signal': 'verify'}, 'scene': [
         'Solid {\n   recognitionColors 0 0 1\n   translation 0.676147498734 0.45 -0.0202334240995\n   children [\n    '
         '   Shape {\n          appearance PBRAppearance {\n          baseColor 0 0 1\n          metalness 0\n         '
-        ' emissiveColor 0 0 1\n        }\n        geometry Cylinder {\n          radius 0.05\n          height 0.1\n  '
+        ' emissiveColor 0 0 1\n        }\n        geometry Cylinder {\n          radius 0.02\n          height 0.04\n  '
         '      }\n        castShadows FALSE\n        }\n        Connector {\n          type "passive"\n          distanceTolerance .1\n          axisTolerance .5\n '
-        '         rotationTolerance 0\n          numberOfRotations 0\n          rotation 1 0 0 -1.57\n          translation 0 0.05 0\n        }\n    ]\n    name "object1"\n   boundingObject Box {\n     size '
-        '0.1 0.1 0.1\n   }\n   physics Physics {\n}}',
+        '         rotationTolerance 0\n          numberOfRotations 0\n          rotation 1 0 0 -1.57\n          translation 0 0.02 0\n        }\n    ]\n    name "object1"\n   boundingObject Box {\n     size '
+        '0.04 0.04 0.04\n   }\n   physics Physics {\n}}',
         'Solid {\n   recognitionColors 0 0 1\n   translation 0.586304972021 0.45 0.238382561155\n   children [\n      '
         ' Shape {\n          appearance PBRAppearance {\n          baseColor 0 0 1\n          metalness 0\n          '
-        'emissiveColor 0 0 1\n        }\n        geometry Box {\n          size 0.1 0.1 0.1\n        }\n        '
+        'emissiveColor 0 0 1\n        }\n        geometry Box {\n          size 0.14 0.14 0.14\n        }\n        '
         'castShadows FALSE\n        }\n        Connector {\n          type "passive"\n          distanceTolerance .1\n          axisTolerance .5\n '
-        '         rotationTolerance 0\n          numberOfRotations 0\n          rotation 1 0 0 -1.57\n          translation 0 0.05 0\n        }\n    ]\n    name "object2"\n   boundingObject Box {\n     size 0.1 0.1 0.1\n   '
+        '         rotationTolerance 0\n          numberOfRotations 0\n          rotation 1 0 0 -1.57\n          translation 0 0.07 0\n        }\n    ]\n    name "object2"\n   boundingObject Box {\n     size 0.14 0.14 0.14\n   '
         '}\n   physics Physics {\n}}']}
 
 
@@ -84,14 +84,14 @@ def test_visual_word_lesson():
                                description=None,
                                distractors=None,
                                content=None)
-    assert lesson1.generate_lesson() == {'interaction': {'content': 'blue cylinder', 'signal': 'verify'}, 'scene': [
+    assert lesson1.generate_lesson() == {'interaction': {'content': 'blue cylinder small', 'signal': 'verify'}, 'scene': [
         'Solid {\n   recognitionColors 0 0 1\n   translation 0.586304972021 0.45 0.238382561155\n   children [\n      '
         ' Shape {\n          appearance PBRAppearance {\n          baseColor 0 0 1\n          metalness 0\n          '
-        'emissiveColor 0 0 1\n        }\n        geometry Cylinder {\n          radius 0.05\n          height 0.1\n   '
+        'emissiveColor 0 0 1\n        }\n        geometry Cylinder {\n          radius 0.02\n          height 0.04\n   '
         '     }\n        castShadows FALSE\n        }\n        Connector {\n          type "passive"\n          distanceTolerance .1\n          axisTolerance .5\n '
-        '         rotationTolerance 0\n          numberOfRotations 0\n          rotation 1 0 0 -1.57\n          translation 0 0.05 0\n        }\n    ]\n    name "object1"\n   boundingObject Box {\n '
+        '         rotationTolerance 0\n          numberOfRotations 0\n          rotation 1 0 0 -1.57\n          translation 0 0.02 0\n        }\n    ]\n    name "object1"\n   boundingObject Box {\n '
         '    size '
-        '0.1 0.1 0.1\n   }\n   physics Physics {\n}}']}
+        '0.04 0.04 0.04\n   }\n   physics Physics {\n}}']}
 
 
 class ObjectRandomizer:
@@ -101,6 +101,9 @@ class ObjectRandomizer:
     shapes = ['cylinder', 'box']
     shape_index = -1
 
+    sizes = ['small','large']
+    sizes_index = -1
+
     uuid = 0
 
     def get_random_color(self):
@@ -109,6 +112,14 @@ class ObjectRandomizer:
 
     def get_color_vector_sample(self, color_symbol):
         return AileenObject.get_colors()[color_symbol][0]
+
+    def get_size_vector_sample(self, size_name):
+        return AileenObject.get_sizes()[size_name][0]
+
+    def get_random_size(self):
+        #sizes = AileenObject.get_sizes().keys()
+        self.sizes_index += 1
+        return self.sizes[self.sizes_index % len(self.sizes)]
 
     def get_random_shape(self):
         self.shape_index += 13
