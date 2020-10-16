@@ -77,13 +77,14 @@ sp {action*apply*place*reference-object
 sp {action*apply*place*relation
     (state <s>    ^name action
                   ^operator <op>
-                  ^io.output-link.action <act>)
+                  ^io.output-link.action <act>
+                  ^topstate._params.spatial-predicates.type <spred>)
     (<op>    ^name op_place
              ^relation <rel>
              ^object.id <oid>)
     (<rel>    ^target-object.id <rid>
               ^root-object.id <oid>
-              ^<< rcc8 cardir >> <sym>)
+              ^<spred> <sym>)
 -->
     (<act>    ^relation <ri>)
     (<ri>    ^target <oid>
