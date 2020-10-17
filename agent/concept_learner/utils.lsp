@@ -6,7 +6,7 @@
 ;;;;   Created: April 26, 2020 06:11:24
 ;;;;   Purpose: 
 ;;;; ----------------------------------------------------------------------------
-;;;;  Modified: Thursday, October 15, 2020 at 09:48:29 by klenk
+;;;;  Modified: Thursday, October 15, 2020 at 17:42:16 by klenk
 ;;;; ----------------------------------------------------------------------------
 
 ;;;
@@ -50,21 +50,23 @@
 					     #'create-reasoning-symbol-helper)))
 			   interactions))
 
-(defun replay-experiment (ints)
+(defun replay-experiment (ints &optional (no-eval? nil))
   (multiple-value-bind (poss negs)
-      (identify-evaluation-sets ints)
+      (unless no-eval? (identify-evaluation-sets ints))
     (replay-experiment-1 poss
 			 negs
 			 (identify-stores ints)
-			 (identify-new-symbols ints))))
+			 (identify-new-symbols ints)
+			 no-eval?)))
 
-(defun replay-experiment-1 (poss negs stores symbols)
+(defun replay-experiment-1 (poss negs stores symbols &optional (no-eval? nil))
   (dolist (symbol symbols)
     (funcall (car symbol) (second symbol)))
   (let (ret)
     (dolist (store stores (reverse ret))
       (funcall (car store) (second store))
-      (push (measure-performance poss negs) ret))))
+      (unless no-eval?
+	(push (measure-performance poss negs) ret)))))
 
 (defun measure-performance (poss negs)
   (let ((pos_res 0)

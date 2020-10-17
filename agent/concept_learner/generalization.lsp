@@ -6,7 +6,7 @@
 ;;;;   Created: November  6, 2019 14:54:11
 ;;;;   Purpose: 
 ;;;; ----------------------------------------------------------------------------
-;;;;  Modified: Monday, September  7, 2020 at 11:19:50 by klenk
+;;;;  Modified: Friday, October 16, 2020 at 18:20:19 by klenk
 ;;;; ----------------------------------------------------------------------------
 
 (in-package :aileen)
@@ -14,7 +14,7 @@
 ;; (load "analogystack/qrgsetup.lsp")
 ;; (require-module "fire" :fire)
 
-(defparameter *assimilation-threshold* 0.5 "sage threshold for storing new cases. For Phase 1 we used 0.01, but for Phase 2, we need a higher number for disjunctive concepts.")
+(defparameter *assimilation-threshold* 0.6 "sage threshold for storing new cases. For Phase 1 we used 0.01, but for Phase 2, we need a higher number for disjunctive concepts.")
 (defparameter *match-threshold* 0.2 "sage threshold for matching to generalizations. because we are doing our own scoring this is low")
 (defparameter *projection-threshold* 0.003 "when projecting, we do not expect much overlap between the current situation and the generalization")
 (defparameter *probability-cutoff* 0.6 "facts below this threshold in generalizations do not contribute to score calculations")
