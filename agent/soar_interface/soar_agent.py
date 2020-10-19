@@ -78,28 +78,30 @@ class SoarAgent(object):
             preload_action_concepts_param = settings.AGENT_PRELOAD_ACTION_CONCEPTS_PARAM
 
         recomp_param = settings.AGENT_RECOMPREHEND_AFTER_LEARN
+        percept_param = settings.AGENT_PERCEPT_SYMBOLS_ATTR
 
         params = """sp {{aileen*apply*init-agent*agent_params 
-                    (state <s>    ^operator.name initialize-agent)
-                    -->
-                    (<s>    ^_params <p>)
-                    (<p>    ^visual-concepts {v_param}
-                            ^spatial-concepts {s_param}
-                            ^action-concepts {a_param}
-                            ^interaction <inter>)
-                    (<p>    ^preload-visual-concepts {pv_param}
-                            ^preload-spatial-concepts {ps_param}
-                            ^preload-action-concepts {pa_param})
-                    (<p>    ^relevant-percept-set <rps>)
-                    (<rps>    ^type color shape)
-                    (<inter>    ^recomprehend {comp_param})
-                    }}""".format(v_param=visual_concepts_param,
-                                 s_param=spatial_concepts_param,
-                                 a_param=action_concepts_param,
-                                 pv_param=preload_visual_concepts_param,
-                                 ps_param=preload_spatial_concepts_param,
-                                 pa_param=preload_action_concepts_param,
-                                 comp_param=recomp_param)
+                            (state <s>    ^operator.name initialize-agent)
+                            -->
+                            (<s>    ^_params <p>)
+                            (<p>    ^visual-concepts {v_param}
+                                    ^spatial-concepts {s_param}
+                                    ^action-concepts {a_param}
+                                    ^interaction <inter>)
+                            (<p>    ^preload-visual-concepts {pv_param}
+                                    ^preload-spatial-concepts {ps_param}
+                                    ^preload-action-concepts {pa_param})
+                            (<p>    ^relevant-percept-set <rps>)
+                            (<rps>    ^type {p_set})
+                            (<inter>    ^recomprehend {comp_param})
+                            }}""".format(v_param=visual_concepts_param,
+                                         s_param=spatial_concepts_param,
+                                         a_param=action_concepts_param,
+                                         pv_param=preload_visual_concepts_param,
+                                         ps_param=preload_spatial_concepts_param,
+                                         pa_param=preload_action_concepts_param,
+                                         p_set=percept_param,
+                                         comp_param=recomp_param)
 
         #logging.debug("[soar-agent] :: loading params into agent")
         self.execute_command(params)
