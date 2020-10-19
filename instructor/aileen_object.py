@@ -142,7 +142,7 @@ class AileenObject:
         scene_object = AileenObject(shape=scene_object_shape,
                                     color=color,
                                     size=size)
-        scene_object._language = [scene_object_color, scene_object_shape, size.name]
+        scene_object._language = [size.name, scene_object_color, scene_object_shape]
         return scene_object
 
     @staticmethod
@@ -155,7 +155,7 @@ class AileenObject:
         size_vector = description.get('xyz', AileenObject.randomizer.get_size_vector_sample(size))
         size = Size(size, size_vector)
         scene_object = AileenObject(shape=shape, color=color, size=size)
-        scene_object._language = [color.name, shape, size.name]
+        scene_object._language = [size.name, color.name, shape]
         return scene_object
 
 

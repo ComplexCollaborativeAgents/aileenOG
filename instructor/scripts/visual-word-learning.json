@@ -1,10 +1,8 @@
 [
   {
-    "signal": "verify",
+    "signal": "inform",
     "lesson-type": "visual-word",
-    "is_positive": "false",
-    "description": {"color": "green", "shape": "cone"},
-    "distractors":2
+    "description": {"color": "green", "shape": "cone", "size": "large"}
   },
   {
     "lesson-type": "visual-word",
