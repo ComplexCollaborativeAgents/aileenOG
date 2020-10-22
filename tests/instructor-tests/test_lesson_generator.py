@@ -19,7 +19,7 @@ def test_action_word_segment():
     lesson1 = ActionWordLesson(is_positive=True, signal='verify', description=None, distractors=None, content=None)
     lesson1.generate_lesson()
     segment = lesson1.get_next_segment()
-    assert segment == {'interaction': {'marker': 'start', 'content': 'move blue cylinder small left of blue box large', 'signal': 'verify'},
+    assert segment == {'interaction': {'marker': 'start', 'content': 'move small blue cylinder left of large blue box', 'signal': 'verify'},
                        'scene': [
                            'Solid {\n   recognitionColors 0 0 1\n   translation 0.586304972021 0.45 0.092\n   '
                            'children [\n       Shape {\n          appearance PBRAppearance {\n          baseColor 0 0 '
@@ -59,7 +59,7 @@ def test_spatial_word_lesson():
                                 description=None,
                                 distractors=None,
                                 content=None)
-    assert lesson1.generate_lesson() == {'interaction': {'content': 'blue cylinder small right of blue box large','signal': 'verify'}, 'scene': [
+    assert lesson1.generate_lesson() == {'interaction': {'content': 'small blue cylinder right of large blue box','signal': 'verify'}, 'scene': [
         'Solid {\n   recognitionColors 0 0 1\n   translation 0.676147498734 0.45 -0.0202334240995\n   children [\n    '
         '   Shape {\n          appearance PBRAppearance {\n          baseColor 0 0 1\n          metalness 0\n         '
         ' emissiveColor 0 0 1\n        }\n        geometry Cylinder {\n          radius 0.02\n          height 0.04\n  '
@@ -84,7 +84,7 @@ def test_visual_word_lesson():
                                description=None,
                                distractors=None,
                                content=None)
-    assert lesson1.generate_lesson() == {'interaction': {'content': 'blue cylinder small', 'signal': 'verify'}, 'scene': [
+    assert lesson1.generate_lesson() == {'interaction': {'content': 'small blue cylinder', 'signal': 'verify'}, 'scene': [
         'Solid {\n   recognitionColors 0 0 1\n   translation 0.586304972021 0.45 0.238382561155\n   children [\n      '
         ' Shape {\n          appearance PBRAppearance {\n          baseColor 0 0 1\n          metalness 0\n          '
         'emissiveColor 0 0 1\n        }\n        geometry Cylinder {\n          radius 0.02\n          height 0.04\n   '
