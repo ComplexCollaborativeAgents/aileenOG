@@ -1,7 +1,7 @@
 {
     "left-of": {
         "objects": ["<obj1>", "<obj2>"],
-        "definition": [["s" , "<obj2>", "<obj1>"], ["dc", "<obj2>", "<obj1>"]],
+        "definition": [["s" , "<obj2>", "<obj1>"], ["ec", "<obj2>", "<obj1>"]],
         "language": ["<obj1>", "left of","<obj2>"]
     },
     "right-of": {
