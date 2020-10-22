@@ -2,7 +2,7 @@
   {
     "signal": "inform",
     "lesson-type": "visual-word",
-    "description": {"color": "green", "shape": "cone", "size": "large"}
+    "description": {"color": "green", "shape": "cone"}
   },
   {
     "lesson-type": "visual-word",
