@@ -6,7 +6,7 @@
 ;;;;   Created: November  6, 2019 14:54:11
 ;;;;   Purpose: 
 ;;;; ----------------------------------------------------------------------------
-;;;;  Modified: Friday, October 16, 2020 at 18:20:19 by klenk
+;;;;  Modified: Monday, October 26, 2020 at 12:56:50 by klenk
 ;;;; ----------------------------------------------------------------------------
 
 (in-package :aileen)
@@ -88,18 +88,25 @@
 	     (error "unexpected concept in fact"))
 	    (t nil)))
     (fire:clear-wm)
-    (fire:kb-forget `(d::gpoolAssimilationThreshold ,gpool ?x) :mt gpool)
-    (fire:kb-store `(d::gpoolAssimilationThreshold ,gpool ,*assimilation-threshold*) :mt gpool)
-    (fire:tell-it `(d::sageSelectAndGeneralize ,context ,gpool) :context 'd::BaseKB)
-    (multiple-value-bind (rbrowse full url) (rbrowse::browse-sme sme::*sme*)
-      (declare (ignore url rbrowse))
-      (format t "~% rbrowse-sme: ~A base:~A target: ~A url: ~A "
-	      sme::*sme*
-	      context
-	      gpool
-	      full))
-    (values (length (fire:ask-it `(d::kbOnly (d::gpoolGeneralization ,gpool ?num))))
-	    (length (fire:ask-it `(d::kbOnly (d::gpoolExample ,gpool ?num)) ))) ))
+    (fire:kb-forget `(d::gpoolAssimilationThreshold ,gpool ?x) :mt gpool);;can probabely get rid of these operations as we are handling it explicitly below.  
+    (fire:kb-store `(d::gpoolAssimilationThreshold ,gpool 0.2) :mt gpool);;setting to a low number helps with debugging, by letting us see the scores
+    (let ((score (fire:ask-it `d::(and (sageSelect ,aileen::context ,aileen::gpool ?case ?mapping)
+				       (normalizedScoreOf ?mapping ?score))
+			      :context 'd::BaseKB :response 'd::(?score ?case ?mapping))))
+      (multiple-value-bind (rbrowse full url) (rbrowse::browse-sme sme::*sme*)
+	(declare (ignore url rbrowse))
+	(format t "~% Example being stored rbrowse-sme: ~A base:~A score: ~A url: ~A "
+		sme::*sme*
+		context
+		score
+		full))
+      (cond ((and score (> (caar score) *assimilation-threshold*))
+	     ;;;Add example to generalization, but redo the mapping to ensure match below threshold support
+	     (fire:tell-it `(d::sageGeneralize ,context ,(second (car score)) ,gpool) :context 'd::BaseKB))
+	    (t
+	     (fire:tell-it `(d::sageAddUngeneralized ,context  ,gpool) :context 'd::BaseKB)))
+      (values (length (fire:ask-it `(d::kbOnly (d::gpoolGeneralization ,gpool ?num))))
+	      (length (fire:ask-it `(d::kbOnly (d::gpoolExample ,gpool ?num)) ))) )))
 
 (defun store-facts-in-case (facts context)
   (remove-facts-from-case context)

@@ -6,7 +6,7 @@
 ;;;;   Created: April 26, 2020 06:11:24
 ;;;;   Purpose: 
 ;;;; ----------------------------------------------------------------------------
-;;;;  Modified: Thursday, October 15, 2020 at 17:42:16 by klenk
+;;;;  Modified: Monday, October 26, 2020 at 12:23:39 by klenk
 ;;;; ----------------------------------------------------------------------------
 
 ;;;
@@ -17,12 +17,18 @@
 
 (in-package :aileen)
 
-(defparameter *test-port* 7090)
 
 (defun replay-concept-memory-interactions (filename)
   (dolist (interaction (extract-concept-memory-interactions filename))
     (format t "~% interaction: ~A" interaction)
     (funcall (car interaction) (second interaction))))
+
+(defun extract-concept-memory-interactions (filename)
+  (with-open-file (f filename :direction :input)
+    (do ((result nil (if (api-call next) (cons (api-call next) result) result))
+	 (next (read-line f nil 'eof) (read-line f nil 'eof)))
+	((equal next 'eof) (reverse result)))))
+
 
 	
 ; return positive and negative query tests
@@ -50,23 +56,26 @@
 					     #'create-reasoning-symbol-helper)))
 			   interactions))
 
-(defun replay-experiment (ints &optional (no-eval? nil))
+(defun replay-experiment (ints &optional (no-eval? nil)(break-after-store? nil))
   (multiple-value-bind (poss negs)
       (unless no-eval? (identify-evaluation-sets ints))
     (replay-experiment-1 poss
 			 negs
 			 (identify-stores ints)
 			 (identify-new-symbols ints)
-			 no-eval?)))
+			 no-eval?
+			 break-after-store?)))
 
-(defun replay-experiment-1 (poss negs stores symbols &optional (no-eval? nil))
+(defun replay-experiment-1 (poss negs stores symbols &optional (no-eval? nil)(break-after-store? nil))
   (dolist (symbol symbols)
     (funcall (car symbol) (second symbol)))
   (let (ret)
     (dolist (store stores (reverse ret))
       (funcall (car store) (second store))
       (unless no-eval?
-	(push (measure-performance poss negs) ret)))))
+	(push (measure-performance poss negs) ret))
+      (when break-after-store?
+	(break)))))
 
 (defun measure-performance (poss negs)
   (let ((pos_res 0)

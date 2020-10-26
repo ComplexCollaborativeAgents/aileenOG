@@ -6,7 +6,7 @@
 ;;;;   Created: June 16, 2020 09:55:54
 ;;;;   Purpose: 
 ;;;; ----------------------------------------------------------------------------
-;;;;  Modified: Friday, October 16, 2020 at 18:18:28 by klenk
+;;;;  Modified: Monday, October 26, 2020 at 13:05:31 by klenk
 ;;;; ----------------------------------------------------------------------------
 
 (in-package :aileen)
@@ -42,11 +42,11 @@
 ;;; If disjunctions are the first thing we are worried about.
 
 (load "test-client.lsp")
-(setq *test-port* 7079) ;; Don't check in with this
+
 
 (in-package :aileen)
 
-(setq *assimilation-threshold* 0.5)
+;(setq *assimilation-threshold* 0.6)
 
 (defun test-phase2-concept-learner-server (&key (clean? t))
   (start-server :port *test-port*) ;; needs to match port in call-test-server.
@@ -188,10 +188,10 @@
     (setq res (call-test-server
 	       "store"
 	       (pairlis '("facts" "context" "concept")
-			(list '(("isa" "Obj11A" "CVCone")
+			(list '(("isa" "Obj11A" "CVCube")
 				("isa" "Obj11A" "CVPurple")
-				("isa" "Obj11B" "CVCube")
-				("isa" "Obj11B" "CVRed")
+				("isa" "Obj11B" "CVCone")
+				("isa" "Obj11B" "CVBlue")
 				("nw" "Obj11A" "Obj11B")
 				("dc" "Obj11A" "Obj11B")
 				("rAbove" "Obj11A" "Obj11B"))
@@ -237,10 +237,10 @@
     (setq res (call-test-server
 	       "query"
 	       (pairlis '("facts" "pattern")
-			'((("isa" "Obj11A" "CVCylinder")
-			   ("isa" "Obj11A" "CVBlue")
+			'((("isa" "Obj11A" "CVCube") ;;;requires arg 1 to be a cube
+			   ("isa" "Obj11A" "CVGreen")
 			   ("isa" "Obj11B" "CVCube")
-			   ("isa" "Obj11B" "CVGreen")
+			   ("isa" "Obj11B" "CVBlue")
 			   ("nw" "Obj11A" "Obj11B")
 			   ("dc" "Obj11A" "Obj11B"))
 			  ("rAbove" "Obj11A" "Obj11B")))))
