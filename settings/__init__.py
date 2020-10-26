@@ -10,7 +10,7 @@ SOAR_PATH = path.join(OS_ROOT_PATH, 'usr', 'local', 'SoarSuite_9.6.0-Multiplatfo
 SOAR_AGENT_PATH = path.join(ROOT_PATH, 'agent', 'soar_interface', 'soar', 'load.soar')
 SOAR_AGENT_NAME = 'aileen'
 SOAR_SLEEP_TIME = 0.001
-SOAR_DEBUG = True
+SOAR_DEBUG = False
 SOAR_SVS = False
 SOAR_CV = True
 CURRENT_IMAGE_PATH = path.join(ROOT_PATH, 'world', 'controllers', 'images', 'current_image.png')
@@ -50,9 +50,7 @@ TRAIN_FILES = TRAINING_DATA_FOLDER + '/train_files.txt'
 TEST_FILES = TRAINING_DATA_FOLDER + '/test_files.txt'
 YOLO_WEIGHTS = path.join(ROOT_PATH, 'agent', 'vision', 'yolov3-tiny-aileen_final.weights')
 YOLO_CFG = path.join(ROOT_PATH, 'agent', 'vision', 'yolov3-tiny-aileen-test.cfg')
-K_MEANS_MODEL = path.join(ROOT_PATH, 'agent', 'visiosettings.OBJECT_POSITION_MIN_X,
-                    settings.OBJECT_POSITION_MIN_Z,
-                    settings.OBJECT_POSITION_MAX_Xn', 'k_means_shape_color')
+K_MEANS_MODEL = path.join(ROOT_PATH, 'agent', 'vision', 'k_means_shape_color')
 REPRESENTATION_WEIGHTS = path.join(ROOT_PATH, 'agent', 'vision', 'autoencoder_final.pkl')
 BACKGROUND_IMG = path.join(ROOT_PATH, 'agent', 'vision', 'background_image.jpg')
 NAMES_FILE = path.join(ROOT_PATH, 'agent', 'vision', 'aileen.names')
@@ -60,7 +58,7 @@ DETECTOR_MODE = 2  # 1: YOLO Only, 2: YOLO + Self Supervised Representations, 3:
 
 # Arbitrary size boudnaries
 SIZE_SM = (.075*.075)
-SIZE_ML = (1.25*1.25)
+SIZE_ML = (0.125*0.125)
 
 # Instructor
 OBJECT_POSITION_MAX_X = 0.855
@@ -106,6 +104,7 @@ ACTION_LESSON_STATE_BAD = 'bad'
 AGENT_PARAM_RUNTIME_FILE = path.join(ROOT_PATH, 'agent', 'soar_interface', 'soar', '_agent_params_runtime.soar')
 
 AGENT_LANGUAGE_LEARNING = False
+
 
 AGENT_VISUAL_CONCEPTS_PARAM = 'soar'
 AGENT_PRELOAD_VISUAL_CONCEPTS_PARAM = 'true'
