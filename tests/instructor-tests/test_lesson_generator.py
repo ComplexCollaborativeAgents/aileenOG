@@ -145,7 +145,7 @@ class SceneRandomizer:
         position = self.positions[self.position_index % len(self.positions)]
         if (self.position_index >= len(self.positions)):
             position = [uniform(settings.OBJECT_POSITION_MIN_X, settings.OBJECT_POSITION_MAX_X),
-                        uniform(settings.OBJECT_POSITION_MIN_Y, settings.OBJECT_POSITION_MAX_Y),
+                        uniform(settings.OBJECT_POSITION_TABLE_Y, settings.OBJECT_POSITION_TABLE_Y),
                         uniform(settings.OBJECT_POSITION_MIN_Z, settings.OBJECT_POSITION_MAX_Z)]
         logging.debug("[scene_randomizer] :: random table position {}".format(position))
         return position
@@ -155,6 +155,9 @@ class SceneRandomizer:
         point = self.points[self.point_index % len(self.points)]
         logging.debug("[scene_randomizer] :: random region position {}".format(point))
         return point
+
+    def check_for_3d_qsrs(self, world, configuration_definition, qsrs, position):
+        return position
 
 
 class SpatialRandomizer:
