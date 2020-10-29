@@ -67,12 +67,12 @@ class AileenScene:
             try:
                 region = compute_region_for_relations(world, configuration_definition, qsr_target_object, table)
                 found_target_object_position = AileenScene.randomizer.sample_position_from_region(region)
-                print( found_target_object_position)
                 position = [found_target_object_position.x, settings.OBJECT_POSITION_TABLE_Y, found_target_object_position.y]
                 #this will only overwrite if a 3d qsr is found
                 position = AileenScene.randomizer.check_for_3d_qsrs(world, configuration_definition, qsr_target_object, position)
                 translations[target_object_name] = position
             except (ValueError, AttributeError):
+                logging.error("[aileen_scene] :: Could not place target object!")
                 pass
         return translations
 

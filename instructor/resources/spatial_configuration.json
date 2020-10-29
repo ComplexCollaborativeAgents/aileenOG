@@ -18,5 +18,10 @@
         "objects": ["<obj1>", "<obj2>"],
         "definition": [["e" , "<obj2>", "<obj1>"], ["dc", "<obj2>", "<obj1>"], ["OEO", "<obj2>", "<obj1>"]],
         "language": ["<obj1>", "behind","<obj2>"]
+    },
+    "on": {
+        "objects": ["<obj1>", "<obj2>"],
+        "definition": [["eq" , "<obj2>", "<obj1>"], ["ntpp", "<obj2>", "<obj1>"], ["OOA", "<obj2>", "<obj1>"]],
+        "language": ["<obj1>", "on","<obj2>"]
     }
 }
