@@ -339,7 +339,7 @@ objects = [{'orientation': [1.0, -5.75539615965681e-17, 3.38996313371214e-17, 5.
                                   ysize=obj['bounding_box'][5]-obj['bounding_box'][2],
                                   zsize=obj['bounding_box'][4]-obj['bounding_box'][1]
                     )])
-        qsrlib_request_message = QSRlib_Request_Message(["rcc8","cardir","ra", "3dcd"], world)
+        qsrlib_request_message = QSRlib_Request_Message(["rcc8","cardir","ra", "3dcd"], world, dynamic_args={'quantisation_factor':settings.QUANTISATION_FACTOR} )
         qsrlib_response_message = qsrlib.request_qsrs(req_msg=qsrlib_request_message)
         ret = {}
         for t in qsrlib_response_message.qsrs.get_sorted_timestamps():

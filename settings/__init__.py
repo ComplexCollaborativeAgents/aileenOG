@@ -10,7 +10,7 @@ SOAR_PATH = path.join(OS_ROOT_PATH, 'usr', 'local', 'SoarSuite_9.6.0-Multiplatfo
 SOAR_AGENT_PATH = path.join(ROOT_PATH, 'agent', 'soar_interface', 'soar', 'load.soar')
 SOAR_AGENT_NAME = 'aileen'
 SOAR_SLEEP_TIME = 0.001
-SOAR_DEBUG = True
+SOAR_DEBUG = False
 SOAR_SVS = False
 SOAR_CV = True
 CURRENT_IMAGE_PATH = path.join(ROOT_PATH, 'world', 'controllers', 'images', 'current_image.png')
@@ -58,21 +58,24 @@ DETECTOR_MODE = 2  # 1: YOLO Only, 2: YOLO + Self Supervised Representations, 3:
 
 # Arbitrary size boudnaries
 SIZE_SM = (.075*.075)
-SIZE_ML = (.125*.125)
-
-QUANTISATION_FACTOR = .001
+SIZE_ML = (0.125*0.125)
 
 # Instructor
 OBJECT_POSITION_MAX_X = 0.855
 OBJECT_POSITION_MIN_X = 0.356
 
-OBJECT_POSITION_MAX_Y = 0.45
+OBJECT_POSITION_TABLE_Y = 0.45
+
+OBJECT_POSITION_MAX_Y = 1.00
 OBJECT_POSITION_MIN_Y = 0.45
 
 OBJECT_POSITION_MAX_Z = 0.242
 OBJECT_POSITION_MIN_Z = -0.245
 
 OBJECT_POSITION_DELTA = 0.15
+
+QSRS_3D = ['3dcd']
+QUANTISATION_FACTOR = .001
 
 #DEPRECATED! SIZES DEFINED IN instructor/resources/sizes.json
 #OBJECT_STANDARD_HEIGHT = 0.1
@@ -100,7 +103,8 @@ ACTION_LESSON_STATE_BAD = 'bad'
 ## Agent
 AGENT_PARAM_RUNTIME_FILE = path.join(ROOT_PATH, 'agent', 'soar_interface', 'soar', '_agent_params_runtime.soar')
 
-AGENT_LANGUAGE_LEARNING = False
+AGENT_LANGUAGE_LEARNING = True
+
 
 AGENT_VISUAL_CONCEPTS_PARAM = 'soar'
 AGENT_PRELOAD_VISUAL_CONCEPTS_PARAM = 'true'
