@@ -1,0 +1,49 @@
+##!
+# @file
+#
+# @created smohan 20201028
+
+
+sp {compose-with-concept-learner*apply*reinforce-correct-query-inference
+    (state <s>    ^name compose-with-concept-learner
+                  ^epmem.present-id <pid>
+                  ^operator <op>
+                  ^io.output-link <ol>)
+    (<op>    ^name reinforce-correct-query-inference
+             ^query <q>
+             ^facts <f>)
+    (<q>    ^lfirst <con>)
+-->
+    (<ol> ^concept-memory <cm>)
+    (<cm>    ^store <si>)
+    (<si>    ^concept <con>
+             ^context <pid>
+             ^facts <facts>)
+    }
+    
+
+sp {compose-with-concept-learner*apply*reinforce-correct-query-inference*query
+    (state <s>    ^name compose-with-concept-learner
+                  ^io.output-link.concept-memory.store <si>
+                  ^operator <op>)
+    (<si>    ^facts <facts>)
+    (<op>    ^name reinforce-correct-query-inference
+             ^query <q>)
+-->
+    (<facts>    ^fact <q>)
+    (<s>    ^reinforced <q>)
+    }
+
+sp {compose-with-concept-learner*apply*reinforce-correct-query-inference*facts
+    (state <s>    ^name compose-with-concept-learner
+                  ^io.output-link.concept-memory.store <si>
+                  ^operator <op>)
+    (<si>    ^facts <facts>)
+    (<op>    ^name reinforce-correct-query-inference
+             ^query <q>
+             ^facts.fact <f>)
+    (<q>    ^<< lsecond lthird >> <ob-name>)
+    (<f>    ^lsecond <obj-name>)
+-->
+    (<facts>    ^fact <f>)
+    }

@@ -30,6 +30,7 @@ sp {compose-with-concept-learner*elaborate*relations
     
 
 sp {compose-with-concept-learner*generate*relation
+    :o-support
     (state <s>    ^name compose-with-concept-learner
                   ^io.input-link <il>
                   ^grounding <g>

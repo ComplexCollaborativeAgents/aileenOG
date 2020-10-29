@@ -42,18 +42,38 @@ sp {compose-with-concept-learner*propose*query-concept-memory
              ^query <q>)
     }
 
-	sp {compose-with-concept-learner*propose*mark-overspecific-spatial-concept
-	    (state <s>    ^name compose-with-concept-learner
-	                  ^relation-query <q>
-	                  ^queried-with <q>
-                      ^map <con>
-	                  -^relations.relation)
-	-->
-	    (<s>    ^operator <op> +)
-	    (<op>    ^name mark-overspecific-spatial-concept
-                  ^concept-structure <con>
-                  ^type spatial)
-	    }
+sp {compose-with-concept-learner*propose*mark-overspecific-spatial-concept
+    (state <s>    ^name compose-with-concept-learner
+	              ^relation-query <q>
+	              ^queried-with <q>
+                  ^map <con>
+	             -^relations.relation
+                 -^io.input-link.concept-memory.result.matches <m>)
+-->
+	(<s>    ^operator <op> +)
+	(<op>    ^name mark-overspecific-spatial-concept
+             ^concept-structure <con>
+             ^type spatial)
+ }
+
+sp {compose-with-concept-learner*propose*reinforce-correct-query
+    (state <s>    ^name compose-with-concept-learner
+                  ^topstate <ts>
+                  ^relations.relation <rel>
+                  ^relation-query <q>
+                  ^facts <facts>
+                  -^reinforced <q>)
+    (<ts>    ^_params.policies.store reinforce-query-inference
+             ^interaction.stack.segment <seg>)
+    (<seg>    ^purpose.type inform
+              -^learned true)
+
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name reinforce-correct-query-inference
+             ^query <q>
+             ^facts <facts>)
+    }
 
 sp {compose-with-concept-learner*propose*complete-compose-with-concept-learner
     (state <s>    ^name compose-with-concept-learner

@@ -1,7 +1,8 @@
 ##!
 # @file
 #
-# @created smohan 20200116
+
+
 sp {compose-with-concept-learner*apply*complete-compose-with-concept-learne
     (state <s>    ^name compose-with-concept-learner
                   ^operator <op>
@@ -12,3 +13,20 @@ sp {compose-with-concept-learner*apply*complete-compose-with-concept-learne
     (<ss>    ^relation <rel>)
     }
         
+
+#sp {compose-with-concept-learner*apply*mark-applied-concept
+#    (state <s>    ^name compose-with-concept-learner
+#                  ^operator <op>
+#                  ^topstate <ts>
+#                  ^grounding <g>
+#                  ^parses <p>)
+#    (<op>    ^name complete-compose-with-concept-learner)
+#-->
+#    (<ts>    ^processing-status <ps>)
+#    (<ps>    ^type applied-concept
+#             ^information <info>
+#             ^source comprehension)
+#    (<info>    ^grounding <g>
+#               ^parses <p>)
+#    (<g>    ^complete true)
+#    }
