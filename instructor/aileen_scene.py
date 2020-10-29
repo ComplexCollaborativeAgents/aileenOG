@@ -67,11 +67,12 @@ class AileenScene:
             try:
                 region = compute_region_for_relations(world, configuration_definition, qsr_target_object, table)
                 found_target_object_position = AileenScene.randomizer.sample_position_from_region(region)
-                position = [found_target_object_position.x, settings.OBJECT_POSITION_MAX_Y, found_target_object_position.y]
+                position = [found_target_object_position.x, settings.OBJECT_POSITION_TABLE_Y, found_target_object_position.y]
                 #this will only overwrite if a 3d qsr is found
-                #position = check_for_3d_qsrs(world, configuration_definition, target, position)
+                position = AileenScene.randomizer.check_for_3d_qsrs(world, configuration_definition, qsr_target_object, position)
                 translations[target_object_name] = position
             except (ValueError, AttributeError):
+                logging.error("[aileen_scene] :: Could not place target object!")
                 pass
         return translations
 
@@ -91,8 +92,10 @@ class AileenScene:
             qsr_reference_object = Object_State(name=str(reference_object_name), timestamp=0,
                                                 x=reference_object._translation[0],
                                                 y=reference_object._translation[2],
+                                                z=reference_object._translation[1],
                                                 xsize=reference_object._width_x,
-                                                ysize=reference_object._width_z)
+                                                ysize=reference_object._width_z,
+                                                zsize=reference_object._height_y)
             world.add_object_state(qsr_reference_object)
             logging.debug(
                 "[aileen_scene] :: added reference object {} to QSRLib scene".format(str(reference_object_name)))
@@ -101,13 +104,15 @@ class AileenScene:
             qsr_target_object = Object_State(name=str(target_object_name), timestamp=0,
                                              x=position[0],
                                              y=position[2],
+                                             z=position[1],
                                              xsize=target_object._width_x,
-                                             ysize=target_object._width_z)
+                                             ysize=target_object._width_z,
+                                             zsize=target_object._height_y)
 
             try:
                 found_target_object_position = AileenScene.randomizer.sample_position_from_region(
                     compute_region_for_relations(world, configuration_definition, qsr_target_object, table))
-                position = [found_target_object_position.x, settings.OBJECT_POSITION_MAX_Y,
+                position = [found_target_object_position.x, settings.OBJECT_POSITION_TABLE_Y,
                             found_target_object_position.y]
             except (ValueError, AttributeError), e:
                 logging.error("[aileen_scene] :: cannot place {} in configuration with {}".format(target_object_name, reference_object_name))
@@ -137,15 +142,19 @@ class AileenScene:
             qsr_first_reference_object = Object_State(name=str(first_reference_object_name), timestamp=0,
                                                       x=translations[first_reference_object_name][0],
                                                       y=translations[first_reference_object_name][2],
+                                                      z=translations[first_reference_object_name][1],
                                                       xsize=first_reference_object._width_x,
-                                                      ysize=first_reference_object._width_z)
+                                                      ysize=first_reference_object._width_z,
+                                                      zsize=first_reference_object._height_y)
             world.add_object_state(qsr_first_reference_object)
 
             qsr_second_reference_object = Object_State(name=str(second_reference_object_name), timestamp=0,
                                                       x=translations[second_reference_object_name][0],
                                                       y=translations[second_reference_object_name][2],
+                                                      z=translations[second_reference_object_name][1],
                                                       xsize=second_reference_object._width_x,
-                                                      ysize=second_reference_object._width_z)
+                                                      ysize=second_reference_object._width_z,
+                                                      zsize=second_reference_object._height_y)
             world.add_object_state(qsr_second_reference_object)
             logging.debug("[aileen_scene] :: added reference objects {} and {} to QSRLib scene".format(first_reference_object_name, second_reference_object_name))
 
@@ -153,13 +162,15 @@ class AileenScene:
             qsr_target_object = Object_State(name=str(target_object_name), timestamp=0,
                                              x=position[0],
                                              y=position[2],
+                                             z=position[1],
                                              xsize=target_object._width_x,
-                                             ysize=target_object._width_z)
+                                             ysize=target_object._width_z,
+                                             zsize=target_object._height_y)
 
             try:
                 found_target_object_position = AileenScene.randomizer.sample_position_from_region(
                     compute_region_for_relations(world, configuration_definition, qsr_target_object, table))
-                position = [found_target_object_position.x, settings.OBJECT_POSITION_MAX_Y,
+                position = [found_target_object_position.x, settings.OBJECT_POSITION_TABLE_Y,
                             found_target_object_position.y]
                 translations[target_object_name] = position
             except ValueError:
@@ -200,5 +211,8 @@ class AileenScene:
 
         def sample_position_from_region(self, region):
             return qsr_realization.sample_position_from_region(region)
+
+        def check_for_3d_qsrs(self, world, configuration_definition, qsrs, position):
+            return qsr_realization.check_for_3d_qsrs(world, configuration_definition, qsrs, position)
 
     randomizer = Randomizer()
