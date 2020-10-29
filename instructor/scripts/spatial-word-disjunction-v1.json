@@ -8,6 +8,15 @@
       "relation": "behind1"},
     "signal": "inform"
   },
+   {
+    "comment": "preload visual concepts used in this example",
+    "lesson-type": "spatial-word",
+    "content": "yellow box behind red box",
+    "description": {
+      "objects": [{"color": "yellow", "shape": "box"},  {"color": "red", "shape": "box"}],
+      "relation": "behind1"},
+    "signal": "inform"
+  },
   {
     "comment": "preload visual concepts used in this example",
     "lesson-type": "spatial-word",
