@@ -58,7 +58,7 @@ DETECTOR_MODE = 2  # 1: YOLO Only, 2: YOLO + Self Supervised Representations, 3:
 
 # Arbitrary size boudnaries
 SIZE_SM = (.075*.075)
-SIZE_ML = (1.25*1.25)
+SIZE_ML = (.125*.125)
 
 # Instructor
 OBJECT_POSITION_MAX_X = 0.855
