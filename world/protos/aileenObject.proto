@@ -1,0 +1,6 @@
+PROTO aileenObject [
+  field SFBool enablePhysics TRUE
+]
+Solid {
+
+}
