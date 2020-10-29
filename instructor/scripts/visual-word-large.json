@@ -16,9 +16,9 @@
   },
   {
     "lesson-type": "visual-word",
-    "content": "large box",
+    "content": "large cylinder",
     "description": {"color": "blue",
-                    "shape": "box",
+                    "shape": "cylinder",
                     "size":  "large"},
     "signal": "inform"
   },
@@ -35,7 +35,7 @@
     "content": "large box",
     "description": {"color": "green",
                     "shape": "box",
-                    "size":  "small"},
+                    "size":  "medium"},
     "signal": "verify"
   }
 ]
