@@ -36,6 +36,7 @@ JOINT_NAMES = ['shoulder_pan_joint', 'shoulder_lift_joint', 'elbow_joint', 'wris
 START_LOCATION_1= [0,-2.3562, 2.3562, 0, 0, 0]
 HOME_POSE = [1.57, -2.3562, 2.1562, -1.57, -1.57, 0]
 
+
 # Vision Module
 SHAPE_SET = ['cone', 'box', 'cylinder', 'sphere']
 COLOR_LABELS = ['blue', 'red']
@@ -100,9 +101,16 @@ AGENT_PRELOAD_SPATIAL_CONCEPTS_PARAM = 'true'
 AGENT_ACTION_CONCEPTS_PARAM = 'external'
 AGENT_PRELOAD_ACTION_CONCEPTS_PARAM = 'false'
 
-AGENT_RECOMPREHEND_AFTER_LEARN = 'false'
 
 AGENT_PERCEPT_SYMBOLS_ATTR = 'color shape'
+
+### Policies
+## Interaction
+#AGENT_INTERACT
+
+
+## Concept storage
+AGENT_STORE_CONCEPT_POLICY = 'all-inform'
 
 
 ## Experiments
