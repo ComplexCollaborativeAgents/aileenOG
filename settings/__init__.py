@@ -60,6 +60,8 @@ DETECTOR_MODE = 2  # 1: YOLO Only, 2: YOLO + Self Supervised Representations, 3:
 SIZE_SM = (.075*.075)
 SIZE_ML = (.125*.125)
 
+QUANTISATION_FACTOR = .001
+
 # Instructor
 OBJECT_POSITION_MAX_X = 0.855
 OBJECT_POSITION_MIN_X = 0.356
