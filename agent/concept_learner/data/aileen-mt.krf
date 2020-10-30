@@ -174,12 +174,29 @@
 (arg2Isa ntpp Thing)
 (comment ntpp "arg2 is RCC8-ec of arg1")
 
+(isa ntppi Relation)
+(arity ntppi 2)
+(arg1Isa ntppi Thing)
+(arg2Isa ntppi Thing)
+(comment ntppi "arg2 is RCC8-ec of arg1")
+
+(isa ntppi Relation)
+(arity ntppi 2)
+(arg1Isa ntppi Thing)
+(arg2Isa ntppi Thing)
+(comment ntppi "arg2 is RCC8-ec of arg1")
+
 (isa tpp Relation)
 (arity tpp 2)
 (arg1Isa tpp Thing)
 (arg2Isa tpp Thing)
 (comment tpp "arg2 is RCC8-ec of arg1")
 
+(isa tppi Relation)
+(arity tppi 2)
+(arg1Isa tppi Thing)
+(arg2Isa tppi Thing)
+(comment tppi "arg2 is RCC8-ec of arg1")
 
 (isa po Relation)
 (arity po 2)
