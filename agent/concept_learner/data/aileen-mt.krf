@@ -141,6 +141,12 @@
 (arg2Isa sw Thing)
 (comment sw "arg2 is southwest of arg1")
 
+(isa eq Relation)
+(arity eq 2)
+(arg1Isa eq Thing)
+(arg2Isa eq Thing)
+(comment eq "arg2 is southwest of arg1")
+
 
 
 ;;; RCC8
@@ -161,6 +167,51 @@
 (arg1Isa ec Thing)
 (arg2Isa ec Thing)
 (comment ec "arg2 is RCC8-ec of arg1")
+
+(isa ntpp Relation)
+(arity ntpp 2)
+(arg1Isa ntpp Thing)
+(arg2Isa ntpp Thing)
+(comment ntpp "arg2 is RCC8-ec of arg1")
+
+(isa tpp Relation)
+(arity tpp 2)
+(arg1Isa tpp Thing)
+(arg2Isa tpp Thing)
+(comment tpp "arg2 is RCC8-ec of arg1")
+
+
+(isa po Relation)
+(arity po 2)
+(arg1Isa po Thing)
+(arg2Isa po Thing)
+(comment po "arg2 is RCC8-ec of arg1")
+
+(isa eq Relation)
+(arity eq 2)
+(arg1Isa eq Thing)
+(arg2Isa eq Thing)
+(comment eq "arg2 is RCC8-ec of arg1")
+
+
+;;; 3D dimensions
+(isa o Relation)
+(arity o 2)
+(arg1Isa o Thing)
+(arg2Isa o Thing)
+(comment o "arg2 is southwest of arg1")
+
+(isa a Relation)
+(arity a 2)
+(arg1Isa a Thing)
+(arg2Isa a Thing)
+(comment a "arg2 is southwest of arg1")
+
+(isa b Relation)
+(arity b 2)
+(arg1Isa b Thing)
+(arg2Isa b Thing)
+(comment b "arg2 is southwest of arg1")
 
 
 (in-microtheory BaseKB)

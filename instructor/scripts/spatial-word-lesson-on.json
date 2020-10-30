@@ -1,0 +1,11 @@
+[
+  {
+    "lesson-type": "spatial-word",
+    "content": "yellow box on red cylinder",
+    "description": {
+      "objects": [{"size": "small", "color": "yellow", "shape": "box"},  {"size": "large", "color": "red", "shape": "cylinder"}],
+      "relation": "on"},
+     "signal": "inform",
+    "distractors": 0
+  }
+]
