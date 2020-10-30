@@ -7,5 +7,14 @@
       "relation": "on"},
      "signal": "inform",
     "distractors": 0
+  },
+  {
+    "lesson-type": "spatial-word",
+    "content": "blue cylinder on red box",
+    "description": {
+      "objects": [{"size": "small", "color": "blue", "shape": "cylinder"},  {"size": "medium", "color": "red", "shape": "box"}],
+      "relation": "on"},
+     "signal": "inform",
+    "distractors": 0
   }
 ]
