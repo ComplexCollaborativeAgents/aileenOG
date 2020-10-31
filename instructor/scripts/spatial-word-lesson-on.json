@@ -12,9 +12,18 @@
     "lesson-type": "spatial-word",
     "content": "blue cylinder on red box",
     "description": {
-      "objects": [{"size": "small", "color": "blue", "shape": "cylinder"},  {"size": "medium", "color": "red", "shape": "box"}],
+      "objects": [{"size": "small", "color": "blue", "shape": "cylinder"},  {"size": "large", "color": "red", "shape": "box"}],
       "relation": "on"},
      "signal": "inform",
+    "distractors": 0
+  },
+  {
+    "lesson-type": "spatial-word",
+    "content": "green cylinder on blue cylinder",
+    "description": {
+      "objects": [{"size": "small", "color": "green", "shape": "cylinder"},  {"size": "large", "color": "blue", "shape": "cylinder"}],
+      "relation": "on"},
+     "signal": "verify",
     "distractors": 0
   }
 ]
