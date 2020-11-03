@@ -78,8 +78,10 @@ if __name__ == '__main__':
     g_exams = rails.generate_verify_testing_gamut_generality()
     logging.debug("[runner] :: generality test {}".format(g_exams))
 
+
     s_exams = rails.generate_verify_testing_gamut_specificity()
     logging.debug("[runner] :: specificity test {}".format(s_exams))
+
 
 
     for lesson in Curriculum(lessons):
