@@ -131,8 +131,8 @@ class Generator:
 
         lessons = []
         for key in relation_configs.keys():
-            random.shuffle(object_set)
             for i in range(0, number_of_samples):
+                random.shuffle(object_set)
                 lesson = {'lesson-type': 'spatial-word',
                           'is_positive': str(is_positive),
                           'description': {
