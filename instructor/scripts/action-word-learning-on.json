@@ -1,0 +1,101 @@
+[
+  {
+    "comment": "preload visual concepts used in this example",
+    "lesson-type": "action-word",
+    "content": "move red box on blue cylinder",
+    "description": {
+      "objects": [
+        "<obj1>",
+        "<obj2>"
+      ],
+      "relations": [
+        "on"
+      ],
+      "action": "move-on",
+      "initial_configuration": [],
+      "trace-actions": [
+        {
+          "name": "pick-up",
+          "argument": "<obj1>"
+        },
+        {
+          "name": "place",
+          "argument1": "<obj1>",
+          "argument2": "<obj2>",
+          "relation": "on"
+        }
+      ],
+      "language": [
+        "move",
+        "<obj1>",
+        "on",
+        "<obj2>"
+      ],
+      "<obj1>": {
+        "color": "red",
+        "shape": "box",
+        "size": "medium"
+      },
+      "<obj2>": {
+        "color": "blue",
+        "shape": "cylinder",
+        "size": "medium"
+      }
+    },
+    "signal": "inform"
+  },
+  {
+    "comment": "preload visual concepts used in this example",
+    "lesson-type": "action-word",
+    "content": "move red box on blue box",
+    "description": {
+      "objects": ["<obj1>", "<obj2>"],
+      "relations": ["on"],
+      "action": "move-on",
+      "initial_configuration": [],
+          "trace-actions": [
+              {"name": "pick-up", "argument": "<obj1>"},
+              {"name": "place", "argument1": "<obj1>", "argument2": "<obj2>", "relation": "on"}],
+      "<obj1>": {"color": "red", "shape": "box", "size":  "medium"},
+      "<obj2>": {"color": "blue", "shape": "box", "size":  "medium"}
+    },
+    "signal": "inform",
+    "distractors": 0
+  },
+  {
+    "comment": "preload visual concepts used in this example",
+    "lesson-type": "action-word",
+    "content": "move yellow cylinder on red cylinder",
+    "description": {
+      "objects": ["<obj1>", "<obj2>"],
+      "relations": ["on"],
+      "action": "move-on",
+      "initial_configuration": [],
+          "trace-actions": [
+              {"name": "pick-up", "argument": "<obj1>"},
+              {"name": "place", "argument1": "<obj1>", "argument2": "<obj2>", "relation": "on"}],
+      "<obj1>": {"color": "yellow", "shape": "cylinder"},
+      "<obj2>": {"color": "red", "shape": "cylinder"}
+    },
+    "signal": "verify",
+    "distractors": 0
+  },
+   {
+    "comment": "preload visual concepts used in this example",
+    "lesson-type": "action-word",
+    "content": "move yellow cylinder on red cylinder",
+    "description": {
+      "objects": ["<obj1>", "<obj2>"],
+      "relations": ["left-of"],
+      "action": "move-left-of",
+      "initial_configuration": [],
+          "trace-actions": [
+              {"name": "pick-up", "argument": "<obj1>"},
+              {"name": "place", "argument1": "<obj1>", "argument2": "<obj2>", "relation": "left-of"}],
+      "<obj1>": {"color": "yellow", "shape": "cylinder"},
+      "<obj2>": {"color": "red", "shape": "cylinder"}
+    },
+    "signal": "verify",
+    "distractors": 0
+  }
+]

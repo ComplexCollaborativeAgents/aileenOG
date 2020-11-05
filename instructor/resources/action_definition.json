@@ -36,5 +36,14 @@
       {"name": "pick-up", "argument": "<obj1>"},
       {"name": "place", "argument1": "<obj1>", "argument2": "<obj2>", "relation": "left-of"}],
     "language": ["move", "<obj1>", "left of", "<obj2>"]
+  },
+  "move-on": {
+    "objects": ["<obj1>", "<obj2>"],
+    "relations": [],
+     "initial_configuration": [],
+    "trace-actions": [
+      {"name": "pick-up", "argument": "<obj1>"},
+      {"name": "place", "argument1": "<obj1>", "argument2": "<obj2>", "relation": "left-of"}],
+    "language": ["move", "<obj1>", "left of", "<obj2>"]
   }
 }
