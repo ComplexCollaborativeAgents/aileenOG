@@ -1,0 +1,9 @@
+[
+  {
+    "lesson-type": "composite-action",
+    "content": "wall",
+    "description": {"composite": "wall"},
+    "signal": "inform",
+    "distractors": 0
+  }
+]
