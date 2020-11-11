@@ -37,22 +37,22 @@ if __name__ == "__main__":
         logging.info('[batch_runner] :: Starting run {} of {} of type {}'.format(run+1, settings.BATCH_SIZE, settings.BATCH_TYPE))
         #Run Webots
         logging.info('[batch_runner] :: Starting Webots')
-        subprocess.Popen(WEBOTS_CMD, stdout = open("experiments/results/{}/logs/webots-run-{}.out".format(experiment_name, run),'w'), stderr = subprocess.STDOUT, shell = True)
+        subprocess.Popen(WEBOTS_CMD, stdout = open("experiments/results/{}/system_logs/webots-run-{}.out".format(experiment_name, run),'w'), stderr = subprocess.STDOUT, shell = True)
         time.sleep(5)
         logging.info('[batch_runner] :: Webots Started')
         #Run World
         logging.info('[batch_runner] :: Starting World')
-        subprocess.Popen(WORLD_CMD, stdout = open("experiments/logs/{}/logs/world-run-{}.out".format(experiment_name, run), 'w'), stderr = subprocess.STDOUT, shell = True)
+        subprocess.Popen(WORLD_CMD, stdout = open("experiments/results/{}/system_logs/world-run-{}.out".format(experiment_name, run), 'w'), stderr = subprocess.STDOUT, shell = True)
         time.sleep(20)
         logging.info('[batch_runner] :: World Started')
         #Run Agent
         logging.info('[batch_runner] :: Starting Agent')
-        subprocess.Popen(AGENT_CMD, stdout = open("experiments/logs/{}/logs/agent-run-{}.out".format(experiment_name, run), 'w'), stderr = subprocess.STDOUT, shell = True)
+        subprocess.Popen(AGENT_CMD, stdout = open("experiments/results/{}/system_logs/agent-run-{}.out".format(experiment_name, run), 'w'), stderr = subprocess.STDOUT, shell = True)
         time.sleep(15)
         logging.info('[batch_runner] :: Agent Started')
         #Run Runner
         logging.info('[batch_runner] :: Starting Runner')
-        subprocess.call(RUNNER_CMD, stdout = open("experiments/logs/{}/runner-run-{}.out".format(experiment_name, run), 'w'), stderr = subprocess.STDOUT, shell = True)
+        subprocess.call(RUNNER_CMD, stdout = open("experiments/results/{}/system_logs/runner-run-{}.out".format(experiment_name, run), 'w'), stderr = subprocess.STDOUT, shell = True)
         logging.info('[batch_runner] :: Runner returned')
         time.sleep(5)
 
