@@ -33,7 +33,12 @@ if __name__ == "__main__":
 
     for run in range(settings.BATCH_SIZE):
         #Redefine Runner CMD
-        RUNNER_CMD = 'python experiments/experiment/runner.py --type {} --file experiments/results/{}/{}-run-{}.csv'.format(experiment_name, settings.BATCH_TYPE, settings.BATCH_TYPE, run)
+        RUNNER_CMD = 'python experiments/experiment/runner.py --type {} --file experiments/results/{}/{}-run-{}.csv ' \
+                     '--concept {} --distractors {} --episodes {}'.format(experiment_name, settings.BATCH_TYPE,
+                                                                          settings.BATCH_TYPE, run,
+                                                                          settings.BATCH_CONCEPT,
+                                                                          settings.BATCH_DISTRACTORS,
+                                                                          settings.BATCH_EPISODE)
         logging.info('[batch_runner] :: Starting run {} of {} of type {}'.format(run+1, settings.BATCH_SIZE, settings.BATCH_TYPE))
         #Run Webots
         logging.info('[batch_runner] :: Starting Webots')
@@ -48,7 +53,7 @@ if __name__ == "__main__":
         #Run Agent
         logging.info('[batch_runner] :: Starting Agent')
         subprocess.Popen(AGENT_CMD, stdout = open("experiments/results/{}/system_logs/agent-run-{}.out".format(experiment_name, run), 'w'), stderr = subprocess.STDOUT, shell = True)
-        time.sleep(15)
+        time.sleep(25)
         logging.info('[batch_runner] :: Agent Started')
         #Run Runner
         logging.info('[batch_runner] :: Starting Runner')
