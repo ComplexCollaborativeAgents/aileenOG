@@ -26,7 +26,7 @@ if __name__ == "__main__":
     if not os.path.exists("experiments/results/{}".format(experiment_name)):
         os.mkdir("experiments/results/{}".format(experiment_name))
         os.mkdir("experiments/results/{}/system_logs".format(experiment_name))
-        os.mkidr("experiments/results/{}/concept_logs".format(experiment_name))
+        os.mkdir("experiments/results/{}/concept_logs".format(experiment_name))
     else:
         logging.error("[batch_runner] :: directory already exists")
         sys.exit()
