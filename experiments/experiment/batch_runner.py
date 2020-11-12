@@ -57,6 +57,7 @@ if __name__ == "__main__":
         logging.info('[batch_runner] :: Agent Started')
         #Run Runner
         logging.info('[batch_runner] :: Starting Runner')
+        logging.info("[batch_runner] :: Running experiment {}".format(RUNNER_CMD))
         subprocess.call(RUNNER_CMD, stdout = open("experiments/results/{}/system_logs/runner-run-{}.out".format(experiment_name, run), 'w'), stderr = subprocess.STDOUT, shell = True)
         logging.info('[batch_runner] :: Runner returned')
         time.sleep(5)
@@ -69,5 +70,5 @@ if __name__ == "__main__":
         logging.info("[batch_runner] :: copying log file to {}".format(SCP_COMMAND))
         subprocess.call(SCP_COMMAND)
         subprocess.Popen("kill $(ps -u $USERNAME | grep python | awk '{print $1}')", shell = True)
-        subprocess.Popen("kill $(ps -u $USERNAME | grep webots-bin | awk '{print $1}')", shell = True)
+        subprocess.Popen("kill $(ps -u $USERNAME | grep webots | awk '{print $1}')", shell = True)
         logging.info('[batch_runner] :: Subprocesses murdered')
