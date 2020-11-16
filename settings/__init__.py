@@ -34,6 +34,7 @@ TEST_LOCATION = [0.771, 0.5610656650000001, -0.199]
 IN_POS_THRESH = .001
 INSTRUCTOR_VELOCITY = 0.15
 INSTRUCTOR_HOLD_POSITION = [1.2, 0.6, 0]
+SIMULATE_ACTIONS = False
 
 #Robot Config
 JOINT_NAMES = ['shoulder_pan_joint', 'shoulder_lift_joint', 'elbow_joint', 'wrist_1_joint', 'wrist_2_joint', 'wrist_3_joint']
@@ -116,6 +117,8 @@ AGENT_ACTION_CONCEPTS_PARAM = 'external'
 AGENT_PRELOAD_ACTION_CONCEPTS_PARAM = 'false'
 
 AGENT_RECOMPREHEND_AFTER_LEARN = 'false'
+
+AGENT_PERCEPT_SYMBOLS_ATTR = 'color shape'
 
 
 ## Experiments
