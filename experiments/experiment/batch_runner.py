@@ -57,6 +57,7 @@ if __name__ == "__main__":
         logging.info('[batch_runner] :: Agent Started')
         #Run Runner
         logging.info('[batch_runner] :: Starting Runner')
+        #print cmd
         logging.info("[batch_runner] :: Running experiment {}".format(RUNNER_CMD))
         subprocess.call(RUNNER_CMD, stdout = open("experiments/results/{}/system_logs/runner-run-{}.out".format(experiment_name, run), 'w'), stderr = subprocess.STDOUT, shell = True)
         logging.info('[batch_runner] :: Runner returned')
