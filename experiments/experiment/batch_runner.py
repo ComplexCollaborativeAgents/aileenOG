@@ -33,9 +33,10 @@ if __name__ == "__main__":
 
     for run in range(settings.BATCH_SIZE):
         #Redefine Runner CMD
-        RUNNER_CMD = 'python experiments/experiment/runner.py --type {} --file experiments/results/{}/{}-run-{}.csv ' \
-                     '--concept {} --distractors {} --episodes {}'.format(experiment_name, settings.BATCH_TYPE,
+        RUNNER_CMD = 'python experiments/experiment/runner.py --file experiments/results/{}/{}-run-{}.csv --type {}' \
+                     '--concept {} --distractors {} --episodes {}'.format(experiment_name,
                                                                           settings.BATCH_TYPE, run,
+                                                                          settings.BATCH_TYPE,
                                                                           settings.BATCH_CONCEPT,
                                                                           settings.BATCH_DISTRACTORS,
                                                                           settings.BATCH_EPISODE)
