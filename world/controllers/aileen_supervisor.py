@@ -191,12 +191,12 @@ class AileenSupervisor(Supervisor):
         #self.print_status()
         return None
 
-    def pick_object(self, position):
+    def pick_object(self, position, offset):
         """
             position: list [X, Y, Z] of object to pick in world frame
         """
         logging.info('[aileen supervisor] :: Picking Object')
-        position = [position[0], position[1]+.051, position[2]]
+        position = [position[0], position[1]+offset, position[2]]
         self.go_to_point(self.transform_point_to_robot_frame(position))
         logging.info('[aileen supervisor] :: Locking')
         self._connectorNode.lock()
@@ -208,10 +208,10 @@ class AileenSupervisor(Supervisor):
         self.return_home()
         return None
 
-    def place_object(self, target):
+    def place_object(self, target, offset=0):
         logging.info('[aileen supervisor] :: Placing Object')
         above_target = [target[0], target[1]+.25, target[2]]
-        target = [target[0], target[1]+.051, target[2]]
+        target = [target[0], target[1]+offset, target[2]]
         self.go_to_point(self.transform_point_to_robot_frame(above_target))
         self.go_to_point(self.transform_point_to_robot_frame(target))
         self._connectorNode.unlock()
@@ -266,7 +266,7 @@ class AileenSupervisor(Supervisor):
             object goes up and out to hold location.  parameterized in time by instructor INSTRUCTOR_VELOCITY
         """
         logging.info('[aileen supervisor] :: Demonstrating a pick')
-        self.disable_physics(node)
+        #self.disable_physics(node)
         way1 = position[:]
         way1[1] += .15
         traj = self.create_trajectory([position, way1, settings.INSTRUCTOR_HOLD_POSITION])
@@ -417,7 +417,7 @@ class AileenSupervisor(Supervisor):
             size = bounding_obj.getField('size').getSFVec3f()
             return [centroid[0] - size[0] / 2, centroid[1] - size[1] / 2, centroid[2] - size[2] / 2,
                     centroid[0] + size[0] / 2, centroid[1] + size[1] / 2, centroid[2] + size[2] / 2]
-        elif (bounding_obj.getTypeName() == "Cylinder"):
+        elif (bounding_obj.getTypeName() == "Cyflinder"):
             height = bounding_obj.getField('height').getSFFloat()
             radius = bounding_obj.getField('radius').getSFFloat()
             return [centroid[0] - radius, centroid[1] - height / 2, centroid[2] - radius,

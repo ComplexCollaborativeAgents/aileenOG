@@ -78,6 +78,7 @@ class AileenScene:
 
     @staticmethod
     def place_object_in_configuration_with(target_object_name, reference_object_name, scene_objects, configuration_definition):
+        translations = {}
         reference_object = scene_objects[reference_object_name]
         target_object = scene_objects[target_object_name]
 
@@ -114,6 +115,8 @@ class AileenScene:
                     compute_region_for_relations(world, configuration_definition, qsr_target_object, table))
                 position = [found_target_object_position.x, settings.OBJECT_POSITION_TABLE_Y,
                             found_target_object_position.y]
+                position = AileenScene.randomizer.check_for_3d_qsrs(world, configuration_definition, qsr_target_object, position)
+                translations[target_object_name] = position
             except (ValueError, AttributeError), e:
                 logging.error("[aileen_scene] :: cannot place {} in configuration with {}".format(target_object_name, reference_object_name))
                 raise e
