@@ -76,10 +76,9 @@ if __name__ == '__main__':
     rails = Generator(experiment_type, experiment_concept, num_episodes_per_concept, exam_length, distractors)
     lessons = rails.generate_inform_training_gamut()
     g_exams = rails.generate_verify_testing_gamut_generality()
-    logging.debug("[runner] :: generality test {}".format(g_exams))
-
     s_exams = rails.generate_verify_testing_gamut_specificity()
-    logging.debug("[runner] :: specificity test {}".format(s_exams))
+
+
 
 
     for lesson in Curriculum(lessons):
@@ -88,6 +87,7 @@ if __name__ == '__main__':
         score, lesson_content = lesson_object.administer_lesson(world, agent)
         ResultsHelper.record_content(lesson_content)
         lesson_number = lesson_number + 1
+        logging.error("[runner] :: generality test {}".format(g_exams))
         if g_exams is not None:
             score = 0
             for exam in Curriculum(g_exams):
@@ -95,6 +95,7 @@ if __name__ == '__main__':
                 e_score, content = exam_object.administer_lesson(world, agent)
                 score = score + e_score
             ResultsHelper.record_performance_score(score)
+        logging.error("[runner] :: specificity test {}".format(s_exams))
         if s_exams is not None:
             score = 0
             for exam in Curriculum(s_exams):

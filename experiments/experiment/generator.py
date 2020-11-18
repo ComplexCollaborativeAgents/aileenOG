@@ -123,12 +123,22 @@ class Generator:
 
         logging.debug("[generator] :: relation list is {}".format(relation_configs))
 
+        shapes = settings.SHAPE_SET
+        with open(settings.COLOR_PATH, 'r') as f:
+            colors = json.load(f).keys()
+
+        object_set = [{"color": c, "shape": s} for s in shapes for c in colors]
+
         lessons = []
-        for i in range(0, number_of_samples):
-            for key in relation_configs.keys():
+        for key in relation_configs.keys():
+            for i in range(0, number_of_samples):
+                random.shuffle(object_set)
                 lesson = {'lesson-type': 'spatial-word',
                           'is_positive': str(is_positive),
-                          'description': {"relation": key},
+                          'description': {
+                              "objects": [object_set[0], object_set[1]],
+                              "relation": key
+                            },
                           'signal': signal
                           }
                 if distractors:
