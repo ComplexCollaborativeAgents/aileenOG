@@ -70,7 +70,7 @@ if __name__ == "__main__":
         subprocess.Popen("experiments/experiment/kill_mlisp.sh", stdout = open('/dev/null'), shell = True)
         SCP_COMMAND = "scp dubs:aileen-agent/agent/concept_learner/concept.log experiments/results/{}/concept_logs/concept-run-{}.log".format(experiment_name, run)
         logging.info("[batch_runner] :: copying log file to {}".format(SCP_COMMAND))
-        subprocess.call(SCP_COMMAND)
+        subprocess.Popen(SCP_COMMAND,shell = True)
         subprocess.Popen("kill $(ps -u $USERNAME | grep python | awk '{print $1}')", shell = True)
         subprocess.Popen("kill $(ps -u $USERNAME | grep webots | awk '{print $1}')", shell = True)
         logging.info('[batch_runner] :: Subprocesses murdered')
