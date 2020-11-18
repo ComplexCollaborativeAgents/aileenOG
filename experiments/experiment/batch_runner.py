@@ -3,8 +3,6 @@ import time
 from log_config import logging
 import settings
 import os, sys
-from psutil import process_iter
-from signal import SIGTERM
 import argparse
 
 #WEBOTS_CMD = 'nohup ./webots_headless.sh > experiments/logs/webots.out &'
@@ -75,9 +73,6 @@ if __name__ == "__main__":
         subprocess.Popen("kill $(ps -u $USERNAME | grep python | awk '{print $1}')", shell = True)
         subprocess.Popen("kill $(ps -u $USERNAME | grep webots | awk '{print $1}')", shell = True)
         logging.info('[batch_runner] :: Subprocesses murdered')
-        for proc in process_iter():
-            for conns in proc.connections(kind='inet'):
-                if conns.laddr.port == settings.AGENT_PORT:
-                    proc.send_signal(SIGTERM)  # or SIGKILL
+        subprocess.Popen("kill - 9 $(lsof - t - i:{})".format(settings.AGENT_PORT), shell = True)
         logging.info("[batch_runner] :: Agent port freed")
 
