@@ -3,6 +3,7 @@ import sys
 import json
 import settings
 from experiments.log_config import logging
+import copy
 
 from instructor.curriculum import Curriculum
 from instructor.spatial_word_lesson import SpatialWordLesson
@@ -24,7 +25,7 @@ class Generator:
             lesson_config = self._generate_visual_word_lesson_descriptions(signal='inform',
                                                                            distractors=None,
                                                                            is_positive=True,
-                                                                           number_of_samples_per_object=self._num_episodes_per_concept)
+                                                                           number_of_samples=self._num_episodes_per_concept)
         if self._lesson_type == "spatial-word":
             lesson_config = self._generate_spatial_word_lesson_descriptions(signal='inform',
                                                                             distractors=None,
@@ -97,10 +98,26 @@ class Generator:
             lessons = []
             if self._experiment_concept in shapes:
                 for i in range(0, number_of_samples):
-                    lessons += [generate_lesson_description(random.choice(colors), self._experiment_concept, distractors, signal, is_positive)]
+                    if not is_positive:
+                        reduced_set = copy.deepcopy(shapes)
+                        reduced_set.remove(self._experiment_concept)
+                        color_choice = random.choice(colors)
+                        new_lesson = generate_lesson_description(color_choice, random.choice(reduced_set), distractors, signal, is_positive)
+                        new_lesson['content'] = "{} {}".format(color_choice, self._experiment_concept)
+                        lessons += [new_lesson]
+                    else:
+                        lessons += [generate_lesson_description(random.choice(colors), self._experiment_concept, distractors, signal, is_positive)]
             if self._experiment_concept in colors:
                 for i in range(0, number_of_samples):
-                    lessons += [generate_lesson_description(self._experiment_concept, random.choice(shapes), distractors, signal, is_positive)]
+                        if not is_positive:
+                            reduced_set = copy.deepcopy(colors)
+                            reduced_set.remove(self._experiment_concept)
+                            shape_choice = random.choice(shapes)
+                            new_lesson = generate_lesson_description(random.choice(reduced_set), shape_choice, distractors, signal, is_positive)
+                            new_lesson['content'] = "{} {}".format(self._experiment_concept, shape_choice)
+                            lessons += [new_lesson]
+                        else:
+                            lessons += generate_lesson_description(self._experiment_concept, random.choice(shapes), distractors, signal, is_positive)
             return lessons
 
         else:

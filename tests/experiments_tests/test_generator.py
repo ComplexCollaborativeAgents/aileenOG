@@ -64,7 +64,7 @@ def test_generate_training_gamut_visual_word_color():
             assert False
         assert 'distractors' not in lesson.keys()
 
-def test_generate_training_gamut_visual_word_color():
+def test_generate_training_gamut_visual_word_shape():
     generator = Generator(
         lesson_type="visual-word",
         experiment_concept="box",
@@ -89,7 +89,7 @@ def test_generate_training_gamut_visual_word_color():
 def test_generate_test_gamut_visual_word_color_generality():
     generator = Generator(
         lesson_type="visual-word",
-        experiment_concept="box",
+        experiment_concept="red",
         num_episodes_per_concept=3,
         max_distractors=2,
         exam_length=7
@@ -98,18 +98,42 @@ def test_generate_test_gamut_visual_word_color_generality():
     assert len(gamut) is 7
     print gamut
     for lesson in gamut:
+        print lesson
         if lesson['signal'] is not 'verify':
             assert False
         if lesson['lesson-type'] != "visual-word":
             assert False
         if lesson['is_positive'] is not 'True':
             assert False
-        if lesson['description']['shape'] is not 'box':
+        if lesson['description']['color'] is not 'red':
             assert False
         assert lesson['distractors'] >= 0
         assert lesson['distractors'] <= 2
 
-def test_generate_test_gamut_visual_word_color_generality():
+def test_generate_test_gamut_visual_word_color_specificity():
+    generator = Generator(
+        lesson_type="visual-word",
+        experiment_concept="red",
+        num_episodes_per_concept=3,
+        max_distractors=2,
+        exam_length=7
+    )
+    gamut = generator.generate_verify_testing_gamut_specificity()
+    assert len(gamut) is 7
+    print gamut
+    for lesson in gamut:
+        if lesson['signal'] is not 'verify':
+            assert False
+        if lesson['lesson-type'] != "visual-word":
+            assert False
+        if lesson['is_positive'] is not 'False':
+            assert False
+        if lesson['description']['color'] is 'red':
+            assert False
+        assert lesson['distractors'] >= 0
+        assert lesson['distractors'] <= 2
+
+def test_generate_test_gamut_visual_word_shape_specificity():
     generator = Generator(
         lesson_type="visual-word",
         experiment_concept="box",
@@ -127,7 +151,9 @@ def test_generate_test_gamut_visual_word_color_generality():
             assert False
         if lesson['is_positive'] is not 'False':
             assert False
-        if lesson['description']['shape'] is not 'box':
+        if lesson['description']['color'] is 'box':
+            assert False
+        if not "box" in lesson['content']:
             assert False
         assert lesson['distractors'] >= 0
         assert lesson['distractors'] <= 2
