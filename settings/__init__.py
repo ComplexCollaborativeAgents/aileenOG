@@ -1,5 +1,6 @@
 import os
 from os import path
+import random
 
 OS_ROOT_PATH = path.abspath(os.sep)
 ROOT_PATH = path.join(path.dirname(path.dirname(path.abspath(__file__))))
@@ -21,7 +22,7 @@ COLOR_PATH = path.join(ROOT_PATH, 'instructor', 'resources', 'colors.json')
 WORLD_HOST = 'localhost'
 WORLD_PORT = 30000
 AGENT_HOST = 'localhost'
-AGENT_PORT = 40001
+AGENT_PORT = int("4000{}".format(random.choice(range(0,9))))
 CONCEPT_LEARNER_HOST = 'dubs.parc.xerox.com'
 CONCEPT_LEARNER_PORT = 8085
 
