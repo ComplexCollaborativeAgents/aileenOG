@@ -1,0 +1,11 @@
+[
+   {
+    "comment": "preload visual concepts used in this example",
+    "lesson-type": "spatial-word",
+    "content": "yellow box next to red box",
+    "description": {
+      "objects": [{"color": "yellow", "shape": "box"},  {"color": "red", "shape": "box"}],
+      "relation": "next-to"},
+    "signal": "inform"
+  }
+]
