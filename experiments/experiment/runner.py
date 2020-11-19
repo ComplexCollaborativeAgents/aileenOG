@@ -78,7 +78,7 @@ if __name__ == '__main__':
     g_exams = rails.generate_verify_testing_gamut_generality()
     s_exams = rails.generate_verify_testing_gamut_specificity()
 
-
+    logging.debug("[runner] :: lessons {}".format(lessons))
 
 
     for lesson in Curriculum(lessons):

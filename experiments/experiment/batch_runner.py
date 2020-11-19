@@ -4,11 +4,12 @@ from log_config import logging
 import settings
 import os, sys
 import argparse
+import random
 
 #WEBOTS_CMD = 'nohup ./webots_headless.sh > experiments/logs/webots.out &'
 WEBOTS_CMD = './webots_headless.sh'
 WORLD_CMD = 'python world'
-AGENT_CMD = 'python agent'
+
 
 def parse():
     parser = argparse.ArgumentParser(description='run a named experiment set for empirics')
@@ -29,6 +30,8 @@ if __name__ == "__main__":
     else:
         logging.error("[batch_runner] :: directory already exists")
         sys.exit()
+
+    AGENT_CMD = "python agent --port 4000{}".format(random.choice(range(0,9)))
 
     for run in range(settings.BATCH_SIZE):
         #Redefine Runner CMD
