@@ -6,8 +6,7 @@
       "objects": [{"color": "yellow", "shape": "cone"},  {"color": "red", "shape": "cylinder"}],
       "relation": "left-of"},
      "signal": "inform",
-    "distractors": 2,
-    "is_positive": "False"
+    "distractors": 0
   },
     {
     "lesson-type": "spatial-word",

@@ -66,6 +66,15 @@ sp {topstate*elaborate*translation*attr
 -->
     (<p>    ^translate <t>)
     (<t>    ^rcc8 po dc ec
-            ^cardir s n e w se nw ne sw)
+            ^cardir s n e w se nw ne sw
+            ^depth a o b)
+    }
+
+sp {topstate*elaborate*spatial*predicates
+    (state <s>    ^name aileen
+                  ^_params <p>)
+-->
+    (<p>    ^spatial-predicates <spred>)
+    (<spred>    ^type rcc8 cardir depth)
     }
     

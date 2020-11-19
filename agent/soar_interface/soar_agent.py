@@ -95,13 +95,13 @@ class SoarAgent(object):
                     (<rps>    ^type {p_set})
                     (<inter>    ^recomprehend {comp_param})
                     }}""".format(v_param=visual_concepts_param,
-                                 s_param=spatial_concepts_param,
-                                 a_param=action_concepts_param,
-                                 pv_param=preload_visual_concepts_param,
-                                 ps_param=preload_spatial_concepts_param,
-                                 pa_param=preload_action_concepts_param,
-                                 p_set=percept_param,
-                                 comp_param=recomp_param)
+                                         s_param=spatial_concepts_param,
+                                         a_param=action_concepts_param,
+                                         pv_param=preload_visual_concepts_param,
+                                         ps_param=preload_spatial_concepts_param,
+                                         pa_param=preload_action_concepts_param,
+                                         p_set=percept_param,
+                                         comp_param=recomp_param)
 
         #logging.debug("[soar-agent] :: loading params into agent")
         self.execute_command(params)

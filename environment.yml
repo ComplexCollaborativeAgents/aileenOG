@@ -23,6 +23,7 @@ dependencies:
   - psutil
   - pip
   - pip:
-      - strands_qsr_lib/qsr_lib/
+      - -e strands_qsr_lib/qsr_lib/
       - agent/vision/
       - -e .
+      - ikpy
