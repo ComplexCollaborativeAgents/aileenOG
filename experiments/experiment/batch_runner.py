@@ -31,17 +31,21 @@ if __name__ == "__main__":
         logging.error("[batch_runner] :: directory already exists")
         sys.exit()
 
-    AGENT_CMD = "python agent --port 4000{}".format(random.choice(range(0,9)))
+
+    agent_port = int("4000{}".format(random.choice(range(0,9))))
+
+    AGENT_CMD = "python agent --port {}".format(agent_port)
 
     for run in range(settings.BATCH_SIZE):
         #Redefine Runner CMD
         RUNNER_CMD = 'python experiments/experiment/runner.py --file experiments/results/{}/{}-run-{}.csv --type {} ' \
-                     '--concept {} --distractors {} --episodes {}'.format(experiment_name,
+                     '--concept {} --distractors {} --episodes {} --agent_port {}'.format(experiment_name,
                                                                           settings.BATCH_TYPE, run,
                                                                           settings.BATCH_TYPE,
                                                                           settings.BATCH_CONCEPT,
                                                                           settings.BATCH_DISTRACTORS,
-                                                                          settings.BATCH_EPISODE)
+                                                                          settings.BATCH_EPISODE,
+                                                                          agent_port)
         logging.info('[batch_runner] :: Starting run {} of {} of type {}'.format(run+1, settings.BATCH_SIZE, settings.BATCH_TYPE))
         #Run Webots
         logging.info('[batch_runner] :: Starting Webots')

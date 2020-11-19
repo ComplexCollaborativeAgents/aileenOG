@@ -22,7 +22,7 @@ COLOR_PATH = path.join(ROOT_PATH, 'instructor', 'resources', 'colors.json')
 WORLD_HOST = 'localhost'
 WORLD_PORT = 30000
 AGENT_HOST = 'localhost'
-AGENT_PORT = int("4000{}".format(random.choice(range(0,9))))
+AGENT_PORT = 40001
 CONCEPT_LEARNER_HOST = 'dubs.parc.xerox.com'
 CONCEPT_LEARNER_PORT = 8085
 

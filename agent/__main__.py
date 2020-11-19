@@ -13,8 +13,18 @@ def create_connection_with_aileen_world():
     logging.info("[aileen] :: created a connection with the world server at: {}".format(url))
     return server
 
+def parse():
+    parser = argparse.ArgumentParser(description='give a port for running the agent on')
+    parser.add_argument('--port', help='run agent on port')
+    return parser.parse_args()
+
 
 if __name__ == '__main__':
+    arguments = parse()
+    if arguments.port:
+        port = int(arguments.port)
+    else:
+        port = settings.AGENT_PORT
 
     world_server = create_connection_with_aileen_world()
     aileen_agent = SoarAgent(world_server)
@@ -27,7 +37,7 @@ if __name__ == '__main__':
 
 
 
-    aileen_agent_server = AileenAgentServer(aileen_agent, port=settings.AGENT_PORT)
+    aileen_agent_server = AileenAgentServer(aileen_agent, port=port)
     aileen_agent_server.run_in_background()
 
     while True:

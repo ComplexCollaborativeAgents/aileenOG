@@ -15,8 +15,8 @@ def create_connection_with_aileen_world():
     return server
 
 
-def create_connection_with_aileen_agent():
-    url = 'http://{}:{}'.format(settings.AGENT_HOST, settings.AGENT_PORT)
+def create_connection_with_aileen_agent(agent_port):
+    url = 'http://{}:{}'.format(settings.AGENT_HOST, agent_port)
     server = xmlrpclib.ServerProxy(url)
     logging.info("[aileen_instructor] :: created a connection with the agent: {}".format(url))
     return server
@@ -30,6 +30,7 @@ def parse():
     parser.add_argument('--episodes', help='number of tranining instances per concetp')
     parser.add_argument('--exam_length', help='number of samples in exams')
     parser.add_argument('--distractors', help='number of distractors in exams')
+    parse.add_argument('--agent_port', help='agent port')
     return parser.parse_args()
 
 
@@ -66,10 +67,15 @@ if __name__ == '__main__':
     else:
         distractors = 0
 
+    if arguments.agent_port:
+        agent_port = arguments.agent_port
+    else:
+        agent_port = settings.AGENT_PORT
+
     lesson_number = 0
 
     world = create_connection_with_aileen_world()
-    agent = create_connection_with_aileen_agent()
+    agent = create_connection_with_aileen_agent(agent_port)
 
     ResultsHelper.reset_results_file()
 
