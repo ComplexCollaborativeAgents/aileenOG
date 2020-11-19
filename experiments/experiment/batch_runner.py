@@ -32,11 +32,11 @@ if __name__ == "__main__":
         sys.exit()
 
 
-    agent_port = int("4000{}".format(random.choice(range(0,9))))
-
-    AGENT_CMD = "python agent --port {}".format(agent_port)
+    agent_port = 40002
 
     for run in range(settings.BATCH_SIZE):
+        agent_port += 1
+        AGENT_CMD = "python agent --port {}".format(agent_port)
         #Redefine Runner CMD
         RUNNER_CMD = 'python experiments/experiment/runner.py --file experiments/results/{}/{}-run-{}.csv --type {} ' \
                      '--concept {} --distractors {} --episodes {} --agent_port {}'.format(experiment_name,

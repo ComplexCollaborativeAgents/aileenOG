@@ -30,7 +30,7 @@ def parse():
     parser.add_argument('--episodes', help='number of tranining instances per concetp')
     parser.add_argument('--exam_length', help='number of samples in exams')
     parser.add_argument('--distractors', help='number of distractors in exams')
-    parse.add_argument('--agent_port', help='agent port')
+    parser.add_argument('--agent_port', help='agent port')
     return parser.parse_args()
 
 
