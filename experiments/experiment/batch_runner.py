@@ -76,6 +76,3 @@ if __name__ == "__main__":
         subprocess.Popen("kill $(ps -u $USERNAME | grep python | awk '{print $1}')", shell = True)
         subprocess.Popen("kill $(ps -u $USERNAME | grep webots | awk '{print $1}')", shell = True)
         logging.info('[batch_runner] :: Subprocesses murdered')
-        subprocess.Popen("kill - 9 $(lsof - t - i:{})".format(settings.AGENT_PORT), shell = True)
-        logging.info("[batch_runner] :: Agent port freed")
-
