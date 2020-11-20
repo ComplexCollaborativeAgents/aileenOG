@@ -74,8 +74,8 @@
           "trace-actions": [
               {"name": "pick-up", "argument": "<obj1>"},
               {"name": "place", "argument1": "<obj1>", "argument2": "<obj2>", "relation": "on"}],
-      "<obj1>": {"color": "yellow", "shape": "cylinder"},
-      "<obj2>": {"color": "red", "shape": "cylinder"}
+      "<obj1>": {"color": "yellow", "shape": "cylinder", "size": "medium"},
+      "<obj2>": {"color": "red", "shape": "cylinder", "size": "medium"}
     },
     "signal": "verify",
     "distractors": 0
@@ -86,14 +86,14 @@
     "content": "move yellow cylinder on red cylinder",
     "description": {
       "objects": ["<obj1>", "<obj2>"],
-      "relations": ["left-of"],
-      "action": "move-left-of",
+      "relations": ["on"],
+      "action": "move-on",
       "initial_configuration": [],
           "trace-actions": [
               {"name": "pick-up", "argument": "<obj1>"},
               {"name": "place", "argument1": "<obj1>", "argument2": "<obj2>", "relation": "left-of"}],
-      "<obj1>": {"color": "yellow", "shape": "cylinder"},
-      "<obj2>": {"color": "red", "shape": "cylinder"}
+      "<obj1>": {"color": "yellow", "shape": "cylinder", "size": "medium"},
+      "<obj2>": {"color": "red", "shape": "cylinder", "size": "medium"}
     },
     "signal": "verify",
     "distractors": 0
