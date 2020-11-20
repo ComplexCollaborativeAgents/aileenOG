@@ -88,6 +88,7 @@ class Generator:
                 lesson['description']['color'] = color
             if shape:
                 lesson['description']['shape'] = shape
+            lesson['description']['size']= 'medium'
             if distractors:
                 lesson['distractors'] = random.randint(distractors[0], distractors[1])
             if signal:
@@ -106,7 +107,10 @@ class Generator:
                         new_lesson['content'] = "{} {}".format(color_choice, self._experiment_concept)
                         lessons += [new_lesson]
                     else:
-                        lessons += [generate_lesson_description(random.choice(colors), self._experiment_concept, distractors, signal, is_positive)]
+                        color_choice = random.choice(colors)
+                        new_lesson = generate_lesson_description(color_choice, self._experiment_concept, distractors, signal, is_positive)
+                        new_lesson['content'] = "{} {}".format(color_choice, self._experiment_concept)
+                        lessons += [new_lesson]
             if self._experiment_concept in colors:
                 for i in range(0, number_of_samples):
                         if not is_positive:
@@ -117,7 +121,11 @@ class Generator:
                             new_lesson['content'] = "{} {}".format(self._experiment_concept, shape_choice)
                             lessons += [new_lesson]
                         else:
-                            lessons += generate_lesson_description(self._experiment_concept, random.choice(shapes), distractors, signal, is_positive)
+                            shape_choice = random.choice(shapes)
+                            new_lesson = generate_lesson_description(self._experiment_concept, shape_choice,
+                                                                     distractors, signal, is_positive)
+                            new_lesson['content'] = "{} {}".format(self._experiment_concept, shape_choice)
+                            lessons += [new_lesson]
             return lessons
 
         else:
