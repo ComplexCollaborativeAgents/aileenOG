@@ -55,9 +55,9 @@ class AileenObject:
         description += "        }\n"
         description += "        Connector {\n"
         description += '          type "passive"\n'
-        description += "          distanceTolerance .1\n"
-        description += "          axisTolerance .5\n"
-        description += "          rotationTolerance 0\n"
+        description += "          distanceTolerance .5\n"
+        description += "          axisTolerance 3\n"
+        description += "          rotationTolerance 3.14\n"
         description += "          numberOfRotations 0\n"
         description += "          rotation 1 0 0 -1.57\n"
         description += "          translation 0 {} 0\n".format(self._connector_dim)
