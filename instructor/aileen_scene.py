@@ -70,11 +70,22 @@ class AileenScene:
                 position = [found_target_object_position.x, settings.OBJECT_POSITION_TABLE_Y, found_target_object_position.y]
                 #this will only overwrite if a 3d qsr is found
                 position = AileenScene.randomizer.check_for_3d_qsrs(world, configuration_definition, qsr_target_object, position)
+                logging.debug('[aileen_scene] :: found position for object: {}'.format(position))
+                position[1] = AileenScene.bound_position_for_demo(qsr_reference_object.z, qsr_reference_object.zsize, position[1])
+                logging.debug('[aileen_scene] :: bounded position: {}'.format(position))
                 translations[target_object_name] = position
             except (ValueError, AttributeError):
                 logging.error("[aileen_scene] :: Could not place target object!")
                 pass
         return translations
+
+    @staticmethod
+    def bound_position_for_demo(z, dz, position_y, offset = .1):
+        top_pos = z + dz/2 + offset
+        if position_y > top_pos:
+            return top_pos
+        return position_y
+
 
     @staticmethod
     def place_object_in_configuration_with(target_object_name, reference_object_name, scene_objects, configuration_definition):
@@ -116,6 +127,9 @@ class AileenScene:
                 position = [found_target_object_position.x, settings.OBJECT_POSITION_TABLE_Y,
                             found_target_object_position.y]
                 position = AileenScene.randomizer.check_for_3d_qsrs(world, configuration_definition, qsr_target_object, position)
+                logging.debug('[aileen_scene] :: found position for object: {}'.format(position))
+                position[1] = AileenScene.bound_position_for_demo(qsr_reference_object.z, qsr_reference_object.zsize, position[1])
+                logging.debug('[aileen_scene] :: bounded position: {}'.format(position))
                 translations[target_object_name] = position
             except (ValueError, AttributeError), e:
                 logging.error("[aileen_scene] :: cannot place {} in configuration with {}".format(target_object_name, reference_object_name))
