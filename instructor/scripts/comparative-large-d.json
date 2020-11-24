@@ -1,0 +1,75 @@
+[
+   {
+    "comment": "preload visual concepts used in this example",
+    "lesson-type": "spatial-word",
+    "content": "yellow box larger than red box",
+    "description": {
+      "objects": [{"color": "yellow", "shape": "box", "size": "large"},  {"color": "red", "shape": "box", "size": "medium"}],
+      "relation": "larger-than"},
+    "signal": "inform"
+  },
+   {
+    "comment": "preload visual concepts used in this example",
+    "lesson-type": "spatial-word",
+    "content": "green cylinder larger than blue cone",
+    "description": {
+      "objects": [{"color": "green", "shape": "cylinder", "size": "large"},  {"color": "blue", "shape": "cone", "size": "medium"}],
+      "relation": "larger-than"},
+    "signal": "inform"
+  },
+  {
+    "comment": "preload visual concepts used in this example",
+    "lesson-type": "spatial-word",
+    "content": "blue cone larger than green sphere",
+    "description": {
+      "objects": [{"color": "blue", "shape": "cone", "size": "large"},  {"color": "green", "shape": "sphere", "size": "medium"}],
+      "relation": "larger-than"},
+    "signal": "inform"
+  },
+  {
+    "comment": "preload visual concepts used in this example",
+    "lesson-type": "spatial-word",
+    "content": "green cone larger than blue sphere",
+    "description": {
+      "objects": [{"color": "green", "shape": "cone", "size": "large"},  {"color": "blue", "shape": "sphere", "size": "medium"}],
+      "relation": "larger-than"},
+    "signal": "inform"
+  },
+    {
+    "comment": "preload visual concepts used in this example",
+    "lesson-type": "spatial-word",
+    "content": "purple box larger than green box",
+    "description": {
+      "objects": [{"color": "purple", "shape": "box", "size": "large"},  {"color": "green", "shape": "box", "size": "medium"}],
+      "relation": "larger-than"},
+    "signal": "inform"
+  },
+  {
+    "comment": "preload visual concepts used in this example",
+    "lesson-type": "spatial-word",
+    "content": "blue cone larger than green sphere",
+    "description": {
+      "objects": [{"color": "blue", "shape": "cone", "size": "large"},  {"color": "green", "shape": "sphere", "size": "medium"}],
+      "relation": "larger-than"},
+    "signal": "verify"
+  },
+
+    {
+    "comment": "preload visual concepts used in this example",
+    "lesson-type": "spatial-word",
+    "content": "blue cone larger than green sphere",
+    "description": {
+      "objects": [{"color": "blue", "shape": "cone", "size": "large"},  {"color": "green", "shape": "sphere", "size": "large"}],
+      "relation": "larger-than"},
+    "signal": "verify"
+  },
+   {
+    "comment": "preload visual concepts used in this example",
+    "lesson-type": "spatial-word",
+    "content": "green sphere larger than blue cone",
+    "description": {
+      "objects": [{"color": "green", "shape": "sphere", "size": "medium"},  {"color": "blue", "shape": "cone", "size": "medium"}],
+      "relation": "larger-than"},
+    "signal": "verify"
+  }
+]

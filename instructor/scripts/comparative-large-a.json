@@ -61,6 +61,50 @@
       "objects": [{"color": "blue", "shape": "cone", "size": "large"},  {"color": "green", "shape": "sphere", "size": "small"}],
       "relation": "larger-than"},
     "signal": "verify"
+  },
+   {
+    "comment": "preload visual concepts used in this example",
+    "lesson-type": "spatial-word",
+    "content": "green sphere larger than blue cone",
+    "description": {
+      "objects": [{"color": "green", "shape": "sphere", "size": "medium"},  {"color": "blue", "shape": "cone", "size": "small"}],
+      "relation": "larger-than"},
+    "signal": "verify"
+  },
+   {
+    "comment": "preload visual concepts used in this example",
+    "lesson-type": "spatial-word",
+    "content": "purple cone larger than green cone",
+    "description": {
+      "objects": [{"color": "purple", "shape": "cone", "size": "large"},  {"color": "green", "shape": "cone", "size": "small"}],
+      "relation": "larger-than"},
+    "signal": "verify"
+  },
+    {
+    "comment": "preload visual concepts used in this example",
+    "lesson-type": "spatial-word",
+    "content": "blue cone larger than green sphere",
+    "description": {
+      "objects": [{"color": "blue", "shape": "cone", "size": "large"},  {"color": "green", "shape": "sphere", "size": "large"}],
+      "relation": "larger-than"},
+    "signal": "verify"
+  },
+   {
+    "comment": "preload visual concepts used in this example",
+    "lesson-type": "spatial-word",
+    "content": "green sphere larger than blue cone",
+    "description": {
+      "objects": [{"color": "green", "shape": "sphere", "size": "medium"},  {"color": "blue", "shape": "cone", "size": "medium"}],
+      "relation": "larger-than"},
+    "signal": "verify"
+  },
+   {
+    "comment": "preload visual concepts used in this example",
+    "lesson-type": "spatial-word",
+    "content": "purple cone larger than green cone",
+    "description": {
+      "objects": [{"color": "purple", "shape": "cone", "size": "small"},  {"color": "green", "shape": "cone", "size": "small"}],
+      "relation": "larger-than"},
+    "signal": "verify"
   }
-
 ]
