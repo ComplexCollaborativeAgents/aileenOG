@@ -58,7 +58,8 @@ DEF ur10 UR10e {
     Connector {
       rotation -1 0 0 1.57
       type "active"
-      distanceTolerance 0.1
+      distanceTolerance 0.5
+      axisTolerance 3.1
       rotationTolerance 0
       numberOfRotations 0
     }
