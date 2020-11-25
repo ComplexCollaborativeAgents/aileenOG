@@ -82,8 +82,11 @@ class AileenScene:
     @staticmethod
     def bound_position_for_demo(z, dz, position_y, offset = .1):
         top_pos = z + dz/2 + offset
-        if position_y > top_pos:
+        highest = top_pos + 0.2
+        if position_y < top_pos:
             return top_pos
+        if position_y > highest:
+            return highest
         return position_y
 
 

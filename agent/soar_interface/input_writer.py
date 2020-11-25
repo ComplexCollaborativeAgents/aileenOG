@@ -350,8 +350,10 @@ objects = [{'orientation': [1.0, -5.75539615965681e-17, 3.38996313371214e-17, 5.
                     ret[args[0]] = {}
                 if 'ra' in v.qsr.keys():
                     v.qsr['ra'] = self.get_rcc8_symbols_for_allen_intervals(v.qsr['ra'])
-                if '3dcd' in v.qsr.keys():
-                    v.qsr['depth'] = v.qsr['3dcd'][-1].lower()
+                # if '3dcd' in v.qsr.keys():
+                #     v.qsr['depth'] = v.qsr['3dcd'][-1].lower()
+                if 'aob' in v.qsr.keys():
+                    v.qsr['depth'] = v.qsr['aob']
                 ret[args[0]][args[1]] = v.qsr
         logging.debug("[input_writer] :: qsrs computed {}".format(ret))
         return ret
