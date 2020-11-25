@@ -28,10 +28,9 @@ sp {verify-relation*elaborate*pairs
 sp {verify-relation*elaborate*world*match
     (state <s>    ^name verify-relation
                   ^world.relations <rels>
-                  ^pair <p>
-                  ^topstate._params.spatial-predicates.type <spred>)
+                  ^pair <p>)
     (<rels>    ^relation <rel>)
-    (<rel>    ^{<type> <spred>} <qsr>
+    (<rel>    ^{<type> << cardir rcc8 depth >>} <qsr>
               ^root-object <robj>
               ^target-object <tobj>)
     (<p>    ^root <robj>
@@ -45,9 +44,8 @@ sp {verify-relation*report*verified
     (state <s>    ^name verify-relation
                   ^pair <p>
                   ^g-relation <rel>
-                  ^superstate <ss>
-                  ^topstate._params.spatial-predicates.type <spred>)
-    -{(<p>    ^primitives.{<type> <spred>} <qsr>)
+                  ^superstate <ss>)
+    -{(<p>    ^primitives.{<type> << cardir rcc8 depth >>} <qsr>)
       (<p>   -^matched <qsr>)}
 -->
     (<ss>    ^verified <rel>)
@@ -57,9 +55,8 @@ sp {verify-relation*report*verified
 sp {verify-relation*report*success
     (state <s>    ^name verify-relation
                   ^pair <p>
-                  ^superstate <ss>
-                  ^topstate._params.spatial-predicates.type <spred>)
-    -{(<p>    ^primitives.{<type> <spred>} <qsr>)
+                  ^superstate <ss>)
+    -{(<p>    ^primitives.{<type> << cardir rcc8 depth >>} <qsr>)
       (<p>   -^matched <qsr>)}
 -->
     (<ss>    ^operator <op> + !)

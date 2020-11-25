@@ -34,7 +34,7 @@
       "<obj1>": {
         "color": "red",
         "shape": "box",
-        "size": "medium"
+        "size": "small"
       },
       "<obj2>": {
         "color": "blue",
@@ -47,7 +47,7 @@
   {
     "comment": "preload visual concepts used in this example",
     "lesson-type": "action-word",
-    "content": "move blue box on yellow box",
+    "content": "move blue cone on yellow cylinder",
     "description": {
       "objects": ["<obj1>", "<obj2>"],
       "relations": ["on"],
@@ -56,8 +56,8 @@
           "trace-actions": [
               {"name": "pick-up", "argument": "<obj1>"},
               {"name": "place", "argument1": "<obj1>", "argument2": "<obj2>", "relation": "on"}],
-      "<obj1>": {"color": "blue", "shape": "box", "size":  "medium"},
-      "<obj2>": {"color": "yellow", "shape": "box", "size":  "large"}
+      "<obj1>": {"color": "blue", "shape": "cone", "size":  "small"},
+      "<obj2>": {"color": "yellow", "shape": "cylinder", "size":  "large"}
     },
     "signal": "inform",
     "distractors": 0
@@ -74,7 +74,7 @@
           "trace-actions": [
               {"name": "pick-up", "argument": "<obj1>"},
               {"name": "place", "argument1": "<obj1>", "argument2": "<obj2>", "relation": "on"}],
-      "<obj1>": {"color": "yellow", "shape": "box", "size": "medium"},
+      "<obj1>": {"color": "yellow", "shape": "box", "size": "small"},
       "<obj2>": {"color": "red", "shape": "box", "size": "large"}
     },
     "signal": "verify",
@@ -86,13 +86,13 @@
     "content": "move yellow cylinder on red cylinder",
     "description": {
       "objects": ["<obj1>", "<obj2>"],
-      "relations": ["on"],
+      "relations": ["left-of"],
       "action": "move-on",
       "initial_configuration": [],
           "trace-actions": [
               {"name": "pick-up", "argument": "<obj1>"},
               {"name": "place", "argument1": "<obj1>", "argument2": "<obj2>", "relation": "left-of"}],
-      "<obj1>": {"color": "yellow", "shape": "cylinder", "size": "medium"},
+      "<obj1>": {"color": "yellow", "shape": "cylinder", "size": "small"},
       "<obj2>": {"color": "red", "shape": "cylinder", "size": "large"}
     },
     "signal": "verify",
