@@ -25,7 +25,7 @@ sp {action*elaborate*goal*not-match*relation
                   ^desired <d>
                   ^topstate._params.spatial-predicates.type <spred>)
     (<d>    ^relations.relation <rel1>)
-    (<rel1> ^{<spred> <type>} <symb>
+    (<rel1> ^{<< cardir rcc8 depth >> <type>} <symb>
             ^root-object <robj>
             ^target-object <tobj>)
   -{(<s>    ^relations.relation <rel2>)
@@ -39,10 +39,9 @@ sp {action*elaborate*goal*not-match*relation
 sp {action*elaborate*goal*match*relation
     (state <s>    ^name action
                   ^relations.relation <rel2>
-                  ^desired <d>
-                  ^topstate._params.spatial-predicates.type <spred>)
+                  ^desired <d>)
     (<d>    ^relations.relation <rel1>)
-    (<rel1> ^{<spred> <type>} <symb>
+    (<rel1> ^{<< cardir rcc8 depth >> <type>} <symb>
             ^root-object <robj>
             ^target-object <tobj>)
     (<rel2> ^<type> <symb>
