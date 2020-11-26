@@ -79,6 +79,7 @@ OBJECT_POSITION_DELTA = 0.15
 #OBJECT_STANDARD_WIDTH_X = 0.1
 #OBJECT_STANDARD_WIDTH_Z = 0.1
 
+# SPATIAL_CONFIGURATION_FILE_NAME = 'spatial_configuration.json'
 SPATIAL_CONFIGURATION_FILE_NAME = 'spatial_configuration.json'
 SPATIAL_DEF_OBJECTS = 'objects'
 SPATIAL_DEF_DEFINITION = 'definition'
@@ -96,6 +97,11 @@ ACTION_LESSON_STATE_TRACE = 'trace'
 ACTION_LESSON_STATE_END = 'end'
 ACTION_LESSON_STATE_COMPLETE = 'complete'
 ACTION_LESSON_STATE_BAD = 'bad'
+
+COMPOSITE_CONFIGURATION_FILE_NAME = 'composite_objects_configuration.json'
+COMPOSITE_DEF_OBJECTS = 'objects'
+COMPOSITE_DEF_DEFINITION = 'definition'
+COMPOSITE_DEF_LANGUAGE = 'language'
 
 ## Agent
 AGENT_PARAM_RUNTIME_FILE = path.join(ROOT_PATH, 'agent', 'soar_interface', 'soar', '_agent_params_runtime.soar')
