@@ -101,7 +101,7 @@ class CompositeWordLesson:
                 target_object_name=self._scene_objects.items()[0][0],
                 reference_object_name=self._scene_objects.items()[1][0],
                 scene_objects=self._scene_objects,
-                configuration_definition=self._composite_configuration_def[settings.COMPOSITE_DEF_DEFINITION])
+                configuration_definition=choice(self._composite_configuration_def[settings.COMPOSITE_DEF_DEFINITION]))
             for scene_object_name in self._scene_objects.keys():
                 scene_object = self._scene_objects[scene_object_name]
                 scene_object.set_translation(translations[scene_object_name])
@@ -113,7 +113,7 @@ class CompositeWordLesson:
                 first_reference_object_name=self._scene_objects.items()[0][0],
                 second_reference_object_name=self._scene_objects.items()[1][0],
                 scene_objects=self._scene_objects,
-                configuration_definition=self._composite_configuration_def[settings.COMPOSITE_DEF_DEFINITION])
+                configuration_definition=choice(self._composite_configuration_def[settings.COMPOSITE_DEF_DEFINITION]))
             for scene_object_name in self._scene_objects.keys():
                 scene_object = self._scene_objects[scene_object_name]
                 scene_object.set_translation(translations[scene_object_name])
