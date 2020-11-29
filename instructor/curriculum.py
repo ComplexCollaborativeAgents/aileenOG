@@ -3,6 +3,7 @@ import json
 from instructor.visual_word_lesson import VisualWordLesson
 from instructor.spatial_word_lesson import SpatialWordLesson
 from instructor.action_word_lesson import ActionWordLesson
+from instructor.composite_word_lesson import CompositeWordLesson
 from language_generator import LanguageGenerator
 
 
@@ -47,6 +48,12 @@ class Curriculum(object):
                                              description=description,
                                              distractors=distractors,
                                              content=content)
+        elif lesson_type == 'composite-word':
+            lesson_object = CompositeWordLesson(is_positive=is_positive,
+                                                signal=signal,
+                                                description=description,
+                                                distractors=distractors,
+                                                content=content)
 
         else:
             return None

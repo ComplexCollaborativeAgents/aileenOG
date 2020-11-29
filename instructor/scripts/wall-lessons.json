@@ -1,6 +1,6 @@
 [
   {
-    "lesson-type": "composite-action",
+    "lesson-type": "composite-word",
     "content": "wall",
     "description": {"composite": "wall"},
     "signal": "inform",

@@ -101,9 +101,11 @@ ACTION_LESSON_STATE_BAD = 'bad'
 COMPOSITE_CONFIGURATION_FILE_NAME = 'composite_objects_configuration.json'
 COMPOSITE_DEF_OBJECTS = 'objects'
 COMPOSITE_DEF_DEFINITION = 'definition'
-COMPOSITE_DEF_LANGUAGE = 'language'
+COMPOSITE_DEF_LANGUAGE_TEMPLATE = 'language'
 
 ## Agent
+
+AGENT_PERCEPT_SYMBOLS_ATTR = 'color shape'
 AGENT_PARAM_RUNTIME_FILE = path.join(ROOT_PATH, 'agent', 'soar_interface', 'soar', '_agent_params_runtime.soar')
 
 AGENT_LANGUAGE_LEARNING = False
