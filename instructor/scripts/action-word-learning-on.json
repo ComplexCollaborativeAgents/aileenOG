@@ -3,45 +3,31 @@
     "comment": "preload visual concepts used in this example",
     "lesson-type": "action-word",
     "content": "move red box on blue box",
-    "description": {
-      "objects": [
-        "<obj1>",
-        "<obj2>"
-      ],
-      "relations": [
-        "on"
-      ],
+    "description": {"objects": ["<obj1>", "<obj2>"],
+      "relations": ["on"],
       "action": "move-on",
       "initial_configuration": [],
-      "trace-actions": [
-        {
-          "name": "pick-up",
-          "argument": "<obj1>"
-        },
-        {
-          "name": "place",
-          "argument1": "<obj1>",
-          "argument2": "<obj2>",
-          "relation": "on"
-        }
-      ],
-      "language": [
-        "move",
-        "<obj1>",
-        "on",
-        "<obj2>"
-      ],
-      "<obj1>": {
-        "color": "red",
-        "shape": "box",
-        "size": "small"
-      },
-      "<obj2>": {
-        "color": "blue",
-        "shape": "box",
-        "size": "large"
-      }
+      "trace-actions": [{"name": "pick-up", "argument": "<obj1>"},
+        {"name": "place", "argument1": "<obj1>", "argument2": "<obj2>", "relation": "on"}],
+      "language": ["move", "<obj1>", "on", "<obj2>"],
+      "<obj1>": {"color": "red", "shape": "box", "size": "small"},
+      "<obj2>": {"color": "blue", "shape": "box", "size": "large"}
     },
+    "signal": "inform"
+  },
+  {
+    "comment": "preload visual concepts used in this example",
+    "lesson-type": "action-word",
+    "content": "move yellow box on green box",
+    "description": {"objects": ["<obj1>", "<obj2>"],
+      "relations": ["on"],
+      "action": "move-on",
+      "initial_configuration": [],
+      "trace-actions": [{"name": "pick-up", "argument": "<obj1>"},
+        {"name": "place", "argument1": "<obj1>", "argument2": "<obj2>", "relation": "on"}],
+      "language": ["move", "<obj1>", "on", "<obj2>"],
+      "<obj1>": {"color": "yellow", "shape": "box", "size": "small"},
+      "<obj2>": {"color": "green", "shape": "box", "size": "large"}},
     "signal": "inform"
   },
   {
