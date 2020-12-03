@@ -93,7 +93,6 @@ class SpatialWordLesson:
 
     def generate_scene(self, positions):
         logging.debug("[aileen_spatial_word_lesson] :: generating a new scene for spatial word learning")
-
         if len(positions) == len(self._scene_objects):
             for o, p in zip(self._scene_objects.values(), positions):
                 o.set_translation(p)

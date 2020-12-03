@@ -58,10 +58,11 @@ sp {learn-from-scene-external*apply*send-instance-to-concept-memory*facts*object
 sp {learn-from-scene-external*apply*send-instance-to-concept-memory*spatial
     (state <s>    ^name learn-from-scene-external
                   ^operator <op>
-                  ^io.output-link.concept-memory.store <si>)
+                  ^io.output-link.concept-memory.store <si>
+                  ^topstate._params.spatial-predicates.type <spred>)
     (<si>    ^facts <facts>)
     (<op>    ^scene.relations.relation <rel>)
-    (<rel>    ^<< rcc8 cardir >> <val>
+    (<rel>    ^<spred> <val>
               ^root-object.id_string <fid>
               ^target-object.id_string <sid>)
 -->

@@ -30,7 +30,7 @@ sp {verify-relation*elaborate*world*match
                   ^world.relations <rels>
                   ^pair <p>)
     (<rels>    ^relation <rel>)
-    (<rel>    ^{<type> << cardir rcc8 >>} <qsr>
+    (<rel>    ^{<type> << cardir rcc8 depth >>} <qsr>
               ^root-object <robj>
               ^target-object <tobj>)
     (<p>    ^root <robj>
@@ -45,7 +45,7 @@ sp {verify-relation*report*verified
                   ^pair <p>
                   ^g-relation <rel>
                   ^superstate <ss>)
-    -{(<p>    ^primitives.{<type> << cardir rcc8 >>} <qsr>)
+    -{(<p>    ^primitives.{<type> << cardir rcc8 depth >>} <qsr>)
       (<p>   -^matched <qsr>)}
 -->
     (<ss>    ^verified <rel>)
@@ -56,7 +56,7 @@ sp {verify-relation*report*success
     (state <s>    ^name verify-relation
                   ^pair <p>
                   ^superstate <ss>)
-    -{(<p>    ^primitives.{<type> << cardir rcc8 >>} <qsr>)
+    -{(<p>    ^primitives.{<type> << cardir rcc8 depth >>} <qsr>)
       (<p>   -^matched <qsr>)}
 -->
     (<ss>    ^operator <op> + !)

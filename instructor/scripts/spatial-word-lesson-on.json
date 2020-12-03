@@ -1,0 +1,38 @@
+[
+  {
+    "lesson-type": "spatial-word",
+    "content": "yellow box on red cylinder",
+    "description": {
+      "objects": [{"size": "small", "color": "yellow", "shape": "box"},  {"size": "large", "color": "red", "shape": "cylinder"}],
+      "relation": "on"},
+     "signal": "inform",
+    "distractors": 0
+  },
+  {
+    "lesson-type": "spatial-word",
+    "content": "blue cylinder on green box",
+    "description": {
+      "objects": [{"size": "small", "color": "blue", "shape": "cylinder"},  {"size": "large", "color": "green", "shape": "box"}],
+      "relation": "on"},
+     "signal": "inform",
+    "distractors": 0
+  },
+  {
+    "lesson-type": "spatial-word",
+    "content": "green cylinder on blue cylinder",
+    "description": {
+      "objects": [{"size": "small", "color": "green", "shape": "cylinder"},  {"size": "large", "color": "blue", "shape": "cylinder"}],
+      "relation": "on"},
+     "signal": "verify",
+    "distractors": 0
+  },
+  {
+    "lesson-type": "spatial-word",
+    "content": "green cylinder on blue cylinder",
+    "description": {
+      "objects": [{"size": "small", "color": "green", "shape": "cylinder"},  {"size": "large", "color": "blue", "shape": "cylinder"}],
+      "relation": "right-of"},
+     "signal": "verify",
+    "distractors": 0
+  }
+]

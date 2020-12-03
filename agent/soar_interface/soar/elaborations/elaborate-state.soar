@@ -65,7 +65,7 @@ sp {topstate*elaborate*translation*attr
                   ^_params <p>)
 -->
     (<p>    ^translate <t>)
-    (<t>    ^rcc8 po dc ec
+    (<t>    ^rcc8 po dc ec nttp nttpi
             ^cardir s n e w se nw ne sw
             ^depth a o b)
     }

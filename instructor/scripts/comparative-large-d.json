@@ -44,6 +44,16 @@
       "relation": "larger-than"},
     "signal": "inform"
   },
+    {
+    "comment": "preload visual concepts used in this example",
+    "lesson-type": "spatial-word",
+    "content": "green cylinder larger than purple cone",
+    "description": {
+      "objects": [{"color": "green", "shape": "cylinder", "size": "large"},  {"color": "purple", "shape": "cone", "size": "medium"}],
+      "relation": "larger-than"},
+    "signal": "inform"
+  },
+
   {
     "comment": "preload visual concepts used in this example",
     "lesson-type": "spatial-word",
