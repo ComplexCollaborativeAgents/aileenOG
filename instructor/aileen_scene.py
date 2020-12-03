@@ -146,6 +146,8 @@ class AileenScene:
                     settings.OBJECT_POSITION_MIN_Z,
                     settings.OBJECT_POSITION_MAX_X,
                     settings.OBJECT_POSITION_MAX_Z)
+
+        logging
         first_reference_object = scene_objects[first_reference_object_name]
         second_reference_object = scene_objects[second_reference_object_name]
         target_object = scene_objects[target_object_name]
@@ -180,6 +182,10 @@ class AileenScene:
             logging.debug("[aileen_scene] :: added reference objects {} and {} to QSRLib scene".format(first_reference_object_name, second_reference_object_name))
 
             position = AileenScene.randomizer.get_random_position_on_table()
+            # position = AileenScene.place_object_in_configuration_with(target_object_name=target_object_name,
+            #                                                           reference_object_name=second_reference_object_name,
+            #                                                           scene_objects=scene_objects,
+            #                                                           configuration_definition=configuration_definition)
             qsr_target_object = Object_State(name=str(target_object_name), timestamp=0,
                                              x=position[0],
                                              y=position[2],
@@ -187,7 +193,7 @@ class AileenScene:
                                              xsize=target_object._width_x,
                                              ysize=target_object._width_z,
                                              zsize=target_object._height_y)
-
+            logging.error('[aileen_scene] :: Entering object placement three objs')
             try:
                 found_target_object_position = AileenScene.randomizer.sample_position_from_region(
                     compute_region_for_relations(world, configuration_definition, qsr_target_object, table))

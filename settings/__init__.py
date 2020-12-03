@@ -83,6 +83,7 @@ QUANTISATION_FACTOR = .001
 #OBJECT_STANDARD_WIDTH_X = 0.1
 #OBJECT_STANDARD_WIDTH_Z = 0.1
 
+# SPATIAL_CONFIGURATION_FILE_NAME = 'spatial_configuration.json'
 SPATIAL_CONFIGURATION_FILE_NAME = 'spatial_configuration.json'
 SPATIAL_DEF_OBJECTS = 'objects'
 SPATIAL_DEF_DEFINITION = 'definition'
@@ -101,7 +102,14 @@ ACTION_LESSON_STATE_END = 'end'
 ACTION_LESSON_STATE_COMPLETE = 'complete'
 ACTION_LESSON_STATE_BAD = 'bad'
 
+COMPOSITE_CONFIGURATION_FILE_NAME = 'composite_objects_configuration.json'
+COMPOSITE_DEF_OBJECTS = 'objects'
+COMPOSITE_DEF_DEFINITION = 'definition'
+COMPOSITE_DEF_LANGUAGE_TEMPLATE = 'language'
+
 ## Agent
+
+AGENT_PERCEPT_SYMBOLS_ATTR = 'color shape'
 AGENT_PARAM_RUNTIME_FILE = path.join(ROOT_PATH, 'agent', 'soar_interface', 'soar', '_agent_params_runtime.soar')
 
 AGENT_LANGUAGE_LEARNING = True

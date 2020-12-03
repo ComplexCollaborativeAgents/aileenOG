@@ -1,8 +1,8 @@
 [
   {
-    "lesson-type": "composite-action",
+    "lesson-type": "composite-word",
     "content": "wall",
-    "description": {"composite": "wall"},
+    "description": {"objects":[{"shape":"box", "size":"medium"},{"shape":"box", "size":"medium"},{"shape":"box", "size":"medium"}], "composite": "wall"},
     "signal": "inform",
     "distractors": 0
   }
