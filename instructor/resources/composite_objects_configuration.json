@@ -1,0 +1,9 @@
+{
+    "wall": {
+              "objects":["<obj1>", "<obj2>", "<obj3>"],
+    "definition": [
+      [["po", "<obj1>", "<obj2>"], ["w", "<obj1>", "<obj2>"]],
+      [["po", "<obj2>", "<obj3>"], ["w", "<obj2>", "<obj3>"]]
+    ],
+    "language": "wall"}
+}
