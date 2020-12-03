@@ -85,7 +85,8 @@ class AileenScene:
         highest = top_pos + 0.2
         if position_y < top_pos:
             return top_pos
-        if position_y > highest:
+        if position_y > highest:# print('dz {}'.format(dz))
+        # print('two object widths sum {}'.format(data1.zsize/2 + data2.zsize/2))
             return highest
         return position_y
 
