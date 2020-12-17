@@ -6,7 +6,7 @@
 ;;;;   Created: June 16, 2020 09:55:54
 ;;;;   Purpose: 
 ;;;; ----------------------------------------------------------------------------
-;;;;  Modified: Monday, October 26, 2020 at 13:05:31 by klenk
+;;;;  Modified: Tuesday, November 17, 2020 at 14:24:14 by klenk
 ;;;; ----------------------------------------------------------------------------
 
 (in-package :aileen)
@@ -55,6 +55,7 @@
   (test-primary)
   (test-above)
   (test-next-to)
+  (test-wall)
 ;  (when clean? (restore-init))
   )
 
@@ -76,8 +77,12 @@
                "create_reasoning_predicate"
                (pairlis '("predicate")
                         '("rNextTo"))))
+    (setq res (call-test-server
+               "create_reasoning_predicate"
+               (pairlis '("predicate" "arity")
+                        '("rWall" 3))))
     (assert (equal (cdr (assoc :GPOOL res))
-		   "rNextToMt"))   
+		   "rWallMt"))   
     ))
 
 
@@ -262,6 +267,188 @@
  
     
     ))
+
+(defun invert-dir (dir)
+  (cdr (assoc dir (pairlis '("w" "nw" "n" "ne")
+			   '("e" "se" "s" "sw")) :test #'string=)))
+
+(defun test-wall()
+  (test-wall-basic))
+
+(defun create-wall-case (&key
+			   (shapes '("CVBox" "CVSphere" "CVCylinder" "CVCone"))
+			   (colors '("CVGreen" "CVBlue" "CVRed" "CVPurple" "CVYellow"))
+			   (dirs '("w" "nw" "n" "ne"))
+			   (include-redundant-rel? t)
+			   (state (make-random-state t 100))
+			   )
+  (let ((objs (list (symbol-name (gensym "Obj"))
+		    (symbol-name (gensym "Obj"))
+		    (symbol-name (gensym "Obj"))))
+	(dir (nth (random (length dirs) state) dirs))
+	(facts nil))
+    (dolist (obj objs)
+      (let ((shape (nth (random (length shapes) state) shapes))
+	    (colors (nth (random (length colors) state) colors)))
+	(push (list "isa" obj shape) facts)
+	(push (list "isa" obj colors) facts)))
+    (mapl #'(lambda (objs1)
+	      (when (cdr objs1)
+		(push (list dir (car objs1) (cadr objs1)) facts)
+		(when include-redundant-rel? (push (list (invert-dir dir)  (cadr objs1) (car objs1)) facts))
+		(push (list "ec" (car objs1) (cadr objs1)) facts)
+		(when include-redundant-rel? (push (list "ec" (cadr objs1) (car objs1)) facts))
+		))
+	  objs)
+    (push (list "dc" (car objs) (car (last objs))) facts)
+    (when include-redundant-rel?
+      (push (list "dc" (car (last objs)) (car objs)) facts))
+    (push (cons "rWall" objs) facts) ;; should be a set 
+    facts))
+
+(defun create-non-wall-case (&key
+			       (shapes '("CVBox" "CVSphere" "CVCylinder" "CVCone"))
+			       (colors '("CVGreen" "CVBlue" "CVRed" "CVPurple" "CVYellow"))
+			       (dirs '("w" "nw" "n" "ne"))
+			       (include-redundant-rel? t)
+			       (state (make-random-state t 100))
+			       )
+  (let ((objs (list (symbol-name (gensym "Obj"))
+		    (symbol-name (gensym "Obj"))
+		    (symbol-name (gensym "Obj"))))
+	(dir (nth (random (length dirs) state) dirs))
+	(facts nil))
+    (dolist (obj objs)
+      (let ((shape (nth (random (length shapes) state) shapes))
+	    (colors (nth (random (length colors) state) colors)))
+	(push (list "isa" obj shape) facts)
+	(push (list "isa" obj colors) facts)))
+    (mapl #'(lambda (objs1)
+	      (when (cdr objs1)
+		(push (list dir (car objs1) (cadr objs1)) facts)
+		(when include-redundant-rel? (push (list (invert-dir dir)  (cadr objs1) (car objs1)) facts))
+		(push (list "ec" (car objs1) (cadr objs1)) facts)
+		(when include-redundant-rel? (push (list "ec" (cadr objs1) (car objs1)) facts))
+		))
+	  objs)
+    (push (list "dc" (car objs) (car (last objs))) facts)
+    (when include-redundant-rel?
+      (push (list "dc" (car (last objs)) (car objs)) facts))
+    (push (cons "rWall" objs) facts) ;; should be a set 
+    facts))
+
+
+;; require different directions, but keep all of the positional relationships the same
+;; We may have to check the query threshold to make sure it is high enough
+(defun create-non-wall-case (&key
+			       (shapes '("CVBox" "CVSphere" "CVCylinder" "CVCone"))
+			       (colors '("CVGreen" "CVBlue" "CVRed" "CVPurple" "CVYellow"))
+			       (dirs '("w" "nw" "n" "ne"))
+			       (include-redundant-rel? t)
+			       (state (make-random-state t 100))
+			       )
+  (let* ((objs (list (symbol-name (gensym "Obj"))
+		     (symbol-name (gensym "Obj"))
+		     (symbol-name (gensym "Obj"))))
+	 (dir1 (nth (random (length dirs) state) dirs))
+	 (dir2 (nth (random (length dirs) state) (remove dir1 dirs :test #'string=)))
+	 (facts nil))
+    (dolist (obj objs)
+      (let ((shape (nth (random (length shapes) state) shapes))
+	    (colors (nth (random (length colors) state) colors)))
+	(push (list "isa" obj shape) facts)
+	(push (list "isa" obj colors) facts)))
+    (push (list dir1 (car objs) (cadr objs)) facts)
+    (when include-redundant-rel? (push (list (invert-dir dir1)  (cadr objs) (car objs)) facts))
+    (push (list dir2 (cadr objs) (caddr objs)) facts)
+    (when include-redundant-rel? (push (list (invert-dir dir2)  (cadr objs) (car objs)) facts))		
+    (mapl #'(lambda (objs1)
+	      (when (cdr objs1)
+		(push (list "ec" (car objs1) (cadr objs1)) facts)
+		(when include-redundant-rel? (push (list "ec" (cadr objs1) (car objs1)) facts))
+		))
+	  objs)
+    (push (list "dc" (car objs) (car (last objs))) facts)
+    (when include-redundant-rel?
+      (push (list "dc" (car (last objs)) (car objs)) facts))
+    (push (cons "rWall" objs) facts) ;; Adding the query here
+    facts))
+
+
+(defun parameter-search (&key (thresholds (reverse '(0.6 0.65 0.7 0.75)))
+			   (redundants '(t nil)))
+  (let (
+	(state (make-random-state t 100))
+	)
+    (with-open-file (output (format nil "parameters_~A.csv" (get-universal-time))
+			    :direction :output
+			    :if-does-not-exist :create)
+      (format output "threshold,redundant,tp,fn,tn,fp,generalizations,exemplars~%")
+      (finish-output output)
+      (dolist (redundant redundants)
+	(dolist (threshold thresholds)
+	  (let ((*assimilation-threshold* threshold))
+	    (dotimes (i 10)
+	      (test-phase2-reasoning-symbols)
+	      (test-wall-basic state redundant)
+	      (dotimes (i 10)
+		(multiple-value-bind (tp fn tn fp generalizations exemplars)
+		    (evaluate-wall-generalizations redundant state) 
+		  (format output "~A,~A,~A,~A,~A,~A,~A,~A~%" threshold redundant tp fn tn fp generalizations exemplars)
+		  (finish-output output))))))))))
+
+(defun test-wall-basic (&optional
+			  (state (make-random-state 100))
+			  (include-redundant? t))
+  (let ((res)
+	(start-time (get-universal-time)))
+    (dotimes (i 20)
+      (setq res (call-test-server
+		 "store"
+		 (pairlis '("facts" "context" "concept")
+			  (list (create-wall-case :state state :include-redundant-rel? include-redundant?)
+				(symbol-name (gensym "Case"))
+				"rWall")
+			  ))))
+    (format t "~% TEST-WALL Took ~A seconds ~A generalizations" (- (get-universal-time) start-time)
+	    (cdr (assoc :NUM-GENERALIZATIONS res))) 
+					;    (assert (= (cdr (assoc :NUM-EXAMPLES res)) 1))
+    ))
+
+
+
+(defun evaluate-wall-generalizations (&optional include-redundant-rel? state (test-set-size 10))
+  (let ((pos-examples (loop repeat test-set-size collect (create-wall-case :state state :include-redundant-rel? include-redundant-rel?)))
+	(neg-examples (loop repeat test-set-size collect (create-non-wall-case :state state :include-redundant-rel? include-redundant-rel?)))
+	(tp 0)
+	(fn 0)
+	(tn 0)
+	(fp 0))
+    (format t "~% Starting Evaluation of Generalizations~%  POSITIVES EXAMPLES")
+    (dolist (exp pos-examples)
+      (let ((res (call-test-server
+		  "query"
+		  (pairlis '("facts" "pattern")
+			   (list (remove "rWall" exp :key #'car :test #'string=)
+				 (find "rWall" exp :key #'car :test #'string=))))))
+	(if (= 1 (length (cdr (assoc :matches res))))
+	    (incf tp)
+	    (incf fn))))
+    (format t "~%   NEGATIVE EXAMPLES")
+    (dolist (exp neg-examples)
+      (let ((res (call-test-server
+		  "query"
+		  (pairlis '("facts" "pattern")
+			   (list (remove "rWall" exp :key #'car :test #'string=)
+				 (find "rWall" exp :key #'car :test #'string=))))))
+	(if (= 0 (length (cdr (assoc :matches res))))
+	    (incf tn)
+	    (incf fp))))
+    (values tp fn tn fp
+	    (length (fire::ask-it 'd::(gpoolGeneralization rWallMt ?x)))
+	    (length (fire::ask-it 'd::(gpoolExample rWallMt ?x))))))
+    
+    
 
 
 (defun test-next-to ()

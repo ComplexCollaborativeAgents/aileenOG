@@ -6,7 +6,7 @@
 ;;;;   Created: November  6, 2019 14:54:11
 ;;;;   Purpose: 
 ;;;; ----------------------------------------------------------------------------
-;;;;  Modified: Monday, October 26, 2020 at 12:56:50 by klenk
+;;;;  Modified: Tuesday, November 17, 2020 at 11:47:16 by klenk
 ;;;; ----------------------------------------------------------------------------
 
 (in-package :aileen)
@@ -95,11 +95,12 @@
 			      :context 'd::BaseKB :response 'd::(?score ?case ?mapping))))
       (multiple-value-bind (rbrowse full url) (rbrowse::browse-sme sme::*sme*)
 	(declare (ignore url rbrowse))
-	(format t "~% Example being stored rbrowse-sme: ~A base:~A score: ~A url: ~A "
+	(format t "~% Example being stored rbrowse-sme: ~A base:~A score: ~A url: ~A assimilation-threshold: ~A "
 		sme::*sme*
 		context
 		score
-		full))
+		full
+		*assimilation-threshold*))
       (cond ((and score (> (caar score) *assimilation-threshold*))
 	     ;;;Add example to generalization, but redo the mapping to ensure match below threshold support
 	     (fire:tell-it `(d::sageGeneralize ,context ,(second (car score)) ,gpool) :context 'd::BaseKB))
