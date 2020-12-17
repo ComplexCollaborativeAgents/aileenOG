@@ -281,6 +281,8 @@ class InputWriter(object):
             object_id.CreateStringWME('shape', w_object['shape'])
             object_id.CreateStringWME('id_string', w_object['id_string'])
             object_id.CreateStringWME('id_uuid', w_object['id_name'])
+            if 'cluster_id' in w_object:
+                object_id.CreateStringWME('percept', 'CVc{}'.format(w_object['cluster_id']))
 
     def request_server_for_objects_info(self):
         try:

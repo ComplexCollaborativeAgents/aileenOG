@@ -81,7 +81,7 @@ class VisualWordLesson:
 
     def administer_lesson(self, world, agent):
         lesson = self.generate_lesson()
-        content = self._language
+        content = lesson['interaction']['content']
         scene_acknowledgement = world.set_scene(
              {'configuration': lesson['scene'], 'label': lesson['interaction']['content']})
         agent_response = agent.process_interaction(lesson['interaction'])

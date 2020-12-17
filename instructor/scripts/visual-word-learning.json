@@ -1,10 +1,5 @@
 [
   {
-    "signal": "inform",
-    "lesson-type": "visual-word",
-    "description": {"color": "green", "shape": "cone"}
-  },
-  {
     "lesson-type": "visual-word",
     "content": "box",
     "description": {"color": "red",

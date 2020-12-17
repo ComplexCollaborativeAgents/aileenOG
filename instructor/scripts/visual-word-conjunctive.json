@@ -1,0 +1,20 @@
+[
+  {
+    "signal": "inform",
+    "lesson-type": "visual-word",
+    "content": "kone",
+    "description": {"color": "green", "shape": "cone"}
+  },
+  {
+    "signal": "inform",
+    "lesson-type": "visual-word",
+    "content": "kone",
+    "description": {"color": "blue", "shape": "cone"}
+  },
+  {
+    "signal": "verify",
+    "lesson-type": "visual-word",
+    "content": "kone",
+    "description": {"color": "green", "shape": "cone"}
+  }
+]

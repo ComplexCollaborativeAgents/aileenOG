@@ -6,10 +6,17 @@
 ;;;;   Created: April 26, 2020 06:11:24
 ;;;;   Purpose: 
 ;;;; ----------------------------------------------------------------------------
-;;;;  Modified: Monday, April 27, 2020 at 10:23:43 by klenk
+;;;;  Modified: Monday, October 26, 2020 at 12:23:39 by klenk
 ;;;; ----------------------------------------------------------------------------
 
+;;;
+;;; Two main functions
+;;; 1) replay-concept-memory-interactions takes a log and just replays all of the interactions in order
+;;; 2) replay-experiment identifies the evaluation set and then measures performance after each storage
+
+
 (in-package :aileen)
+
 
 (defun replay-concept-memory-interactions (filename)
   (dolist (interaction (extract-concept-memory-interactions filename))
@@ -21,6 +28,71 @@
     (do ((result nil (if (api-call next) (cons (api-call next) result) result))
 	 (next (read-line f nil 'eof) (read-line f nil 'eof)))
 	((equal next 'eof) (reverse result)))))
+
+
+	
+; return positive and negative query tests
+; assumes equal number of positive and negative tests
+; would be better as a loop
+(defun identify-evaluation-sets (interactions &optional (test-set-size 10))
+  (assert (evenp test-set-size)) 
+  (let* ((start (+ 2 (position #'store-helper interactions :key #'car)))
+	 (end (- (position #'store-helper interactions :key #'car :start start) 1)))
+    (cond ((= (-  end start) test-set-size)
+	   (values
+	    (subseq interactions start (+ start (/ test-set-size 2)))
+	    (subseq interactions (+ start (/ test-set-size 2)) end)))
+	  (t
+	   (identify-evaluation-sets (subseq interactions end)  test-set-size)))))
+	   
+
+(defun identify-stores (interactions)
+  (remove-if-not #'(lambda (int) (eql (car int) #'store-helper)) interactions))
+
+(defun identify-new-symbols (interactions)
+  (remove-if-not #'(lambda (int) (find (car int)
+				       (list #'create-reasoning-predicate-helper
+					     #'create-reasoning-action-helper
+					     #'create-reasoning-symbol-helper)))
+			   interactions))
+
+(defun replay-experiment (ints &optional (no-eval? nil)(break-after-store? nil))
+  (multiple-value-bind (poss negs)
+      (unless no-eval? (identify-evaluation-sets ints))
+    (replay-experiment-1 poss
+			 negs
+			 (identify-stores ints)
+			 (identify-new-symbols ints)
+			 no-eval?
+			 break-after-store?)))
+
+(defun replay-experiment-1 (poss negs stores symbols &optional (no-eval? nil)(break-after-store? nil))
+  (dolist (symbol symbols)
+    (funcall (car symbol) (second symbol)))
+  (let (ret)
+    (dolist (store stores (reverse ret))
+      (funcall (car store) (second store))
+      (unless no-eval?
+	(push (measure-performance poss negs) ret))
+      (when break-after-store?
+	(break)))))
+
+(defun measure-performance (poss negs)
+  (let ((pos_res 0)
+	(neg_res 0))
+    (dolist (pos poss)
+      (print pos)
+      (when (query-matches pos) 
+	(incf pos_res)))
+    (dolist (neg negs)
+      (unless (query-matches neg)
+	(incf neg_res)))
+    (cons pos_res neg_res)))
+
+(defun query-matches (query)
+  (let ((results (cl-json:decode-json-from-string
+		  (funcall (car query) (second query)))))
+    (cdr (assoc :MATCHES results))))
 
 
 ;"Creating Reasoning Action  r_move1" => but in the future this will be a json string
@@ -38,7 +110,7 @@
 	((starts-with-p str "Creating Reasoning Symbol2")
 	 (list #'create-reasoning-symbol-helper (json-in-str str)))
 	((starts-with-p str "Creating Reasoning Predicate")
-	 str)
+	 (list #'create-reasoning-predicate-helper (json-in-str str)))
 	(t nil)))
 	 
 (defun starts-with-p (str1 str2)
