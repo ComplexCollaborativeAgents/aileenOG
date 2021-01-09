@@ -4,43 +4,17 @@
     "lesson-type": "action-word",
     "content": "move red box right of blue cylinder",
     "description": {
-      "objects": [
-        "<obj1>",
-        "<obj2>"
-      ],
-      "relations": [
-        "right-of"
-      ],
+      "objects": ["<obj1>", "<obj2>"],
+      "relations": ["right-of"],
       "action": "move-right-of",
       "initial_configuration": [],
       "trace-actions": [
-        {
-          "name": "pick-up",
-          "argument": "<obj1>"
-        },
-        {
-          "name": "place",
-          "argument1": "<obj1>",
-          "argument2": "<obj2>",
-          "relation": "right-of"
-        }
+        {"name": "pick-up", "argument": "<obj1>"},
+        {"name": "place", "argument1": "<obj1>", "argument2": "<obj2>", "relation": "right-of"}
       ],
-      "language": [
-        "move",
-        "<obj1>",
-        "right of",
-        "<obj2>"
-      ],
-      "<obj1>": {
-        "color": "red",
-        "shape": "box",
-        "size": "medium"
-      },
-      "<obj2>": {
-        "color": "blue",
-        "shape": "cylinder",
-        "size": "medium"
-      }
+      "language": ["move", "<obj1>", "right of", "<obj2>"],
+      "<obj1>": {"color": "red", "shape": "box", "size": "medium"},
+      "<obj2>": {"color": "blue", "shape": "cylinder", "size": "medium"}
     },
     "distractors": 0,
     "signal": "inform"
@@ -54,7 +28,7 @@
       "relations": ["right-of"],
       "action": "move-right-of",
       "initial_configuration": [],
-          "trace-actions": [
+      "trace-actions": [
               {"name": "pick-up", "argument": "<obj1>"},
               {"name": "place", "argument1": "<obj1>", "argument2": "<obj2>", "relation": "right-of"}],
       "<obj1>": {"color": "green", "shape": "cone", "size":  "medium"},
@@ -78,25 +52,7 @@
       "<obj1>": {"color": "yellow", "shape": "cylinder", "size": "medium"},
       "<obj2>": {"color": "red", "shape": "cylinder", "size": "medium"}
     },
-    "signal": "verify",
-    "distractors": 0
-  },
-   {
-    "comment": "preload visual concepts used in this example",
-    "lesson-type": "action-word",
-    "content": "move yellow cylinder right of red cylinder",
-    "description": {
-      "objects": ["<obj1>", "<obj2>"],
-      "relations": ["left-of"],
-      "action": "move-left-of",
-      "initial_configuration": [],
-          "trace-actions": [
-              {"name": "pick-up", "argument": "<obj1>"},
-              {"name": "place", "argument1": "<obj1>", "argument2": "<obj2>", "relation": "left-of"}],
-      "<obj1>": {"color": "yellow", "shape": "cylinder", "size": "medium"},
-      "<obj2>": {"color": "red", "shape": "cylinder", "size": "medium"}
-    },
-    "signal": "verify",
+    "signal": "inform",
     "distractors": 0
   },
 
