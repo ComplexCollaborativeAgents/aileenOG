@@ -14,6 +14,7 @@
 
 ; (defparameter *assimilation-threshold* .6)
 (defparameter *probe-mt* 'd::query-facts)
+(defparameter *min-quant-count* 3)
 (defparameter *test-preds* 'd::(distanceBetween distance sizeOf size))
 
 
@@ -156,6 +157,135 @@
                   ,gpool)))
 
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; New Quantity Reasoning
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+(defun internal-fact? (fact internal-preds)
+  (member (car (decontextualize-temporal-pred fact)) internal-preds))
+
+
+;;; maybe optimize this? it gets called a lot, so maybe don't ask
+(defun continuous->internal-fact (fact)
+  (cond ((eql (car fact) 'd::holdsIn)
+          (list 'd::holdsIn (second fact) (continuous->internal-fact (third fact))))
+        (t (let ((rln (car (fire:ask-it `(d::encodingOf ,(car fact) ?what) :response '?what))))
+          (list rln (remove-if 'numberp (cdr fact)))))))
+
+
+(defun remove-quantity-facts (facts internal-preds)
+  (remove-if (lambda (fact)
+    (let ((decon (decontextualize-temporal-pred fact)))
+      (or (member (car decon) internal-preds)
+          (fact-has-quantity? decon)))) 
+    facts))
+
+
+;;; We will have just performed a mapping, as facts are a set of candidate inferences
+;;; from that mapping
+(defun sample-internal-preds-new (facts sme)
+  (let* ((internal-preds (fire:ask-it '(d::isa ?pred d::AileenInternalPredicate) :response '?pred))
+         (filtered-facts (remove-quantity-facts facts internal-preds))
+         (sampled-facts (sample-quantity-mhs sme internal-preds)))
+    (append filtered-facts sampled-facts)))
+
+
+(defmethod reconstruct-exp ((exp sme::probablistic-expression))
+  (cons (sme::name (sme::predicate exp))
+        (mapcar 'reconstruct-exp (mapcar 'cdr (sme::arguments exp)))))
+
+
+(defmethod reconstruct-exp ((exp sme::entity))
+  (cond ((numberp (sme::user-form exp))
+          (format t "number~%")
+          (sme::user-form exp))
+        (t (sme::user-form exp))
+    ))
+
+
+
+(defun sample-quantity-mhs (sme internal-preds)
+
+  (let ((sampled-facts nil)
+        (cached-mhs (make-hash-table :test 'equal))
+        (mapping (car (sme::mappings sme))))
+
+    ;;; we need to get mhs for continuous expressions from internal facts,
+    ;;; so go through and cache this mapping for easy retrieval
+    (dolist (mh (sme::top-level-mhs mapping))
+      (let ((base-form (sme::user-form (sme::base-item mh))))
+        (when (fact-has-quantity? base-form)
+          (let ((internal-rep (continuous->internal-fact base-form)))
+            (setf (gethash internal-rep cached-mhs) mh)))))
+
+    (dolist (mh (sme::top-level-mhs mapping) sampled-facts)
+      (let ((base-form (sme::user-form (sme::base-item mh))))
+        (when (internal-fact? base-form internal-preds)
+          
+          (let ((mapped-mh (gethash base-form cached-mhs)))
+
+            (when mapped-mh
+
+
+
+              )))))))
+
+
+;;; given a case potentially having quantity preds,
+;;; maybe assert internal encoding preds
+(defun rerep-quants (probe-context concept)
+  (let ((match (sage-select probe-context concept)))
+    (when match
+      (let ((ipreds (use-mapping-to-support-internal-continuous-preds sme::*sme*)))
+        (store-facts-in-case (append (kb::list-mt-facts probe-context) ipreds) probe-context)))))
+
+
+(defun filter-quantity-mhs (mhs)
+  (remove-duplicates
+    (remove-if-not (lambda (mh)
+                   (numberp (sme::user-form (sme::base-item mh)))) 
+    mhs) :test 'equal))
+
+
+(defun mh-history (mh)
+ (mapcar 'second (cdar (fire::ask-it `(d::gmtEntityHistory 
+        ,(sme::user-form (sme::target-item mh))
+        ,(sme::name (sme::target (sme::sme mh))) ?x)
+    :response '?x))))
+
+
+(defun quantity-mh-in-distribution? (mh)
+  (let ((quants (mh-history mh))
+        (probe (sme::user-form (sme::base-item mh))))
+    (if (< (length quants) *min-quant-count*)
+      t
+      (in-distribution-new? probe quants))))
+
+
+;;; this makes certain assumptions about facts and quantities in them
+;;; if we start dealing with facts that have multiple quantities
+;;; (and right now I don't know what that would mean), then
+;;; this should be revisited.
+(defun top-level-in-distribution-new? (top-level-mh)
+  (let ((quant-mhs (filter-quantity-mhs (sme::descendants top-level-mh))))
+    (every (lambda (mh)
+             (quantity-mh-in-distribution? mh)) 
+      quant-mhs)))
+
+
+(defun use-mapping-to-support-internal-continuous-preds (sme)
+  (let ((internal-preds nil)
+        (mapping (car (sme::mappings sme))))
+    (dolist (mh (sme::top-level-mhs mapping) internal-preds)
+      (let ((base-form (sme::user-form (sme::base-item mh))))
+        (when (fact-has-quantity? base-form)
+          (when (top-level-in-distribution-new? mh)
+            (push (make-qfact-pred base-form) internal-preds)
+            ))))))
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Quantity Reasoning
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -201,6 +331,49 @@
       quantity-facts)))
 
 
+(defun decontextualize-temporal-pred (pred)
+  (if (eql (car pred) 'd::holdsIn) (third pred) pred))
+
+
+(defun filter-internal-preds (preds)
+  (let ((internal-preds (fire:ask-it '(d::isa ?pred d::AileenInternalPredicate) :response '?pred)))
+    (remove-if-not (lambda (pred)
+                     (member (car (decontextualize-temporal-pred pred)) internal-preds))
+                   preds)))
+
+
+(defun remove-continuous-preds (preds)
+  (remove-if 'fact-has-quantity? preds))
+
+
+(defun sample-internal-preds (facts probe-mt gpool)
+  (let ((internal-preds (fire:ask-it '(d::isa ?pred d::AileenInternalPredicate) :response '?pred)))
+    (mapcan (lambda (fact)
+              (let ((decon (decontextualize-temporal-pred fact)))
+              (cond ((fact-has-quantity? decon)
+                     nil)
+                    ((member (car decon) internal-preds)
+                     (list (sample-internal-pred fact probe-mt gpool)))
+                    (t (list fact))))) 
+      facts)))
+
+
+(defun sample-internal-pred (internal-fact probe-mt gpool)
+  (let* ((decon (decontextualize-temporal-pred internal-fact))
+         (continuous-pred (car (fire:ask-it `(d::encodingOf ?fact ,(car decon)) :response '?fact)))
+         (continuous-fact (sublis (list (cons (car decon) continuous-pred)) internal-fact))
+         (quantity (sample-gpool continuous-fact probe-mt gpool)))
+
+  (if (eql (car internal-fact) 'd::holdsIn)
+    (list 'd::holdsIn (second internal-fact) (append (list continuous-pred) (list quantity) (cdr decon)))
+    (append (list continuous-pred) (list quantity) (cdr continuous-fact)))
+  ))
+
+
+(defun sample-gpool (continuous-pred probe-mt gpool)
+  (sample-series-normal (pred-quantities continuous-pred probe-mt gpool)))
+         
+
 (defun in-distribution? (qpred probe-context gpool)
   (let* ((dist-quants (pred-quantities qpred probe-context gpool))
          (probe-quant (fact-quantity qpred))
@@ -208,6 +381,12 @@
          (stddev (stddev dist-quants)))
     (debug-format "    Checking dist: probe is ~A, quants are ~A~%" probe-quant dist-quants)
     (confidence probe-quant mean stddev)))
+
+
+(defun in-distribution-new? (probe quants)
+  (let ((mean (mean quants))
+        (stddev (stddev quants)))
+   (confidence probe mean stddev)))
 
 
 ;;; a dumb version that doesn't take structure mapping into account
@@ -226,6 +405,10 @@
 (defun fact-quantity (fact)
   (or (find-if 'numberp (cdr fact))
       (find-if 'numberp (third fact))))
+
+
+(defun fact-has-quantity? (fact)
+  (find-if 'numberp (cdr (decontextualize-temporal-pred fact))))
 
 
 (defun filter-relevant-facts (qfact facts probe-context target-context)
@@ -304,15 +487,20 @@
   (fire:ask-it `(d::kbOnly (d::sageConstituent ?case ?gmt ,gpool-form)) :response '?case))
 
 
+(defun make-qpred-relation (relation)
+  (intern (format nil "qPred-~a" relation)))
+
+
 (defmethod make-qfact-pred ((qfact t))
   (cond ((eql (car qfact) 'd::holdsIn)
          (list (car qfact) (second qfact) (make-qfact-pred (third qfact))))
-        (t (let ((pred (intern (format nil "qPred-~a" (car qfact))))
+        (t (let ((pred (make-qpred-relation (car qfact)))
                  (non-quantity-arg-count (non-quantity-arg-count qfact))
                  (nq-args (remove-if 'numberp (cdr qfact))))
              ;;; should we not do this if it already exists?
-             (create-reasoning-predicate-simple pred non-quantity-arg-count)
+             (create-internal-predicate pred (car qfact) non-quantity-arg-count)
              (cons pred nq-args)))))
+
 
 ;;; take a ground predicate, return number of
 ;;; non-quantity args
@@ -383,6 +571,48 @@
     
     (and (>= point lower-bound)
          (<= point upper-bound))))
+
+
+(defun sample-series-normal (series)
+  (let ((mean (mean series))
+        (stddev (stddev series)))
+    (sample-gaussian mean stddev)))
+
+
+;-------------------------------------------------------------------------------
+(defconstant +sapa-sqrt-8-over-e+ (sqrt (/ 8.0d0 (exp 1.0d0))))
+(defconstant +sapa-4-time-exp-of-1-over-4+ (* 4.0d0 (exp 0.25d0)))
+(defconstant +sapa-4-time-exp-of-minus-1-point-35+ (* 4.0d0 (exp (- 1.35d0))))
+
+;-------------------------------------------------------------------------------
+;-------------------------------------------------------------------------------
+;;;  The functions  ranorm
+;;;                 ranorms
+;;;  generate one or more uncorrelated normally distributed deviates.
+;-------------------------------------------------------------------------------
+;-------------------------------------------------------------------------------
+(defun ranorm ()
+  "returns a random deviate from a normal distribution
+   with zero mean and unit variance"
+  (let ((u (random 1.0)))
+    (cond
+     ((= u 0.0) (ranorm))   ;bad choice!
+     (t
+      (let* ((x (/ (* (- (random 1.0) 0.5)
+                      +sapa-sqrt-8-over-e+) u))
+             (xs (* x x)))
+        (cond
+         ((<= xs (- 5.0 (* u +sapa-4-time-exp-of-1-over-4+)))
+          x)   ;done
+         ((>= xs (+ 1.4 (/ +sapa-4-time-exp-of-minus-1-point-35+ u)))
+          (ranorm))   ;do it again
+         ((<= xs (- (* 4.0 (log u))))
+          x)
+         (t
+          (ranorm))))))))
+
+(defun sample-gaussian (mean stddev)
+  (+ mean (* stddev (ranorm))))
 
 
 ;;; one way to do this would be a two-step process.
