@@ -6,7 +6,6 @@ import settings
 from aileen_object import AileenObject
 from copy import deepcopy
 
-
 from aileen_scene import AileenScene
 from language_generator import LanguageGenerator
 from log_config import logging
@@ -22,8 +21,6 @@ class SpatialWordLesson:
         configuration = None
 
         self._is_positive = is_positive
-
-
         self._spatial_configuration_def = None
         self._language_def = None
 
@@ -35,25 +32,35 @@ class SpatialWordLesson:
             self._spatial_configuration = SpatialWordLesson.randomizer.random_spatial_configuration(
                 self._spatial_configurations_set.keys())
 
-
         if is_positive:
             self._spatial_configuration_def = self._spatial_configurations_set[self._spatial_configuration]
             self._language_def = self._spatial_configuration_def[settings.SPATIAL_DEF_LANGUAGE_TEMPLATE]
         else:
-            other_spatial_configs = deepcopy(self._spatial_configurations_set.keys())
-            other_spatial_configs.remove(self._spatial_configuration)
-            self._spatial_configuration_negative = SpatialWordLesson.randomizer.random_spatial_configuration(
-                other_spatial_configs)
+
+            # self._spatial_configuration
+            concept_def = self._spatial_configurations_set[self._spatial_configuration]
+
+            if "negation" in concept_def.keys():
+                self._spatial_configuration_negative = concept_def["negation"]
+            else:
+                other_spatial_configs = deepcopy(self._spatial_configurations_set.keys())
+                other_spatial_configs.remove(self._spatial_configuration)
+
+                # logging.debug("[aileen_scene] :: other configs {}".format(self._spatial_configurations_set))
+
+                self._spatial_configuration_negative = SpatialWordLesson.randomizer.random_spatial_configuration(
+                    other_spatial_configs)
+
             self._spatial_configuration_def = self._spatial_configurations_set[self._spatial_configuration_negative]
             self._language_def = self._spatial_configurations_set[self._spatial_configuration][settings.SPATIAL_DEF_LANGUAGE_TEMPLATE]
+
+        # logging.debug("[aileen_scene] :: neg config gen {}".format(self._spatial_configuration_def))
+        # logging.debug("[aileen_scene] :: neg config gen {}".format(self._spatial_configuration_negative))
 
         self._scene_objects = OrderedDict()
         self._scene = AileenScene()
         self._language = None
-
         self._signal = signal
-
-
         self._distractors = distractors
         self._content = content
 
@@ -81,7 +88,7 @@ class SpatialWordLesson:
         return lesson
 
     def generate_setup(self, object_descriptions):
-        logging.debug("[action_word_lesson] :: generate the setup for the new lesson")
+        logging.debug("[spatial_word_lesson] :: generate the setup for the new lesson")
         objects = self._spatial_configuration_def[settings.SPATIAL_DEF_OBJECTS]
         if object_descriptions:
             for o, desc in zip(objects, object_descriptions):
@@ -199,5 +206,13 @@ class SpatialWordLesson:
 
 
 if __name__ == '__main__':
-    lesson1 = SpatialWordLesson().generate_lesson()
-    print(lesson1)
+    lesson1 = SpatialWordLesson(
+        is_positive=False,
+        signal='verify',
+        description={"objects": [{"color": "blue", "shape": "cone", "size": "medium"},
+                                 {"color": "red", "shape": "cylinder", "size": "small"}],
+                    "relation": "near"},
+        distractors=0,
+        content=None
+    ).generate_lesson()
+    print(json.dumps(lesson1, indent=4, sort_keys=True))
