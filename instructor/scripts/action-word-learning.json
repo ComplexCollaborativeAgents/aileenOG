@@ -71,7 +71,7 @@
       "<obj1>": {"color": "yellow", "shape": "cylinder", "size": "medium"},
       "<obj2>": {"color": "red", "shape": "cylinder", "size": "medium"}
     },
-    "signal": "react",
+    "signal": "verify",
     "distractors": 0
   }
 ]
