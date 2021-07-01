@@ -66,7 +66,7 @@
     "content": "move yellow cylinder right of red cylinder",
     "description": {
       "objects": ["<obj1>", "<obj2>"],
-      "relations": ["left-of"],
+      "relations": ["right-of"],
       "action": "move-left-of",
       "initial_configuration": [],
           "trace-actions": [
