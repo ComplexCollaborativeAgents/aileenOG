@@ -9,7 +9,7 @@ class ActionExecutor:
 
     def process_action_command(self, action):
         logging.info("[action_executor] :: processing action {}".format(action['name']))
-        self._requestor = action['requestor']
+        self._requestor = action['requester']
         if action['name'] == 'pick-up' and 'id' in action:
             return self.pick_up_object(action['id'])
         else:
@@ -72,10 +72,11 @@ class ActionExecutor:
         translation = node.getField('translation')
         pos = translation.getSFVec3f()
         if settings.SIMULATE_ACTIONS:
-            if self._requestor == 'agent':
-                self._supervisor.pick_object(pos)
-            else:
-                self._supervisor.pick_object_instructor(node, pos)
+            self._supervisor.pick_object(pos)
+            # if self._requestor == 'agent':
+            #     self._supervisor.pick_object(pos)
+            # else:
+            #     self._supervisor.pick_object_instructor(node, pos)
         else:
             translation.setSFVec3f(settings.ROBOT_PLATE_LOCATION)
         logging.debug("[action_executor] :: object {} moved to {}".format(object_id, node.getPosition()))
@@ -92,19 +93,21 @@ class ActionExecutor:
             if location == 'proxy':
                 translation = node.getField('translation')
                 if settings.SIMULATE_ACTIONS:
-                    if self._requestor == 'agent':
-                        self._supervisor.place_object(settings.TEST_LOCATION)
-                    else:
-                        self._supervisor.place_object_instructor(settings.TEST_LOCATION)
+                    self._supervisor.place_object(settings.TEST_LOCATION)
+                    # if self._requestor == 'agent':
+                    #     self._supervisor.place_object(settings.TEST_LOCATION)
+                    # else:
+                    #     self._supervisor.place_object_instructor(settings.TEST_LOCATION)
                 else:
                     translation.setSFVec3f(settings.TEST_LOCATION)
             else:
                 translation = node.getField('translation')
                 if settings.SIMULATE_ACTIONS:
-                    if self._requestor == 'agent':
-                        self._supervisor.place_object(location)
-                    else:
-                        self._supervisor.place_object_instructor(node, location)
+                    self._supervisor.place_object(location)
+                    # if self._requestor == 'agent':
+                    #     self._supervisor.place_object(location)
+                    # else:
+                    #     self._supervisor.place_object_instructor(node, location)
                 else:
                     translation.setSFVec3f(location)
             self._supervisor.set_held_node(None)
