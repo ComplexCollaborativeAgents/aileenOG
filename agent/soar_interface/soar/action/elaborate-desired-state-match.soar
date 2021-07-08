@@ -22,9 +22,10 @@ sp {action*elaborate*goal*not-match*holdsInHand
 
 sp {action*elaborate*goal*not-match*relation
     (state <s>    ^name action
-                  ^desired <d>)
+                  ^desired <d>
+                  ^topstate._params.spatial-predicates.type <spred>)
     (<d>    ^relations.relation <rel1>)
-    (<rel1> ^{<< cardir rcc8 >> <type>} <symb>
+    (<rel1> ^{<< cardir rcc8 depth >> <type>} <symb>
             ^root-object <robj>
             ^target-object <tobj>)
   -{(<s>    ^relations.relation <rel2>)
@@ -40,7 +41,7 @@ sp {action*elaborate*goal*match*relation
                   ^relations.relation <rel2>
                   ^desired <d>)
     (<d>    ^relations.relation <rel1>)
-    (<rel1> ^{<< cardir rcc8 >> <type>} <symb>
+    (<rel1> ^{<< cardir rcc8 depth >> <type>} <symb>
             ^root-object <robj>
             ^target-object <tobj>)
     (<rel2> ^<type> <symb>

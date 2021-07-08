@@ -14,10 +14,11 @@ sp {compose-with-concept-learner*apply*query-concept-learner*relations
                   ^operator.name collect-relation-facts
                   ^world.relations.relation <rel>
                   ^facts <facts>
-                  ^grounding <g>)
+                  ^grounding <g>
+                  ^topstate._params.spatial-predicates.type <spred>)
     (<g>    ^entity.object <robj>
             ^entity.object <tobj>)
-    (<rel>    ^<< rcc8 cardir >> <sym>
+    (<rel>    ^<spred> <sym>
               ^root-object <robj>
               ^target-object <tobj>)
     (<robj>    ^id_string <fid>)

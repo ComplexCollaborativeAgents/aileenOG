@@ -50,10 +50,11 @@ sp {translate-to-facts*write-facts*trace*holdsInHand
 sp {translate-to-facts*write-facts*trace*world*relations
     (state <s>    ^name translate-to-facts
                   ^trace.world <sr>
-                  ^facts <facts>)
+                  ^facts <facts>
+                  ^topstate._params.spatial-predicates.type <spred>)
     (<sr>    ^memory-id <lab>)
     (<sr>    ^relations.relation <rel>)
-    (<rel>    ^<< rcc8 cardir >> <val>
+    (<rel>    ^<spred> <val>
               ^root-object.id_string <fid>
               ^target-object.id_string <sid>)
 -->

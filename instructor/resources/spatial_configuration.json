@@ -1,22 +1,41 @@
 {
     "left-of": {
         "objects": ["<obj1>", "<obj2>"],
-        "definition": [["s" , "<obj2>", "<obj1>"], ["dc", "<obj2>", "<obj1>"]],
+        "definition": [["s" , "<obj2>", "<obj1>"], ["dc", "<obj2>", "<obj1>"], ["o", "<obj2>", "<obj1>"]],
         "language": ["<obj1>", "left of","<obj2>"]
     },
     "right-of": {
         "objects": ["<obj1>", "<obj2>"],
-        "definition": [["n" , "<obj2>", "<obj1>"], ["dc", "<obj2>", "<obj1>"]],
+        "definition": [["n" , "<obj2>", "<obj1>"], ["dc", "<obj2>", "<obj1>"], ["o", "<obj2>", "<obj1>"]],
         "language": ["<obj1>", "right of","<obj2>"]
     },
     "front-of": {
         "objects": ["<obj1>", "<obj2>"],
-        "definition": [["w" , "<obj2>", "<obj1>"], ["dc", "<obj2>", "<obj1>"]],
+        "definition": [["w" , "<obj2>", "<obj1>"], ["dc", "<obj2>", "<obj1>"], ["o", "<obj2>", "<obj1>"]],
         "language": ["<obj1>", "in front of","<obj2>"]
     },
-    "behind": {
+    "larger-than": {
         "objects": ["<obj1>", "<obj2>"],
-        "definition": [["e" , "<obj2>", "<obj1>"], ["dc", "<obj2>", "<obj1>"]],
-        "language": ["<obj1>", "behind","<obj2>"]
+        "definition": [["dc", "<obj2>", "<obj1>"]],
+        "language": ["<obj1>", "larger than", "<obj2>"]
+    },
+    "on": {
+        "objects": ["<obj1>", "<obj2>"],
+        "definition": [["eq" , "<obj2>", "<obj1>"], ["ntpp", "<obj2>", "<obj1>"], ["a", "<obj2>", "<obj1>"]],
+        "language": ["<obj1>", "on","<obj2>"]
+    },
+    "behind": {
+        "definition": [
+                        [
+                            [["dc", "<obj2>", "<obj1>"],["e", "<obj2>", "<obj1>"], ["o", "<obj2>", "<obj1>"]]
+                        ],
+                        [
+                            [["dc", "<obj2>", "<obj1>"],["ne", "<obj2>", "<obj1>"], ["o", "<obj2>", "<obj1>"]]
+                        ],
+                        [
+                            [["dc", "<obj2>", "<obj1>"], ["se", "<obj2>", "<obj1>"], ["o", "<obj2>", "<obj1>"]]
+                        ]
+                    ],
+        "language": ["<obj1>", "behind", "<obj2>"]
     }
 }

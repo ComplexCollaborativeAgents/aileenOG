@@ -208,6 +208,7 @@ class ActionWordLesson:
             gui.log("[instructor] {}".format(segment['interaction']))
             agent_response = None
             if segment['action'] is not None:
+                logging.debug("[action_word_lesson] :: sending segment {}".format(segment['action']))
                 scene_acknowledgement = world_server.apply_action(segment['action'])
                 agent_response = agent_server.process_interaction(segment['interaction'])
                 gui.log("[agent] {}".format(agent_response))

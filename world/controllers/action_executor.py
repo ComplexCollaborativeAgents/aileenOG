@@ -71,14 +71,20 @@ class ActionExecutor:
         logging.debug("[action_executor] :: picking up object id {}".format(object_id))
         translation = node.getField('translation')
         pos = translation.getSFVec3f()
+        size = node.getField('boundingObject').getSFNode().getField('size').getSFVec3f()
         if settings.SIMULATE_ACTIONS:
-            self._supervisor.pick_object(pos)
+            #self._supervisor.pick_object(pos)
             # if self._requestor == 'agent':
             #     self._supervisor.pick_object(pos)
             # else:
             #     self._supervisor.pick_object_instructor(node, pos)
+            if self._requestor == 'agent':
+                self._supervisor.pick_object(pos, (size[0]/2)+.001)
+            else:
+                self._supervisor.pick_object(pos, (size[0]/2)+.001)
+                #self._supervisor.pick_object_instructor(node, pos)
         else:
-            translation.setSFVec3f(settings.ROBOT_PLATE_LOCATION)
+            translation.setSFVec3f(settings.INSTRUCTOR_HOLD_POSITION)
         logging.debug("[action_executor] :: object {} moved to {}".format(object_id, node.getPosition()))
         self._supervisor.set_held_node(node)
         return True
@@ -88,26 +94,43 @@ class ActionExecutor:
             Location defines the point where I want the center of the object to go.
         """
         node = self._supervisor.get_held_node()
+        size = node.getField('boundingObject').getSFNode().getField('size').getSFVec3f()
         if node is not None:
             logging.debug("[action_executor] :: currently holding node {}".format(node.getId()))
             if location == 'proxy':
                 translation = node.getField('translation')
                 if settings.SIMULATE_ACTIONS:
+<<<<<<< HEAD
                     self._supervisor.place_object(settings.TEST_LOCATION)
                     # if self._requestor == 'agent':
                     #     self._supervisor.place_object(settings.TEST_LOCATION)
                     # else:
                     #     self._supervisor.place_object_instructor(settings.TEST_LOCATION)
+=======
+                    if self._requestor == 'agent':
+                        self._supervisor.place_object(settings.TEST_LOCATION)
+                    else:
+                        self._supervisor.place_object(settings.TEST_LOCATION)
+                        #self._supervisor.place_object_instructor(settings.TEST_LOCATION)
+>>>>>>> december-demo
                 else:
                     translation.setSFVec3f(settings.TEST_LOCATION)
             else:
                 translation = node.getField('translation')
                 if settings.SIMULATE_ACTIONS:
+<<<<<<< HEAD
                     self._supervisor.place_object(location)
                     # if self._requestor == 'agent':
                     #     self._supervisor.place_object(location)
                     # else:
                     #     self._supervisor.place_object_instructor(node, location)
+=======
+                    if self._requestor == 'agent':
+                        self._supervisor.place_object(location)
+                    else:
+                        self._supervisor.place_object(location)
+                        #self._supervisor.place_object_instructor(node, location)
+>>>>>>> december-demo
                 else:
                     translation.setSFVec3f(location)
             self._supervisor.set_held_node(None)

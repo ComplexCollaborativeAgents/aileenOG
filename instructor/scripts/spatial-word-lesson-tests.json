@@ -6,6 +6,6 @@
       "objects": [{"color": "blue", "shape": "cone"},  {"color": "red", "rgb": [1, 0, 0], "shape": "cylinder"}],
       "relation": "left-of"},
     "signal": "verify",
-    "distractors": 3
+    "distractors": 0
     }
 ]

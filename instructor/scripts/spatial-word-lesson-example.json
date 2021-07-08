@@ -18,7 +18,7 @@
   },
   {
     "lesson-type": "spatial-word",
-    "content": "blue sphere left of blue box",
+    "content": "blue sphere leftf blue box",
     "description": {
       "objects": [{"color": "blue", "shape": "sphere"},  {"color": "blue", "shape": "box"}],
       "relation": "left-of"},

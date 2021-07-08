@@ -6,7 +6,7 @@
 ;;;;   Created: November 13, 2019 16:14:37
 ;;;;   Purpose: 
 ;;;; ----------------------------------------------------------------------------
-;;;;  Modified: Wednesday, May 20, 2020 at 19:56:33 by klenk
+;;;;  Modified: Friday, November 13, 2020 at 16:47:36 by klenk
 ;;;; ----------------------------------------------------------------------------
 
 (in-package :cl-user)
@@ -111,11 +111,11 @@
   (handler-bind ((error #'print-backtrace))
   (let* ((json (cl-json:decode-json-from-string str))
 	 (symbol (str->symbols (cdr (assoc :PREDICATE json))))
-	 )
+	 (arity (cdr (assoc :ARITY json))))
     (cond (symbol
-	   (format t "Creating Reasoning Predicate ~A~%" str)
+	   (format t "Creating Reasoning Predicate ~A , ~A~%" str arity)
 	   (multiple-value-bind (num gpool)
-	       (create-reasoning-predicate symbol 2)
+	       (create-reasoning-predicate symbol (if arity arity 2))
 	     (cl-json:encode-json-alist-to-string
 	      (pairlis '("numPredicates" "gpool") (list num (symbol-name gpool))))))
 	  (t

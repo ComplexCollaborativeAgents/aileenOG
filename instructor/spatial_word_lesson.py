@@ -20,6 +20,13 @@ class SpatialWordLesson:
 
         self._description = description
         configuration = None
+
+        self._is_positive = is_positive
+
+
+        self._spatial_configuration_def = None
+        self._language_def = None
+
         if self._description:
             configuration = description.get("relation", None)
         if configuration:
@@ -28,17 +35,17 @@ class SpatialWordLesson:
             self._spatial_configuration = SpatialWordLesson.randomizer.random_spatial_configuration(
                 self._spatial_configurations_set.keys())
 
-        self._is_positive = is_positive
-        self._spatial_configuration_def = self._spatial_configurations_set[self._spatial_configuration]
 
-
-
-        if not is_positive:
+        if is_positive:
+            self._spatial_configuration_def = self._spatial_configurations_set[self._spatial_configuration]
+            self._language_def = self._spatial_configuration_def[settings.SPATIAL_DEF_LANGUAGE_TEMPLATE]
+        else:
             other_spatial_configs = deepcopy(self._spatial_configurations_set.keys())
             other_spatial_configs.remove(self._spatial_configuration)
             self._spatial_configuration_negative = SpatialWordLesson.randomizer.random_spatial_configuration(
                 other_spatial_configs)
-            self._spatial_configuration_def_negative = self._spatial_configurations_set[self._spatial_configuration_negative]
+            self._spatial_configuration_def = self._spatial_configurations_set[self._spatial_configuration_negative]
+            self._language_def = self._spatial_configurations_set[self._spatial_configuration][settings.SPATIAL_DEF_LANGUAGE_TEMPLATE]
 
         self._scene_objects = OrderedDict()
         self._scene = AileenScene()
@@ -83,17 +90,18 @@ class SpatialWordLesson:
             objs = AileenObject.generate_random_objects(len(objects))
             for o, obj in zip(objs, objects):
                 self._scene_objects[obj] = o
-        if self._is_positive:
-            self._language = LanguageGenerator.generate_language_from_template(self._scene_objects,
-                                                                               self._spatial_configuration_def[
-                                                                                   settings.SPATIAL_DEF_LANGUAGE_TEMPLATE])
-        else:
-            self._language = LanguageGenerator.generate_language_from_template(self._scene_objects,
-                                                                               self._spatial_configuration_def_negative[settings.SPATIAL_DEF_LANGUAGE_TEMPLATE])
+
+        self._language = LanguageGenerator.generate_language_from_template(self._scene_objects, self._language_def)
+        # if self._is_positive:
+        #     self._language = LanguageGenerator.generate_language_from_template(self._scene_objects,
+        #                                                                        self._spatial_configuration_def[
+        #                                                                            settings.SPATIAL_DEF_LANGUAGE_TEMPLATE])
+        # else:
+        #     self._language = LanguageGenerator.generate_language_from_template(self._scene_objects,
+        #                                                                        self._spatial_configuration_def_negative[settings.SPATIAL_DEF_LANGUAGE_TEMPLATE])
 
     def generate_scene(self, positions):
         logging.debug("[aileen_spatial_word_lesson] :: generating a new scene for spatial word learning")
-
         if len(positions) == len(self._scene_objects):
             for o, p in zip(self._scene_objects.values(), positions):
                 o.set_translation(p)

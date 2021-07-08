@@ -98,8 +98,8 @@ if __name__ == '__main__':
         pass
     elif arguments.test_sizes:
         scene = AileenScene()
-        
+
     else:
-        VisualWordLesson.administer_curriculum(world_server, agent_server)
-        # SpatialWordLesson.administer_curriculum(world_server, agent_server)
+        #VisualWordLesson.administer_curriculum(world_server, agent_server)
+         SpatialWordLesson.administer_curriculum(world_server, agent_server)
         # ActionWordLesson.administer_curriculum(world_server, agent_server)

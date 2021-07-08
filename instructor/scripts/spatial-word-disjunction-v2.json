@@ -1,0 +1,74 @@
+[
+  {
+    "comment": "preload visual concepts used in this example",
+    "lesson-type": "spatial-word",
+    "content": "yellow box behind red box",
+    "description": {
+      "objects": [{"color": "yellow", "shape": "box"},  {"color": "red", "shape": "box"}],
+      "relation": "behind1"},
+    "signal": "inform"
+  },
+   {
+    "comment": "preload visual concepts used in this example",
+    "lesson-type": "spatial-word",
+    "content": "red cylinder behind yellow cone",
+    "description": {
+      "objects": [{"color": "red", "shape": "cylinder"},  {"color": "yellow", "shape": "cone"}],
+      "relation": "behind1"},
+    "signal": "inform"
+  },
+  {
+    "comment": "preload visual concepts used in this example",
+    "lesson-type": "spatial-word",
+    "content": "red cylinder behind yellow box",
+    "description": {
+      "objects": [{"color": "red", "shape": "cylinder"},  {"color": "yellow", "shape": "box"}],
+      "relation": "behind2"},
+    "signal": "inform"
+  },
+   {
+    "comment": "preload visual concepts used in this example",
+    "lesson-type": "spatial-word",
+    "content": "green box behind blue cone",
+    "description": {
+      "objects": [{"color": "green", "shape": "box"},  {"color": "blue", "shape": "cone"}],
+      "relation": "behind2"},
+    "signal": "inform"
+  },
+  {
+    "comment": "preload visual concepts used in this example",
+    "lesson-type": "spatial-word",
+    "content": "red cone behind green box",
+    "description": {
+      "objects": [{"color": "red", "shape": "cone"},  {"color": "green", "shape": "box"}],
+      "relation": "behind3"},
+    "signal": "inform"
+  },
+   {
+    "comment": "preload visual concepts used in this example",
+    "lesson-type": "spatial-word",
+    "content": "blue box behind yellow cylinder",
+    "description": {
+      "objects": [{"color": "blue", "shape": "box"},  {"color": "yellow", "shape": "cylinder"}],
+      "relation": "behind3"},
+    "signal": "inform"
+  },
+  {
+    "comment": "preload visual concepts used in this example",
+    "lesson-type": "spatial-word",
+    "content": "green cylinder behind green box",
+    "description": {
+      "objects": [{"color": "green", "shape": "cylinder"},  {"color": "green", "shape": "box"}],
+      "relation": "behind-disjunctive"},
+    "signal": "verify"
+  },
+  {
+    "comment": "preload visual concepts used in this example",
+    "lesson-type": "spatial-word",
+    "content": "blue cylinder behind green box",
+    "description": {
+      "objects": [{"color": "blue", "shape": "cylinder"},  {"color": "green", "shape": "box"}],
+      "relation": "right-of"},
+    "signal": "verify"
+  }
+]

@@ -281,6 +281,8 @@ class InputWriter(object):
             object_id.CreateStringWME('shape', w_object['shape'])
             object_id.CreateStringWME('id_string', w_object['id_string'])
             object_id.CreateStringWME('id_uuid', w_object['id_name'])
+            if 'cluster_id' in w_object:
+                object_id.CreateStringWME('percept', 'CVc{}'.format(w_object['cluster_id']))
 
     def request_server_for_objects_info(self):
         try:
@@ -339,7 +341,7 @@ objects = [{'orientation': [1.0, -5.75539615965681e-17, 3.38996313371214e-17, 5.
                                   ysize=obj['bounding_box'][5]-obj['bounding_box'][2],
                                   zsize=obj['bounding_box'][4]-obj['bounding_box'][1]
                     )])
-        qsrlib_request_message = QSRlib_Request_Message(["rcc8","cardir","ra", "3dcd"], world)
+        qsrlib_request_message = QSRlib_Request_Message(["rcc8","cardir","ra", "3dcd", "aob"], world, dynamic_args={'quantisation_factor':settings.QUANTISATION_FACTOR} )
         qsrlib_response_message = qsrlib.request_qsrs(req_msg=qsrlib_request_message)
         ret = {}
         for t in qsrlib_response_message.qsrs.get_sorted_timestamps():
@@ -350,8 +352,10 @@ objects = [{'orientation': [1.0, -5.75539615965681e-17, 3.38996313371214e-17, 5.
                     ret[args[0]] = {}
                 if 'ra' in v.qsr.keys():
                     v.qsr['ra'] = self.get_rcc8_symbols_for_allen_intervals(v.qsr['ra'])
-                if '3dcd' in v.qsr.keys():
-                    v.qsr['depth'] = v.qsr['3dcd'][-1].lower()
+                # if '3dcd' in v.qsr.keys():
+                #     v.qsr['depth'] = v.qsr['3dcd'][-1].lower()
+                if 'aob' in v.qsr.keys():
+                    v.qsr['depth'] = v.qsr['aob']
                 ret[args[0]][args[1]] = v.qsr
         logging.debug("[input_writer] :: qsrs computed {}".format(ret))
         return ret

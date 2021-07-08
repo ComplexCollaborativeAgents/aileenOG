@@ -20,6 +20,7 @@ dependencies:
   - pytest
   - python-igraph
   - opencv
+  - psutil
   - pip
   - pip:
       - -e strands_qsr_lib/qsr_lib/
