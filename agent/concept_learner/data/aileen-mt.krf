@@ -150,6 +150,15 @@
 (comment ec "arg2 is RCC8-ec of arg1")
 
 
+
+;;; Quantity Relations
+(isa distance Relation)
+(arity distance 3)
+(arg1Isa distance Thing)
+(arg2Isa distance Thing)
+(arg3Isa distance Quantity)
+
+
 (in-microtheory BaseKB)
 (notForAnalogy AileenCaseMt)
 (notForAnalogy sageRequireInMapping)

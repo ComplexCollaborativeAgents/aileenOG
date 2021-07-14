@@ -1,0 +1,16 @@
+(in-microtheory AileenExp13)
+(isa AileenExp13 AileenCaseMt)
+
+(isa Obj1 CVCube)
+(isa Obj1 CVBlue)
+(isa Obj1 RCube)
+(isa Obj1 RBlue)
+
+
+(isa Obj2 CVCone)
+(isa Obj2 CVYellow)
+(isa Obj2 RCone)
+(isa Obj2 RYellow)
+
+
+(distance Obj1 Obj2 3.0)
