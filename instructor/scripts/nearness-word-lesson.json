@@ -1,0 +1,11 @@
+[
+  {
+    "lesson-type": "spatial-word",
+    "content": "yellow cone near red cylinder",
+    "description": {
+      "objects": [{"color": "yellow", "shape": "cone"},  {"color": "red", "shape": "cylinder"}],
+      "relation": "near"},
+     "signal": "inform",
+    "distractors": 0
+  }
+]
