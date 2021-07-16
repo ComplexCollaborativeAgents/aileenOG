@@ -27,12 +27,12 @@ class AileenWorldServer:
         self._host = socket.gethostbyname("0.0.0.0")
         logging.info("[aileen_world_server] :: hostname: " + self._host)
 
-        self._server = SimpleXMLRPCServer((self._host, self._port), requestHandler=RequestHandler)
+        self._server = SimpleXMLRPCServer((self._host, self._port), requestHandler=RequestHandler, logRequests=False)
 
         self._server.register_introspection_functions()
 
         def get_all():
-            logging.info("[aileen_world_server] :: received get_all from agent client")
+            # logging.info("[aileen_world_server] :: received get_all from agent client")
             output = aileen_supervisor.get_all()
 
             logging.debug("[aileen_world_server] :: sending response {}".format(output))
@@ -49,7 +49,7 @@ class AileenWorldServer:
             return data
 
         def set_scene(scene_specification):
-            logging.info("[aileen_world_server] :: received set_scene from instructor client")
+            logging.info("[aileen_world_server] :: received set_scene from instructor client junedemo {}".format(scene_specification))
             acknowledgement = aileen_supervisor.set_scene(scene_specification['configuration'],
                                                           scene_specification['label'])
             logging.debug("[aileen_world_server] :: sending acknowledgement")
