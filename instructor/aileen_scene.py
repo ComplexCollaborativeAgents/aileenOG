@@ -22,6 +22,7 @@ class AileenScene:
         self._objects.append(aileen_object)
 
     def generate_scene_world_config(self):
+        logging.info("[action_word_lesson] :: generate scene world config {}".format(self._objects))
         description = []
         for scene_object in self._objects:
             description.append(scene_object.get_object_description())
@@ -29,6 +30,7 @@ class AileenScene:
 
     @staticmethod
     def place_two_objects_in_configuration(target_object_name, reference_object_name, scene_objects, configuration_definition):
+        logging.info("[aileen_scene] :: place two objects in config {} {} {} {}".format(target_object_name, reference_object_name, scene_objects, configuration_definition))
         translations = {}
         reference_object = scene_objects[reference_object_name]
         target_object = scene_objects[target_object_name]

@@ -197,4 +197,7 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
+# lisp stuff
+*.fasl
+
 # End of https://www.gitignore.io/api/python,pycharm+all

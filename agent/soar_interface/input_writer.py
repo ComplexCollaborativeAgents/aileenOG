@@ -145,6 +145,10 @@ class InputWriter(object):
         return updated_detections
 
     def write_qsrs_to_input_link(self, qsrs):
+
+        if qsrs:
+            logging.info("[testing] writing qsrs to input link {}".format(qsrs))
+
         self._soar_agent.delete_all_children(self._qsrs_link)
         for root_obj_id in qsrs:
             root_obj_qsrs = qsrs[root_obj_id]
@@ -159,6 +163,7 @@ class InputWriter(object):
                         qsr_id.CreateStringWME("rcc8", qsr_value)
                     else:
                         if qsr_type == "cardir":
+                            logging.info("Creating cardir QSR with value {}".format(qsr_value))
                             qsr_id.CreateStringWME("cardir", qsr_value)
 
     def clean_concept_memory(self):
@@ -291,7 +296,7 @@ class InputWriter(object):
             logging.error("[input_writer] :: fault code {}; fault string{}".format(fault.faultCode, fault.faultString))
             return
 
-        logging.debug("[input_writer] :: received objects from server {}".format(objects_dict))
+        # logging.debug("[input_writer] :: received objects from server {}".format(objects_dict))
         objects_list = objects_dict['objects']
         return objects_list
 
@@ -316,6 +321,53 @@ class InputWriter(object):
             handle.write(binary_image.data)
 
 
+
+    TEST_OBJECTS = [
+    {'shape': 'CVCone', 
+    'id_name': 'object110730092892670', 
+    'bounding_box': [0.3724613854228045, 0.39980403441748485, -0.2968869626644896, 0.47246138542280447, 0.49980403441748483, -0.19688696266448957], 
+    'bounding_box_camera': [0.06967705545435193, 0.7228759139077792, 0.21445705545435195, 0.867675913907779], 
+    'id_string': 'ob370', 
+    'held': 'false', 
+    'color': 'CVYellow', 
+    'position': [0.4224613854228045, 0.44980403441748484, -0.2468869626644896], 
+    'id': 370, 'texture': 't_'}, 
+    {'shape': 'CVCylinder', 'id_name': 'object188837901502179', 
+    'bounding_box': [0.33520377466400003, 0.3998037994635584, -0.17868542245000002, 0.435203774664, 0.49980379946355835, -0.07868542245], 
+    'bounding_box_camera': [0.2408092453768899, 0.7768249342865279, 0.38558924537688993, 0.9216249342865279], 
+    'id_string': 'ob377', 
+    'held': 'false', 
+    'color': 'CVRed', 
+    'position': [0.385203774664, 0.44980379946355836, -0.12868542245], 
+    'id': 377, 'texture': 't_'}, 
+    {'shape': 'CVCone', 
+    'id_name': 'object195648312634764', 
+    'bounding_box': [0.4599946867100079, 0.39980350624364386, -0.1972266109604019, 0.559994686710008, 0.49980350624364384, -0.0972266109604019], 
+    'bounding_box_camera': [0.21396531265153007, 0.5961276936439085, 0.3587453126515301, 0.7409276936439085], 
+    'id_string': 'ob384', 
+    'held': 'false', 
+    'color': 'CVRed', 
+    'position': [0.5099946867100079, 0.44980350624364385, -0.1472266109604019], 
+    'id': 384, 'texture': 't_'}, 
+    {'shape': 'CVSphere', 
+    'id_name': 'object179932903310641', 
+    'bounding_box': [0.636336046731, 0.39980379946355843, -0.0724874191323, 0.7363360467310001, 0.4998037994635584, 0.027512580867700004], 
+    'bounding_box_camera': [0.394562714580256, 0.34078540433351195, 0.5393427145802561, 0.4855854043335121], 
+    'id_string': 'ob391', 
+    'held': 'false', 
+    'color': 'CVBlue', 
+    'position': [0.686336046731, 0.4498037994635584, -0.0224874191323], 
+    'id': 391, 'texture': 't_'}]
+
+
+    '''
+    Added by Will. For now, using this to handle nearness relations. Can eventually extend
+    to estimating any continuous quantities 
+    '''
+    def create_aux_info(self, objects):
+        pass
+
+
     def create_qsrs(self, objects):
         '''
 - Ignore y position as everything is on the table (use z instead)
@@ -338,6 +390,7 @@ objects = [{'orientation': [1.0, -5.75539615965681e-17, 3.38996313371214e-17, 5.
                     )])
         qsrlib_request_message = QSRlib_Request_Message(["rcc8","cardir"], world)
         qsrlib_response_message = qsrlib.request_qsrs(req_msg=qsrlib_request_message)
+        logging.info("[input_writer] :: qsrs response message {}".format(qsrlib_response_message))
         ret = {}
         for t in qsrlib_response_message.qsrs.get_sorted_timestamps():
             for k, v in zip(qsrlib_response_message.qsrs.trace[t].qsrs.keys(),
@@ -346,5 +399,5 @@ objects = [{'orientation': [1.0, -5.75539615965681e-17, 3.38996313371214e-17, 5.
                 if args[0] not in ret:
                     ret[args[0]] = {}
                 ret[args[0]][args[1]] = v.qsr
-        logging.debug("[input_writer] :: qsrs computed {}".format(ret))
+        # logging.debug("[input_writer] :: qsrs computed {}".format(ret))
         return ret
