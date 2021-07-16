@@ -1,16 +1,15 @@
 (in-microtheory AileenExp12)
 (isa AileenExp12 AileenCaseMt)
 
-(isa Obj1 CVCone)
-(isa Obj1 CVBlue)
-(isa Obj1 RCone)
-(isa Obj1 RBlue)
+(isa Obj3 CVCone)
+(isa Obj3 CVBlue)
+(isa Obj3 RCone)
+(isa Obj3 RBlue)
 
+(isa Obj4 CVCylinder)
+(isa Obj4 CVYellow)
+(isa Obj4 RCylinder)
+(isa Obj4 RYellow)
 
-(isa Obj2 CVCylinder)
-(isa Obj2 CVYellow)
-(isa Obj2 RCylinder)
-(isa Obj2 RYellow)
-
-
-(distance Obj1 Obj2 5.0)
+(distanceBetween Obj3 Obj4 5.0)
+(near Obj3 Obj4)
