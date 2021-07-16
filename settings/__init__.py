@@ -36,7 +36,7 @@ IN_POS_THRESH = .001
 INSTRUCTOR_VELOCITY = 0.15
 
 INSTRUCTOR_HOLD_POSITION = [-0.1, 0.2, 0]
-SIMULATE_ACTIONS = False
+SIMULATE_ACTIONS = True
 
 #Robot Config
 JOINT_NAMES = ['shoulder_pan_joint', 'shoulder_lift_joint', 'elbow_joint', 'wrist_1_joint', 'wrist_2_joint', 'wrist_3_joint']

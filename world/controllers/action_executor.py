@@ -100,37 +100,31 @@ class ActionExecutor:
             if location == 'proxy':
                 translation = node.getField('translation')
                 if settings.SIMULATE_ACTIONS:
-<<<<<<< HEAD
-                    self._supervisor.place_object(settings.TEST_LOCATION)
+                    #self._supervisor.place_object(settings.TEST_LOCATION)
                     # if self._requestor == 'agent':
                     #     self._supervisor.place_object(settings.TEST_LOCATION)
                     # else:
                     #     self._supervisor.place_object_instructor(settings.TEST_LOCATION)
-=======
                     if self._requestor == 'agent':
                         self._supervisor.place_object(settings.TEST_LOCATION)
                     else:
                         self._supervisor.place_object(settings.TEST_LOCATION)
                         #self._supervisor.place_object_instructor(settings.TEST_LOCATION)
->>>>>>> december-demo
                 else:
                     translation.setSFVec3f(settings.TEST_LOCATION)
             else:
                 translation = node.getField('translation')
                 if settings.SIMULATE_ACTIONS:
-<<<<<<< HEAD
-                    self._supervisor.place_object(location)
+                    #self._supervisor.place_object(location)
                     # if self._requestor == 'agent':
                     #     self._supervisor.place_object(location)
                     # else:
                     #     self._supervisor.place_object_instructor(node, location)
-=======
                     if self._requestor == 'agent':
                         self._supervisor.place_object(location)
                     else:
                         self._supervisor.place_object(location)
                         #self._supervisor.place_object_instructor(node, location)
->>>>>>> december-demo
                 else:
                     translation.setSFVec3f(location)
             self._supervisor.set_held_node(None)

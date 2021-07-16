@@ -211,7 +211,9 @@ class AileenSupervisor(Supervisor):
     def place_object(self, target, offset=0):
         logging.info('[aileen supervisor] :: Placing Object')
         above_target = [target[0], target[1]+.25, target[2]]
+        logging.error('[aileen_supervisor] :: above target is {}'.format(above_target))
         target = [target[0], target[1]+offset, target[2]]
+        logging.error('[aileen_supervisor] :: target is {}'.format(target))
         self.go_to_point(self.transform_point_to_robot_frame(above_target))
         self.go_to_point(self.transform_point_to_robot_frame(target))
         self._connectorNode.unlock()
