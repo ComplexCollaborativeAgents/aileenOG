@@ -28,5 +28,5 @@
         "objects": ["<obj1>", "<obj2>"],
         "definition": [["distant" , "<obj2>", "<obj1>"], ["dc", "<obj2>", "<obj1>"]],
         "language": ["<obj1>", "far from","<obj2>"]
-    },
+    }
 }
