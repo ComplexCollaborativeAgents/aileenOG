@@ -10,13 +10,16 @@
 ;;;; ----------------------------------------------------------------------------
 
 (in-package :cl-user)
-(load "analogystack/qrgsetup.lsp")
+
+(load "C:\\Users\\whancock\\aileen-agent\\agent\\concept_learner\\analogystack\\qrgsetup.lsp")
+
+
 (require-module "fire" :fire) ;; assumes you already have a KB
 (require-module "rbrowse" :rbrowse) ;; don't need this now
 
 (require :asdf)
 
-(load "cl-json/cl-json.asd")
+(load "C:\\Users\\whancock\\aileen-agent\\agent\\concept_learner\\cl-json\\cl-json.asd")
 (asdf:load-system :cl-json)
 
 (require :aserve)
@@ -26,7 +29,7 @@
 (defpackage :aileen
   (:use :common-lisp :cl-user :excl))
 
-(load "generalization.lsp")
+(load "C:\\Users\\whancock\\aileen-agent\\agent\\concept_learner\\generalization.lsp")
 
 (in-package :aileen)
 
@@ -296,7 +299,7 @@
 	     "")))))
 
   
-(defun start-server (&key (port 8000) (kbdir "nextkb"))
+(defun start-server (&key (port 8085) (kbdir "nextkb"))
   (format t "~% starting server port ~A" port)
   (make-reasoner :kbdir kbdir)
   (let ((rcp (net.xml-rpc:make-xml-rpc-server
