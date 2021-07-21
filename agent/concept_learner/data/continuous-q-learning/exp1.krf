@@ -27,11 +27,10 @@
 (isa Obj1 RCube)
 (isa Obj1 RGreen)
 
-
 (isa Obj2 CVCylinder)
 (isa Obj2 CVGreen)
 (isa Obj2 RCylinder)
 (isa Obj2 RGreen)
 
-
-(distance Obj1 Obj2 4.0)
+(distanceBetween Obj1 Obj2 4.0)
+(near Obj1 Obj2)
