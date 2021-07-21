@@ -23,10 +23,12 @@
 
 ; mt ids for concept
 (defparameter *r-near* '(11 12 13))
-(defparameter *concept-symbol* 'd::RNear)
+(defparameter *concept-symbol* 'd::rNear)
 (defparameter *concept-gpool* (get-concept-gpool *concept-symbol*))
 (defparameter *probe-mt* 'd::query-facts)
 (defparameter *probe-dist* 5.0)
+
+(defparameter *filter-expression* (list *concept-symbol* 'd::?one 'd::?two))
 
 
 
@@ -53,14 +55,9 @@
 
 (defun qlearning-main ()
 
-  ; (load-test-flat-files)
-  ; (create-test-generalizations *concept-symbol*)
-
-  (let ((confident? (test-probe *probe-dist*)))
-
-    (format t "confident is ~s~%" confident?)
-
-    )
+  (load-test-flat-files)
+  (create-test-generalizations *concept-symbol*)
+  (run-query *test-case* *concept-gpool*)
   )
 
 (defun load-test-flat-files ()
@@ -71,7 +68,8 @@
   (cl-user::load-flatfiles-in-dir (qrg:make-qrg-path ".." "data" "continuous-q-learning")))
 
 (defun create-test-generalizations (concept-symbol)
-  (create-reasoning-symbol concept-symbol)
+  ; (create-reasoning-symbol concept-symbol)
+  (create-reasoning-predicate concept-symbol 2)
   (multiple-value-bind (gens examples) ;;do I need to add reasoning symbols?
     (create-gpool *r-near* (get-concept-gpool concept-symbol))
     (declare (ignore gens examples))
@@ -90,12 +88,19 @@
 
 
 
-; (defun run-query (facts gpool)
+(defun run-query (facts gpool)
 
-;   (remove-facts-from-case *probe-mt*)
-;   (filter-scene-by-expression facts probe-mt gpool nil 'd::(isa ?o RNear))
+  (remove-facts-from-case *probe-mt*)
 
-;   )
+  (when (test-probe *probe-dist*)
+    (format t "found to be near, appending near fact~%")
+    (setf facts (append facts `(d::(near Obj11 Obj22))))
+    )
+
+  ; (format t "Filtering scene with facts ~a~%." facts)
+  (filter-scene-by-expression facts *probe-mt* gpool nil *filter-expression*)
+
+  )
 
 
 

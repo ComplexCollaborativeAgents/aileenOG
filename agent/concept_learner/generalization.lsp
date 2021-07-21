@@ -251,8 +251,10 @@
 
 
 (defun filter-scene-by-expression-rel (facts context gpool prevmatches pattern)
+	(debug-format "filtering by relation expression ~A." pattern)
   (assert (null prevmatches))
   (assert (and (listp pattern) (every #'atom pattern))) ;; no nested lists in pattern.
+  (debug-format "Storing facts ~A." facts)
   (store-facts-in-case facts context)
   (when (not gpool)
     (setf gpool (get-concept-gpool (car pattern))))
@@ -263,6 +265,7 @@
 	((vars-in-expr pattern)
 	 (remove-if-not
 	  #'(lambda (bound-pattern)
+	  	(format t "Testing bound pattern ~A~%" bound-pattern)
 	      (match-query-against-gpool context gpool bound-pattern))
 	  (mapcar 
 	   #'(lambda (blist)
@@ -372,6 +375,7 @@
 	)))))
   
 (defun make-possible-blists (vars objs &optional blist)
+	(format t "Possible blist ~a ~a~%" vars objs)
   (cond ((null vars) (list blist))
 	((null objs) (assert nil))
 	(t
