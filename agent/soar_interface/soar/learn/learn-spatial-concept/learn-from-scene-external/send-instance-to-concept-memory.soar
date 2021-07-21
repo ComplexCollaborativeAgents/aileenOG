@@ -70,6 +70,22 @@ sp {learn-from-scene-external*apply*send-instance-to-concept-memory*spatial
            ^lsecond <fid>
            ^lthird <sid>)}
 
+sp {learn-from-scene-external*apply*send-instance-to-concept-memory*spatial*distance
+    (state <s>    ^name learn-from-scene-external
+                  ^operator <op>
+                  ^io.output-link.concept-memory.store <si>)
+    (<si>    ^facts <facts>)
+    (<op>    ^scene.relations.relation <rel>)
+    (<rel>    ^distance <val>
+              ^root-object.id_string <fid>
+              ^target-object.id_string <sid>)
+-->
+    (<facts> ^fact <f>)
+    (<f>   ^lfirst distance
+           ^lsecond <val>
+           ^lthird <fid>
+           ^lfourth <sid>)}
+
 
    
 sp {learn-from-scene-external*apply*send-instance-to-concept-memory*status

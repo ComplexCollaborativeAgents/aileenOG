@@ -32,6 +32,7 @@ class InputWriter(object):
             self._world_link = self._input_link.CreateIdWME("world")
             self._objects_link = self._world_link.CreateIdWME("objects")
             self._qsrs_link = self._world_link.CreateIdWME("qsrs")
+            self._csrs_link = self._world_link.CreateIdWME("csrs")
 
             self._interaction_link = self._input_link.CreateIdWME("interaction-link")
             self._clean_interaction_link_flag = False
@@ -96,6 +97,8 @@ class InputWriter(object):
             self.add_objects_to_working_memory(objects_list)
         qsrs = self.create_qsrs(objects_list)
         self.write_qsrs_to_input_link(qsrs)
+        csrs = self.create_aux_info(objects_list)
+        self.write_csrs_to_input_link(csrs)
         self._soar_agent.commit()
 
     @staticmethod
@@ -166,6 +169,17 @@ class InputWriter(object):
                         if qsr_type == "cardir":
                             logging.info("Creating cardir QSR with value {}".format(qsr_value))
                             qsr_id.CreateStringWME("cardir", qsr_value)
+
+    def write_csrs_to_input_link(self, csrs):
+        logging.debug("[input_writer] :: writing csrs to input link {}".format(csrs))
+        self._soar_agent.delete_all_children(self._csrs_link)
+        for csr in csrs:
+            csr_id = self._csrs_link.CreateIdWME('csr')
+            csr_id.CreateIntWME("root", csr[0])
+            csr_id.CreateIntWME("target", csr[1])
+            csr_id.CreateFloatWME("distance", csr[2])
+
+
 
     def clean_concept_memory(self):
         self._soar_agent.delete_all_children(self._concept_memory)
@@ -326,13 +340,13 @@ class InputWriter(object):
     Added by Will. For now, using this to handle nearness relations. Can eventually extend
     to estimating any continuous quantities. This should probably live somewhere else.
     '''
-    def create_aux_info(objects):
+    def create_aux_info(self, objects):
         rels = []
 
         # add distance information between pairs of objects
         for items in combinations(objects, 2):
             distance = np.linalg.norm(np.array(items[0]['position']) - np.array(items[1]['position']))
-            rels.append((items[0]['id_string'], items[1]['id_string'], distance))
+            rels.append((items[0]['id'], items[1]['id'], distance))
 
         return rels
 
