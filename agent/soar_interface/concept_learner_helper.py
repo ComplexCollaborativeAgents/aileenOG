@@ -151,20 +151,22 @@ def translate_soar_facts_to_tuple_list(facts_id):
 
 
 def translate_soar_fact_to_tuple(fact_id):
-    fact_tuple = [None, None, None]
+    fact_list = [None, None, None, None]
     for j in range(0, fact_id.GetNumberChildren()):
         child = fact_id.GetChild(j)
         if child.GetAttribute() == 'lfirst':
-            fact_tuple[0] = child.GetValueAsString()
+            fact_list[0] = child.GetValueAsString()
         if child.GetAttribute() == 'lsecond':
-            fact_tuple[1] = child.GetValueAsString()
+            fact_list[1] = child.GetValueAsString()
         if child.GetAttribute() == 'lthird':
             if child.IsIdentifier() is False:
-                fact_tuple[2] = child.GetValueAsString()
+                fact_list[2] = child.GetValueAsString()
             else:
-                fact_tuple[2] = translate_soar_fact_to_tuple(child.ConvertToIdentifier())
-    for element in fact_tuple:
+                fact_list[2] = translate_soar_fact_to_tuple(child.ConvertToIdentifier())
+        if child.GetAttribute() == 'lfourth':
+            fact_list[3] = child.GetValueAsString()
+    for element in fact_list:
         if element is None:
-            fact_tuple.remove(element)
-    return fact_tuple
+            fact_list.remove(element)
+    return tuple(fact_list)
 

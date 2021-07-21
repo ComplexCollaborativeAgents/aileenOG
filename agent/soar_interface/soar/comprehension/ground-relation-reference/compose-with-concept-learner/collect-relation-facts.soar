@@ -29,6 +29,27 @@ sp {compose-with-concept-learner*apply*query-concept-learner*relations
             ^lthird <sid>)
     }
 
+sp {compose-with-concept-learner*apply*query-concept-learner*relations*distance
+    (state <s>    ^name compose-with-concept-learner
+                  ^operator.name collect-relation-facts
+                  ^world.relations.relation <rel>
+                  ^facts <facts>
+                  ^grounding <g>)
+    (<g>    ^entity.object <robj>
+            ^entity.object <tobj>)
+    (<rel>    ^distance <val>
+              ^root-object <robj>
+              ^target-object <tobj>)
+    (<robj>    ^id_string <fid>)
+    (<tobj>    ^id_string <sid>)
+-->
+    (<facts>    ^fact <f>)
+    (<f>    ^lfirst distance
+            ^lsecond <val>
+            ^lthird <fid>
+            ^lfourth <sid>)
+    }
+
 sp {compose-with-concept-learner*apply*query-concept-learner*objects
     (state <s>    ^name compose-with-concept-learner
                   ^operator.name collect-relation-facts
