@@ -13,3 +13,4 @@
 
 (distanceBetween Obj5 Obj6 3.0)
 (near Obj5 Obj6)
+(rNear Obj5 Obj6)
