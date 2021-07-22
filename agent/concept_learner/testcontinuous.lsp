@@ -32,6 +32,7 @@
 
 
 
+;;; positive example
 (defparameter *test-case* 'd::( 
 
   (isa Obj11 CVCube)
@@ -44,9 +45,36 @@
   (isa Obj22 RCylinder)
   (isa Obj22 RGreen)
 
-  (distanceBetween Obj11 Obj22 8.0)
+  (distanceBetween Obj11 Obj22 4.0)
+
+
+  (dc Obj11 Obj22)
+  (e Obj11 Obj22)
+
 
   ))
+
+;;; negative nearness test case
+(defparameter *negative-test-case* 'd::( 
+
+  (isa Obj13 CVCube)
+  (isa Obj13 CVYellow)
+  (isa Obj13 RCube)
+  (isa Obj13 RYellow)
+
+  (isa Obj23 CVCylinder)
+  (isa Obj23 CVGreen)
+  (isa Obj23 RCylinder)
+  (isa Obj23 RGreen)
+
+  (distanceBetween Obj13 Obj23 99999.0)
+
+  (dc Obj13 Obj23)
+  (s Obj13 Obj23)
+
+  ))
+
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Testing code
@@ -122,6 +150,73 @@
                     ,gpool)))
   (values (length (fire:ask-it `(d::gpoolGeneralization ,gpool ?num)))
           (length (fire:ask-it `(d::gpoolExample ,gpool ?num)))))
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Quantity Reasoning
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+(defparameter *test-mt* 'd::AileenExp11)
+
+(defparameter *test-forms* 
+  'd::((distanceBetween ?o1 ?o2 ?o3)))
+
+
+
+(defun test-find-quantities ()
+  (find-quantities *test-forms* *test-mt*))
+
+
+(defun test-find-quantities-new ()
+
+  (filter-scene-by-expression *test-case* *probe-mt* *concept-gpool* nil *filter-expression*)
+
+  )
+
+
+(defun process-sme ()
+
+  (let ((sme sme::*sme*))
+
+
+
+
+    )
+
+  )
+
+
+;;; return a list of facts
+(defun find-quantities (forms mt)
+  (mapcan (lambda (form)
+    (mapcar 'car (fire::retrieve form :mt mt)))
+    forms))
+
+
+;;; this is making ugly assumptions; essentially
+;;; it is ignoring structure mapping and assuming that
+;;; we will ever only see one instantiation of a predicate
+;;; e.g. (distanceBetween ... ... ...)
+;;; to handle this more elegantly, we could invoke SME
+(defun generate-quantity-symbols (forms mt gpool)
+
+  (let* ((quantity-preds (find-quantities forms mt))
+         (preds (remove-duplicates (mapcar 'car quantity-preds)))
+
+
+        )
+
+))
+
+
+(defun get-quantity-preds-for-gpool (pred argfn gpool)
+  (let ((preds (fire::retrieve pred :mt gpool)))
+    (mapcar argfn preds)))
+
+
+
 
 
 

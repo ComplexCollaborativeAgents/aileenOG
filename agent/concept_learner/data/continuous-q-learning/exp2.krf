@@ -12,5 +12,8 @@
 (isa Obj4 RYellow)
 
 (distanceBetween Obj3 Obj4 5.0)
-(near Obj3 Obj4)
+
+(dc Obj3 Obj4)
+(s Obj3 Obj4)
+
 (rNear Obj3 Obj4)
