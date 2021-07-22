@@ -33,9 +33,8 @@
 (isa Obj2 RGreen)
 
 (distanceBetween Obj1 Obj2 4.0)
-(distanceBetween_Rnear_01_02 Obj1 Obj2)
-
 
 (dc Obj1 Obj2)
 (n Obj1 Obj2)
+
 (rNear Obj1 Obj2)
