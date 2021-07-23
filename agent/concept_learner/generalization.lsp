@@ -58,6 +58,10 @@
     (values (length (fire:ask-it `d::(isa ?x AileenReasoningPredicate)))
 	    gpool)))
 
+(defun create-reasoning-predicate-simple (pred arity)
+	(fire:kb-store `d::(isa ,aileen::pred AileenReasoningPredicate) :mt 'd::BaseKB)
+  (fire:kb-store `d::(arity ,aileen::pred ,aileen::arity) :mt 'd::BaseKB))
+
 ;;; Not davidsonian...
 (defun create-reasoning-action (action arity)
   (let ((gpool (get-concept-gpool action)))

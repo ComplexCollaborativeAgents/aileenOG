@@ -12,9 +12,7 @@
 (in-package :cl-user)
 
 ; (require :asdf)
-
-
-; (load "server.lsp") ;;;Should probably move this to asdf at some point
+; (load "server.lsp") ;;; Should probably move this to asdf at some point
 
 (in-package :aileen)
 
@@ -22,14 +20,13 @@
 (defparameter *threshold* .6)
 
 ; mt ids for concept
-(defparameter *r-near* '(11 12 13))
+(defparameter *r-near-inform-ids* '(11 12 13))
 (defparameter *concept-symbol* 'd::rNear)
 (defparameter *concept-gpool* (get-concept-gpool *concept-symbol*))
 (defparameter *probe-mt* 'd::query-facts)
 (defparameter *probe-dist* 5.0)
 
 (defparameter *filter-expression* (list *concept-symbol* 'd::?one 'd::?two))
-
 
 
 ;;; positive example
@@ -51,8 +48,8 @@
   (dc Obj11 Obj22)
   (e Obj11 Obj22)
 
-
   ))
+
 
 ;;; negative nearness test case
 (defparameter *negative-test-case* 'd::( 
@@ -75,34 +72,43 @@
   ))
 
 
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Testing code
-
 
 
 (defun qlearning-main ()
 
   (load-test-flat-files)
   (create-test-generalizations *concept-symbol*)
-  (run-query *test-case* *concept-gpool*)
+  ; (run-query *test-case* *concept-gpool*)
   )
+
 
 (defun load-test-flat-files ()
   (fire:kr-file->kb (qrg:make-qrg-file-name
-			    (qrg:make-qrg-path ".." "data")
-			    "aileen-mt.krf")
-	       :error-on-bad-exps? t :kb fire::*kb*)
+                     (qrg:make-qrg-path ".." "data")
+                     "aileen-mt.krf")
+    :error-on-bad-exps? t :kb fire::*kb*)
   (cl-user::load-flatfiles-in-dir (qrg:make-qrg-path ".." "data" "continuous-q-learning")))
+
 
 (defun create-test-generalizations (concept-symbol)
   ; (create-reasoning-symbol concept-symbol)
   (create-reasoning-predicate concept-symbol 2)
-  (multiple-value-bind (gens examples) ;;do I need to add reasoning symbols?
-    (create-gpool *r-near* (get-concept-gpool concept-symbol))
-    (declare (ignore gens examples))
-    )
-  )
+  
+  ;;; need to mod training examples
+  (let ((gpool (get-concept-gpool concept-symbol)))
+    
+    (create-gpool gpool)
+    
+    (dolist (id *r-near-inform-ids*)
+      
+      ;;; see if we need to add quantity preds
+      ; (maybe-add-quantity-preds id gpool)
+      
+      (generalize-case id gpool)
+      
+      )))
 
 
 ;;; first assume global distribution
@@ -113,23 +119,19 @@
     (confidence probe-dist mean stddev)))
 
 
-
-
-
 (defun run-query (facts gpool)
-
+  
   (remove-facts-from-case *probe-mt*)
-
+  
   (when (test-probe *probe-dist*)
     (format t "found to be near, appending near fact~%")
     (setf facts (append facts `(d::(near Obj11 Obj22))))
     )
-
+  
   ; (format t "Filtering scene with facts ~a~%." facts)
   (filter-scene-by-expression facts *probe-mt* gpool nil *filter-expression*)
-
+  
   )
-
 
 
 (defun make-random-mt ()
@@ -140,17 +142,18 @@
   (intern (format nil "AileenExp~D" id) :d))
 
 
-(defun create-gpool (ids gpool)
+(defun create-gpool (gpool)
   (cl-user::nuke-gpool gpool)
-  (cl-user::setup-gpool gpool :threshold *threshold* :strategy :gel)  
-  (dolist (id ids)
-    (format t "generalizing ~s~%" id)
-    (fire:tell-it `(d::sageSelectAndGeneralize
-                    ,(microtheory-by-id id)
-                    ,gpool)))
+  (cl-user::setup-gpool gpool :threshold *threshold* :strategy :gel)
   (values (length (fire:ask-it `(d::gpoolGeneralization ,gpool ?num)))
           (length (fire:ask-it `(d::gpoolExample ,gpool ?num)))))
 
+
+(defmethod generalize-case ((case-id fixnum) (gpool t))
+  (format t "generalizing ~s~%" case-id)
+  (fire:tell-it `(d::sageSelectAndGeneralize
+                  ,(microtheory-by-id case-id)
+                  ,gpool)))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -160,39 +163,96 @@
 
 (defparameter *test-mt* 'd::AileenExp11)
 
-(defparameter *test-forms* 
-  'd::((distanceBetween ?o1 ?o2 ?o3)))
+; (defparameter *test-forms* 
+;   'd::((distanceBetween ?o1 ?o2 ?o3)))
 
-
+(defparameter *test-preds* 'd::(distanceBetween))
 
 (defun test-find-quantities ()
-  (find-quantities *test-forms* *test-mt*))
+  (find-quantities *test-preds* *test-case*))
 
 
-(defun test-find-quantities-new ()
-
-  (filter-scene-by-expression *test-case* *probe-mt* *concept-gpool* nil *filter-expression*)
-
-  )
+(defun test-maybe-add ()
+  (maybe-add-quantity-preds 11 *concept-gpool*))
 
 
-(defun process-sme ()
+;;; need gpool to see how many examples so far
+;;; this lets us know if we have enough evidence to
+;;; learn quantity distributions
+(defun maybe-add-quantity-preds (facts gpool &key (learn-after 3))
+  (let (;;; how many examples in gpool
+        (example-count (cl-user::compute-n-input-examples (kb::retrieve-gpool gpool :create? nil)))
+        ;;; get quantity preds from facts in case
+        (quantity-facts (find-quantities *test-preds* facts)))
+    ; (format t "qfacts are ~s~%" quantity-facts)
+    (mapcan (lambda (qfact)
+              ;;; take the predicate that has at least one quantity arg
+              ;;; introduce a new predicate without the quantity
+              (let ((qfact-pred (make-qfact-pred qfact)))
+                (cond ((<= example-count learn-after)
+                       (list qfact-pred))
+                      ((in-distribution? qfact gpool)
+                       (list qfact-pred))
+                      (t nil)))) 
+      quantity-facts)))
 
-  (let ((sme sme::*sme*))
+
+(defun in-distribution? (qpred gpool)
+  (let* ((dist-quants (pred-quantities qpred gpool))
+         (probe-quant (fact-quantity qpred))
+         (mean (mean dist-quants))
+         (stddev (stddev dist-quants)))
+    (confidence probe-quant mean stddev)))
 
 
+;;; a dumb version that doesn't take structure mapping into account
+(defun pred-quantities (qpred gpool)
+  (mapcan (lambda (mt)
+            (let* ((facts (kb::list-mt-facts mt))
+                   (relevant-facts (filter-relevant-facts qpred facts)))
+              (mapcar 'fact-quantity relevant-facts)))
+    (gpool->examples gpool)))
 
 
-    )
+(defun fact-quantity (fact)
+  (find-if 'numberp (cdr fact)))
 
-  )
+
+(defun filter-relevant-facts (qfact facts)
+  (mapcan (lambda (fact)
+            (and (eql (car fact) (car qfact)) (list fact))) 
+    facts))
+
+
+;;; there's got to be a better way to do this???
+(defun gpool->examples (gpool)
+  (append
+   (mapcar (lambda (instance)
+             (third (fire::decontextualize-statement instance)))
+     (fire::ask-it `(d::gpoolExample ,gpool ?example)))
+   (cl-user::input-case-names-from-generalizations (kb::retrieve-gpool *concept-gpool*))))
+
+
+(defun make-qfact-pred (qfact)
+  (let ((pred (intern (format nil "qPred-~a" (car qfact))))
+        (non-quantity-arg-count (non-quantity-arg-count qfact))
+        (nq-args (remove-if 'numberp (cdr qfact))))
+    ;;; should we not do this if it already exists?
+    (create-reasoning-predicate-simple pred non-quantity-arg-count)
+    (cons pred nq-args)))
+
+;;; take a ground predicate, return number of
+;;; non-quantity args
+;;; this should probably be explicitly reified
+(defun non-quantity-arg-count (qfact)
+  (count-if-not 'numberp (cdr qfact)))
 
 
 ;;; return a list of facts
-(defun find-quantities (forms mt)
-  (mapcan (lambda (form)
-    (mapcar 'car (fire::retrieve form :mt mt)))
-    forms))
+(defun find-quantities (preds facts)
+  (remove-if-not (lambda (fact)
+                   (member (car fact) preds)) 
+                 facts))
 
 
 ;;; this is making ugly assumptions; essentially
@@ -200,30 +260,21 @@
 ;;; we will ever only see one instantiation of a predicate
 ;;; e.g. (distanceBetween ... ... ...)
 ;;; to handle this more elegantly, we could invoke SME
-(defun generate-quantity-symbols (forms mt gpool)
-
-  (let* ((quantity-preds (find-quantities forms mt))
-         (preds (remove-duplicates (mapcar 'car quantity-preds)))
-
-
-        )
-
-))
+; (defun generate-quantity-symbols (forms mt gpool)
+;   (let* ((quantity-preds (find-quantities forms mt))
+;          (preds (remove-duplicates (mapcar 'car quantity-preds)))
+;         )
+; ))
 
 
-(defun get-quantity-preds-for-gpool (pred argfn gpool)
-  (let ((preds (fire::retrieve pred :mt gpool)))
-    (mapcar argfn preds)))
-
-
-
-
+; (defun get-quantity-preds-for-gpool (pred argfn gpool)
+;   (let ((preds (fire::retrieve pred :mt gpool)))
+;     (mapcar argfn preds)))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Prob Stuff
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
 
 
 (defun mean (points)
@@ -242,12 +293,9 @@
 
 
 ;;; given a point, what is the prob it belongs to this class?
-;;;
 (defun gaussian-density (point mean stddev)
   (* (/ 1 (* stddev (sqrt (* 2. pi))))
      (exp (* -.5 (expt (/ (- point mean) stddev) 2)))))
-
-
 
 
 (defun confidence (point mean stddev &key (n-stddevs 2.))
@@ -259,7 +307,6 @@
     
     (and (>= point lower-bound)
          (<= point upper-bound))))
-
 
 
 ;;; one way to do this would be a two-step process.
