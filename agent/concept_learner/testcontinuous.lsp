@@ -84,6 +84,7 @@
   )
 
 
+
 (defun load-test-flat-files ()
   (fire:kr-file->kb (qrg:make-qrg-file-name
                      (qrg:make-qrg-path ".." "data")
@@ -105,32 +106,31 @@
       
       ;;; see if we need to add quantity preds
       ; (maybe-add-quantity-preds id gpool)
+      (let* ((mt (microtheory-by-id id))
+             (facts (kb::list-mt-facts mt)))
+
+        (dolist (fact (maybe-add-quantity-preds facts gpool))
+          (format t "storing ~s in ~s" fact mt)
+          (fire:kb-store fact :mt mt)))
       
       (generalize-case id gpool)
-      
+
       )))
 
 
 ;;; first assume global distribution
 ;;; this will be called by a query
-(defun test-probe (probe-dist &key (cheating-dists (list 3 4 5)))
-  (let* ((mean (mean cheating-dists))
-         (stddev (stddev cheating-dists)))
-    (confidence probe-dist mean stddev)))
+; (defun test-probe (probe-dist &key (cheating-dists (list 3 4 5)))
+;   (let* ((mean (mean cheating-dists))
+;          (stddev (stddev cheating-dists)))
+;     (confidence probe-dist mean stddev)))
 
 
 (defun run-query (facts gpool)
-  
   (remove-facts-from-case *probe-mt*)
-  
-  (when (test-probe *probe-dist*)
-    (format t "found to be near, appending near fact~%")
-    (setf facts (append facts `(d::(near Obj11 Obj22))))
-    )
-  
-  ; (format t "Filtering scene with facts ~a~%." facts)
+  ;;; see if in-distribution, if so add preds
+  (setf facts (append facts (maybe-add-quantity-preds facts gpool)))
   (filter-scene-by-expression facts *probe-mt* gpool nil *filter-expression*)
-  
   )
 
 
@@ -173,7 +173,7 @@
 
 
 (defun test-maybe-add ()
-  (maybe-add-quantity-preds 11 *concept-gpool*))
+  (maybe-add-quantity-preds *test-case* *concept-gpool*))
 
 
 ;;; need gpool to see how many examples so far
