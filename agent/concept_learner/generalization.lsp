@@ -79,6 +79,10 @@
 ;;; Assumes gpool is aready created
 (defun add-case-to-gpool (facts context concept)
   (let ((gpool (get-concept-gpool concept)))
+
+  	;;; wwh adding quantity predicates if needed
+  	(setf facts (append facts (maybe-add-quantity-preds facts gpool)))
+
     (store-facts-in-case facts context)
     (dolist (fact facts)
       (cond ((eql concept (car fact))
@@ -94,13 +98,15 @@
     (fire:kb-forget `(d::gpoolAssimilationThreshold ,gpool ?x) :mt gpool)
     (fire:kb-store `(d::gpoolAssimilationThreshold ,gpool ,*assimilation-threshold*) :mt gpool)
     (fire:tell-it `(d::sageSelectAndGeneralize ,context ,gpool) :context 'd::BaseKB)
-    (multiple-value-bind (rbrowse full url) (rbrowse::browse-sme sme::*sme*)
-      (declare (ignore url rbrowse))
-      (format t "~% rbrowse-sme: ~A base:~A target: ~A url: ~A "
-	      sme::*sme*
-	      context
-	      gpool
-	      full))
+    
+    ; (multiple-value-bind (rbrowse full url) (rbrowse::browse-sme sme::*sme*)
+    ;   (declare (ignore url rbrowse))
+    ;   (format t "~% rbrowse-sme: ~A base:~A target: ~A url: ~A "
+	   ;    sme::*sme*
+	   ;    context
+	   ;    gpool
+	   ;    full))
+
     (values (length (fire:ask-it `(d::kbOnly (d::gpoolGeneralization ,gpool ?num))))
 	    (length (fire:ask-it `(d::kbOnly (d::gpoolExample ,gpool ?num)) ))) ))
 
@@ -200,11 +206,13 @@
   
   (fire:ask-it `(d::matchBetween ,base (d::KBCaseFn-Probability ,target ,threshold)
 				 ,constraints ?target))
-  (multiple-value-bind (rbrowse full url) (rbrowse::browse-sme sme::*sme*)
-    (declare (ignore url rbrowse))
-		   (format t "~% match-scoring-sme rbrowse-sme: ~A url: ~A"
-			   sme::*sme*
-			   full))
+
+  ; (multiple-value-bind (rbrowse full url) (rbrowse::browse-sme sme::*sme*)
+  ;   (declare (ignore url rbrowse))
+		;    (format t "~% match-scoring-sme rbrowse-sme: ~A url: ~A"
+		; 	   sme::*sme*
+		; 	   full))
+
   (when (sme::mappings  sme::*sme*)
     (let ((score (sme::score (car (sme::mappings  sme::*sme*))))
 	  (sme sme::*sme*))
@@ -354,13 +362,15 @@
 	      (d::candidateInferenceContent ?ci ,pattern)
 	      ))
 	   :context gpool :response '?ret)))
-      (multiple-value-bind (rbrowse full url) (rbrowse::browse-sme sme::*sme*)
-	(declare (ignore rbrowse url))
-	(format t "~% rbrowse-sme: ~A base: ~A target: ~A url: ~A"
-		sme::*sme*
-		case-term
-		gpool
-		full))
+
+ ;      (multiple-value-bind (rbrowse full url) (rbrowse::browse-sme sme::*sme*)
+	; (declare (ignore rbrowse url))
+	; (format t "~% rbrowse-sme: ~A base: ~A target: ~A url: ~A"
+	; 	sme::*sme*
+	; 	case-term
+	; 	gpool
+	; 	full))
+
       (cond (ci-found?
 	     ;; The query above should return the score of the best mapping that includes
 	     ;; the pattern in the reverse candidate inference
@@ -436,8 +446,8 @@
   (fire:clear-wm)
   (fire:clear-dgroup-caches)
   (let* ((case-term `(d::KBCaseFn ,context))
-	 (gpool (get-concept-gpool action))
-	 (correspondences (determine-state-correspondences context gpool)))
+         (gpool (get-concept-gpool action))
+         (correspondences (determine-state-correspondences context gpool)))
     (format t "~%~% ~A " (fire:ask-it `(d::gpoolAssimilationThreshold ,gpool ?x) :context gpool))
     (format t "~%~%~% threshold : ~A" *projection-threshold*)
     (fire:kb-forget `(d::gpoolAssimilationThreshold ,gpool ?x):mt gpool)
@@ -449,28 +459,30 @@
     (fire:tell-it `(d::copyWMCaseToKB ,case-term ,case-term)) ;;could have an explicit query context here for easier clean up?
     (setup-constraints case-term correspondences)
     (let ((cis (fire:ask-it
-		`(d::reverseCIsAllowed
-		  (d::and
-		   (d::sageSelect ,case-term ,gpool ?ret ?mapping)
-		   (d::reverseCandidateInferenceOf ?ci ?mapping)
-		   (d::candidateInferenceContent ?ci ?ci-context)))
-		:context gpool :response '?ci-context)))
+                   `(d::reverseCIsAllowed
+                     (d::and
+                      (d::sageSelect ,case-term ,gpool ?ret ?mapping)
+                      (d::reverseCandidateInferenceOf ?ci ?mapping)
+                      (d::candidateInferenceContent ?ci ?ci-context)))
+                 :context gpool :response '?ci-context)))
       ;; Should we verify anything?
       ;; What kind of score should be required?
-
-    (fire:kb-forget `(d::gpoolAssimilationThreshold ,gpool ?x):mt gpool)
-    (fire:kb-store `(d::gpoolAssimilationThreshold ,gpool *match-threshold*) :mt gpool) 
-
-      (multiple-value-bind (rbrowse full url) (rbrowse::browse-wm)
-	(declare (ignore url rbrowse))
-	(format t "~% rbrowse-wm after project query: ~A" full))
-      (multiple-value-bind (rbrowse full url) (rbrowse::browse-sme sme::*sme*)
-	(declare (ignore url rbrowse))
-	(format t "~% rbrowse-sme: ~A base:~A target: ~A url: ~A"
-		sme::*sme*
-		case-term
-		gpool
-		full))
+      
+      (fire:kb-forget `(d::gpoolAssimilationThreshold ,gpool ?x):mt gpool)
+      (fire:kb-store `(d::gpoolAssimilationThreshold ,gpool *match-threshold*) :mt gpool) 
+      
+      ; (multiple-value-bind (rbrowse full url) (rbrowse::browse-wm)
+      ;   (declare (ignore url rbrowse))
+      ;   (format t "~% rbrowse-wm after project query: ~A" full))
+      
+      ; (multiple-value-bind (rbrowse full url) (rbrowse::browse-sme sme::*sme*)
+      ;   (declare (ignore url rbrowse))
+      ;   (format t "~% rbrowse-sme: ~A base:~A target: ~A url: ~A"
+      ;     sme::*sme*
+      ;     case-term
+      ;     gpool
+      ;     full))
+      
       cis)))
 
 
