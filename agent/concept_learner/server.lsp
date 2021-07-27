@@ -39,15 +39,12 @@
   )
 
 (defun debug-format (ctrl &rest args)
-
 	#+ide
 	(ide:with-output-to-ide-listener()
 		(apply 'format t ctrl args)
 		(finish-output))
 	#-ide
-	(apply 'format t ctrl args)
-
-	)
+	(apply 'format t ctrl args))
 
 (defun str->symbols (lst)
   (cond ((null lst) nil)
@@ -228,7 +225,12 @@
     (cond ((and facts pattern)
            ;; Clear previous facts from context.
            (remove-facts-from-case context)
+
+           ;;; adding quantity preds if needed
+           (setf facts (append facts (maybe-add-quantity-preds facts (get-concept-gpool (car pattern)))))
+
            ;; Store facts in context and match query.
+           (debug-format "in query-helper. facts are~%~% ~A.~%~%Context is ~A~%~% Pattern is ~A" facts context pattern)
            (let ((matches (filter-scene-by-expression facts context nil nil pattern)))
              (debug-format "Found matches ~A~%" matches)
              (cl-json:encode-json-alist-to-string
