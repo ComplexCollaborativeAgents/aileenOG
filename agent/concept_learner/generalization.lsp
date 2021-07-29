@@ -80,6 +80,9 @@
 (defun add-case-to-gpool (facts context concept)
   (let ((gpool (get-concept-gpool concept)))
 
+
+  	(debug-format "foofacts are ~s~%" facts)
+
   	;;; wwh adding quantity predicates if needed
   	(setf facts (append facts (maybe-add-quantity-preds facts gpool)))
 

@@ -1,0 +1,15 @@
+(in-microtheory AileenExp14)
+(isa AileenExp14 AileenCaseMt)
+
+(isa Obj14A CVCylinder)
+(isa Obj14A CVRed)
+
+(isa Obj14B CVCube)
+(isa Obj14B CVBlue)
+
+(w Obj14A Obj14B)
+(dc Obj14A Obj14B)
+
+(distanceBetween Obj14A Obj14B 3.0)
+
+(rNear Obj14A Obj14B)
