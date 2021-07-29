@@ -1,0 +1,13 @@
+(in-microtheory AileenExp25)
+(isa AileenExp25 AileenCaseMt)
+
+(isa Obj25A CVCube)
+(isa Obj25A CVBlue)
+
+(isa Obj25B CVCube)
+(isa Obj25B CVGreen)
+
+(w Obj25A Obj25B)
+(ec Obj25A Obj25B)
+
+(rLeft Obj25A Obj25B)
