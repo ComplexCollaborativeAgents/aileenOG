@@ -152,11 +152,11 @@
 
 
 ;;; Quantity Relations
-; (isa distance Relation)
-; (arity distance 3)
-; (arg1Isa distance Thing)
-; (arg2Isa distance Thing)
-; (arg3Isa distance Quantity)
+(isa distance Relation)
+(arity distance 3)
+(arg1Isa distance Quantity)
+(arg2Isa distance Thing)
+(arg3Isa distance Thing)
 
 
 (in-microtheory BaseKB)

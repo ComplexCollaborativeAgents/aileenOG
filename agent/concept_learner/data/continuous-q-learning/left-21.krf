@@ -1,0 +1,13 @@
+(in-microtheory AileenExp21)
+(isa AileenExp21 AileenCaseMt)
+
+(isa Obj21A CVCylinder)
+(isa Obj21A CVRed)
+
+(isa Obj21B CVCube)
+(isa Obj21B CVBlue)
+
+(w Obj21A Obj21B)
+(dc Obj21A Obj21B)
+
+(rLeft Obj21A Obj21B)
