@@ -10,4 +10,6 @@
 (w Obj25A Obj25B)
 (ec Obj25A Obj25B)
 
+(distanceBetween Obj25A Obj25B 6.0)
+
 (rLeft Obj25A Obj25B)

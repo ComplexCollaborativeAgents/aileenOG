@@ -10,4 +10,6 @@
 (w Obj21A Obj21B)
 (dc Obj21A Obj21B)
 
+(distanceBetween Obj21A Obj21B 4.0)
+
 (rLeft Obj21A Obj21B)
