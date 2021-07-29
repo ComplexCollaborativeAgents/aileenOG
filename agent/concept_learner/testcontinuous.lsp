@@ -210,7 +210,7 @@
               ;;; take the predicate that has at least one quantity arg
               ;;; introduce a new predicate without the quantity
               (let ((qfact-pred (make-qfact-pred qfact)))
-                (cond ((<= example-count learn-after)
+                (cond ((< example-count learn-after)
                        (debug-format "~s examples, default add ~s~%" example-count qfact-pred)
                        (list qfact-pred))
                       ((in-distribution? qfact gpool)
