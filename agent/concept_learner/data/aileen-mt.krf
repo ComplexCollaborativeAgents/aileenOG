@@ -159,6 +159,13 @@
 (arg3Isa distance Thing)
 
 
+(isa sizeOf Relation)
+(arity sizeOf 2)
+(arg1Isa sizeOf Thing)
+(arg2Isa sizeOf Quantity)
+
+
+
 (in-microtheory BaseKB)
 (notForAnalogy AileenCaseMt)
 (notForAnalogy sageRequireInMapping)
