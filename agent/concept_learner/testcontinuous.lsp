@@ -12,21 +12,8 @@
 (in-package :aileen)
 
 
-(defparameter *assimilation-threshold* .6)
-
-; mt ids for concept
-(defparameter *r-near-inform-ids* '(11 12 13))
-(defparameter *near-concept-symbol* 'd::rNear)
-
-
-(defparameter *leftof-inform-ids* '(11 12 13))
-(defparameter *leftof-concept-symbol* 'd::r_leftOf)
-
-
-(defparameter *near-filter-expression* (list *near-concept-symbol* 'd::?one 'd::?two))
+; (defparameter *assimilation-threshold* .6)
 (defparameter *probe-mt* 'd::query-facts)
-
-
 
 
 ;;; positive example
@@ -73,7 +60,7 @@
   (isa ObjLeftPosB CVCylinder)
   (isa ObjLeftPosB CVGreen)
 
-  (distanceBetween ObjLeftPosA ObjLeftPosB 4.0)
+  (distanceBetween ObjLeftPosA ObjLeftPosB 9999.0)
 
   (dc ObjLeftPosA ObjLeftPosB)
   (w ObjLeftPosA ObjLeftPosB)
@@ -107,11 +94,27 @@
   (load-test-flat-files)
 
   ;;; nearness cases
-  (create-test-generalizations *near-concept-symbol* *r-near-inform-ids*)
+  (create-test-generalizations 'd::rNear (list 11 12 13 14 15))
+  (create-test-generalizations 'd::rLeft (list 21 22 23 24 25))
 
 
+  ; (run-query *near-pos* (get-concept-gpool 'd::rNear))
+  ; (run-query *near-neg* (get-concept-gpool 'd::rNear))
 
-  ; (run-query *near-pos* *concept-gpool*)
+
+  ; (run-query *left-pos* (get-concept-gpool 'd::rLeft))
+  ; (run-query *left-neg* (get-concept-gpool 'd::rLeft))
+  )
+
+
+(defun test-query ()
+
+  ; (run-query *near-pos* 'd::rNear)
+  ; (run-query *near-neg* 'd::rNear)
+  
+  
+  (run-query *left-pos* 'd::rLeft)
+  ; (run-query *left-neg* 'd::rLeft)
   )
 
 
@@ -149,12 +152,13 @@
       )))
 
 
-(defun run-query (facts gpool)
-  (remove-facts-from-case *probe-mt*)
-  ;;; see if in-distribution, if so add preds
-  (setf facts (append facts (maybe-add-quantity-preds facts gpool)))
-  (filter-scene-by-expression facts *probe-mt* gpool nil *near-filter-expression*)
-  )
+(defun run-query (facts concept)
+  (let ((gpool (get-concept-gpool concept)))
+    (remove-facts-from-case *probe-mt*)
+    ;;; see if in-distribution, if so add preds
+    (setf facts (append facts (maybe-add-quantity-preds facts gpool)))
+    (filter-scene-by-expression facts *probe-mt* gpool nil (list concept 'd::?one 'd::?two))
+    ))
 
 
 (defun make-random-mt ()
