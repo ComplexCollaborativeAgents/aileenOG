@@ -8,7 +8,7 @@
 (isa Obj25B CVGreen)
 
 (w Obj25A Obj25B)
-(ec Obj25A Obj25B)
+(dc Obj25A Obj25B)
 
 (distanceBetween Obj25A Obj25B 6.0)
 
