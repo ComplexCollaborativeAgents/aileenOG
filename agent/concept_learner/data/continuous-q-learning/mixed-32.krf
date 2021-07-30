@@ -1,0 +1,16 @@
+(in-microtheory AileenExp32)
+(isa AileenExp32 AileenCaseMt)
+
+(isa Obj32A CVCone)
+(isa Obj32A CVBlue)
+(sizeOf Obj32A 5.0)
+
+(isa Obj32B CVCylinder)
+(isa Obj32B CVYellow)
+
+(dc Obj32A Obj32B)
+(s Obj32A Obj32B)
+
+(distanceBetween Obj32A Obj32B 5.0)
+
+(rNearTwo Obj32A Obj32B)
