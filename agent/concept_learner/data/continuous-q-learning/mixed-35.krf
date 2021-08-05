@@ -1,0 +1,16 @@
+(in-microtheory AileenExp35)
+(isa AileenExp35 AileenCaseMt)
+
+(isa Obj35A CVCube)
+(isa Obj35A CVBlue)
+(sizeOf Obj35A 700.0)
+
+(isa Obj35B CVCube)
+(isa Obj35B CVGreen)
+
+(n Obj35A Obj35B)
+(dc Obj35A Obj35B)
+
+(distanceBetween Obj35A Obj35B 5.0)
+
+(rNearTwo Obj35A Obj35B)
