@@ -28,10 +28,5 @@
         "objects": ["<obj1>", "<obj2>"],
         "definition": [["distant" , "<obj2>", "<obj1>"], ["dc", "<obj2>", "<obj1>"]],
         "language": ["<obj1>", "far from","<obj2>"]
-    },
-    "distance-between": {
-        "objects": ["<obj1>", "<obj2>, <obj3>"],
-        "definition": [["distant" , "<obj2>", "<obj1>", "<obj3>"], ["dc", "<obj2>", "<obj1>"]],
-        "language": ["<obj2>", "is", "<obj3>", "from", "<obj1>"]
     }
 }
