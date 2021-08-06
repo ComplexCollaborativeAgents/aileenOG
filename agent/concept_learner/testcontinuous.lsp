@@ -14,75 +14,7 @@
 
 ; (defparameter *assimilation-threshold* .6)
 (defparameter *probe-mt* 'd::query-facts)
-
-
-;;; positive example
-(defparameter *near-pos* 'd::( 
-
-  (isa ObjNearPosA CVCube)
-  (isa ObjNearPosA CVGreen)
-
-  (isa ObjNearPosB CVCylinder)
-  (isa ObjNearPosB CVGreen)
-
-  (distanceBetween ObjNearPosA ObjNearPosB 4.0)
-
-  (dc ObjNearPosA ObjNearPosB)
-  (e ObjNearPosA ObjNearPosB)
-
-  ))
-
-
-;;; negative nearness test case
-(defparameter *near-neg* 'd::( 
-
-  (isa ObjNearNegA CVCube)
-  (isa ObjNearNegA CVYellow)
-
-  (isa ObjNearNegB CVCylinder)
-  (isa ObjNearNegB CVGreen)
-
-  (distanceBetween ObjNearNegA ObjNearNegB 99999.0)
-
-  (dc ObjNearNegA ObjNearNegB)
-  (s ObjNearNegA ObjNearNegB)
-
-  ))
-
-
-
-
-(defparameter *left-pos* 'd::( 
-
-  (isa ObjLeftPosA CVCube)
-  (isa ObjLeftPosA CVGreen)
-
-  (isa ObjLeftPosB CVCylinder)
-  (isa ObjLeftPosB CVGreen)
-
-  (distanceBetween ObjLeftPosA ObjLeftPosB 9999.0)
-
-  (dc ObjLeftPosA ObjLeftPosB)
-  (w ObjLeftPosA ObjLeftPosB)
-
-  ))
-
-
-(defparameter *left-neg* 'd::( 
-
-  (isa ObjLeftNegA CVCube)
-  (isa ObjLeftNegA CVYellow)
-
-  (isa ObjLeftNegB CVCylinder)
-  (isa ObjLeftNegB CVGreen)
-
-  (distanceBetween ObjLeftNegA ObjLeftNegB 7.0)
-
-  (dc ObjLeftNegA ObjLeftNegB)
-  (s ObjLeftNegA ObjLeftNegB)
-
-  ))
-
+(defparameter *test-preds* 'd::(distanceBetween distance sizeOf))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -93,17 +25,13 @@
 
   (load-test-flat-files)
 
-  ;;; nearness cases
-  (create-test-generalizations 'd::rNear (list 11 12 13 14 15))
-  (create-test-generalizations 'd::rLeft (list 21 22 23 24 25))
+  ; ;;; nearness cases
+  (create-test-generalizations 'd::rNear (list 11 12 13 14 15) :predicate)
+  (create-test-generalizations 'd::rLeft (list 21 22 23 24 25) :predicate)
+  (create-test-generalizations 'd::rNearTwo (list 31 32 33 34 35) :predicate)
 
+  (create-test-generalizations 'd::rSmallNew (list 41 42 43 44 45) :symbol)
 
-  ; (run-query *near-pos* (get-concept-gpool 'd::rNear))
-  ; (run-query *near-neg* (get-concept-gpool 'd::rNear))
-
-
-  ; (run-query *left-pos* (get-concept-gpool 'd::rLeft))
-  ; (run-query *left-neg* (get-concept-gpool 'd::rLeft))
   )
 
 
@@ -112,9 +40,14 @@
   ; (run-query *near-pos* 'd::rNear)
   ; (run-query *near-neg* 'd::rNear)
   
-  
-  (run-query *left-pos* 'd::rLeft)
-  ; (run-query *left-neg* 'd::rLeft)
+  (run-query *left-pos* 'd::rLeft 'd::(rLeft ?obj1 ?obj2))
+  ; (run-query *left-neg* 'd::rLeft 'd::(rLeft ?obj1 ?obj2))
+
+  ; (run-query *mixed-pos* 'd::rNearTwo)
+  ; (run-query *mixed-neg* 'd::rNearTwo)
+
+  ; (run-query *small-pos* 'd::rSmallNew 'd::(isa ?obj rSmallNew))
+  ; (run-query *small-neg* 'd::rSmallNew 'd::(isa ?obj rSmallNew))
   )
 
 
@@ -127,10 +60,12 @@
   (cl-user::load-flatfiles-in-dir (qrg:make-qrg-path ".." "data" "continuous-q-learning")))
 
 
-(defun create-test-generalizations (concept-symbol case-ids)
-  ; (create-reasoning-symbol concept-symbol)
-  (create-reasoning-predicate concept-symbol 2)
-  
+(defun create-test-generalizations (concept-symbol case-ids type)
+
+  (case type
+    (:predicate (create-reasoning-predicate concept-symbol 2))
+    (:symbol (create-reasoning-symbol concept-symbol)))
+
   ;;; need to mod training examples
   (let ((gpool (get-concept-gpool concept-symbol)))
     
@@ -152,12 +87,12 @@
       )))
 
 
-(defun run-query (facts concept)
+(defun run-query (facts concept concept-pred)
   (let ((gpool (get-concept-gpool concept)))
     (remove-facts-from-case *probe-mt*)
     ;;; see if in-distribution, if so add preds
     (setf facts (append facts (maybe-add-quantity-preds facts gpool)))
-    (filter-scene-by-expression facts *probe-mt* gpool nil (list concept 'd::?one 'd::?two))
+    (filter-scene-by-expression facts *probe-mt* gpool nil concept-pred)
     ))
 
 
@@ -188,11 +123,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-(defparameter *test-mt* 'd::AileenExp11)
-
-(defparameter *test-preds* 'd::(distanceBetween distance))
-
-
 ; (defun test-find-quantities ()
 ;   (find-quantities *test-preds* *near-pos*))
 
@@ -214,14 +144,17 @@
               ;;; take the predicate that has at least one quantity arg
               ;;; introduce a new predicate without the quantity
               (let ((qfact-pred (make-qfact-pred qfact)))
-                (cond ((< example-count learn-after)
-                       (debug-format "~s examples, default add ~s~%" example-count qfact-pred)
+
+                (debug-format "~%Checking ~A~%" qfact-pred)
+
+                (cond ((<= example-count learn-after)
+                       (debug-format "Less than ~s examples, default add ~s~%" learn-after qfact-pred)
                        (list qfact-pred))
                       ((in-distribution? qfact gpool)
-                       (debug-format "in dist, adding ~s~%" qfact-pred)
+                       (debug-format "In dist, adding ~s~%" qfact-pred)
                        (list qfact-pred))
                       (t 
-                        (debug-format "out of dist, not adding ~s~%" qfact-pred)
+                        (debug-format "Out of dist, not adding ~s~%" qfact-pred)
                         nil)))) 
       quantity-facts)))
 
@@ -231,6 +164,7 @@
          (probe-quant (fact-quantity qpred))
          (mean (mean dist-quants))
          (stddev (stddev dist-quants)))
+    (debug-format "Checking dist: probe is ~A, quants are ~A~%" probe-quant dist-quants)
     (confidence probe-quant mean stddev)))
 
 
