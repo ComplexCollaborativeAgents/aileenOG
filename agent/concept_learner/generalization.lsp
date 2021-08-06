@@ -80,8 +80,7 @@
 (defun add-case-to-gpool (facts context concept)
   (let ((gpool (get-concept-gpool concept)))
 
-
-  	(debug-format "foofacts are ~s~%" facts)
+  	; (debug-format "foofacts are ~s~%" facts)
 
   	;;; wwh adding quantity predicates if needed
   	(setf facts (append facts (maybe-add-quantity-preds facts gpool)))
@@ -121,9 +120,9 @@
   )
 
 (defun remove-facts-from-case (context)
-  (format t "Removing ~A~%" context)
+  ; (format t "Removing ~A~%" context)
   (dolist (fact (fire:retrieve-it '?x :context context :response '?x))
-    (format t "Forgetting ~A in ~A~%" fact context)
+    ; (format t "Forgetting ~A in ~A~%" fact context)
     (fire:kb-forget fact :mt context)))
   
 ;;; this may go away
@@ -266,10 +265,10 @@
 
 
 (defun filter-scene-by-expression-rel (facts context gpool prevmatches pattern)
-	(debug-format "filtering by relation expression ~A." pattern)
+	(debug-format "Filtering by relation expression ~A.~%" pattern)
   (assert (null prevmatches))
   (assert (and (listp pattern) (every #'atom pattern))) ;; no nested lists in pattern.
-  (debug-format "Storing facts ~A." facts)
+  (debug-format "Storing facts ~A.~%" facts)
   (store-facts-in-case facts context)
   (when (not gpool)
     (setf gpool (get-concept-gpool (car pattern))))
@@ -280,7 +279,7 @@
 	((vars-in-expr pattern)
 	 (remove-if-not
 	  #'(lambda (bound-pattern)
-	  	(format t "Testing bound pattern ~A~%" bound-pattern)
+	  	; (format t "Testing bound pattern ~A~%" bound-pattern)
 	      (match-query-against-gpool context gpool bound-pattern))
 	  (mapcar 
 	   #'(lambda (blist)
@@ -392,7 +391,7 @@
 	)))))
   
 (defun make-possible-blists (vars objs &optional blist)
-	(format t "Possible blist ~a ~a~%" vars objs)
+	; (format t "Possible blist ~a ~a~%" vars objs)
   (cond ((null vars) (list blist))
 	((null objs) (assert nil))
 	(t

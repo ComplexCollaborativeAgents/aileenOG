@@ -7,6 +7,7 @@
 
 (isa Obj35B CVCube)
 (isa Obj35B CVGreen)
+(sizeOf Obj35B 4.0)
 
 (n Obj35A Obj35B)
 (dc Obj35A Obj35B)
