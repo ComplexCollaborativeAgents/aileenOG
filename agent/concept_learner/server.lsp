@@ -11,15 +11,29 @@
 
 (in-package :cl-user)
 
-(load "C:\\Users\\whancock\\aileen-agent\\agent\\concept_learner\\analogystack\\qrgsetup.lsp")
 
+(setf *current-dir* (pathname-directory *load-pathname*))
+(setf *cljson-dir* (append *current-dir* (list "cl-json")))
+(setf *analogystack-dir* (append *current-dir* (list "analogystack")))
+
+
+(defun get-abspath (filename pathspec)
+	(namestring (make-pathname
+   :host (pathname-host *load-pathname*)
+   :device (pathname-device *load-pathname*)
+   :directory pathspec
+   :name filename)))
+
+
+;;; load qrgsetup
+(load (get-abspath "qrgsetup.lsp" *analogystack-dir*))
 
 (require-module "fire" :fire) ;; assumes you already have a KB
 (require-module "rbrowse" :rbrowse) ;; don't need this now
 
 (require :asdf)
 
-(load "C:\\Users\\whancock\\aileen-agent\\agent\\concept_learner\\cl-json\\cl-json.asd")
+(load (get-abspath "cl-json.asd" *cljson-dir*))
 (asdf:load-system :cl-json)
 
 (require :aserve)
@@ -29,7 +43,12 @@
 (defpackage :aileen
   (:use :common-lisp :cl-user :excl))
 
-(load "C:\\Users\\whancock\\aileen-agent\\agent\\concept_learner\\generalization.lsp")
+(load (get-abspath "generalization.lsp" *current-dir*))
+(load (get-abspath "testcontinuous.lsp" *current-dir*))
+(load (get-abspath "test-concepts.lsp" *current-dir*))
+
+
+
 
 (in-package :aileen)
 
