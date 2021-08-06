@@ -1,0 +1,8 @@
+(in-microtheory AileenExp41)
+(isa AileenExp41 AileenCaseMt)
+
+(isa Obj41A CVCube)
+(isa Obj41A CVGreen)
+(sizeOf Obj41A 0.5)
+
+(isa Obj41A rSmallNew)
