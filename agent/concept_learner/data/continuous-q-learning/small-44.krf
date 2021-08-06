@@ -1,0 +1,8 @@
+(in-microtheory AileenExp44)
+(isa AileenExp44 AileenCaseMt)
+
+(isa Obj44A CVCylinder)
+(isa Obj44A CVRed)
+(sizeOf Obj44A 2.0)
+
+(isa Obj44A rSmallNew)
