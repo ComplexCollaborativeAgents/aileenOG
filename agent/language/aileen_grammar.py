@@ -51,13 +51,14 @@ class AileenGrammar:
         # self.property_names = ["the",
         #                        "left", "middle", "right",
         #                        "blue", "red", "yellow"]
-        self.property_names = ["blue", "red", "yellow", "green", "purple", "white", "black"]
+        self.property_names = ["blue", "red", "yellow", "green", "purple", "white", "black", "small"]
         self.relation_rules = ["between [obj] and [obj]",
                                "left of [obj]",
                                "on [obj]",
                                "right of [obj]",
                                "in front of [obj]",
                                "behind [obj]",
+                               "near [obj]",
                                "next to [obj]"]
         self.action_rules = ["move [obj] [rel]", "pick up [obj]"]
         self.reset_parser()
