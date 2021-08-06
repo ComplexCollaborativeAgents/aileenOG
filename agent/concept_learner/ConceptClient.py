@@ -3,7 +3,7 @@ import xmlrpclib
 
 
 
-def test_concept_learner_server(port=8000):
+def test_concept_learner_server(port=8085):
     server = xmlrpclib.ServerProxy('http://dubs:'+str(port)+'/ConceptLearner')
     test_reasoning_symbols(server)
     test_generalization(server)
