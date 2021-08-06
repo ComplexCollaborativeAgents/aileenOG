@@ -21,19 +21,36 @@ sp {filter-scene*apply*elaborate-with-concept
               ^lthird <concept>)
     }
 
-sp {filter-scene*apply*elaborate-with-concept*object*attrs
+sp {filter-scene*apply*elaborate-with-concept*object*attrs*color*shape
     (state <s>    ^name filter-scene
                   ^operator <op>
                   ^io.output-link <ol>
-                  ^world.objects.object <cso>
-                  ^topstate._params.relevant-percept-set.type <attr>)
+                  ^world.objects.object <cso>)
+                 # ^topstate._params.relevant-percept-set.type <attr>)
     (<ol>    ^concept-memory.query.facts <facts>)
     (<op>    ^name elaborate-with-concept)
-    (<cso>    ^<attr> <val>
+    (<cso>    ^<< color shape >> <val>
               ^id_string <id_string>)
 -->
     (<facts>    ^fact <f>)
     (<f>    ^lfirst isa
+            ^lsecond <id_string>
+            ^lthird <val>)
+    }
+
+sp {filter-scene*apply*elaborate-with-concept*object*attrs*color*size
+    (state <s>    ^name filter-scene
+                  ^operator <op>
+                  ^io.output-link <ol>
+                  ^world.objects.object <cso>)
+                 # ^topstate._params.relevant-percept-set.type <attr>)
+    (<ol>    ^concept-memory.query.facts <facts>)
+    (<op>    ^name elaborate-with-concept)
+    (<cso>    ^size <val>
+              ^id_string <id_string>)
+-->
+    (<facts>    ^fact <f>)
+    (<f>    ^lfirst size
             ^lsecond <id_string>
             ^lthird <val>)
     }
