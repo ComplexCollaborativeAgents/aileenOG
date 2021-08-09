@@ -44,11 +44,7 @@ class InputWriter(object):
             self._clean_concept_memory_flag = False
 
         if settings.SOAR_CV:
-            # ToDo: Move the input to Detector to the config file.
-            self.detector = Detector(settings.CV_NAMES,
-                                     settings.CV_CONFIGURATION,
-                                     settings.CV_WEIGHTS,
-                                     'color')
+            self.detector = Detector()
 
     def set_concept_memory_status(self, concept_memory_status_dictionary):
         self._concept_memory_status = concept_memory_status_dictionary
@@ -108,8 +104,14 @@ class InputWriter(object):
 
         updated_detections = []
 
+        mapped = np.zeros(len(world))
         for i in range(len(detections)):
+            w_index = -1
             for w in world:
+                w_index += 1
+                if mapped[w_index]:
+                    continue
+
                 d = detections[i]
                 bbox1 = d['camera_bounding_box_yolo']
                 bbox2 = w['bounding_box_camera']
@@ -124,6 +126,7 @@ class InputWriter(object):
 
                 if Detector.bb_iou(bbox1, bbox2) > .7:
                     # Match
+                    mapped[w_index] = 1
                     detections[i]['id'] = w['id']
                     detections[i]['id_name'] = w['id_name']
                     detections[i]['id_string'] = w['id_string']
@@ -135,16 +138,16 @@ class InputWriter(object):
                     detections[i]['position'] = detections[i]['camera_yolo_position_proj_to_world']
                     detections[i]['bounding_box'] = detections[i]['camera_bounding_box_yolo_proj_to_world']
 
+                    if settings.DETECTOR_MODE == 2:
+                        detections[i]['cluster_id'] = detections[i]['cluster_id']
 
-                    ## SM: if settings have preload visual concepts on, just use information from the world to ensure 100% detection
+                    ##  SM: if settings have preload visual concepts on, just use information from the world to ensure 100% detection
                     if settings.AGENT_VISUAL_CONCEPTS_PARAM == 'soar' and settings.AGENT_PRELOAD_VISUAL_CONCEPTS_PARAM == 'true':
                         detections[i]['color'] = w['color']
                         detections[i]['shape'] = w['shape']
 
                     updated_detections.append(detections[i])
                     break
-
-
 
         return updated_detections
 
@@ -163,12 +166,7 @@ class InputWriter(object):
                     qsr_id = self._qsrs_link.CreateIdWME('qsr')
                     qsr_id.CreateIntWME("root", int(root_obj_id))
                     qsr_id.CreateIntWME("target", int(target_obj_id))
-                    if qsr_type == "rcc8":
-                        qsr_id.CreateStringWME("rcc8", qsr_value)
-                    else:
-                        if qsr_type == "cardir":
-                            logging.info("Creating cardir QSR with value {}".format(qsr_value))
-                            qsr_id.CreateStringWME("cardir", qsr_value)
+                    qsr_id.CreateStringWME(qsr_type, qsr_value)
 
     def write_csrs_to_input_link(self, csrs):
         logging.debug("[input_writer] :: writing csrs to input link {}".format(csrs))
@@ -292,9 +290,11 @@ class InputWriter(object):
                 position_id.CreateFloatWME('y', w_object['position'][1])
                 position_id.CreateFloatWME('z', w_object['position'][2])
             if 'bounding_box' in w_object:
-                size_id = object_id.CreateIdWME('size')
+                size_id = object_id.CreateIdWME('size_bb')
                 size_id.CreateFloatWME('xsize', w_object['bounding_box'][3]-w_object['bounding_box'][0])
                 size_id.CreateFloatWME('zsize', w_object['bounding_box'][5]-w_object['bounding_box'][2])
+                size_id.CreateFloatWME('ysize', w_object['bounding_box'][4]-w_object['bounding_box'][1])
+                object_id.CreateFloatWME('size', self.size_from_bounding_box(w_object['bounding_box']))
             object_id.CreateStringWME('held', w_object['held'])
             object_id.CreateStringWME('color', str(w_object['color']))
             object_id.CreateStringWME('shape', w_object['shape'])
@@ -368,10 +368,12 @@ class InputWriter(object):
                     [Object_State(name=str(obj['id']),timestamp=0,
                                   x=obj['position'][0],
                                   y=obj['position'][2],
+                                  z=obj['position'][1],
                                   xsize=obj['bounding_box'][3]-obj['bounding_box'][0],
-                                  ysize=obj['bounding_box'][5]-obj['bounding_box'][2]
+                                  ysize=obj['bounding_box'][5]-obj['bounding_box'][2],
+                                  zsize=obj['bounding_box'][4]-obj['bounding_box'][1]
                     )])
-        qsrlib_request_message = QSRlib_Request_Message(["rcc8","cardir"], world)
+        qsrlib_request_message = QSRlib_Request_Message(["rcc8","cardir","ra", "3dcd"], world)
         qsrlib_response_message = qsrlib.request_qsrs(req_msg=qsrlib_request_message)
         logging.info("[input_writer] :: qsrs response message {}".format(qsrlib_response_message))
         ret = {}
@@ -381,51 +383,70 @@ class InputWriter(object):
                 args = k.split(',')
                 if args[0] not in ret:
                     ret[args[0]] = {}
+                if 'ra' in v.qsr.keys():
+                    v.qsr['ra'] = self.get_rcc8_symbols_for_allen_intervals(v.qsr['ra'])
+                if '3dcd' in v.qsr.keys():
+                    v.qsr['depth'] = v.qsr['3dcd'][-1].lower()
                 ret[args[0]][args[1]] = v.qsr
         # logging.debug("[input_writer] :: qsrs computed {}".format(ret))
         return ret
 
 
+    def size_from_bounding_box(self, bbox):
+        """
+        Place holder for something more principled.
+        Arbitrary thresholds as a first pass -> clustering on witnessed examples later
+        """
+        area = abs((bbox[3] - bbox[0]) * (bbox[5] - bbox[2]))
+        return area
 
+        # if area < settings.SIZE_SM:
+        #     return 'CVSmall'
+        # elif area < settings.SIZE_ML:
+        #     return 'CVMedium'
+        # else:
+        #     return 'CVLarge'
 
-# TEST_OBJECTS = [
-#     {'shape': 'CVCone', 
-#     'id_name': 'object110730092892670', 
-#     'bounding_box': [0.3724613854228045, 0.39980403441748485, -0.2968869626644896, 0.47246138542280447, 0.49980403441748483, -0.19688696266448957], 
-#     'bounding_box_camera': [0.06967705545435193, 0.7228759139077792, 0.21445705545435195, 0.867675913907779], 
-#     'id_string': 'ob370', 
-#     'held': 'false', 
-#     'color': 'CVYellow', 
-#     'position': [0.4224613854228045, 0.44980403441748484, -0.2468869626644896], 
-#     'id': 370, 'texture': 't_'}, 
-#     {'shape': 'CVCylinder', 'id_name': 'object188837901502179', 
-#     'bounding_box': [0.33520377466400003, 0.3998037994635584, -0.17868542245000002, 0.435203774664, 0.49980379946355835, -0.07868542245], 
-#     'bounding_box_camera': [0.2408092453768899, 0.7768249342865279, 0.38558924537688993, 0.9216249342865279], 
-#     'id_string': 'ob377', 
-#     'held': 'false', 
-#     'color': 'CVRed', 
-#     'position': [0.385203774664, 0.44980379946355836, -0.12868542245], 
-#     'id': 377, 'texture': 't_'}, 
-#     {'shape': 'CVCone', 
-#     'id_name': 'object195648312634764', 
-#     'bounding_box': [0.4599946867100079, 0.39980350624364386, -0.1972266109604019, 0.559994686710008, 0.49980350624364384, -0.0972266109604019], 
-#     'bounding_box_camera': [0.21396531265153007, 0.5961276936439085, 0.3587453126515301, 0.7409276936439085], 
-#     'id_string': 'ob384', 
-#     'held': 'false', 
-#     'color': 'CVRed', 
-#     'position': [0.5099946867100079, 0.44980350624364385, -0.1472266109604019], 
-#     'id': 384, 'texture': 't_'}, 
-#     {'shape': 'CVSphere', 
-#     'id_name': 'object179932903310641', 
-#     'bounding_box': [0.636336046731, 0.39980379946355843, -0.0724874191323, 0.7363360467310001, 0.4998037994635584, 0.027512580867700004], 
-#     'bounding_box_camera': [0.394562714580256, 0.34078540433351195, 0.5393427145802561, 0.4855854043335121], 
-#     'id_string': 'ob391', 
-#     'held': 'false', 
-#     'color': 'CVBlue', 
-#     'position': [0.686336046731, 0.4498037994635584, -0.0224874191323], 
-#     'id': 391, 'texture': 't_'}]
+    def get_rcc8_symbols_for_allen_intervals(self, symbols):
+        """
+        We lose a bit of information here, but it works with the current concept learner so we have it as a stopgap
+        mapping:
+        <   dc
+        >   dc
+        =   eq
+        m   ec
+        mi  ec
+        o   po
+        oi  po
+        d   ntpp
+        di  ntppi
+        s   tpp
+        si  tppi
+        f   tpp
+        fi  tppi
+        """
 
-
-
-# if __name__ == '__main__':
-#     print(create_aux_info(TEST_OBJECTS))
+        symbol_split = symbols.split(',')
+        new_symbols = ''
+        count = 0
+        for symbol in symbol_split:
+            count += 1
+            if symbol == '<' or symbol == '>':
+                new_symbols += 'dc'
+            if symbol == '=':
+                new_symbols += 'eq'
+            if symbol == 'm' or symbol == 'mi':
+                new_symbols += 'ec'
+            if symbol == 'o' or symbol == 'oi':
+                new_symbols += 'po'
+            if symbol == 'd':
+                new_symbols += 'ntpp'
+            if symbol == 'di':
+                new_symbols += 'ntppi'
+            if symbol in ['s','f']:
+                new_symbols += 'tpp'
+            if symbol in ['si', 'fi']:
+                new_symbols += 'tppi'
+            if count != len(symbol_split):
+                new_symbols += ','
+        return new_symbols

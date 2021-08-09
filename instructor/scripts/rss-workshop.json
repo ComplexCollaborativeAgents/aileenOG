@@ -1,4 +1,20 @@
-[{
+[
+  {
+    "lesson-type": "visual-word",
+    "content": "box",
+    "description": {"color": "red",
+                    "shape": "box"},
+    "signal": "verify"
+  },
+   {
+    "lesson-type": "visual-word",
+    "content": "box",
+    "description": {"color": "blue",
+                    "shape": "box"},
+    "signal": "verify",
+     "distractors": 2
+  },
+  {
     "lesson-type": "spatial-word",
     "content": "yellow cone left of red cylinder",
     "description": {

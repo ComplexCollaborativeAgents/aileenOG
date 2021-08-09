@@ -1,0 +1,41 @@
+[
+  {
+    "signal": "inform",
+    "lesson-type": "visual-word",
+    "description": {"color": "green",
+                    "shape": "cone",
+                    "size":  "large"}
+  },
+  {
+    "lesson-type": "visual-word",
+    "content": "large box",
+    "description": {"color": "red",
+                    "shape": "box",
+                    "size":  "large"},
+    "signal": "inform"
+  },
+  {
+    "lesson-type": "visual-word",
+    "content": "large cylinder",
+    "description": {"color": "blue",
+                    "shape": "cylinder",
+                    "size":  "large"},
+    "signal": "inform"
+  },
+  {
+    "lesson-type": "visual-word",
+    "content": "large box",
+    "description": {"color": "green",
+                    "shape": "box",
+                    "size":  "large"},
+    "signal": "verify"
+  },
+  {
+    "lesson-type": "visual-word",
+    "content": "large box",
+    "description": {"color": "green",
+                    "shape": "box",
+                    "size":  "medium"},
+    "signal": "verify"
+  }
+]

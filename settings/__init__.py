@@ -15,9 +15,9 @@ SOAR_SVS = False
 SOAR_CV = True
 CURRENT_IMAGE_PATH = path.join(ROOT_PATH, 'world', 'controllers', 'images', 'current_image.png')
 COLOR_PATH = path.join(ROOT_PATH, 'instructor', 'resources', 'colors.json')
-CV_NAMES = path.join(ROOT_PATH, 'agent', 'vision', 'aileen.names')  # TODO: This should be changed to setting.SHAPE_SET.
-CV_CONFIGURATION = path.join(ROOT_PATH, 'agent', 'vision', 'yolov3-tiny-aileen-test.cfg')
-CV_WEIGHTS = path.join(ROOT_PATH, 'agent', 'vision', 'yolov3-tiny-aileen_final.weights')
+
+
+SIZE_PATH = path.join(ROOT_PATH, 'instructor', 'resources', 'sizes.json')
 
 # Servers
 WORLD_HOST = 'localhost'
@@ -32,6 +32,8 @@ ROBOT_PLATE_LOCATION = [-0.1, 0.2, 0]
 TIME_STEP = 32
 TEST_LOCATION = [0.771, 0.5610656650000001, -0.199]
 IN_POS_THRESH = .001
+INSTRUCTOR_VELOCITY = 0.15
+INSTRUCTOR_HOLD_POSITION = [1.2, 0.6, 0]
 
 #Robot Config
 JOINT_NAMES = ['shoulder_pan_joint', 'shoulder_lift_joint', 'elbow_joint', 'wrist_1_joint', 'wrist_2_joint', 'wrist_3_joint']
@@ -46,6 +48,19 @@ GET_IMAGE_RETURNS_IMAGE_BINARY = True
 TRAINING_DATA_FOLDER = './vision_training_data'
 TRAIN_FILES = TRAINING_DATA_FOLDER + '/train_files.txt'
 TEST_FILES = TRAINING_DATA_FOLDER + '/test_files.txt'
+YOLO_WEIGHTS = path.join(ROOT_PATH, 'agent', 'vision', 'yolov3-tiny-aileen_final.weights')
+YOLO_CFG = path.join(ROOT_PATH, 'agent', 'vision', 'yolov3-tiny-aileen-test.cfg')
+K_MEANS_MODEL = path.join(ROOT_PATH, 'agent', 'vision', 'k_means_shape_color')
+REPRESENTATION_WEIGHTS = path.join(ROOT_PATH, 'agent', 'vision', 'autoencoder_final.pkl')
+BACKGROUND_IMG = path.join(ROOT_PATH, 'agent', 'vision', 'background_image.jpg')
+NAMES_FILE = path.join(ROOT_PATH, 'agent', 'vision', 'aileen.names')
+DETECTOR_MODE = 2  # 1: YOLO Only, 2: YOLO + Self Supervised Representations, 3: (todo: Object Det + SS Representations)
+
+# Arbitrary size boudnaries
+SIZE_SM = (.075*.075)
+SIZE_ML = (.125*.125)
+
+QUANTISATION_FACTOR = .001
 
 # Instructor
 OBJECT_POSITION_MAX_X = 0.855
@@ -59,9 +74,10 @@ OBJECT_POSITION_MIN_Z = -0.245
 
 OBJECT_POSITION_DELTA = 0.15
 
-OBJECT_STANDARD_HEIGHT = 0.1
-OBJECT_STANDARD_WIDTH_X = 0.1
-OBJECT_STANDARD_WIDTH_Z = 0.1
+#DEPRECATED! SIZES DEFINED IN instructor/resources/sizes.json
+#OBJECT_STANDARD_HEIGHT = 0.1
+#OBJECT_STANDARD_WIDTH_X = 0.1
+#OBJECT_STANDARD_WIDTH_Z = 0.1
 
 SPATIAL_CONFIGURATION_FILE_NAME = 'spatial_configuration.json'
 SPATIAL_DEF_OBJECTS = 'objects'
@@ -83,6 +99,9 @@ ACTION_LESSON_STATE_BAD = 'bad'
 
 ## Agent
 AGENT_PARAM_RUNTIME_FILE = path.join(ROOT_PATH, 'agent', 'soar_interface', 'soar', '_agent_params_runtime.soar')
+
+AGENT_LANGUAGE_LEARNING = False
+
 AGENT_VISUAL_CONCEPTS_PARAM = 'soar'
 AGENT_PRELOAD_VISUAL_CONCEPTS_PARAM = 'true'
 
@@ -97,7 +116,6 @@ AGENT_RECOMPREHEND_AFTER_LEARN = 'false'
 
 ## Experiments
 RUN_DATA_FILE_PATH = path.join(ROOT_PATH, 'experiments', 'results', 'run.csv')
-
 
 try:
     from local_settings import *

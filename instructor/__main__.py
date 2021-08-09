@@ -33,6 +33,7 @@ def parse():
     parser.add_argument('--train-vision', action='store_true', help='Run vision training scripts')
     parser.add_argument('--json', help='Use curriculum from JSON file')
     parser.add_argument('--test-action', help='Test available actions', action='store_true')
+    parser.add_argument('--test-sizes', help='Test different sizes', action='store_true')
     return parser.parse_args()
 
 
@@ -85,7 +86,7 @@ if __name__ == '__main__':
         curriculum_thread.daemon = True
         curriculum_thread.start()
         gui.run()
-    elif arguments.test-action:
+    elif arguments.test_action:
         """
         Insert action testing here
             - find object
@@ -95,6 +96,9 @@ if __name__ == '__main__':
             - drop
         """
         pass
+    elif arguments.test_sizes:
+        scene = AileenScene()
+        
     else:
         VisualWordLesson.administer_curriculum(world_server, agent_server)
         # SpatialWordLesson.administer_curriculum(world_server, agent_server)

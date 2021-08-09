@@ -1,5 +1,5 @@
 from threading import Thread
-from controller import Supervisor
+from controller import Supervisor, Field
 import settings
 from agent.vision.Detector import Detector
 import os
@@ -92,7 +92,7 @@ class AileenSupervisor(Supervisor):
         self._home = T[0:3,3]
         #self._orientation = T[0:3,0:3]
         #print(self._orientation)
-        self._orientation = [0, -1, 0]
+        self._orientation = [0, 1, 0]
 
     def pose_to_ikpy(self, joints):
         j = [0]
@@ -112,7 +112,7 @@ class AileenSupervisor(Supervisor):
         #Tmat = to_transformation_matrix(point, self._orientation)
         #tpoint = self.transform_point_to_robot_frame(point)
         init_pos = self.pose_to_ikpy(self.get_current_position())
-        ikpy_pose = self._ur10Chain.inverse_kinematics(target_position=point, target_orientation=self._orientation, initial_position=init_pos, max_iter=50000)
+        ikpy_pose = self._ur10Chain.inverse_kinematics(target_position=point, target_orientation=self._orientation, orientation_mode="Z", initial_position=init_pos, max_iter=50000)
         return self.pose_from_ikpy(ikpy_pose)
 
     def go_to_point(self, point, wait=True):
@@ -191,7 +191,7 @@ class AileenSupervisor(Supervisor):
         #self.print_status()
         return None
 
-    def pick_object(self, position, wait=True):
+    def pick_object(self, position):
         """
             position: list [X, Y, Z] of object to pick in world frame
         """
@@ -208,9 +208,9 @@ class AileenSupervisor(Supervisor):
         self.return_home()
         return None
 
-    def place_object(self, target, wait=True):
+    def place_object(self, target):
         logging.info('[aileen supervisor] :: Placing Object')
-        above_target = [target[0], target[1]+.3, target[2]]
+        above_target = [target[0], target[1]+.25, target[2]]
         target = [target[0], target[1]+.051, target[2]]
         self.go_to_point(self.transform_point_to_robot_frame(above_target))
         self.go_to_point(self.transform_point_to_robot_frame(target))
@@ -220,6 +220,65 @@ class AileenSupervisor(Supervisor):
         newJnts[2] -= 3.14/4
         self.command_pose(newJnts)
         self.return_home()
+        return None
+
+    def create_trajectory(self, waypoints):
+        """
+            Creates a list of positions for the object to follow
+        """
+        traj = list()
+        traj.append(waypoints[0])
+        nlegs = len(waypoints) - 1
+
+        for i in np.arange(nlegs):
+            #Find vector in 3d space
+            delta_vec = [waypoints[i+1][0] - waypoints[i][0], waypoints[i+1][1] - waypoints[i][1], waypoints[i+1][2] - waypoints[i][2]]
+            delta_mag = ((delta_vec[0]**2) + (delta_vec[1]**2) + (delta_vec[2]**2))**0.5
+            #Calculate number of points in vector
+            npoints = np.floor((delta_mag/settings.INSTRUCTOR_VELOCITY)/(settings.TIME_STEP/1000.0))
+            #Find motion step through space
+            delta_step = delta_vec/npoints
+            for i in np.arange(npoints):
+                traj.append(list(traj[-1]+delta_step))
+        return traj
+
+    def animate(self, node, positions):
+        trans_field = node.getField('translation')
+        for point in positions:
+            trans_field.setSFVec3f(point)
+            #node.resetPhysics()
+            self.step(settings.TIME_STEP)
+        return None
+
+    def disable_physics(self, node):
+
+
+        import pdb; pdb.set_trace()
+        #node.getField('physics').importMFNode('/usr/local/webots/resources/nodes/Physics.wrl')
+        return None
+
+    def enable_physics(self, node):
+        node.getField('physics').importMFNode('/usr/local/webots/resources/nodes/Physics.wrl')
+        return None
+
+    def pick_object_instructor(self, node, position):
+        """
+            object goes up and out to hold location.  parameterized in time by instructor INSTRUCTOR_VELOCITY
+        """
+        logging.info('[aileen supervisor] :: Demonstrating a pick')
+        self.disable_physics(node)
+        way1 = position[:]
+        way1[1] += .15
+        traj = self.create_trajectory([position, way1, settings.INSTRUCTOR_HOLD_POSITION])
+        self.animate(node, traj)
+        return None
+
+    def place_object_instructor(self, node, target):
+        logging.info('[aileen supervisor] :: Demonstrating a place')
+        way1 = target[:]
+        way1[1] += .15
+        traj = self.create_trajectory([settings.INSTRUCTOR_HOLD_POSITION, way1, target])
+        self.animate(node, traj)
         return None
 
     def test_ikpy(self, n=5):
@@ -320,7 +379,7 @@ class AileenSupervisor(Supervisor):
                 geometry_string = geometry_node.getTypeName()
                 label_string = "CV{}".format(geometry_string.title())
                 return label_string
-        import pdb; pdb.set_trace()
+
     def get_object_color(self, object_node):
         children = object_node.getField('children')
         for i in range(0, children.getCount()):

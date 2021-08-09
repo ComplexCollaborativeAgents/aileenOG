@@ -47,6 +47,13 @@ class TrainingImage:
         # iw = input_writer.InputWriter(agent_server, world_server)
         counter = 1
         while counter < 4000:
+
+            if counter == 1:
+                data = world_server.get_image()
+                binary_image = data['image']
+                im = cv2.imdecode(np.fromstring(binary_image.data, dtype=np.uint8), 1)
+                cv2.imwrite(settings.TRAINING_DATA_FOLDER + '/background_image.jpg', im)
+
             num_obj = random.randint(1, 6)
             lesson = TrainingImage().generate_lesson(num_obj)
             scene_acknowledgement = world_server.set_scene(

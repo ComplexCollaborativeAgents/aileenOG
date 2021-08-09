@@ -78,6 +78,19 @@
 (comment CVCone "An object with property Cone")
 (isa CVCone AileenCVSymbol)
 
+(isa CVSmall Collection)
+(comment CVSmall "An object small size")
+(isa CVSmall AileenCVSymbol)
+
+(isa CVMedium Collection)
+(comment CVMedium "An object with medium size")
+(isa CVMedium AileenCVSymbol)
+
+(isa CVLarge Collection)
+(comment CVLarge "An object with large size")
+(isa CVLarge AileenCVSymbol)
+
+
 ;;; Positional Relations
 ;;;  Only define 4 of the positional relationships
 (isa w Relation)

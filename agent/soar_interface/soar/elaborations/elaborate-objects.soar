@@ -83,13 +83,14 @@ sp {aileen*elaborate*add*qsrs
     :o-support
     (state <s>    ^name aileen
                   ^io.input-link <il>
-                  ^world <w>)
+                  ^world <w>
+                  ^topstate._params.spatial-predicates.type <spred>)
     (<w>    ^objects <objs>
             ^relations <rels>)
     (<il>    ^world.qsrs.qsr <qsr>)
     (<qsr>    ^root <root-num>
               ^target <target-num>
-              ^{<< cardir rcc8 >> <type>} <val>)
+              ^<spred> <val>)
     (<objs>    ^object <root-obj>
                ^object <target-obj>)
     (<root-obj>    ^id <root-num>)
@@ -102,19 +103,20 @@ sp {aileen*elaborate*add*qsrs
     (<rels>    ^relation <rel-new>)
     (<rel-new>    ^root-object <root-obj>
                   ^target-object <target-obj>
-                  ^<type> <val>)
+                  ^<spred> <val>)
     }
 
 sp {aileen*elaborate*remove*qsrs*no-root-object
     :o-support
     (state <s>    ^name aileen
-                  ^world <w>)
+                  ^world <w>
+                  ^topstate._params.spatial-predicates.type <spred>)
     (<w>    ^objects <objs>
             ^relations <rels>)
     (<rels>    ^relation <rel>)
     (<rel>    ^root-object <root-obj>
               ^target-object <target-obj>
-              ^<< cardir rcc8 distance >> <val>)
+              ^<spred> <val>)
     (<objs>    -^object <root-obj>)
 -->
     (<rels>    ^relation <rel> -)
@@ -123,13 +125,14 @@ sp {aileen*elaborate*remove*qsrs*no-root-object
 sp {aileen*elaborate*remove*qsrs*no-target-object
     :o-support
     (state <s>    ^name aileen
-                  ^world <w>)
+                  ^world <w>
+                  ^topstate._params.spatial-predicates.type <spred>)
     (<w>    ^objects <objs>
             ^relations <rels>)
     (<rels>    ^relation <rel>)
     (<rel>    ^root-object <root-obj>
               ^target-object <target-obj>
-              ^<< cardir rcc8 distance >> <val>)
+              ^<spred> <val>)
     (<objs>    -^object <target-obj>)
 -->
     (<rels>    ^relation <rel> -)
@@ -139,17 +142,18 @@ sp {aileen*elaborate*remove*qsrs*different-qsr
     :o-support
     (state <s>    ^name aileen
                   ^world <w>
-                  ^io.input-link.world.qsrs.qsr <irel>)
+                  ^io.input-link.world.qsrs.qsr <irel>
+                  ^topstate._params.spatial-predicates.type <spred>)
     (<w>    ^objects <objs>
             ^relations <rels>)
     (<rels>    ^relation <rel>)
     (<rel>    ^root-object <root-obj>
               ^target-object <target-obj>
-              ^{<< cardir rcc8 >> <type>} <val>)
+              ^<spred> <val>)
     (<objs>    ^object <target-obj> <root-obj>)
     (<irel>    ^root <root-num>
                ^target <target-num>
-               ^<type> {<nval> <> <val>})
+               ^<spred> {<nval> <> <val>})
     (<root-obj>    ^id <root-num>)
     (<target-obj>    ^id <target-num>)
 -->
@@ -160,13 +164,14 @@ sp {aileen*elaborate*remove*qsrs*no-qsr
     :o-support
     (state <s>    ^name aileen
                   ^world <w>
-                  ^io.input-link.world.qsrs <qsrs>)
+                  ^io.input-link.world.qsrs <qsrs>
+                  ^topstate._params.spatial-predicates.type <spred>)
     (<w>    ^objects <objs>
             ^relations <rels>)
     (<rels>    ^relation <rel>)
     (<rel>    ^root-object <root-obj>
               ^target-object <target-obj>
-              ^{<< cardir rcc8 >> <type>} <val>)
+              ^<spred> <val>)
     (<objs>    ^object <target-obj> <root-obj>)
     -{(<qsrs>  ^qsr <q>)
        (<q>    ^root <root-num>
