@@ -1,6 +1,6 @@
 [
   {
-    "lesson-type": "spatial-word",
+    "lesson-type": "visual-word",
     "content": "small green cone",
     "description": {
       "objects": [{"color": "green", "shape": "cone"}],
@@ -8,7 +8,7 @@
      "signal": "inform"
   },
   {
-    "lesson-type": "spatial-word",
+    "lesson-type": "visual-word",
     "content": "small yellow cone",
     "description": {
       "objects": [{"color": "yellow", "shape": "cone"}],
@@ -16,7 +16,7 @@
      "signal": "inform"
   },
   {
-    "lesson-type": "spatial-word",
+    "lesson-type": "visual-word",
     "content": "small yellow sphere",
     "description": {
       "objects": [{"color": "yellow", "shape": "sphere"}],
@@ -24,7 +24,7 @@
      "signal": "inform"
   },
   {
-    "lesson-type": "spatial-word",
+    "lesson-type": "visual-word",
     "content": "small green cube",
     "description": {
       "objects": [{"color": "green", "shape": "cube"}],
@@ -32,7 +32,7 @@
      "signal": "inform"
   },
   {
-    "lesson-type": "spatial-word",
+    "lesson-type": "visual-word",
     "content": "small blue cube",
     "description": {
       "objects": [{"color": "blue", "shape": "cube"}],
@@ -42,7 +42,7 @@
 
 
   {
-    "lesson-type": "spatial-word",
+    "lesson-type": "visual-word",
     "content": "small blue cone",
     "description": {
       "objects": [{"color": "blue", "shape": "cone"}],
