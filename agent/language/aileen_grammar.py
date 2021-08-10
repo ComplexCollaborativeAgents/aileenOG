@@ -51,7 +51,7 @@ class AileenGrammar:
         # self.property_names = ["the",
         #                        "left", "middle", "right",
         #                        "blue", "red", "yellow"]
-        self.property_names = ["blue", "red", "yellow", "green", "purple", "white", "black", "small"]
+        self.property_names = ["blue", "red", "yellow", "green", "purple", "white", "black"]
         self.relation_rules = ["between [obj] and [obj]",
                                "left of [obj]",
                                "on [obj]",
