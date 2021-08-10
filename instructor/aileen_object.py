@@ -23,7 +23,7 @@ class AileenObject:
         self._name = "object{}".format(AileenObject.randomizer.uuid4())
         self._language = None
         self._connector_dim = None
-        logging.info("[aileen_object] :: created a new object with height {}".format(height_y))
+        logging.info("[aileen_object] :: created a new object with height {}".format(self._height_y))
 
     def __eq__(self, other):
         return self._shape == other._shape and self._color.name == other._color.name and self._size.name == other._size.name
