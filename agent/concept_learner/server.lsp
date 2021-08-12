@@ -246,7 +246,8 @@
            (remove-facts-from-case context)
 
            ;;; adding quantity preds if needed
-           (setf facts (append facts (maybe-add-quantity-preds facts (get-concept-gpool (car pattern)))))
+           ;;; not the right place to do this
+           ; (setf facts (append facts (maybe-add-quantity-preds facts (get-concept-gpool (car pattern)))))
 
            ;; Store facts in context and match query.
            (debug-format "in query-helper. facts are~%~% ~A.~%~%Context is ~A~%~% Pattern is ~A" facts context pattern)

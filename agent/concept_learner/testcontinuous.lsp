@@ -14,7 +14,7 @@
 
 ; (defparameter *assimilation-threshold* .6)
 (defparameter *probe-mt* 'd::query-facts)
-(defparameter *test-preds* 'd::(distanceBetween distance sizeOf))
+(defparameter *test-preds* 'd::(distanceBetween distance sizeOf size))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -135,6 +135,9 @@
 ;;; this lets us know if we have enough evidence to
 ;;; learn quantity distributions
 (defun maybe-add-quantity-preds (facts gpool &key (learn-after 3))
+
+  (debug-format "How many examples for ~s~%" gpool)
+
   (let (;;; how many examples in gpool
         (example-count (cl-user::compute-n-input-examples (kb::retrieve-gpool gpool :create? nil)))
         ;;; get quantity preds from facts in case

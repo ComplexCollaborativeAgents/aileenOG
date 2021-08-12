@@ -78,6 +78,9 @@
 
 ;;; Assumes gpool is aready created
 (defun add-case-to-gpool (facts context concept)
+
+	(debug-format "Adding case to gpool ~s~%" concept)
+
   (let ((gpool (get-concept-gpool concept)))
 
   	; (debug-format "foofacts are ~s~%" facts)
@@ -188,9 +191,13 @@
 
 (defun filter-scene-by-expression-obj (facts context gpool prevmatches pattern)
   (assert (null prevmatches))
-  (store-facts-in-case facts context)
+
   (when (not gpool)
     (setf gpool (get-concept-gpool (third pattern))))
+
+  (setf facts (append facts (maybe-add-quantity-preds facts gpool)))
+  (store-facts-in-case facts context)
+
   (fire:kb-forget `(d::gpoolAssimilationThreshold ,gpool ?x) :mt gpool)
   (fire:kb-store `(d::gpoolAssimilationThreshold ,gpool ,*match-threshold*) :mt gpool)
   (let* ((collection (third pattern))
@@ -269,9 +276,13 @@
   (assert (null prevmatches))
   (assert (and (listp pattern) (every #'atom pattern))) ;; no nested lists in pattern.
   (debug-format "Storing facts ~A.~%" facts)
-  (store-facts-in-case facts context)
+
   (when (not gpool)
     (setf gpool (get-concept-gpool (car pattern))))
+
+  (setf facts (append facts (maybe-add-quantity-preds facts gpool)))
+  (store-facts-in-case facts context)
+
   (cond ((null (vars-in-expr pattern))
 	 (if (match-query-against-gpool context gpool pattern)
 	     (list pattern)
@@ -295,9 +306,13 @@
 ;; matches one of the reverse candidate inferences
 (defun filter-scene-by-expression-act (facts context gpool prevmatches pattern)
   (assert (null prevmatches))
-  (store-facts-in-case facts context)
+  
   (when (not gpool)
     (setf gpool (get-concept-gpool (car pattern))))
+
+  (setf facts (append facts (maybe-add-quantity-preds facts gpool)))
+  (store-facts-in-case facts context)
+
   (cond ((null (vars-in-expr pattern))
 	 (if (match-query-against-gpool context gpool pattern)
 	     (list pattern)
