@@ -169,7 +169,7 @@ class InputWriter(object):
                     qsr_id.CreateStringWME(qsr_type, qsr_value)
 
     def write_csrs_to_input_link(self, csrs):
-        logging.debug("[input_writer] :: writing csrs to input link {}".format(csrs))
+        # logging.debug("[input_writer] :: writing csrs to input link {}".format(csrs))
         self._soar_agent.delete_all_children(self._csrs_link)
         for csr in csrs:
             csr_id = self._csrs_link.CreateIdWME('csr')
@@ -375,7 +375,7 @@ class InputWriter(object):
                     )])
         qsrlib_request_message = QSRlib_Request_Message(["rcc8","cardir","ra", "3dcd"], world)
         qsrlib_response_message = qsrlib.request_qsrs(req_msg=qsrlib_request_message)
-        logging.info("[input_writer] :: qsrs response message {}".format(qsrlib_response_message))
+        # logging.info("[input_writer] :: qsrs response message {}".format(qsrlib_response_message))
         ret = {}
         for t in qsrlib_response_message.qsrs.get_sorted_timestamps():
             for k, v in zip(qsrlib_response_message.qsrs.trace[t].qsrs.keys(),
