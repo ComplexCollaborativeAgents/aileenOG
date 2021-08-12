@@ -1,52 +1,38 @@
 [
   {
-    "lesson-type": "spatial-word",
+    "lesson-type": "visual-word",
     "content": "small green cone",
-    "description": {
-      "objects": [{"color": "green", "shape": "cone"}],
-      "relation": "small"},
+    "description": {"color": "green", "shape": "cone", "size": "small"},  
      "signal": "inform"
   },
   {
-    "lesson-type": "spatial-word",
+    "lesson-type": "visual-word",
     "content": "small yellow cone",
-    "description": {
-      "objects": [{"color": "yellow", "shape": "cone"}],
-      "relation": "small"},
+    "description": {"color": "yellow", "shape": "cone", "size": "small"},
      "signal": "inform"
   },
   {
-    "lesson-type": "spatial-word",
+    "lesson-type": "visual-word",
     "content": "small yellow sphere",
-    "description": {
-      "objects": [{"color": "yellow", "shape": "sphere"}],
-      "relation": "small"},
+    "description": {"color": "yellow", "shape": "sphere", "size": "small"},
      "signal": "inform"
   },
   {
-    "lesson-type": "spatial-word",
+    "lesson-type": "visual-word",
     "content": "small green cube",
-    "description": {
-      "objects": [{"color": "green", "shape": "cube"}],
-      "relation": "small"},
+    "description": {"color": "green", "shape": "cube", "size": "small"},
      "signal": "inform"
   },
   {
-    "lesson-type": "spatial-word",
+    "lesson-type": "visual-word",
     "content": "small blue cube",
-    "description": {
-      "objects": [{"color": "blue", "shape": "cube"}],
-      "relation": "small"},
+    "description": {"color": "blue", "shape": "cube", "size": "small"},
      "signal": "inform"
   },
-
-
   {
-    "lesson-type": "spatial-word",
+    "lesson-type": "visual-word",
     "content": "small blue cone",
-    "description": {
-      "objects": [{"color": "blue", "shape": "cone"}],
-      "relation": "small"},
+    "description": {"color": "blue", "shape": "cone", "size": "small"},
      "signal": "verify",
     "distractors": 0
   }

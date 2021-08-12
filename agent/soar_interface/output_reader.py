@@ -1,16 +1,21 @@
 from agent.log_config import logging
 import xmlrpclib
 from agent.language.aileen_grammar import AileenGrammar
+from agent.language.language_learner import LanguageLearner
 from agent.concept_learner.concept_learner import ConceptLearner
 from agent.soar_interface import concept_learner_helper
 from agent.soar_interface import action_helper
+import settings
 
 
 class OutputReader(object):
     def __init__(self, soar_agent, world_server):
         self._soar_agent = soar_agent
-        self._grammar = AileenGrammar()
-        self._grammar.use_default_rules()
+        if not settings.AGENT_LANGUAGE_LEARNING:
+            self._grammar = AileenGrammar()
+            self._grammar.use_default_rules()
+        else:
+            self._grammar = LanguageLearner()
         self._response = None
         self._concept_learner = ConceptLearner()
         self._context_counter = 0

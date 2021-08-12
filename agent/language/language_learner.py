@@ -10,9 +10,10 @@ class LanguageLearner:
     def __init__(self, grammar=None):
         if grammar == None:
             grammar = aileen_grammar.AileenGrammar()
+            grammar.use_default_rules()
         self.grammar = grammar
     
-    def parse_description(self, sentence, scene=None):
+    def parse(self, sentence, scene=None):
         """Parse a natural language description of a scene.
         Learns grammar rules as a side effect.
         The scene, if given, should implement ground_object_description(description).

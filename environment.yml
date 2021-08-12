@@ -5,6 +5,11 @@ channels:
   - menpo
 dependencies:
   - python=2.7
+  - seaborn
+  - scikit-learn
+  - pandas
+  - torchvision
+  - matplotlib
   - coloredlogs
   - enum
   - typing
@@ -17,6 +22,7 @@ dependencies:
   - opencv
   - pip
   - pip:
-      - strands_qsr_lib/qsr_lib/
+      - -e strands_qsr_lib/qsr_lib/
       - agent/vision/
       - -e .
+      - ikpy

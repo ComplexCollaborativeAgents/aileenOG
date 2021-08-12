@@ -12,4 +12,6 @@
 
 (distanceBetween Obj25A Obj25B 6.0)
 
+(distanceBetween Obj25A Obj25B 6.0)
+
 (rLeft Obj25A Obj25B)
