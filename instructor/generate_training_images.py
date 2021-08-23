@@ -23,6 +23,7 @@ class TrainingImage:
         self._language = None
 
     def generate_lesson(self, num_objects=1):
+        logging.info("[aileen_instructor] :: generating lesson with num objects {}".format(num_objects))
         lesson = {}
         self.generate_scene(num_objects)
         lesson['scene'] = self._scene.generate_scene_world_config()
@@ -30,7 +31,7 @@ class TrainingImage:
         return lesson
 
     def generate_scene(self, num_objects=1):
-        logging.debug("[aileen_visual_word_lesson] :: generating a new scene for visual word learning")
+        logging.info("[aileen_visual_word_lesson] :: generating a new scene for visual word learning")
         for i in range(0, num_objects):
             scene_object = AileenObject.generate_random_object()
             scene_object.set_translation(AileenScene.randomizer.get_random_position_on_table())

@@ -21,7 +21,7 @@ class AileenAgentServer():
         class RequestHandler(SimpleXMLRPCRequestHandler):
             rpc_paths = ('/RPC2',)
 
-        self._server = SimpleXMLRPCServer((self._host, self._port), requestHandler=RequestHandler)
+        self._server = SimpleXMLRPCServer((self._host, self._port), requestHandler=RequestHandler, logRequests=False)
 
         self._server.register_introspection_functions()
 

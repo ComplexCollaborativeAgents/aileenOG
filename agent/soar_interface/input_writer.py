@@ -4,6 +4,7 @@ from agent.log_config import logging
 import xmlrpclib
 from svs_helper import SVSHelper
 from agent.vision.Detector import Detector
+from itertools import combinations
 import cv2
 import numpy as np
 import settings
@@ -31,6 +32,7 @@ class InputWriter(object):
             self._world_link = self._input_link.CreateIdWME("world")
             self._objects_link = self._world_link.CreateIdWME("objects")
             self._qsrs_link = self._world_link.CreateIdWME("qsrs")
+            self._csrs_link = self._world_link.CreateIdWME("csrs")
 
             self._interaction_link = self._input_link.CreateIdWME("interaction-link")
             self._clean_interaction_link_flag = False
@@ -91,6 +93,8 @@ class InputWriter(object):
             self.add_objects_to_working_memory(objects_list)
         qsrs = self.create_qsrs(objects_list)
         self.write_qsrs_to_input_link(qsrs)
+        csrs = self.create_aux_info(objects_list)
+        self.write_csrs_to_input_link(csrs)
         self._soar_agent.commit()
 
     @staticmethod
@@ -148,6 +152,10 @@ class InputWriter(object):
         return updated_detections
 
     def write_qsrs_to_input_link(self, qsrs):
+
+        if qsrs:
+            logging.info("[testing] writing qsrs to input link {}".format(qsrs))
+
         self._soar_agent.delete_all_children(self._qsrs_link)
         for root_obj_id in qsrs:
             root_obj_qsrs = qsrs[root_obj_id]
@@ -159,6 +167,17 @@ class InputWriter(object):
                     qsr_id.CreateIntWME("root", int(root_obj_id))
                     qsr_id.CreateIntWME("target", int(target_obj_id))
                     qsr_id.CreateStringWME(qsr_type, qsr_value)
+
+    def write_csrs_to_input_link(self, csrs):
+        # logging.debug("[input_writer] :: writing csrs to input link {}".format(csrs))
+        self._soar_agent.delete_all_children(self._csrs_link)
+        for csr in csrs:
+            csr_id = self._csrs_link.CreateIdWME('csr')
+            csr_id.CreateIntWME("root", csr[0])
+            csr_id.CreateIntWME("target", csr[1])
+            csr_id.CreateFloatWME("distance", csr[2])
+
+
 
     def clean_concept_memory(self):
         self._soar_agent.delete_all_children(self._concept_memory)
@@ -294,7 +313,7 @@ class InputWriter(object):
             logging.error("[input_writer] :: fault code {}; fault string{}".format(fault.faultCode, fault.faultString))
             return
 
-        logging.debug("[input_writer] :: received objects from server {}".format(objects_dict))
+        # logging.debug("[input_writer] :: received objects from server {}".format(objects_dict))
         objects_list = objects_dict['objects']
         return objects_list
 
@@ -319,14 +338,29 @@ class InputWriter(object):
             handle.write(binary_image.data)
 
 
+    '''
+    Added by Will. For now, using this to handle nearness relations. Can eventually extend
+    to estimating any continuous quantities. This should probably live somewhere else.
+    '''
+    def create_aux_info(self, objects):
+        rels = []
+
+        # add distance information between pairs of objects
+        for items in combinations(objects, 2):
+            distance = np.linalg.norm(np.array(items[0]['position']) - np.array(items[1]['position']))
+            rels.append((items[0]['id'], items[1]['id'], distance))
+
+        return rels
+
+
     def create_qsrs(self, objects):
         '''
-- Ignore y position as everything is on the table (use z instead)
-- While qsrlib allows includes a parameter for orientation/rotation, it is not clear it is used. It is being ignored for now.
+        - Ignore y position as everything is on the table (use z instead)
+        - While qsrlib allows includes a parameter for orientation/rotation, it is not clear it is used. It is being ignored for now.
 
-Saving sample input from aileen world for later testing.
+        Saving sample input from aileen world for later testing.
 
-objects = [{'orientation': [1.0, -5.75539615965681e-17, 3.38996313371214e-17, 5.75539615965681e-17, 1.0, 2.98427949019241e-17, -3.38996313371214e-17, -2.98427949019241e-17, 1.0], 'bounding_object': 'Box', 'held': 'false', 'bounding_box': [0.721, 0.3998037998119487, -0.249, 0.8210000000000001, 0.49980379981194867, -0.14900000000000002], 'position': [0.771, 0.4498037998119487, -0.199], 'id': 397}, {'orientation': [1.0, 4.8853319907279786e-17, -4.193655877514327e-17, -4.8853319907279786e-17, 1.0, -1.80524117148876e-16, 4.193655877514327e-17, 1.80524117148876e-16, 1.0], 'bounding_object': 'Cylinder', 'held': 'false', 'bounding_box': [0.369851, 0.39992295234206066, 0.067742, 0.46985099999999996, 0.49992295234206063, 0.167742], 'position': [0.419851, 0.44992295234206064, 0.117742], 'id': 403}]
+        objects = [{'orientation': [1.0, -5.75539615965681e-17, 3.38996313371214e-17, 5.75539615965681e-17, 1.0, 2.98427949019241e-17, -3.38996313371214e-17, -2.98427949019241e-17, 1.0], 'bounding_object': 'Box', 'held': 'false', 'bounding_box': [0.721, 0.3998037998119487, -0.249, 0.8210000000000001, 0.49980379981194867, -0.14900000000000002], 'position': [0.771, 0.4498037998119487, -0.199], 'id': 397}, {'orientation': [1.0, 4.8853319907279786e-17, -4.193655877514327e-17, -4.8853319907279786e-17, 1.0, -1.80524117148876e-16, 4.193655877514327e-17, 1.80524117148876e-16, 1.0], 'bounding_object': 'Cylinder', 'held': 'false', 'bounding_box': [0.369851, 0.39992295234206066, 0.067742, 0.46985099999999996, 0.49992295234206063, 0.167742], 'position': [0.419851, 0.44992295234206064, 0.117742], 'id': 403}]
         '''
         qsrlib = QSRlib() # We don't need a new object each time
         world = World_Trace()
@@ -343,6 +377,7 @@ objects = [{'orientation': [1.0, -5.75539615965681e-17, 3.38996313371214e-17, 5.
                     )])
         qsrlib_request_message = QSRlib_Request_Message(["rcc8","cardir","ra", "3dcd"], world)
         qsrlib_response_message = qsrlib.request_qsrs(req_msg=qsrlib_request_message)
+        # logging.info("[input_writer] :: qsrs response message {}".format(qsrlib_response_message))
         ret = {}
         for t in qsrlib_response_message.qsrs.get_sorted_timestamps():
             for k, v in zip(qsrlib_response_message.qsrs.trace[t].qsrs.keys(),
@@ -355,8 +390,9 @@ objects = [{'orientation': [1.0, -5.75539615965681e-17, 3.38996313371214e-17, 5.
                 if '3dcd' in v.qsr.keys():
                     v.qsr['depth'] = v.qsr['3dcd'][-1].lower()
                 ret[args[0]][args[1]] = v.qsr
-        logging.debug("[input_writer] :: qsrs computed {}".format(ret))
+        # logging.debug("[input_writer] :: qsrs computed {}".format(ret))
         return ret
+
 
     def size_from_bounding_box(self, bbox):
         """

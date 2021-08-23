@@ -1,0 +1,16 @@
+(in-microtheory AileenExp31)
+(isa AileenExp31 AileenCaseMt)
+
+(isa Obj31A CVCube)
+(isa Obj31A CVGreen)
+(sizeOf Obj31A 3.0)
+
+(isa Obj31B CVCylinder)
+(isa Obj31B CVGreen)
+
+(dc Obj31A Obj31B)
+(n Obj31A Obj31B)
+
+(distanceBetween Obj31A Obj31B 4.0)
+
+(rNearTwo Obj31A Obj31B)

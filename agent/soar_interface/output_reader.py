@@ -78,7 +78,7 @@ class OutputReader(object):
             if child.GetAttribute() == 'parse-content':
                 content = child.GetValueAsString().strip()
                 logging.info("[output-reader] :: received parse-content command for {}".format(content))
-                parsed_content = self._grammar.parse_description(content)
+                parsed_content = self._grammar.parse(content)
                 logging.debug("[output-reader] :: parsed content to {}".format(parsed_content))
                 self._soar_agent._input_writer.set_language({'parses': parsed_content})
         commandID.AddStatusComplete()

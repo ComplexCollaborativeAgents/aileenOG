@@ -1,0 +1,15 @@
+(in-microtheory AileenExp23)
+(isa AileenExp23 AileenCaseMt)
+
+(isa Obj23A CVCube)
+(isa Obj23A CVRed)
+
+(isa Obj23B CVSphere)
+(isa Obj23B CVBlue)
+
+(w Obj23A Obj23B)
+(dc Obj23A Obj23B)
+
+(distanceBetween Obj23A Obj23B 4.0)
+
+(rLeft Obj23A Obj23B)

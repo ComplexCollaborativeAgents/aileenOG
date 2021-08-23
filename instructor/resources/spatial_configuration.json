@@ -27,6 +27,16 @@
                             [["dc", "<obj2>", "<obj1>"], ["se", "<obj2>", "<obj1>"]]
                         ]
                     ],
-        "language": ["<obj1>", "behind", "<obj2>"]
+        "language": ["<obj1>", "behind","<obj2>"]
+    },
+    "near": {
+        "objects": ["<obj1>", "<obj2>"],
+        "definition": [["near" , "<obj2>", "<obj1>"], ["dc", "<obj2>", "<obj1>"]],
+        "language": ["<obj1>", "near","<obj2>"]
+    },
+    "distant": {
+        "objects": ["<obj1>", "<obj2>"],
+        "definition": [["distant" , "<obj2>", "<obj1>"], ["dc", "<obj2>", "<obj1>"]],
+        "language": ["<obj1>", "far from","<obj2>"]
     }
 }

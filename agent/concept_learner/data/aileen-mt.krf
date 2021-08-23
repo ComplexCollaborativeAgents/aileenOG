@@ -265,9 +265,16 @@
 ;;; Quantity Relations
 (isa distance Relation)
 (arity distance 3)
-(arg1Isa distance Thing)
+(arg1Isa distance Quantity)
 (arg2Isa distance Thing)
-(arg3Isa distance Quantity)
+(arg3Isa distance Thing)
+
+
+(isa sizeOf Relation)
+(arity sizeOf 2)
+(arg1Isa sizeOf Thing)
+(arg2Isa sizeOf Quantity)
+
 
 
 (in-microtheory BaseKB)

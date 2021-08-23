@@ -14,7 +14,7 @@
 ;; (load "analogystack/qrgsetup.lsp")
 ;; (require-module "fire" :fire)
 
-(defparameter *assimilation-threshold* 0.6 "sage threshold for storing new cases. For Phase 1 we used 0.01, but for Phase 2, we need a higher number for disjunctive concepts.")
+(defparameter *assimilation-threshold* 0.6 "sage threshold for storing new cases. A low number means we want everything to be in one generalization and that we don't expect disjunctive concepts")
 (defparameter *match-threshold* 0.2 "sage threshold for matching to generalizations. because we are doing our own scoring this is low")
 (defparameter *projection-threshold* 0.003 "when projecting, we do not expect much overlap between the current situation and the generalization")
 (defparameter *probability-cutoff* 0.6 "facts below this threshold in generalizations do not contribute to score calculations")
@@ -36,7 +36,11 @@
   (let ((gpool (get-concept-gpool symbol)))
     (cl-user::nuke-gpool gpool)
     (dolist (fact (fire:retrieve-it '?x :context gpool :response '?x))
+<<<<<<< HEAD
       ;;(format t "Forgetting ~A in ~A~%" fact gpool)
+=======
+      ; (format t "Forgetting ~A in ~A~%" fact gpool)
+>>>>>>> continuous-learning
       (fire:kb-forget fact :mt gpool))
     (cl-user::setup-gpool gpool  :strategy :bestgel
 			  :probability-cutoff *probability-cutoff*)  
@@ -49,7 +53,11 @@
   (let ((gpool (get-concept-gpool pred)))
     (cl-user::nuke-gpool gpool)
     (dolist (fact (fire:retrieve-it '?x :context gpool :response '?x))
+<<<<<<< HEAD
       ;;(format t "Forgetting ~A in ~A~%" fact gpool)
+=======
+      ; (format t "Forgetting ~A in ~A~%" fact gpool)
+>>>>>>> continuous-learning
       (fire:kb-forget fact :mt gpool))
     (cl-user::setup-gpool gpool :strategy :bestgel  :context 'd::DummyMt)
     (fire:kb-store `d::(isa ,aileen::pred AileenReasoningPredicate) :mt 'd::BaseKB)
@@ -58,12 +66,20 @@
     (values (length (fire:ask-it `d::(isa ?x AileenReasoningPredicate)))
 	    gpool)))
 
+(defun create-reasoning-predicate-simple (pred arity)
+	(fire:kb-store `d::(isa ,aileen::pred AileenReasoningPredicate) :mt 'd::BaseKB)
+  (fire:kb-store `d::(arity ,aileen::pred ,aileen::arity) :mt 'd::BaseKB))
+
 ;;; Not davidsonian...
 (defun create-reasoning-action (action arity)
   (let ((gpool (get-concept-gpool action)))
     (cl-user::nuke-gpool gpool)
     (dolist (fact (fire:retrieve-it '?x :context gpool :response '?x))
+<<<<<<< HEAD
       ;;;(format t "Forgetting ~A in ~A~%" fact gpool)
+=======
+      ; (format t "Forgetting ~A in ~A~%" fact gpool)
+>>>>>>> continuous-learning
       (fire:kb-forget fact :mt gpool))
     (cl-user::setup-gpool gpool :strategy :gel )  
     (fire:kb-store `d::(isa ,aileen::action AileenReasoningAction) :mt 'd::BaseKB)
@@ -75,7 +91,16 @@
 
 ;;; Assumes gpool is aready created
 (defun add-case-to-gpool (facts context concept)
+
+	(debug-format "Adding case to gpool ~s~%" concept)
+
   (let ((gpool (get-concept-gpool concept)))
+
+  	; (debug-format "foofacts are ~s~%" facts)
+
+  	;;; wwh adding quantity predicates if needed
+  	(setf facts (append facts (maybe-add-quantity-preds facts gpool)))
+
     (store-facts-in-case facts context)
     (dolist (fact facts)
       (cond ((eql concept (car fact))
@@ -88,6 +113,7 @@
 	     (error "unexpected concept in fact"))
 	    (t nil)))
     (fire:clear-wm)
+<<<<<<< HEAD
     (fire:kb-forget `(d::gpoolAssimilationThreshold ,gpool ?x) :mt gpool);;can probabely get rid of these operations as we are handling it explicitly below.  
     (fire:kb-store `(d::gpoolAssimilationThreshold ,gpool 0.2) :mt gpool);;setting to a low number helps with debugging, by letting us see the scores
     (let ((score (fire:ask-it `d::(and (sageSelect ,aileen::context ,aileen::gpool ?case ?mapping)
@@ -107,6 +133,22 @@
 	     (fire:tell-it `(d::sageAddUngeneralized ,context  ,gpool) :context 'd::BaseKB)))
       (values (length (fire:ask-it `(d::kbOnly (d::gpoolGeneralization ,gpool ?num))))
 	      (length (fire:ask-it `(d::kbOnly (d::gpoolExample ,gpool ?num)) ))) )))
+=======
+    (fire:kb-forget `(d::gpoolAssimilationThreshold ,gpool ?x) :mt gpool)
+    (fire:kb-store `(d::gpoolAssimilationThreshold ,gpool ,*assimilation-threshold*) :mt gpool)
+    (fire:tell-it `(d::sageSelectAndGeneralize ,context ,gpool) :context 'd::BaseKB)
+    
+    ; (multiple-value-bind (rbrowse full url) (rbrowse::browse-sme sme::*sme*)
+    ;   (declare (ignore url rbrowse))
+    ;   (format t "~% rbrowse-sme: ~A base:~A target: ~A url: ~A "
+	   ;    sme::*sme*
+	   ;    context
+	   ;    gpool
+	   ;    full))
+
+    (values (length (fire:ask-it `(d::kbOnly (d::gpoolGeneralization ,gpool ?num))))
+	    (length (fire:ask-it `(d::kbOnly (d::gpoolExample ,gpool ?num)) ))) ))
+>>>>>>> continuous-learning
 
 (defun store-facts-in-case (facts context)
   (remove-facts-from-case context)
@@ -116,9 +158,15 @@
   )
 
 (defun remove-facts-from-case (context)
+<<<<<<< HEAD
   ;;(format t "Removing ~A~%" context)
   (dolist (fact (fire:retrieve-it '?x :context context :response '?x))
     ;;(format t "Forgetting ~A in ~A~%" fact context)
+=======
+  ; (format t "Removing ~A~%" context)
+  (dolist (fact (fire:retrieve-it '?x :context context :response '?x))
+    ; (format t "Forgetting ~A in ~A~%" fact context)
+>>>>>>> continuous-learning
     (fire:kb-forget fact :mt context)))
   
 ;;; this may go away
@@ -184,9 +232,13 @@
 
 (defun filter-scene-by-expression-obj (facts context gpool prevmatches pattern)
   (assert (null prevmatches))
-  (store-facts-in-case facts context)
+
   (when (not gpool)
     (setf gpool (get-concept-gpool (third pattern))))
+
+  (setf facts (append facts (maybe-add-quantity-preds facts gpool)))
+  (store-facts-in-case facts context)
+
   (fire:kb-forget `(d::gpoolAssimilationThreshold ,gpool ?x) :mt gpool)
   (fire:kb-store `(d::gpoolAssimilationThreshold ,gpool ,*match-threshold*) :mt gpool)
   (let* ((collection (third pattern))
@@ -204,11 +256,22 @@
   
   (fire:ask-it `(d::matchBetween ,base (d::KBCaseFn-Probability ,target ,threshold)
 				 ,constraints ?target))
+<<<<<<< HEAD
   (multiple-value-bind (rbrowse full url) (rbrowse::browse-sme sme::*sme*)
     (declare (ignore url rbrowse))
     (format t "~% match-scoring-sme rbrowse-sme: ~A url: ~A" sme::*sme* full))
     (when (sme::mappings  sme::*sme*)
     
+=======
+
+  ; (multiple-value-bind (rbrowse full url) (rbrowse::browse-sme sme::*sme*)
+  ;   (declare (ignore url rbrowse))
+		;    (format t "~% match-scoring-sme rbrowse-sme: ~A url: ~A"
+		; 	   sme::*sme*
+		; 	   full))
+
+  (when (sme::mappings  sme::*sme*)
+>>>>>>> continuous-learning
     (let ((score (sme::score (car (sme::mappings  sme::*sme*))))
 	  (sme sme::*sme*))
       (sme::clone-current-sme)
@@ -263,11 +326,17 @@
 
 
 (defun filter-scene-by-expression-rel (facts context gpool prevmatches pattern)
+	(debug-format "Filtering by relation expression ~A.~%" pattern)
   (assert (null prevmatches))
   (assert (and (listp pattern) (every #'atom pattern))) ;; no nested lists in pattern.
-  (store-facts-in-case facts context)
+  (debug-format "Storing facts ~A.~%" facts)
+
   (when (not gpool)
     (setf gpool (get-concept-gpool (car pattern))))
+
+  (setf facts (append facts (maybe-add-quantity-preds facts gpool)))
+  (store-facts-in-case facts context)
+
   (cond ((null (vars-in-expr pattern))
 	 (if (match-query-against-gpool context gpool pattern)
 	     (list pattern)
@@ -275,6 +344,7 @@
 	((vars-in-expr pattern)
 	 (remove-if-not
 	  #'(lambda (bound-pattern)
+	  	; (format t "Testing bound pattern ~A~%" bound-pattern)
 	      (match-query-against-gpool context gpool bound-pattern))
 	  (mapcar 
 	   #'(lambda (blist)
@@ -290,9 +360,13 @@
 ;; matches one of the reverse candidate inferences
 (defun filter-scene-by-expression-act (facts context gpool prevmatches pattern)
   (assert (null prevmatches))
-  (store-facts-in-case facts context)
+  
   (when (not gpool)
     (setf gpool (get-concept-gpool (car pattern))))
+
+  (setf facts (append facts (maybe-add-quantity-preds facts gpool)))
+  (store-facts-in-case facts context)
+
   (cond ((null (vars-in-expr pattern))
 	 (if (match-query-against-gpool context gpool pattern)
 	     (list pattern)
@@ -360,6 +434,7 @@
 	      (d::candidateInferenceContent ?ci ,pattern)
 	      ))
 	   :context gpool :response '?ret)))
+<<<<<<< HEAD
       (multiple-value-bind (rbrowse full url) (rbrowse::browse-sme sme::*sme*)
 	(declare (ignore rbrowse url))
 	(format t "~% ci: ~A rbrowse-sme: ~A base: ~A target: ~A url: ~A~%"
@@ -368,6 +443,17 @@
 		case-term
 		gpool
 		full))
+=======
+
+ ;      (multiple-value-bind (rbrowse full url) (rbrowse::browse-sme sme::*sme*)
+	; (declare (ignore rbrowse url))
+	; (format t "~% rbrowse-sme: ~A base: ~A target: ~A url: ~A"
+	; 	sme::*sme*
+	; 	case-term
+	; 	gpool
+	; 	full))
+
+>>>>>>> continuous-learning
       (cond (ci-found?
 	     ;; The query above should return the score of the best mapping that includes
 	     ;; the pattern in the reverse candidate inference
@@ -389,6 +475,7 @@
 	)))))
   
 (defun make-possible-blists (vars objs &optional blist)
+	; (format t "Possible blist ~a ~a~%" vars objs)
   (cond ((null vars) (list blist))
 	((null objs) (assert nil))
 	(t
@@ -445,8 +532,8 @@
   (fire:clear-wm)
   (fire:clear-dgroup-caches)
   (let* ((case-term `(d::KBCaseFn ,context))
-	 (gpool (get-concept-gpool action))
-	 (correspondences (determine-state-correspondences context gpool)))
+         (gpool (get-concept-gpool action))
+         (correspondences (determine-state-correspondences context gpool)))
     (format t "~%~% ~A " (fire:ask-it `(d::gpoolAssimilationThreshold ,gpool ?x) :context gpool))
     (format t "~%~%~% threshold : ~A" *projection-threshold*)
     (fire:kb-forget `(d::gpoolAssimilationThreshold ,gpool ?x):mt gpool)
@@ -458,28 +545,30 @@
     (fire:tell-it `(d::copyWMCaseToKB ,case-term ,case-term)) ;;could have an explicit query context here for easier clean up?
     (setup-constraints case-term correspondences)
     (let ((cis (fire:ask-it
-		`(d::reverseCIsAllowed
-		  (d::and
-		   (d::sageSelect ,case-term ,gpool ?ret ?mapping)
-		   (d::reverseCandidateInferenceOf ?ci ?mapping)
-		   (d::candidateInferenceContent ?ci ?ci-context)))
-		:context gpool :response '?ci-context)))
+                   `(d::reverseCIsAllowed
+                     (d::and
+                      (d::sageSelect ,case-term ,gpool ?ret ?mapping)
+                      (d::reverseCandidateInferenceOf ?ci ?mapping)
+                      (d::candidateInferenceContent ?ci ?ci-context)))
+                 :context gpool :response '?ci-context)))
       ;; Should we verify anything?
       ;; What kind of score should be required?
-
-    (fire:kb-forget `(d::gpoolAssimilationThreshold ,gpool ?x):mt gpool)
-    (fire:kb-store `(d::gpoolAssimilationThreshold ,gpool *match-threshold*) :mt gpool) 
-
-      (multiple-value-bind (rbrowse full url) (rbrowse::browse-wm)
-	(declare (ignore url rbrowse))
-	(format t "~% rbrowse-wm after project query: ~A" full))
-      (multiple-value-bind (rbrowse full url) (rbrowse::browse-sme sme::*sme*)
-	(declare (ignore url rbrowse))
-	(format t "~% rbrowse-sme: ~A base:~A target: ~A url: ~A"
-		sme::*sme*
-		case-term
-		gpool
-		full))
+      
+      (fire:kb-forget `(d::gpoolAssimilationThreshold ,gpool ?x):mt gpool)
+      (fire:kb-store `(d::gpoolAssimilationThreshold ,gpool *match-threshold*) :mt gpool) 
+      
+      ; (multiple-value-bind (rbrowse full url) (rbrowse::browse-wm)
+      ;   (declare (ignore url rbrowse))
+      ;   (format t "~% rbrowse-wm after project query: ~A" full))
+      
+      ; (multiple-value-bind (rbrowse full url) (rbrowse::browse-sme sme::*sme*)
+      ;   (declare (ignore url rbrowse))
+      ;   (format t "~% rbrowse-sme: ~A base:~A target: ~A url: ~A"
+      ;     sme::*sme*
+      ;     case-term
+      ;     gpool
+      ;     full))
+      
       cis)))
 
 

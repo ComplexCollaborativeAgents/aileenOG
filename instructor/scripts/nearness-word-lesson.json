@@ -1,0 +1,53 @@
+[
+  {
+    "lesson-type": "spatial-word",
+    "content": "green cone near red sphere",
+    "description": {
+      "objects": [{"color": "green", "shape": "cone"},  {"color": "red", "shape": "sphere"}],
+      "relation": "near"},
+     "signal": "inform"
+  },
+  {
+    "lesson-type": "spatial-word",
+    "content": "yellow cone near red cylinder",
+    "description": {
+      "objects": [{"color": "yellow", "shape": "cone"},  {"color": "red", "shape": "cylinder"}],
+      "relation": "near"},
+     "signal": "inform"
+  },
+  {
+    "lesson-type": "spatial-word",
+    "content": "yellow sphere near red sphere",
+    "description": {
+      "objects": [{"color": "yellow", "shape": "sphere"},  {"color": "red", "shape": "sphere"}],
+      "relation": "near"},
+     "signal": "inform"
+  },
+  {
+    "lesson-type": "spatial-word",
+    "content": "green cube near green cylinder",
+    "description": {
+      "objects": [{"color": "green", "shape": "cube"},  {"color": "green", "shape": "cylinder"}],
+      "relation": "near"},
+     "signal": "inform"
+  },
+  {
+    "lesson-type": "spatial-word",
+    "content": "blue cube near green cube",
+    "description": {
+      "objects": [{"color": "blue", "shape": "cube"},  {"color": "green", "shape": "cube"}],
+      "relation": "near"},
+     "signal": "inform"
+  },
+
+
+  {
+    "lesson-type": "spatial-word",
+    "content": "blue cone near green sphere",
+    "description": {
+      "objects": [{"color": "blue", "shape": "cone"},  {"color": "green", "shape": "sphere"}],
+      "relation": "near"},
+     "signal": "verify",
+    "distractors": 0
+  }
+]
