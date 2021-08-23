@@ -8,7 +8,9 @@ sp {learn-visual-concept*propose*select-object
                   ^world.objects.object <obj>
                   -^selected-object)
 -->
-    (<s>    ^operator <op> +)
+   # (<s>    ^operator <op> +)
+    ## HACK to support multiple objects being detected
+    (<s>    ^operator <op> + =)
     (<op>    ^name select-object
              ^object <obj>)
     }

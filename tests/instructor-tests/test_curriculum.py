@@ -75,6 +75,22 @@ def test_spatial():
     lesson = next(curriculum)['object'].generate_lesson()
     assert len(lesson["scene"]) == 2
 
+def test_spatial():
+    curriculum = Curriculum(
+        [
+            {
+                "lesson-type": "spatial-word",
+                "description": {
+                    "objects": [{"color": "blue", "shape": "cone"},
+                                {"color": "red", "rgb": [1, 0, 0], "shape": "cylinder"}],
+                    "relation": "left-of"},
+                "signal": "verify",
+                "is_positive": "False"
+            },
+        ])
+    lesson = next(curriculum)['object'].generate_lesson()
+    print lesson
+
 def test_action():
     curriculum = Curriculum(
         [{

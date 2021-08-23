@@ -1,5 +1,6 @@
 import os
 from os import path
+import random
 
 OS_ROOT_PATH = path.abspath(os.sep)
 ROOT_PATH = path.join(path.dirname(path.dirname(path.abspath(__file__))))
@@ -113,6 +114,9 @@ AGENT_PRELOAD_ACTION_CONCEPTS_PARAM = 'false'
 
 AGENT_RECOMPREHEND_AFTER_LEARN = 'false'
 
+AGENT_PERCEPT_SYMBOLS_ATTR = 'color shape'
+
+QUANTISATION_FACTOR = .001
 
 ## Experiments
 RUN_DATA_FILE_PATH = path.join(ROOT_PATH, 'experiments', 'results', 'run.csv')
