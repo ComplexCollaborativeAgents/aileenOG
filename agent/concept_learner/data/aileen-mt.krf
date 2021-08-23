@@ -172,10 +172,10 @@
 (arg3Isa distance Thing)
 
 
-(isa sizeOf Relation)
-(arity sizeOf 2)
-(arg1Isa sizeOf Thing)
-(arg2Isa sizeOf Quantity)
+(isa size Relation)
+(arity size 2)
+(arg1Isa size Thing)
+(arg2Isa size Quantity)
 
 
 
