@@ -1,0 +1,57 @@
+[{
+    "comment": "Provide a grounded example of placing near",
+    "lesson-type": "action-word",
+    "description": {
+      "objects": ["<obj1>", "<obj2>"],
+      "relations": ["near"],
+      "action": "move-near",
+      "initial_configuration": [[["not","near"], "<obj2>", "<obj1>"], ["dc", "<obj2>", "<obj1>"]],
+          "trace-actions": [
+              {"name": "pick-up", "argument": "<obj1>"},
+              {"name": "place", "argument1": "<obj1>", "argument2": "<obj2>", "relation": "near"}],
+      "language": ["move", "<obj1>", "near", "<obj2>"],
+      "<obj1>": {"color": "red", "shape": "cone"},
+      "<obj2>": {"color": "blue", "shape": "cone"}
+    },
+    "content": "move red cone near blue cone",
+    "signal": "inform",
+    "distractors": 0
+  },
+  {
+    "comment": "Provide another grounded example of placing near",
+    "lesson-type": "action-word",
+    "description": {
+      "objects": ["<obj1>", "<obj2>"],
+      "relations": ["near"],
+      "action": "move-near",
+      "initial_configuration": [[["not","near"], "<obj2>", "<obj1>"], ["dc", "<obj2>", "<obj1>"]],
+          "trace-actions": [
+              {"name": "pick-up", "argument": "<obj1>"},
+              {"name": "place", "argument1": "<obj1>", "argument2": "<obj2>", "relation": "near"}],
+      "language": ["move", "<obj1>", "near", "<obj2>"],
+      "<obj1>": {"color": "blue", "shape": "cylinder"},
+      "<obj2>": {"color": "red", "shape": "cylinder"}
+    },
+    "content": "move blue cylinder near red cylinder",
+    "signal": "inform",
+    "distractors": 0
+  },
+  {
+    "comment": "Recognize action",
+    "lesson-type": "action-word",
+    "description": {
+      "objects": ["<obj1>", "<obj2>"],
+      "relations": ["near"],
+      "action": "move-near",
+      "initial_configuration": [[["not","near"], "<obj2>", "<obj1>"], ["dc", "<obj2>", "<obj1>"]],
+          "trace-actions": [
+              {"name": "pick-up", "argument": "<obj1>"},
+              {"name": "place", "argument1": "<obj1>", "argument2": "<obj2>", "relation": "near"}],
+      "language": ["move", "<obj1>", "near", "<obj2>"],
+      "<obj1>": {"color": "green", "shape": "sphere"},
+      "<obj2>": {"color": "blue", "shape": "cylinder"}
+    },
+    "content": "move green sphere right of blue cylinder",
+    "signal": "verify",
+    "distractors": 0
+  }]
