@@ -1,12 +1,12 @@
 ;;;; -*-  Mode: LISP; Syntax: Common-Lisp; Base: 10                          -*-
 ;;;; ----------------------------------------------------------------------------
 ;;;; File name: generalization.lsp
-;;;;    System: 
+;;;;    System:
 ;;;;    Author: Matthew Klenk
 ;;;;   Created: November  6, 2019 14:54:11
-;;;;   Purpose: 
+;;;;   Purpose:
 ;;;; ----------------------------------------------------------------------------
-;;;;  Modified: Monday, October 26, 2020 at 12:56:50 by klenk
+;;;;  Modified: Thursday, May 28, 2020 at 15:06:05 by klenk
 ;;;; ----------------------------------------------------------------------------
 
 (in-package :aileen)
@@ -18,7 +18,7 @@
 (defparameter *match-threshold* 0.2 "sage threshold for matching to generalizations. because we are doing our own scoring this is low")
 (defparameter *projection-threshold* 0.003 "when projecting, we do not expect much overlap between the current situation and the generalization")
 (defparameter *probability-cutoff* 0.6 "facts below this threshold in generalizations do not contribute to score calculations")
-(defparameter *normalized-threshold* 0.90 "mapping threshold normalized against the target without the inference fact")
+(defparameter *normalized-threshold* 0.75 "mapping threshold normalized against the target without the inference fact")
 ;;; Klenk tried making this .999, but I ran into a problem with some mapping scores not being as high expected in the relational cases
 
 (defun make-reasoner (&key (kbdir "nextkb"))
@@ -36,14 +36,10 @@
   (let ((gpool (get-concept-gpool symbol)))
     (cl-user::nuke-gpool gpool)
     (dolist (fact (fire:retrieve-it '?x :context gpool :response '?x))
-<<<<<<< HEAD
-      ;;(format t "Forgetting ~A in ~A~%" fact gpool)
-=======
       ; (format t "Forgetting ~A in ~A~%" fact gpool)
->>>>>>> continuous-learning
       (fire:kb-forget fact :mt gpool))
-    (cl-user::setup-gpool gpool  :strategy :bestgel
-			  :probability-cutoff *probability-cutoff*)  
+    (cl-user::setup-gpool gpool  :strategy :gel
+			  :probability-cutoff *probability-cutoff*)
     (fire:kb-store `d::(genls ,aileen::symbol AileenReasoningSymbol) :mt 'd::BaseKB)
     (fire:kb-store `d::(isa ,aileen::symbol Collection) :mt 'd::BaseKB)
     (values (1- (length (fire:ask-it `d::(genls ?x AileenReasoningSymbol)))) ;;due to genls identity
@@ -53,13 +49,9 @@
   (let ((gpool (get-concept-gpool pred)))
     (cl-user::nuke-gpool gpool)
     (dolist (fact (fire:retrieve-it '?x :context gpool :response '?x))
-<<<<<<< HEAD
-      ;;(format t "Forgetting ~A in ~A~%" fact gpool)
-=======
       ; (format t "Forgetting ~A in ~A~%" fact gpool)
->>>>>>> continuous-learning
       (fire:kb-forget fact :mt gpool))
-    (cl-user::setup-gpool gpool :strategy :bestgel  :context 'd::DummyMt)
+    (cl-user::setup-gpool gpool :strategy :gel  :context 'd::DummyMt)
     (fire:kb-store `d::(isa ,aileen::pred AileenReasoningPredicate) :mt 'd::BaseKB)
     (fire:kb-store `d::(arity ,aileen::pred
 			      ,aileen::arity) :mt 'd::BaseKB)
@@ -75,15 +67,10 @@
   (let ((gpool (get-concept-gpool action)))
     (cl-user::nuke-gpool gpool)
     (dolist (fact (fire:retrieve-it '?x :context gpool :response '?x))
-<<<<<<< HEAD
-      ;;;(format t "Forgetting ~A in ~A~%" fact gpool)
-=======
       ; (format t "Forgetting ~A in ~A~%" fact gpool)
->>>>>>> continuous-learning
       (fire:kb-forget fact :mt gpool))
-    (cl-user::setup-gpool gpool :strategy :gel )  
+    (cl-user::setup-gpool gpool :strategy :gel )
     (fire:kb-store `d::(isa ,aileen::action AileenReasoningAction) :mt 'd::BaseKB)
-    (fire:kb-store `d::(isa ,aileen::action Relation) :mt 'd::BaseKB)
     (fire:kb-store `d::(arity ,aileen::action ,aileen::arity) :mt 'd::BaseKB)
     (values (length (fire:ask-it `d::(isa ?x AileenReasoningAction)))
 	    gpool)))
@@ -113,31 +100,10 @@
 	     (error "unexpected concept in fact"))
 	    (t nil)))
     (fire:clear-wm)
-<<<<<<< HEAD
-    (fire:kb-forget `(d::gpoolAssimilationThreshold ,gpool ?x) :mt gpool);;can probabely get rid of these operations as we are handling it explicitly below.  
-    (fire:kb-store `(d::gpoolAssimilationThreshold ,gpool 0.2) :mt gpool);;setting to a low number helps with debugging, by letting us see the scores
-    (let ((score (fire:ask-it `d::(and (sageSelect ,aileen::context ,aileen::gpool ?case ?mapping)
-				       (normalizedScoreOf ?mapping ?score))
-			      :context 'd::BaseKB :response 'd::(?score ?case ?mapping))))
-      (multiple-value-bind (rbrowse full url) (rbrowse::browse-sme sme::*sme*)
-	(declare (ignore url rbrowse))
-	(format t "~% Example being stored rbrowse-sme: ~A base:~A score: ~A url: ~A "
-		sme::*sme*
-		context
-		score
-		full))
-      (cond ((and score (> (caar score) *assimilation-threshold*))
-	     ;;;Add example to generalization, but redo the mapping to ensure match below threshold support
-	     (fire:tell-it `(d::sageGeneralize ,context ,(second (car score)) ,gpool) :context 'd::BaseKB))
-	    (t
-	     (fire:tell-it `(d::sageAddUngeneralized ,context  ,gpool) :context 'd::BaseKB)))
-      (values (length (fire:ask-it `(d::kbOnly (d::gpoolGeneralization ,gpool ?num))))
-	      (length (fire:ask-it `(d::kbOnly (d::gpoolExample ,gpool ?num)) ))) )))
-=======
     (fire:kb-forget `(d::gpoolAssimilationThreshold ,gpool ?x) :mt gpool)
     (fire:kb-store `(d::gpoolAssimilationThreshold ,gpool ,*assimilation-threshold*) :mt gpool)
     (fire:tell-it `(d::sageSelectAndGeneralize ,context ,gpool) :context 'd::BaseKB)
-    
+
     ; (multiple-value-bind (rbrowse full url) (rbrowse::browse-sme sme::*sme*)
     ;   (declare (ignore url rbrowse))
     ;   (format t "~% rbrowse-sme: ~A base:~A target: ~A url: ~A "
@@ -148,7 +114,6 @@
 
     (values (length (fire:ask-it `(d::kbOnly (d::gpoolGeneralization ,gpool ?num))))
 	    (length (fire:ask-it `(d::kbOnly (d::gpoolExample ,gpool ?num)) ))) ))
->>>>>>> continuous-learning
 
 (defun store-facts-in-case (facts context)
   (remove-facts-from-case context)
@@ -158,17 +123,11 @@
   )
 
 (defun remove-facts-from-case (context)
-<<<<<<< HEAD
-  ;;(format t "Removing ~A~%" context)
-  (dolist (fact (fire:retrieve-it '?x :context context :response '?x))
-    ;;(format t "Forgetting ~A in ~A~%" fact context)
-=======
   ; (format t "Removing ~A~%" context)
   (dolist (fact (fire:retrieve-it '?x :context context :response '?x))
     ; (format t "Forgetting ~A in ~A~%" fact context)
->>>>>>> continuous-learning
     (fire:kb-forget fact :mt context)))
-  
+
 ;;; this may go away
 (defun match-case-against-gpool (facts context gpool pattern)
   (store-facts-in-case facts context)
@@ -177,7 +136,7 @@
   (fire:ask-it `(d::reverseCIsAllowed
 		 (d::and
 		  (d::sageSelect  ,context ,gpool ?ret ?mapping)
-		  
+
 		  (d::reverseCandidateInferenceOf ?ci ?mapping)
 		  (d::candidateInferenceContent ?ci ,pattern)))
 	       :context gpool :response pattern))
@@ -220,7 +179,7 @@
 
 
 (defun object-filter? (pattern)
-  (and (= (length pattern) 3) 
+  (and (= (length pattern) 3)
        (eql (car pattern) 'd::isa)
        (fire:ask-it `(d::genls ,(third pattern) d::AileenReasoningSymbol))))
 
@@ -253,16 +212,9 @@
 							 (threshold *probability-cutoff*)
 							 (inference-rel nil))
   ;;; base and target
-  
+
   (fire:ask-it `(d::matchBetween ,base (d::KBCaseFn-Probability ,target ,threshold)
 				 ,constraints ?target))
-<<<<<<< HEAD
-  (multiple-value-bind (rbrowse full url) (rbrowse::browse-sme sme::*sme*)
-    (declare (ignore url rbrowse))
-    (format t "~% match-scoring-sme rbrowse-sme: ~A url: ~A" sme::*sme* full))
-    (when (sme::mappings  sme::*sme*)
-    
-=======
 
   ; (multiple-value-bind (rbrowse full url) (rbrowse::browse-sme sme::*sme*)
   ;   (declare (ignore url rbrowse))
@@ -271,18 +223,12 @@
 		; 	   full))
 
   (when (sme::mappings  sme::*sme*)
->>>>>>> continuous-learning
     (let ((score (sme::score (car (sme::mappings  sme::*sme*))))
 	  (sme sme::*sme*))
       (sme::clone-current-sme)
-      ;(format t "~% before remove: ~A" (sme::self-score-dgroup (sme::target sme::*sme*)
-	;						       (sme::mapping-parameters sme::*sme*)))
-      ;(format t "~% ~A" (sme::expressions (sme::target sme::*sme*)))
+      (format t "~% ~A" (sme::expressions (sme::target sme::*sme*)))
       (remove-rel-from-dgroup (sme::target sme::*sme*) inference-rel)
-      ;(format t "~% ~A" (sme::expressions (sme::target sme::*sme*)))
-      ;(format t "~% after remove: ~A" (sme::self-score-dgroup (sme::target sme::*sme*)
-;							       (sme::mapping-parameters sme::*sme*)))
-
+      (format t "~% ~A" (sme::expressions (sme::target sme::*sme*)))
       (let ((normalized-score (/ score
 				 (sme::self-score-dgroup (sme::target sme::*sme*)
 							 (sme::mapping-parameters sme::*sme*)))))
@@ -300,24 +246,24 @@
 	       :key #'(lambda (expr) (sme:name (car expr)))))
 	(unlikely-facts nil))
 	; (mapcar #'car (getf (sme:plist (sme::target sme::*sme*)) :unlikely-facts))))
-    ;(format t "~%old:~A" (sme::expressions dgroup))
-    ;(format t "~% REMOVING: ~A and ~A" expr unlikely-facts)
+;    (format t "~%old:~A" (sme::expressions dgroup))
+;    (format t "~% REMOVING: ~A and ~A" expr unlikely-facts)
     (let (new)
       (dolist (expr2 (sme::expressions dgroup))
-	;(format t "~% expr2: ~A" expr2)
+;	(format t "~% expr2: ~A" expr2)
 	(unless (or (equalp expr expr2)
 		    (member (sme:lisp-form (second expr2)) unlikely-facts :test #'equalp))
-	  ;(format t "~% keep it")
-	  (push expr2 new)))
+;	  (format t "~% keep it")
+	  (push expr new)))
       (setf (sme::expressions dgroup) new))
-    ;(format t "~%new:~A~%~%~%" (sme::expressions dgroup))
+ ;   (format t "~%new:~A~%~%~%" (sme::expressions dgroup))
     (dolist (entity (sme::entities dgroup))
       (let (new)
 	(dolist (exp (sme::parents entity))
-	  ;(format t "~% exp: ~A" exp)
+;	  (format t "~% exp: ~A" exp)
 	  (unless (or (equalp (second expr) exp)
 		      (member (sme:lisp-form exp) unlikely-facts :test #'equalp))
-	    ;(format t "~% keep")
+;	    (format t "~% keep")
 	    (push exp new)))
 	(setf (sme::parents entity) new)))))
 
@@ -346,7 +292,7 @@
 	  #'(lambda (bound-pattern)
 	  	; (format t "Testing bound pattern ~A~%" bound-pattern)
 	      (match-query-against-gpool context gpool bound-pattern))
-	  (mapcar 
+	  (mapcar
 	   #'(lambda (blist)
 	       (fire::substitute-bindings pattern blist))
 	   (make-possible-blists
@@ -360,7 +306,7 @@
 ;; matches one of the reverse candidate inferences
 (defun filter-scene-by-expression-act (facts context gpool prevmatches pattern)
   (assert (null prevmatches))
-  
+
   (when (not gpool)
     (setf gpool (get-concept-gpool (car pattern))))
 
@@ -375,7 +321,7 @@
 	 (remove-if-not
 	  #'(lambda (bound-pattern)
 	      (match-query-against-gpool context gpool bound-pattern))
-	  (mapcar 
+	  (mapcar
 	   #'(lambda (blist)
 	       (fire::substitute-bindings pattern blist))
 	   (make-possible-blists
@@ -391,7 +337,7 @@
 	 (list 'd::KBCaseFn context))
 	((= (length objs) 1)
 	 (list 'd::MinimalCaseFromMtFn (car objs) context))
-	(t 
+	(t
 	 (cons 'd::CaseUnionFn
 	       (mapcar #'(lambda (obj)
 			   `(d::MinimalCaseFromMtFn ,obj ,context))
@@ -407,9 +353,8 @@
 
 ;; repeat? is only included as we had strange behavior where a match did not work the first time we tried it
 (defun match-query-against-gpool (context gpool pattern &optional repeat?)
-  (fire:update-special-analogy-predicates! (fire:analogy-source-of fire:*reasoner*) context)
   (sme:with-sme-type
-    ;  'sme::exhaustive-sme  ;;;DOESN'T WORK WITH FILTERS  ;;;annoyingly missing a greedy merge in a test case 
+    ;  'sme::exhaustive-sme  ;;;DOESN'T WORK WITH FILTERS  ;;;annoyingly missing a greedy merge in a test case
       'sme::sme
   (let* ((objs (remove-if-not
 		#'(lambda (e) (find e (objs-in-context context)))
@@ -418,11 +363,11 @@
     (fire:kb-forget `(d::gpoolAssimilationThreshold ,gpool ?x):mt gpool)
     (fire:kb-store `(d::gpoolAssimilationThreshold ,gpool ,*match-threshold*) :mt gpool)
     (remove-facts-from-case case-term)
-    (fire:clear-dgroup-caches)	       
+    (fire:clear-dgroup-caches)
     (fire:tell-it `(d::constructCaseInWM ,case-term))
     (fire:tell-it `(d::copyWMCaseToKB ,case-term ,case-term)) ;;could have an explicit query context here for easier clean up?
     (dolist (obj objs) ;; analogy control predicates
-      ;;;(format t "~% (d::sageRequireInMapping ~A)" obj)
+      (format t "~% (d::sageRequireInMapping ~A)" obj)
       (fire:kb-store `(d::sageRequireInMapping ,obj) :mt case-term))
     (let ((ci-found? (fire:ask-it
 	   `(d::reverseCIsAllowed
@@ -434,16 +379,6 @@
 	      (d::candidateInferenceContent ?ci ,pattern)
 	      ))
 	   :context gpool :response '?ret)))
-<<<<<<< HEAD
-      (multiple-value-bind (rbrowse full url) (rbrowse::browse-sme sme::*sme*)
-	(declare (ignore rbrowse url))
-	(format t "~% ci: ~A rbrowse-sme: ~A base: ~A target: ~A url: ~A~%"
-		(not (not ci-found?))
-		sme::*sme*
-		case-term
-		gpool
-		full))
-=======
 
  ;      (multiple-value-bind (rbrowse full url) (rbrowse::browse-sme sme::*sme*)
 	; (declare (ignore rbrowse url))
@@ -453,7 +388,6 @@
 	; 	gpool
 	; 	full))
 
->>>>>>> continuous-learning
       (cond (ci-found?
 	     ;; The query above should return the score of the best mapping that includes
 	     ;; the pattern in the reverse candidate inference
@@ -463,17 +397,14 @@
 						 (third pattern)
 						 (car pattern)))) ;;This used to be aileen-symbols-in-patter
 	    ((and (not repeat?)
-		  (or (and
-		       (sme:mappings sme::*sme*)
-		       (= (sme:score (car (sme:mappings sme::*sme*))) 0))
-		      (not (sme:mappings sme::*sme*))
-		      ;;(not ci-found?) ;;; sageRequiredCorrespondences is in a dgroup the first call, but not the second?
-		      ))
+		  (or (and (sme:mappings sme::*sme*)
+			   (= (sme:score (car (sme:mappings sme::*sme*))) 0))
+		      (not (sme:mappings sme::*sme*))))
 	     (format t "~% Strange bug of mapping with a score of 0 that is corrected with a repeated call")
 	     (match-query-against-gpool context gpool pattern t))
 	    (t nil)
 	)))))
-  
+
 (defun make-possible-blists (vars objs &optional blist)
 	; (format t "Possible blist ~a ~a~%" vars objs)
   (cond ((null vars) (list blist))
@@ -485,7 +416,7 @@
 		      (remove obj objs)
 		      (cons (cons (car vars) obj) blist)))
 		 objs))))
-  
+
 (defun vars-in-expr (expr)
   (remove-if-not #'fire:variable? expr))
 
@@ -540,7 +471,7 @@
     (fire:kb-store `(d::gpoolAssimilationThreshold ,gpool ,*projection-threshold*) :mt gpool)
     (format t "~%~% ~A " (fire:ask-it `(d::gpoolAssimilationThreshold ,gpool ?x) :context gpool))
     (remove-facts-from-case case-term)
-    (fire:clear-dgroup-caches)	       
+    (fire:clear-dgroup-caches)
     (fire:tell-it `(d::constructCaseInWM ,case-term))
     (fire:tell-it `(d::copyWMCaseToKB ,case-term ,case-term)) ;;could have an explicit query context here for easier clean up?
     (setup-constraints case-term correspondences)
@@ -553,14 +484,14 @@
                  :context gpool :response '?ci-context)))
       ;; Should we verify anything?
       ;; What kind of score should be required?
-      
+
       (fire:kb-forget `(d::gpoolAssimilationThreshold ,gpool ?x):mt gpool)
-      (fire:kb-store `(d::gpoolAssimilationThreshold ,gpool *match-threshold*) :mt gpool) 
-      
+      (fire:kb-store `(d::gpoolAssimilationThreshold ,gpool *match-threshold*) :mt gpool)
+
       ; (multiple-value-bind (rbrowse full url) (rbrowse::browse-wm)
       ;   (declare (ignore url rbrowse))
       ;   (format t "~% rbrowse-wm after project query: ~A" full))
-      
+
       ; (multiple-value-bind (rbrowse full url) (rbrowse::browse-sme sme::*sme*)
       ;   (declare (ignore url rbrowse))
       ;   (format t "~% rbrowse-sme: ~A base:~A target: ~A url: ~A"
@@ -568,7 +499,7 @@
       ;     case-term
       ;     gpool
       ;     full))
-      
+
       cis)))
 
 
@@ -578,6 +509,7 @@
 
 
 
- 
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; End of Code
+
