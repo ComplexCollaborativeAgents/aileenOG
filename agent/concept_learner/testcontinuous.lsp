@@ -136,12 +136,13 @@
 ;;; learn quantity distributions
 (defun maybe-add-quantity-preds (facts gpool &key (learn-after 3))
 
-  (debug-format "How many examples for ~s~%" gpool)
-
   (let (;;; how many examples in gpool
         (example-count (cl-user::compute-n-input-examples (kb::retrieve-gpool gpool :create? nil)))
         ;;; get quantity preds from facts in case
         (quantity-facts (find-quantities *test-preds* facts)))
+
+    (debug-format "~s examples for ~s~%" example-count gpool)
+
     ; (format t "qfacts are ~s~%" quantity-facts)
     (mapcan (lambda (qfact)
               ;;; take the predicate that has at least one quantity arg
@@ -150,7 +151,7 @@
 
                 (debug-format "~%Checking ~A~%" qfact-pred)
 
-                (cond ((<= example-count learn-after)
+                (cond ((< example-count learn-after)
                        (debug-format "Less than ~s examples, default add ~s~%" learn-after qfact-pred)
                        (list qfact-pred))
                       ((in-distribution? qfact gpool)
