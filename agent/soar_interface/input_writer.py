@@ -153,8 +153,8 @@ class InputWriter(object):
 
     def write_qsrs_to_input_link(self, qsrs):
 
-        if qsrs:
-            logging.info("[testing] writing qsrs to input link {}".format(qsrs))
+        # if qsrs:
+        #     logging.info("[testing] writing qsrs to input link {}".format(qsrs))
 
         self._soar_agent.delete_all_children(self._qsrs_link)
         for root_obj_id in qsrs:
@@ -400,6 +400,8 @@ class InputWriter(object):
         Arbitrary thresholds as a first pass -> clustering on witnessed examples later
         """
         area = abs((bbox[3] - bbox[0]) * (bbox[5] - bbox[2]))
+
+        # logging.info("[input_writer] :: bbox is {}".format(bbox))
         return area
 
         # if area < settings.SIZE_SM:
