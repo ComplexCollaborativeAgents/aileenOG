@@ -1,6 +1,7 @@
 [
   {
     "signal": "inform",
+    "content": "large cone",
     "lesson-type": "visual-word",
     "description": {"color": "green",
                     "shape": "cone",

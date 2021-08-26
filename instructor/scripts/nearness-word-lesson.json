@@ -39,8 +39,6 @@
       "relation": "near"},
      "signal": "inform"
   },
-
-
   {
     "lesson-type": "spatial-word",
     "content": "blue cone near green sphere",
@@ -49,5 +47,13 @@
       "relation": "near"},
      "signal": "verify",
     "distractors": 0
+  },
+  {
+    "lesson-type": "spatial-word",
+    "content": "green box near blue sphere",
+    "description": {
+      "objects": [{"color": "blue", "shape": "sphere"},  {"color": "green", "shape": "box"}],
+      "relation": "distant"},
+    "signal": "verify"
   }
 ]
