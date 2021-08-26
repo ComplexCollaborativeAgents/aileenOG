@@ -137,11 +137,11 @@
 (defun maybe-add-quantity-preds (facts gpool &key (learn-after 3))
 
   (let (;;; how many examples in gpool
-        (example-count (cl-user::compute-n-input-examples (kb::retrieve-gpool gpool :create? nil)))
+        (example-count (gpool->size gpool))
         ;;; get quantity preds from facts in case
         (quantity-facts (find-quantities *test-preds* facts)))
 
-    (debug-format "~s examples for ~s~%" example-count gpool)
+    (debug-format "~%------------------------~%~s examples for ~s~%" example-count gpool)
 
     ; (format t "qfacts are ~s~%" quantity-facts)
     (mapcan (lambda (qfact)
@@ -149,16 +149,16 @@
               ;;; introduce a new predicate without the quantity
               (let ((qfact-pred (make-qfact-pred qfact)))
 
-                (debug-format "~%Checking ~A~%" qfact-pred)
+                (debug-format "    Checking ~A~%" qfact-pred)
 
                 (cond ((< example-count learn-after)
-                       (debug-format "Less than ~s examples, default add ~s~%" learn-after qfact-pred)
+                       (debug-format "    Less than ~s examples, default add ~s~%" learn-after qfact-pred)
                        (list qfact-pred))
                       ((in-distribution? qfact gpool)
-                       (debug-format "In dist, adding ~s~%" qfact-pred)
+                       (debug-format "    In dist, adding ~s~%" qfact-pred)
                        (list qfact-pred))
                       (t 
-                        (debug-format "Out of dist, not adding ~s~%" qfact-pred)
+                        (debug-format "    Out of dist, not adding ~s~%" qfact-pred)
                         nil)))) 
       quantity-facts)))
 
@@ -168,17 +168,19 @@
          (probe-quant (fact-quantity qpred))
          (mean (mean dist-quants))
          (stddev (stddev dist-quants)))
-    (debug-format "Checking dist: probe is ~A, quants are ~A~%" probe-quant dist-quants)
+    (debug-format "    Checking dist: probe is ~A, quants are ~A~%" probe-quant dist-quants)
     (confidence probe-quant mean stddev)))
 
 
 ;;; a dumb version that doesn't take structure mapping into account
 (defun pred-quantities (qpred gpool)
   (mapcan (lambda (mt)
+            (format t "    Checking mt ~s~%" mt)
             (let* ((facts (kb::list-mt-facts mt))
                    (relevant-facts (filter-relevant-facts qpred facts)))
+              (format t "    Rel facts are ~s~%" relevant-facts)
               (mapcar 'fact-quantity relevant-facts)))
-    (gpool->examples gpool)))
+    (gpool->cases gpool)))
 
 
 (defun fact-quantity (fact)
@@ -191,13 +193,20 @@
     facts))
 
 
-;;; there's got to be a better way to do this???
-(defun gpool->examples (gpool)
-  (append
-   (mapcar (lambda (instance)
-             (third (fire::decontextualize-statement instance)))
-     (fire::ask-it `(d::gpoolExample ,gpool ?example)))
-   (cl-user::input-case-names-from-generalizations (kb::retrieve-gpool gpool))))
+(defun gpool->size (gpool-form)
+  (length (gpool->cases gpool-form)))
+
+
+(defun gpool->cases (gpool-form)
+  (nconc (gpool->assimilated gpool-form) (gpool->unassimilated gpool-form)))
+
+
+(defun gpool->unassimilated (gpool-form)
+  (mapcar 'car (fire:ask-it `(d::kbOnly (d::gpoolExample ,gpool-form ?ex)) :response '?ex)))
+
+
+(defun gpool->assimilated (gpool-form)
+  (fire:ask-it `(d::kbOnly (d::sageConstituent ?case ?gmt ,gpool-form)) :response '?case))
 
 
 (defun make-qfact-pred (qfact)
