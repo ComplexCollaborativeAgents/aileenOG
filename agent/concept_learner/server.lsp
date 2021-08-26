@@ -250,7 +250,7 @@
            ; (setf facts (append facts (maybe-add-quantity-preds facts (get-concept-gpool (car pattern)))))
 
            ;; Store facts in context and match query.
-           (debug-format "in query-helper. facts are~%~% ~A.~%~%Context is ~A~%~% Pattern is ~A" facts context pattern)
+           ; (debug-format "in query-helper. facts are~%~% ~A.~%~%Context is ~A~%~% Pattern is ~A" facts context pattern)
            (let ((matches (filter-scene-by-expression facts context nil nil pattern)))
              (debug-format "Found matches ~A~%" matches)
              (cl-json:encode-json-alist-to-string
