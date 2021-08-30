@@ -79,16 +79,20 @@ class Generator:
         shapes = settings.SHAPE_SET
         with open(settings.COLOR_PATH, 'r') as f:
             colors = json.load(f).keys()
+        with open(settings.SIZE_PATH, 'r') as f:
+            sizes = json.load(f).keys()
 
-        def generate_lesson_description(color, shape, distractors, signal, is_positive):
-            if color is None and shape is None:
+        def generate_lesson_description(color, shape, size, distractors, signal, is_positive):
+            if color is None and shape is None and size is None:
                 sys.exit('Either color or shape is required!')
             lesson = {'lesson-type': 'visual-word', 'is_positive': str(is_positive), 'description': {}}
             if color:
                 lesson['description']['color'] = color
             if shape:
                 lesson['description']['shape'] = shape
-            lesson['description']['size']= 'medium'
+            # lesson['description']['size']= 'medium'
+            if size:
+                lesson['description']['size'] = size
             if distractors:
                 lesson['distractors'] = random.randint(distractors[0], distractors[1])
             if signal:
@@ -99,33 +103,59 @@ class Generator:
             lessons = []
             if self._experiment_concept in shapes:
                 for i in range(0, number_of_samples):
+                    color_choice = random.choice(colors)
+                    size_choice = random.choice(sizes)
                     if not is_positive:
                         reduced_set = copy.deepcopy(shapes)
                         reduced_set.remove(self._experiment_concept)
-                        color_choice = random.choice(colors)
-                        new_lesson = generate_lesson_description(color_choice, random.choice(reduced_set), distractors, signal, is_positive)
-                        new_lesson['content'] = "{} {}".format(color_choice, self._experiment_concept)
+                        
+                        new_lesson = generate_lesson_description(color_choice, random.choice(reduced_set), size_choice, distractors, signal, is_positive)
+                        new_lesson['content'] = "{} {} {}".format(color_choice, size_choice, self._experiment_concept)
                         lessons += [new_lesson]
                     else:
-                        color_choice = random.choice(colors)
-                        new_lesson = generate_lesson_description(color_choice, self._experiment_concept, distractors, signal, is_positive)
-                        new_lesson['content'] = "{} {}".format(color_choice, self._experiment_concept)
+                        new_lesson = generate_lesson_description(color_choice, self._experiment_concept, size_choice, distractors, signal, is_positive)
+                        new_lesson['content'] = "{} {} {}".format(color_choice, size_choice, self._experiment_concept)
                         lessons += [new_lesson]
+
             if self._experiment_concept in colors:
                 for i in range(0, number_of_samples):
-                        if not is_positive:
-                            reduced_set = copy.deepcopy(colors)
-                            reduced_set.remove(self._experiment_concept)
-                            shape_choice = random.choice(shapes)
-                            new_lesson = generate_lesson_description(random.choice(reduced_set), shape_choice, distractors, signal, is_positive)
-                            new_lesson['content'] = "{} {}".format(self._experiment_concept, shape_choice)
-                            lessons += [new_lesson]
-                        else:
-                            shape_choice = random.choice(shapes)
-                            new_lesson = generate_lesson_description(self._experiment_concept, shape_choice,
-                                                                     distractors, signal, is_positive)
-                            new_lesson['content'] = "{} {}".format(self._experiment_concept, shape_choice)
-                            lessons += [new_lesson]
+                    shape_choice = random.choice(shapes)
+                    size_choice = random.choice(sizes)
+                    if not is_positive:
+                        reduced_set = copy.deepcopy(colors)
+                        reduced_set.remove(self._experiment_concept)
+                        
+                        new_lesson = generate_lesson_description(random.choice(reduced_set), shape_choice, size_choice, distractors, signal, is_positive)
+                        new_lesson['content'] = "{} {} {}".format(self._experiment_concept, size_choice, shape_choice)
+                        lessons += [new_lesson]
+                    else:
+                        new_lesson = generate_lesson_description(self._experiment_concept, shape_choice, size_choice,
+                                                                 distractors, signal, is_positive)
+                        new_lesson['content'] = "{} {} {}".format(self._experiment_concept, size_choice, shape_choice)
+                        lessons += [new_lesson]
+
+
+            # wwh adding size
+            if self._experiment_concept in sizes:
+                for i in range(0, number_of_samples):
+                    shape_choice = random.choice(shapes)
+                    color_choice = random.choice(colors)
+                    if not is_positive:
+                        reduced_set = copy.deepcopy(sizes)
+                        reduced_set.remove(self._experiment_concept)
+                        size_choice = random.choice(reduced_set)
+                        new_lesson = generate_lesson_description(color_choice, shape_choice, size_choice, distractors, signal, is_positive)
+                        new_lesson['content'] = "{} {} {}".format(color_choice, self._experiment_concept, shape_choice)
+                        lessons += [new_lesson]
+                    else:
+                        shape_choice = random.choice(shapes)
+                        color_choice = random.choice(colors)
+                        new_lesson = generate_lesson_description(color_choice, shape_choice, self._experiment_concept,
+                                                                 distractors, signal, is_positive)
+                        new_lesson['content'] = "{} {} {}".format(color_choice, self._experiment_concept, shape_choice)
+                        lessons += [new_lesson]
+
+
             return lessons
 
         else:
@@ -133,9 +163,9 @@ class Generator:
                 logging.warning("[generator] :: generating multiple samples for unique combination of objects")
             lessons = []
             for i in range(0, number_of_samples):
-                lessons += [generate_lesson_description(c, s, distractors, signal, is_positive) for s in shapes for c in colors]
+                lessons += [generate_lesson_description(c, s, None, distractors, signal, is_positive) for s in shapes for c in colors]
                 if self._experiment_concept is None:
-                    lessons += [generate_lesson_description(None, s, distractors, signal, is_positive) for s in shapes]
+                    lessons += [generate_lesson_description(None, s, None, distractors, signal, is_positive) for s in shapes]
             random.shuffle(lessons)
             return lessons
 
