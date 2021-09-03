@@ -9,7 +9,7 @@ class ActionExecutor:
 
     def process_action_command(self, action):
         logging.info("[action_executor] :: processing action {}".format(action['name']))
-        self._requestor = action['requestor']
+        self._requestor = action['requester']
         if action['name'] == 'pick-up' and 'id' in action:
             return self.pick_up_object(action['id'])
         else:
