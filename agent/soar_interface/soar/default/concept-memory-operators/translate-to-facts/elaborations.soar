@@ -66,22 +66,63 @@ sp {translate-to-facts*write-facts*trace*world*relations
                ^lthird <sid>)
     }
 
-sp {translate-to-facts*write-facts*trace*world*objects
+sp {translate-to-facts*write-facts*trace*world*relations*distance
+    (state <s> ^name translate-to-facts
+               ^trace.world <sr>
+               ^facts <facts>)
+    (<sr> ^memory-id <lab>)
+    (<sr> ^relations.relation <rel>)
+    (<rel>    ^distance <val>
+              ^root-object.id_string <fid>
+              ^target-object.id_string <sid>)
+-->
+    (<facts>    ^fact <f>)
+    (<f>    ^lfirst holdsIn
+            ^lsecond (concat episode_ <lab>)
+            ^lthird <srel>)
+    (<srel>    ^lfirst distance
+               ^lsecond <val>
+               ^lthird <fid>
+               ^lfourth <sid>)}
+
+
+sp {translate-to-facts*write-facts*trace*world*objects*color*shape
     (state <s>    ^name translate-to-facts
                   ^facts <facts>
-                  ^topstate._params.relevant-percept-set <set>
+                  #^topstate._params.relevant-percept-set <set>
                   ^trace.world <sr>)
-    (<set>    ^type <type>)
+    #(<set>    ^type <type>)
     (<sr>    ^memory-id <lab>)
     (<sr>    ^objects.object <obj>)
     (<obj>    ^id_string <id_string>
-              ^<type> <symbol>)
+              ^<< color shape >> <symbol>)
 -->
     (<facts>    ^fact <f>)
     (<f>    ^lfirst holdsIn
             ^lsecond (concat episode_ <lab>)
             ^lthird <objf>)
     (<objf>    ^lfirst isa
+               ^lsecond <id_string>
+               ^lthird <symbol>)
+    }
+
+
+sp {translate-to-facts*write-facts*trace*world*objects*size
+    (state <s>    ^name translate-to-facts
+                  ^facts <facts>
+                  #^topstate._params.relevant-percept-set <set>
+                  ^trace.world <sr>)
+    #(<set>    ^type <type>)
+    (<sr>    ^memory-id <lab>)
+    (<sr>    ^objects.object <obj>)
+    (<obj>    ^id_string <id_string>
+              ^size <symbol>)
+-->
+    (<facts>    ^fact <f>)
+    (<f>    ^lfirst holdsIn
+            ^lsecond (concat episode_ <lab>)
+            ^lthird <objf>)
+    (<objf>    ^lfirst size
                ^lsecond <id_string>
                ^lthird <symbol>)
     }
