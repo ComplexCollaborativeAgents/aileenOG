@@ -345,8 +345,16 @@ class InputWriter(object):
     def create_aux_info(self, objects):
         rels = []
 
+        # logging.debug("[input_writer] :: cai objects are: {}".format(objects))
+        non_held_objs = [o for o in objects if not o['held'] == 'true']
+        # logging.debug("[input_writer] :: non held objects are: {}".format(non_held_objs))
+
         # add distance information between pairs of objects
-        for items in combinations(objects, 2):
+        for items in combinations(non_held_objs, 2):
+
+            # logging.debug("[input_writer] :: vec 1 is: {}".format(np.array(items[0]['position'])))
+            # logging.debug("[input_writer] :: vec 2 is: {}".format(np.array(items[1]['position'])))
+
             distance = np.linalg.norm(np.array(items[0]['position']) - np.array(items[1]['position']))
             rels.append((items[0]['id'], items[1]['id'], distance))
 
