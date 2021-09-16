@@ -1,0 +1,10 @@
+[
+  {
+    "lesson-type": "spatial-word",
+    "content": "large green box near small red sphere",
+    "description": {
+      "objects": [{"color": "green", "shape": "box", "size": "large"},  {"color": "red", "shape": "sphere", "size": "small"}],
+      "relation": "near"},
+     "signal": "inform"
+  }
+]
