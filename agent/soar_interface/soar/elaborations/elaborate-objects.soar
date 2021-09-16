@@ -4,30 +4,30 @@
 # @created smohan 20191115
 
 
-sp {aileen*elaborate*objects*copy*id
+sp {aileen*elaborate*objects*copy
     :o-support
     (state <s>    ^name aileen
                   ^io.input-link <il>
                   ^world.objects <wobjs>)
     (<il>    ^world.objects.object <obj>)
-    (<obj>  ^id <id>)
+    (<obj>    ^color <color>
+              ^shape <shape>
+              ^held <held>
+              ^id <id>
+              ^id_uuid <id-uuid>
+              ^id_string <id-string>
+              ^size <sz>)
    -{(<wobjs>    ^object <wobj>)
     (<wobj>    ^id <id>)}
 -->
     (<wobjs>    ^object <obj-new>)
-    (<obj-new> ^id <id>)
-    }
-
-sp {aileen*elaborate*objects*copy*attributes
-    :o-support
-    (state <s>    ^name aileen
-                  ^io.input-link.world.objects.object <ilo>
-                  ^world.objects.object <obj>)
-    (<ilo>    ^id <id>
-              ^<attr> <val>)
-    (<obj>    ^id <id>)
--->
-    (<obj>    ^<attr> <val>)
+    (<obj-new>    ^color <color>
+                  ^shape <shape>
+                  ^held <held>
+                  ^id <id>
+                  ^id_uuid <id-uuid>
+                  ^id_string <id-string>
+                  ^size <sz>)
     }
 
 sp {aileen*elaborate*objects*remove
@@ -53,6 +53,18 @@ sp {aileen*elaborate*objects*position
     (<wobj>    ^id <id>)
 -->
     (<wobj>    ^position <p>)
+    }
+
+sp {aileen*elaborate*objects*size_bb
+    (state <s>    ^name aileen
+                  ^io.input-link <il>
+                  ^world.objects.object <wobj>)
+    (<il>    ^world.objects.object <obj>)
+    (<obj>    ^id <id>
+              ^size_bb <p>)
+    (<wobj>    ^id <id>)
+-->
+    (<wobj>    ^size_bb <p>)
     }
 
 sp {aileen*elaborate*objects*update*held
