@@ -154,6 +154,7 @@ class AileenObject:
         color = Color(color, scene_object_color_vector)
         shape = description.get('shape', AileenObject.randomizer.get_random_shape())
         size = description.get('size', AileenObject.randomizer.get_random_size())
+        # size = 'medium'
         size_vector = description.get('xyz', AileenObject.randomizer.get_size_vector_sample(size))
         size = Size(size, size_vector)
         scene_object = AileenObject(shape=shape, color=color, size=size)
