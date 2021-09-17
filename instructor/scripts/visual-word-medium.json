@@ -1,7 +1,7 @@
 [
   {
     "signal": "inform",
-    "content": "medium cone",
+    "content": "medium",
     "lesson-type": "visual-word",
     "description": {"color": "green",
                     "shape": "cone",
@@ -9,7 +9,7 @@
   },
   {
     "lesson-type": "visual-word",
-    "content": "medium box",
+    "content": "medium",
     "description": {"color": "red",
                     "shape": "box",
                     "size":  "medium"},
@@ -17,7 +17,7 @@
   },
   {
     "lesson-type": "visual-word",
-    "content": "medium cylinder",
+    "content": "medium",
     "description": {"color": "blue",
                     "shape": "cylinder",
                     "size":  "medium"},
@@ -25,7 +25,7 @@
   },
   {
     "lesson-type": "visual-word",
-    "content": "medium box",
+    "content": "medium",
     "description": {"color": "green",
                     "shape": "box",
                     "size":  "medium"},
@@ -33,7 +33,7 @@
   },
   {
     "lesson-type": "visual-word",
-    "content": "medium box",
+    "content": "medium",
     "description": {"color": "green",
                     "shape": "box",
                     "size":  "small"},
