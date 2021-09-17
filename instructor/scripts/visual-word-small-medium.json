@@ -1,0 +1,87 @@
+[
+  {
+    "signal": "inform",
+    "content": "small cone",
+    "lesson-type": "visual-word",
+    "description": {"color": "green",
+                    "shape": "cone",
+                    "size":  "small"}
+  },
+  {
+    "lesson-type": "visual-word",
+    "content": "medium box",
+    "description": {"color": "red",
+                    "shape": "box",
+                    "size":  "medium"},
+    "signal": "inform"
+  },
+  {
+    "lesson-type": "visual-word",
+    "content": "small cylinder",
+    "description": {"color": "blue",
+                    "shape": "cylinder",
+                    "size":  "small"},
+    "signal": "inform"
+  },
+  {
+    "lesson-type": "visual-word",
+    "content": "medium sphere",
+    "description": {"color": "green",
+                    "shape": "sphere",
+                    "size":  "medium"},
+    "signal": "inform"
+  },
+  {
+    "lesson-type": "visual-word",
+    "content": "small box",
+    "description": {"color": "blue",
+                    "shape": "box",
+                    "size":  "small"},
+    "signal": "inform"
+  },
+  {
+    "lesson-type": "visual-word",
+    "content": "medium cylinder",
+    "description": {"color": "blue",
+                    "shape": "cylinder",
+                    "size":  "medium"},
+    "signal": "inform"
+  },
+
+
+
+  {
+    "lesson-type": "visual-word",
+    "content": "medium box",
+    "description": {"color": "green",
+                    "shape": "box",
+                    "size":  "medium"},
+    "signal": "verify"
+  },
+  {
+    "lesson-type": "visual-word",
+    "content": "medium box",
+    "description": {"color": "green",
+                    "shape": "box",
+                    "size":  "large"},
+    "signal": "verify"
+  },
+
+
+  {
+    "lesson-type": "visual-word",
+    "content": "small box",
+    "description": {"color": "green",
+                    "shape": "box",
+                    "size":  "small"},
+    "signal": "verify"
+  },
+  {
+    "lesson-type": "visual-word",
+    "content": "small box",
+    "description": {"color": "green",
+                    "shape": "box",
+                    "size":  "large"},
+    "signal": "verify"
+  }
+]

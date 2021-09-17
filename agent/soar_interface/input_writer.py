@@ -153,8 +153,8 @@ class InputWriter(object):
 
     def write_qsrs_to_input_link(self, qsrs):
 
-        if qsrs:
-            logging.info("[testing] writing qsrs to input link {}".format(qsrs))
+        # if qsrs:
+        #     logging.info("[testing] writing qsrs to input link {}".format(qsrs))
 
         self._soar_agent.delete_all_children(self._qsrs_link)
         for root_obj_id in qsrs:
@@ -345,8 +345,16 @@ class InputWriter(object):
     def create_aux_info(self, objects):
         rels = []
 
+        # logging.debug("[input_writer] :: cai objects are: {}".format(objects))
+        non_held_objs = [o for o in objects if not o['held'] == 'true']
+        # logging.debug("[input_writer] :: non held objects are: {}".format(non_held_objs))
+
         # add distance information between pairs of objects
-        for items in combinations(objects, 2):
+        for items in combinations(non_held_objs, 2):
+
+            # logging.debug("[input_writer] :: vec 1 is: {}".format(np.array(items[0]['position'])))
+            # logging.debug("[input_writer] :: vec 2 is: {}".format(np.array(items[1]['position'])))
+
             distance = np.linalg.norm(np.array(items[0]['position']) - np.array(items[1]['position']))
             rels.append((items[0]['id'], items[1]['id'], distance))
 
@@ -400,6 +408,8 @@ class InputWriter(object):
         Arbitrary thresholds as a first pass -> clustering on witnessed examples later
         """
         area = abs((bbox[3] - bbox[0]) * (bbox[5] - bbox[2]))
+
+        # logging.info("[input_writer] :: bbox is {}".format(bbox))
         return area
 
         # if area < settings.SIZE_SM:

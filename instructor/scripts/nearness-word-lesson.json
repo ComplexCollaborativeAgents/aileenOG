@@ -1,9 +1,9 @@
 [
   {
     "lesson-type": "spatial-word",
-    "content": "green cone near red sphere",
+    "content": "green box near red sphere",
     "description": {
-      "objects": [{"color": "green", "shape": "cone"},  {"color": "red", "shape": "sphere"}],
+      "objects": [{"color": "green", "shape": "box"},  {"color": "red", "shape": "sphere"}],
       "relation": "near"},
      "signal": "inform"
   },
@@ -25,17 +25,17 @@
   },
   {
     "lesson-type": "spatial-word",
-    "content": "green cube near green cylinder",
+    "content": "green box near green cylinder",
     "description": {
-      "objects": [{"color": "green", "shape": "cube"},  {"color": "green", "shape": "cylinder"}],
+      "objects": [{"color": "green", "shape": "box"},  {"color": "green", "shape": "cylinder"}],
       "relation": "near"},
      "signal": "inform"
   },
   {
     "lesson-type": "spatial-word",
-    "content": "blue cube near green cube",
+    "content": "blue box near green box",
     "description": {
-      "objects": [{"color": "blue", "shape": "cube"},  {"color": "green", "shape": "cube"}],
+      "objects": [{"color": "blue", "shape": "box"},  {"color": "green", "shape": "box"}],
       "relation": "near"},
      "signal": "inform"
   },
