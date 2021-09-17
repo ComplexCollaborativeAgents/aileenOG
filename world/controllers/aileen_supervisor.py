@@ -485,7 +485,7 @@ class AileenSupervisor(Supervisor):
             if 'Solid' in object_name:
                 nodes_to_remove.append(object_node.getId())
 
-        print len(nodes_to_remove)
+        #print len(nodes_to_remove)
         for i in range(0, len(nodes_to_remove)):
             node_id = nodes_to_remove[i]
             node = self.getFromId(node_id)
