@@ -201,11 +201,11 @@
   (fire:kb-forget `(d::gpoolAssimilationThreshold ,gpool ?x) :mt gpool)
   (fire:kb-store `(d::gpoolAssimilationThreshold ,gpool ,*match-threshold*) :mt gpool)
   (let* ((collection (third pattern))
-	 (objs
-	  (remove-if-not
-	   #'(lambda (obj)
-	       (match-query-against-gpool context gpool `(d::isa ,obj ,collection)))
-	 (reverse (objs-in-context context)))))
+         (objs
+          (remove-if-not
+           #'(lambda (obj)
+               (match-query-against-gpool context gpool `(d::isa ,obj ,collection)))
+           (reverse (objs-in-context context)))))
     (mapcar #'(lambda (obj) (list 'd::isa obj (third pattern))) objs)))
 
 (defun match-score-exceeds-threshold? (base target &key (constraints '(d::TheSet))
@@ -275,7 +275,7 @@
 	(debug-format "Filtering by relation expression ~A.~%" pattern)
   (assert (null prevmatches))
   (assert (and (listp pattern) (every #'atom pattern))) ;; no nested lists in pattern.
-  (debug-format "Storing facts ~A.~%" facts)
+  ; (debug-format "Storing facts ~A.~%" facts)
 
   (when (not gpool)
     (setf gpool (get-concept-gpool (car pattern))))
@@ -353,6 +353,12 @@
 
 ;; repeat? is only included as we had strange behavior where a match did not work the first time we tried it
 (defun match-query-against-gpool (context gpool pattern &optional repeat?)
+  (debug-format "Matching Query Against Gpool ~A~%" context)
+
+  (let ((num-cases (gpool->size gpool)))
+  	(when (< num-cases 3)
+  		(return-from match-query-against-gpool nil)))
+
   (sme:with-sme-type
     ;  'sme::exhaustive-sme  ;;;DOESN'T WORK WITH FILTERS  ;;;annoyingly missing a greedy merge in a test case
       'sme::sme
@@ -387,6 +393,7 @@
 	; 	case-term
 	; 	gpool
 	; 	full))
+	(debug-format "CI Found for ~A in ~A is ~A~%" context gpool ci-found?)
 
       (cond (ci-found?
 	     ;; The query above should return the score of the best mapping that includes
