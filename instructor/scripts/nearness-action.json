@@ -10,8 +10,8 @@
               {"name": "pick-up", "argument": "<obj1>"},
               {"name": "place", "argument1": "<obj1>", "argument2": "<obj2>", "relation": "near"}],
       "language": ["move", "<obj1>", "near", "<obj2>"],
-      "<obj1>": {"color": "red", "shape": "cone"},
-      "<obj2>": {"color": "blue", "shape": "cone"}
+      "<obj1>": {"color": "red", "shape": "cone", "size": "medium"},
+      "<obj2>": {"color": "blue", "shape": "cone", "size": "medium"}
     },
     "content": "move red cone near blue cone",
     "signal": "inform",
@@ -29,8 +29,8 @@
               {"name": "pick-up", "argument": "<obj1>"},
               {"name": "place", "argument1": "<obj1>", "argument2": "<obj2>", "relation": "near"}],
       "language": ["move", "<obj1>", "near", "<obj2>"],
-      "<obj1>": {"color": "blue", "shape": "cylinder"},
-      "<obj2>": {"color": "red", "shape": "cylinder"}
+      "<obj1>": {"color": "blue", "shape": "cylinder", "size": "medium"},
+      "<obj2>": {"color": "red", "shape": "cylinder", "size": "medium"}
     },
     "content": "move blue cylinder near red cylinder",
     "signal": "inform",
@@ -48,8 +48,8 @@
               {"name": "pick-up", "argument": "<obj1>"},
               {"name": "place", "argument1": "<obj1>", "argument2": "<obj2>", "relation": "near"}],
       "language": ["move", "<obj1>", "near", "<obj2>"],
-      "<obj1>": {"color": "green", "shape": "sphere"},
-      "<obj2>": {"color": "blue", "shape": "cylinder"}
+      "<obj1>": {"color": "green", "shape": "sphere", "size": "medium"},
+      "<obj2>": {"color": "blue", "shape": "cylinder", "size": "medium"}
     },
     "content": "move green sphere near blue cylinder",
     "signal": "verify",
