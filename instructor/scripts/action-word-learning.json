@@ -58,7 +58,7 @@
               {"name": "pick-up", "argument": "<obj1>"},
               {"name": "place", "argument1": "<obj1>", "argument2": "<obj2>", "relation": "right-of"}],
       "<obj1>": {"color": "green", "shape": "cone", "size":  "medium"},
-      "<obj2>": {"color": "red", "shape": "box", "size": medium}
+      "<obj2>": {"color": "red", "shape": "box", "size": "medium"}
     },
     "signal": "inform",
     "distractors": 0
