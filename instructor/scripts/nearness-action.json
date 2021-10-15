@@ -54,4 +54,22 @@
     "content": "move green sphere near blue cylinder",
     "signal": "verify",
     "distractors": 0
+  },
+  {
+    "comment": "Try to do exactly what was taught.",
+    "lesson-type": "action-word",
+    "description": {
+      "objects": ["<obj1>", "<obj2>"],
+      "relations": ["near"],
+      "action": "move-near",
+      "initial_configuration": [[["not","near"], "<obj2>", "<obj1>"], ["dc", "<obj2>", "<obj1>"]],
+          "trace-actions": [
+              {"name": "pick-up", "argument": "<obj1>"},
+              {"name": "place", "argument1": "<obj1>", "argument2": "<obj2>", "relation": "near"}],
+      "language": ["move", "<obj1>", "near", "<obj2>"],
+      "<obj1>": {"color": "red", "shape": "box", "size": "medium"},
+      "<obj2>": {"color": "blue", "shape": "box", "size": "medium"}
+    },
+    "content": "move red box near blue box",
+    "signal": "react"
   }]
