@@ -236,7 +236,7 @@
 (defun query-helper (str)
   (handler-bind ((error #'print-backtrace))
   (setq *str* str)
-  (debug-format "Querying ~A~%" str)
+  ; (debug-format "Querying ~A~%" str)
   (let* ((json (cl-json:decode-json-from-string str))
          (facts (str->symbols (cdr (assoc :FACTS json)))) ;;; all facts in scene
          (context 'data::query-facts)

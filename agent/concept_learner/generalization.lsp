@@ -85,6 +85,9 @@
 
   	; (debug-format "foofacts are ~s~%" facts)
 
+    (debug-format "Storing case facts in ~s~%" context)
+    (store-facts-in-case facts context)
+
   	;;; wwh adding quantity predicates if needed
   	(setf facts (append facts (maybe-add-quantity-preds facts gpool)))
 
@@ -307,8 +310,12 @@
 (defun filter-scene-by-expression-act (facts context gpool prevmatches pattern)
   (assert (null prevmatches))
 
+  ; (debug-format "Filtering by action ~A. Facts are ~%~A~%~%" pattern facts)
+
   (when (not gpool)
     (setf gpool (get-concept-gpool (car pattern))))
+
+  (store-facts-in-case facts context)
 
   (setf facts (append facts (maybe-add-quantity-preds facts gpool)))
   (store-facts-in-case facts context)
@@ -353,64 +360,64 @@
 
 ;; repeat? is only included as we had strange behavior where a match did not work the first time we tried it
 (defun match-query-against-gpool (context gpool pattern &optional repeat?)
-  (debug-format "Matching Query Against Gpool ~A~%" context)
+  (debug-format "Matching Pattern ~A Against Gpool ~A~%" pattern gpool)
 
   (let ((num-cases (gpool->size gpool)))
-  	(when (< num-cases 3)
-  		(return-from match-query-against-gpool nil)))
+    (when (< num-cases 3)
+      (return-from match-query-against-gpool nil)))
 
   (sme:with-sme-type
-    ;  'sme::exhaustive-sme  ;;;DOESN'T WORK WITH FILTERS  ;;;annoyingly missing a greedy merge in a test case
+      ;  'sme::exhaustive-sme  ;;;DOESN'T WORK WITH FILTERS  ;;;annoyingly missing a greedy merge in a test case
       'sme::sme
-  (let* ((objs (remove-if-not
-		#'(lambda (e) (find e (objs-in-context context)))
-		pattern))
-	 (case-term (make-case-term context objs)))
-    (fire:kb-forget `(d::gpoolAssimilationThreshold ,gpool ?x):mt gpool)
-    (fire:kb-store `(d::gpoolAssimilationThreshold ,gpool ,*match-threshold*) :mt gpool)
-    (remove-facts-from-case case-term)
-    (fire:clear-dgroup-caches)
-    (fire:tell-it `(d::constructCaseInWM ,case-term))
-    (fire:tell-it `(d::copyWMCaseToKB ,case-term ,case-term)) ;;could have an explicit query context here for easier clean up?
-    (dolist (obj objs) ;; analogy control predicates
-      (format t "~% (d::sageRequireInMapping ~A)" obj)
-      (fire:kb-store `(d::sageRequireInMapping ,obj) :mt case-term))
-    (let ((ci-found? (fire:ask-it
-	   `(d::reverseCIsAllowed
-	     (d::and
-	      (d::sageSelect ,case-term ,gpool ?ret ?mapping)
-	      (d::mappingOf  ?mapping ?matcher)
-	      (d::mappingOf ?mapping1 ?matcher )
-	      (d::reverseCandidateInferenceOf ?ci ?mapping1)
-	      (d::candidateInferenceContent ?ci ,pattern)
-	      ))
-	   :context gpool :response '?ret)))
-
- ;      (multiple-value-bind (rbrowse full url) (rbrowse::browse-sme sme::*sme*)
-	; (declare (ignore rbrowse url))
-	; (format t "~% rbrowse-sme: ~A base: ~A target: ~A url: ~A"
-	; 	sme::*sme*
-	; 	case-term
-	; 	gpool
-	; 	full))
-	(debug-format "CI Found for ~A in ~A is ~A~%" context gpool ci-found?)
-
-      (cond (ci-found?
-	     ;; The query above should return the score of the best mapping that includes
-	     ;; the pattern in the reverse candidate inference
-	     (match-score-exceeds-threshold? case-term (car ci-found?)
-					     :inference-rel
-					     (if (eql (car pattern) 'd::isa)
-						 (third pattern)
-						 (car pattern)))) ;;This used to be aileen-symbols-in-patter
-	    ((and (not repeat?)
-		  (or (and (sme:mappings sme::*sme*)
-			   (= (sme:score (car (sme:mappings sme::*sme*))) 0))
-		      (not (sme:mappings sme::*sme*))))
-	     (format t "~% Strange bug of mapping with a score of 0 that is corrected with a repeated call")
-	     (match-query-against-gpool context gpool pattern t))
-	    (t nil)
-	)))))
+    (let* ((objs (remove-if-not
+                  #'(lambda (e) (find e (objs-in-context context)))
+                  pattern))
+           (case-term (make-case-term context objs)))
+      (fire:kb-forget `(d::gpoolAssimilationThreshold ,gpool ?x):mt gpool)
+      (fire:kb-store `(d::gpoolAssimilationThreshold ,gpool ,*match-threshold*) :mt gpool)
+      (remove-facts-from-case case-term)
+      (fire:clear-dgroup-caches)
+      (fire:tell-it `(d::constructCaseInWM ,case-term))
+      (fire:tell-it `(d::copyWMCaseToKB ,case-term ,case-term)) ;;could have an explicit query context here for easier clean up?
+      (dolist (obj objs) ;; analogy control predicates
+        (format t "~% (d::sageRequireInMapping ~A)" obj)
+        (fire:kb-store `(d::sageRequireInMapping ,obj) :mt case-term))
+      (let ((ci-found? (fire:ask-it
+                           `(d::reverseCIsAllowed
+                             (d::and
+                              (d::sageSelect ,case-term ,gpool ?ret ?mapping)
+                              (d::mappingOf ?mapping ?matcher)
+                              (d::mappingOf ?mapping1 ?matcher )
+                              (d::reverseCandidateInferenceOf ?ci ?mapping1)
+                              (d::candidateInferenceContent ?ci ,pattern)
+                              ))
+                         :context gpool :response '?ret)))
+        
+        ;      (multiple-value-bind (rbrowse full url) (rbrowse::browse-sme sme::*sme*)
+        ; (declare (ignore rbrowse url))
+        ; (format t "~% rbrowse-sme: ~A base: ~A target: ~A url: ~A"
+        ; 	sme::*sme*
+        ; 	case-term
+        ; 	gpool
+        ; 	full))
+        (debug-format "CI Found for ~A in ~A is ~A~%" context gpool ci-found?)
+        
+        (cond (ci-found?
+               ;; The query above should return the score of the best mapping that includes
+               ;; the pattern in the reverse candidate inference
+               (match-score-exceeds-threshold? case-term (car ci-found?)
+                                               :inference-rel
+                                               (if (eql (car pattern) 'd::isa)
+                                                 (third pattern)
+                                                 (car pattern)))) ;;This used to be aileen-symbols-in-patter
+              ((and (not repeat?)
+                    (or (and (sme:mappings sme::*sme*)
+                             (= (sme:score (car (sme:mappings sme::*sme*))) 0))
+                        (not (sme:mappings sme::*sme*))))
+               (format t "~% Strange bug of mapping with a score of 0 that is corrected with a repeated call")
+               (match-query-against-gpool context gpool pattern t))
+              (t nil)
+              )))))
 
 (defun make-possible-blists (vars objs &optional blist)
 	; (format t "Possible blist ~a ~a~%" vars objs)

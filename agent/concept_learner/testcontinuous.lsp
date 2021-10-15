@@ -26,11 +26,14 @@
   (load-test-flat-files)
 
   ; ;;; nearness cases
-  (create-test-generalizations 'd::rNear (list 11 12 13 14 15) :predicate)
-  (create-test-generalizations 'd::rLeft (list 21 22 23 24 25) :predicate)
-  (create-test-generalizations 'd::rNearTwo (list 31 32 33 34 35) :predicate)
+  ; (create-test-generalizations 'd::rNear (list 11 12 13 14 15) :predicate)
+  ; (create-test-generalizations 'd::rLeft (list 21 22 23 24 25) :predicate)
+  ; (create-test-generalizations 'd::rNearTwo (list 31 32 33 34 35) :predicate)
 
-  (create-test-generalizations 'd::rSmallNew (list 41 42 43 44 45) :symbol)
+  ; (create-test-generalizations 'd::rSmallNew (list 41 42 43 44 45) :symbol)
+
+  (create-test-generalizations 'd::r_move_near1 
+    'd::(episode1549 episode1615 episode236 episode307 episode373) :action)
 
   )
 
@@ -51,6 +54,14 @@
   )
 
 
+;;; action generalizations need to exist already
+(defun test-action-quantities ()
+
+  (run-query-mt 'd::qtest-query-facts 'd::r_move_near1 '(d::r_move_near1 ?obj1 ?obj2))
+
+  )
+
+
 
 (defun load-test-flat-files ()
   (fire:kr-file->kb (qrg:make-qrg-file-name
@@ -63,6 +74,7 @@
 (defun create-test-generalizations (concept-symbol case-ids type)
 
   (case type
+    (:action (create-reasoning-action concept-symbol 2))
     (:predicate (create-reasoning-predicate concept-symbol 2))
     (:symbol (create-reasoning-symbol concept-symbol)))
 
@@ -75,25 +87,30 @@
       
       ;;; see if we need to add quantity preds
       ; (maybe-add-quantity-preds id gpool)
-      (let* ((mt (microtheory-by-id id))
+      (let* ((mt (if (numberp id) (microtheory-by-id id) id))
              (facts (kb::list-mt-facts mt)))
 
         (dolist (fact (maybe-add-quantity-preds facts gpool))
-          (format t "storing ~s in ~s" fact mt)
-          (fire:kb-store fact :mt mt)))
-      
-      (generalize-case id gpool)
+          ; (format t "storing ~s in ~s" fact mt)
+          (fire:kb-store fact :mt mt))
 
-      )))
+        (generalize-case mt gpool)
+
+        ))))
 
 
 (defun run-query (facts concept concept-pred)
   (let ((gpool (get-concept-gpool concept)))
     (remove-facts-from-case *probe-mt*)
+    (store-facts-in-case facts *probe-mt*)
     ;;; see if in-distribution, if so add preds
     (setf facts (append facts (maybe-add-quantity-preds facts gpool)))
     (filter-scene-by-expression facts *probe-mt* gpool nil concept-pred)
     ))
+
+
+(defun run-query-mt (mt concept concept-pred)
+  (run-query (kb::list-mt-facts mt) concept concept-pred))
 
 
 (defun make-random-mt ()
@@ -109,6 +126,13 @@
   (cl-user::setup-gpool gpool :threshold *assimilation-threshold* :strategy :gel)
   (values (length (fire:ask-it `(d::gpoolGeneralization ,gpool ?num)))
           (length (fire:ask-it `(d::gpoolExample ,gpool ?num)))))
+
+
+(defmethod generalize-case ((mt t) (gpool t))
+  (format t "generalizing ~s~%" mt)
+  (fire:tell-it `(d::sageSelectAndGeneralize
+                  ,mt
+                  ,gpool)))
 
 
 (defmethod generalize-case ((case-id fixnum) (gpool t))
@@ -144,17 +168,17 @@
     (debug-format "~%------------------------~%~s examples for ~s~%" example-count gpool)
 
     ; (format t "qfacts are ~s~%" quantity-facts)
-    (mapcan (lambda (qfact)
+    (mapcan (lambda (fact)
               ;;; take the predicate that has at least one quantity arg
               ;;; introduce a new predicate without the quantity
-              (let ((qfact-pred (make-qfact-pred qfact)))
+              (let ((qfact-pred (make-qfact-pred fact)))
 
                 (debug-format "    Checking ~A~%" qfact-pred)
 
                 (cond ((< example-count learn-after)
-                       (debug-format "    Less than ~s examples, default add ~s~%" learn-after qfact-pred)
+                       ; (debug-format "    Less than ~s examples, default add ~s~%" learn-after qfact-pred)
                        (list qfact-pred))
-                      ((in-distribution? qfact gpool)
+                      ((in-distribution? fact gpool)
                        (debug-format "    In dist, adding ~s~%" qfact-pred)
                        (list qfact-pred))
                       (t 
@@ -173,23 +197,69 @@
 
 
 ;;; a dumb version that doesn't take structure mapping into account
+;;; effectively trying to find the 1:1 mapping between qpred and
+;;; facts in each gpool. returns a list of facts (one from each gpool)
 (defun pred-quantities (qpred gpool)
   (mapcan (lambda (mt)
-            (format t "    Checking mt ~s~%" mt)
+            ; (format t "    Checking mt ~s~%" mt)
             (let* ((facts (kb::list-mt-facts mt))
-                   (relevant-facts (filter-relevant-facts qpred facts)))
-              (format t "    Rel facts are ~s~%" relevant-facts)
+                   (relevant-facts (filter-relevant-facts qpred facts mt)))
+              ; (format t "    Rel facts are ~s~%" relevant-facts)
               (mapcar 'fact-quantity relevant-facts)))
     (gpool->cases gpool)))
 
 
 (defun fact-quantity (fact)
-  (find-if 'numberp (cdr fact)))
+  (or (find-if 'numberp (cdr fact))
+      (find-if 'numberp (third fact))))
 
 
-(defun filter-relevant-facts (qfact facts)
+(defun filter-relevant-facts (qfact facts context)
+  (cond ((eql (car qfact) 'd::holdsIn)
+         (filter-relevant-temporal-facts qfact context))
+        (t (filter-relevant-facts-default qfact facts context))))
+
+
+;;; returns facts in context that have the same relation (e.g. sizeOf)
+;;; AND the same temporal position (first, middle, last) as qfact
+(defun filter-relevant-temporal-facts (qfact context)
+  (let ((target-rln (car (third qfact)))
+        (target-episode (episode-ci (second qfact) context)))
+
+    ; (debug-format "    Mapped episode for ~s is ~s in ~s~%" (second qfact) target-episode context)
+    (assert target-episode)
+
+    (remove-if-not 
+     (lambda (fact)
+       (and (eql (second fact) target-episode)
+            (listp (third fact))
+            (eql target-rln (car (third fact)))))
+     (kb::list-mt-facts context))))
+
+
+(defun episode-ci (base-episode target-context)
+  (let ((probe-episodes (episode-order 'd::query-facts))
+        (target-episodes (episode-order target-context)))
+
+    ; (debug-format "    Probe episodes: ~s Target episodes: ~s~%" probe-episodes target-episodes)
+
+    (nth (position base-episode probe-episodes) target-episodes)))
+
+
+;;; tied to four episodes per context
+(defun episode-order (context)
+  (let* ((start (car (fire::ask-it '(d::isa ?what d::AileenActionStartTime) 
+                       :response '?what :context context)))
+         (second (car (fire:ask-it `(d::startsAfterEndingOf ?second ,start)
+                        :response '?second :context context)))
+         (terminal (car (fire::ask-it '(d::aileenTerminalTransition ?one ?two) 
+                          :response (list '?one '?two) :context context))))
+    (cons start (cons second terminal))))
+
+
+(defun filter-relevant-facts-default (qfact facts context)
   (mapcan (lambda (fact)
-            (and (eql (car fact) (car qfact)) (list fact))) 
+            (and (eql (car fact) (car qfact)) (list fact)))
     facts))
 
 
@@ -209,13 +279,15 @@
   (fire:ask-it `(d::kbOnly (d::sageConstituent ?case ?gmt ,gpool-form)) :response '?case))
 
 
-(defun make-qfact-pred (qfact)
-  (let ((pred (intern (format nil "qPred-~a" (car qfact))))
-        (non-quantity-arg-count (non-quantity-arg-count qfact))
-        (nq-args (remove-if 'numberp (cdr qfact))))
-    ;;; should we not do this if it already exists?
-    (create-reasoning-predicate-simple pred non-quantity-arg-count)
-    (cons pred nq-args)))
+(defmethod make-qfact-pred ((qfact t))
+  (cond ((eql (car qfact) 'd::holdsIn)
+         (list (car qfact) (second qfact) (make-qfact-pred (third qfact))))
+        (t (let ((pred (intern (format nil "qPred-~a" (car qfact))))
+                 (non-quantity-arg-count (non-quantity-arg-count qfact))
+                 (nq-args (remove-if 'numberp (cdr qfact))))
+             ;;; should we not do this if it already exists?
+             (create-reasoning-predicate-simple pred non-quantity-arg-count)
+             (cons pred nq-args)))))
 
 ;;; take a ground predicate, return number of
 ;;; non-quantity args
@@ -227,8 +299,11 @@
 ;;; return a list of facts
 (defun find-quantities (preds facts)
   (remove-if-not (lambda (fact)
-                   (member (car fact) preds)) 
+                   (or (member (car fact) preds)
+                       ; for holdsIn statements, not pretty
+                       (and (eq (car fact) 'd::holdsIn) (member (car (third fact)) preds))))
                  facts))
+
 
 
 ;;; this is making ugly assumptions; essentially
