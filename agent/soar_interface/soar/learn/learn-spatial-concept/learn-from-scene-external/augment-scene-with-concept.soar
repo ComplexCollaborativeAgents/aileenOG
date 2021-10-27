@@ -13,7 +13,7 @@ sp {learn-from-scene-external*apply*augment-scene-with-concept
     (<scene>    ^relations <rels>)
 -->
     (<rels>    ^relation <rel-new>)
-    (<rel-new>    ^internal <c>)
+    (<rel-new>    ^spatial-concept <c>)
     }
 
 sp {learn-from-scene-external*apply*augment-scene-with-concept*objects
@@ -25,7 +25,7 @@ sp {learn-from-scene-external*apply*augment-scene-with-concept*objects
              ^scene <scene>
              ^concept <c>)
     (<scene>    ^relations.relation <rel>)
-    (<rel>    ^internal <c>)
+    (<rel>    ^spatial-concept <c>)
     (<t>    ^order.{<< first second >> <order>} <ref>)
     (<g>    ^entity <ent>)
     (<ent>    ^_metadata.description <ref>
@@ -41,7 +41,7 @@ sp {learn-from-scene-external*apply*augment-scene-with-concepts*object*complete
              ^scene <scene>
              ^concept <c>)
     (<scene>    ^relations.relation <rel>)
-    (<rel>    ^internal <c>
+    (<rel>    ^spatial-concept <c>
               ^<order> <obj>)
 -->
     (<s>    ^augmented-with <c>)
