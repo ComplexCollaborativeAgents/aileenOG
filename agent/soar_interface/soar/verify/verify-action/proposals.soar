@@ -16,6 +16,7 @@ sp {verify-action*propse*translate-to-facts
     (state <s>    ^name verify-action
                   ^trace <t>
                   -^facts <f>)
+    (<t>    -^action <any>)
 -->
     (<s>    ^operator <op> +)
     (<op>    ^name translate-to-facts
@@ -46,6 +47,14 @@ sp {verify-action*propose*mark-overspecific-action-concept
 sp {verify-action*propose*complete-verify-action
     (state <s>    ^name verify-action
                   ^retrieved.match <any>)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name complete-verify-action)
+    }
+
+sp {verify-action*propose*complete-verify-action*trace
+    (state <s>    ^name verify-action
+                  ^trace.action <any>)
 -->
     (<s>    ^operator <op> +)
     (<op>    ^name complete-verify-action)

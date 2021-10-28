@@ -21,12 +21,14 @@ sp {learn-from-scene-external*apply*send-instance-to-concept-memory
              ^facts <fact>)
     }
 
+
 sp {learn-from-scene-external*apply*send-instance-to-concept-memory*facts*new-rel
     (state <s>    ^name learn-from-scene-external
                   ^operator <op>
                   ^io.output-link.concept-memory.store <si>)
     (<si>    ^facts <facts>)
-    (<op>    ^scene.relations.relation <rel>)
+    (<op>    ^scene.relations <rels>)
+    (<rels>    ^relation <rel>)
     (<rel>    ^internal <int>
               ^first.id_string <fid>
               ^second.id_string <sid>)
