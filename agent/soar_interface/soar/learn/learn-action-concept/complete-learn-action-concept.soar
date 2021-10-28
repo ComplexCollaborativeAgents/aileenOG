@@ -12,6 +12,20 @@ sp {learn-action-concept*apply*complete-learn-action-concept
     (<seg>    ^learned <info>)
     }
 
+sp {learn-action-concept*apply*complete-learn-action-concept*grounding
+    (state <s>    ^name learn-action-concept
+                  ^superstate.segment <seg>
+                  ^trace <t>
+                  ^operator.name complete-learn-action-concept)
+    (<seg>    ^grounding <g>
+              ^parses.action-ref <ref>)
+-->
+    (<g>    ^trace <t>
+            ^_metadata <ref>)
+    }
+
+
+
 sp {learn-action-concept*apply*complete-learn-action-concept*grounding*clear*learn-until-correct
     (state <s>    ^name learn-action-concept
                   ^information.grounding <g>

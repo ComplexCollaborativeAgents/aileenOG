@@ -12,6 +12,7 @@ sp {action*elaborate*state
     (<s>    ^segment <seg>)
     }
 
+
 sp {action*elaborate*state*action
     (state <s>    ^name action
                   ^segment <seg>)
