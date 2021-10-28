@@ -68,7 +68,7 @@ class AileenObject:
         description += "   physics Physics {\n}"
         description += "}"
 
-        logging.debug("[aileen_object] :: added string {}".format(description))
+        # logging.debug("[aileen_object] :: added string {}".format(description))
 
         return description
 

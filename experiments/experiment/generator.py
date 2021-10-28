@@ -99,6 +99,8 @@ class Generator:
                 lesson['signal'] = signal
             return lesson
 
+        print("Concept is", self._experiment_concept, 'and samples is', number_of_samples)
+
         if self._experiment_concept and number_of_samples > 1:
             lessons = []
             if self._experiment_concept in shapes:
@@ -134,6 +136,7 @@ class Generator:
                         new_lesson['content'] = "{} {} {}".format(self._experiment_concept, size_choice, shape_choice)
                         lessons += [new_lesson]
 
+            print('SHAPES ARE', shapes)
 
             # wwh adding size
             if self._experiment_concept in sizes:
@@ -149,16 +152,20 @@ class Generator:
                         lessons += [new_lesson]
                     else:
                         shape_choice = random.choice(shapes)
-                        color_choice = random.choice(colors)
+                        # color_choice = random.choice(colors)
+                        color_choice = None # grammar can't handle color and size right now
                         new_lesson = generate_lesson_description(color_choice, shape_choice, self._experiment_concept,
                                                                  distractors, signal, is_positive)
-                        new_lesson['content'] = "{} {} {}".format(color_choice, self._experiment_concept, shape_choice)
+                        new_lesson['content'] = "{} {}".format(self._experiment_concept, shape_choice)
                         lessons += [new_lesson]
 
 
             return lessons
 
         else:
+
+            print('WE ARE HERE num samples', number_of_samples)
+
             if number_of_samples > 1 and not self._experiment_concept:
                 logging.warning("[generator] :: generating multiple samples for unique combination of objects")
             lessons = []
@@ -167,6 +174,7 @@ class Generator:
                 if self._experiment_concept is None:
                     lessons += [generate_lesson_description(None, s, None, distractors, signal, is_positive) for s in shapes]
             random.shuffle(lessons)
+            print('lessons are', lessons)
             return lessons
 
     def _generate_spatial_word_lesson_descriptions(self, signal, distractors, is_positive, number_of_samples=5):
@@ -183,14 +191,18 @@ class Generator:
         with open(settings.COLOR_PATH, 'r') as f:
             colors = json.load(f).keys()
 
-        object_set = [{"color": c, "shape": s} for s in shapes for c in colors]
+        # force size for now, kinematics can't handle sizes other than medium
+        object_set = [{"color": c, "shape": s, "size": "medium"} for s in shapes for c in colors]
 
+        # wwh: adding content field; grammar can't currently parse shape and size so we're forcing the
+        # removal of size; also since everything is medium...
         lessons = []
         for key in relation_configs.keys():
             for i in range(0, number_of_samples):
                 random.shuffle(object_set)
                 lesson = {'lesson-type': 'spatial-word',
                           'is_positive': str(is_positive),
+                          'content': "{} {} near {} {}".format(object_set[0]['color'], object_set[0]['shape'], object_set[1]['color'], object_set[1]['shape']),
                           'description': {
                               "objects": [object_set[0], object_set[1]],
                               "relation": key
