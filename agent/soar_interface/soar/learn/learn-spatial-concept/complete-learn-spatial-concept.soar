@@ -12,7 +12,7 @@ sp {learn-spatial-concept*apply*complete-learn-spatial-concept
     (<seg>    ^learned <info>)
     }
 
-sp {learn-visual-concept*apply*complete-learn-spatial-concept*grounding*clear*learn-until-correct
+sp {learn-spatial-concept*apply*complete-learn-spatial-concept*grounding*clear*learn-until-correct
     (state <s>    ^name learn-spatial-concept
                   ^information.grounding <g>
                   ^operator.name complete-learn-spatial-concept
@@ -20,6 +20,17 @@ sp {learn-visual-concept*apply*complete-learn-spatial-concept*grounding*clear*le
     (<g>    ^complete true)
 -->
     (<g>    ^complete true -)
+    }
+
+sp {learn-spatial-concept*apply*complete-learn-spatial-concept*grounding*write-relation-to-world
+    (state <s>    ^name learn-spatial-concept
+                  ^operator.name complete-learn-spatial-concept
+                  ^world.relations <wrels>
+                  ^selected-scene <scene>)
+    (<scene>     ^relations.relation <rel>)
+    (<rel>     ^spatial-concept <con>)
+-->
+    (<wrels> ^relation <rel>)
     }
 
 sp {learn-spatial-concept*clear*concept-memory*topstate

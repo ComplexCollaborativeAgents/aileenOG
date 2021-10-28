@@ -13,7 +13,7 @@ sp {learn-action-with-concept-learner*apply*augment-trace-with-concept
     (<con>    ^concept <con-name>)
 -->
     (<trace> ^action <act>)
-    (<act>    ^internal <con-name>)
+    (<act>    ^concept <con-name>)
     }
 
 sp {learn-action-with-concept-learner*apply*augment-trace-with-concept*objects
@@ -25,7 +25,7 @@ sp {learn-action-with-concept-learner*apply*augment-trace-with-concept*objects
              ^trace.action <act>
              ^concept-structure <cons>)
     (<cons>    ^concept <con-name>)
-    (<act>    ^internal <con-name>)
+    (<act>    ^concept <con-name>)
     (<t>    ^order.{<< first second >> <order>} <ref>)
     (<g>    ^entity <ent>)
     (<ent>    ^_metadata.description <ref>
@@ -42,7 +42,7 @@ sp {learn-action-with-concept-learner*apply*augment-trace-with-action*complete
              ^trace <t>
              ^concept-structure <lti>)
     (<t>    ^action <act>)
-    (<act>    ^internal <name>)
+    (<act>    ^concept <name>)
 -->
     (<s>    ^augmented-with <lti>)
     }
