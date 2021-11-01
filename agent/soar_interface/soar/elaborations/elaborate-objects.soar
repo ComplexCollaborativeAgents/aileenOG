@@ -260,5 +260,37 @@ sp {aileen*elaborate*remove*csrs*no-csr
 -->
     (<rels>    ^relation <rel> -)
     }
-      
+     
+
+sp {aileen*elaborate*remove*csrs*no-root-object
+    :o-support
+    (state <s>    ^name aileen
+                  ^world <w>)
+    (<w>    ^objects <objs>
+            ^relations <rels>)
+    (<rels>    ^relation <rel>)
+    (<rel>    ^root-object <root-obj>
+              ^target-object <target-obj>
+              ^distance <val>)
+    (<objs>    -^object <root-obj>)
+-->
+    (<rels>    ^relation <rel> -)
+    }
+
+sp {aileen*elaborate*remove*csrs*no-target-object
+    :o-support
+    (state <s>    ^name aileen
+                  ^world <w>)
+    (<w>    ^objects <objs>
+            ^relations <rels>)
+    (<rels>    ^relation <rel>)
+    (<rel>    ^root-object <root-obj>
+              ^target-object <target-obj>
+              ^distance <val>)
+    (<objs>    -^object <target-obj>)
+-->
+    (<rels>    ^relation <rel> -)
+    }
+
+
               

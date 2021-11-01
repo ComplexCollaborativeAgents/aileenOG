@@ -2,11 +2,27 @@
 # @file
 #
 # @created smohan 20191210
-sp {learn-from-scene-external*apply*complete-learn-from-scene-external
+#sp {learn-from-scene-external*apply*complete-learn-from-scene-external
+#    (state <s>    ^name learn-from-scene-external
+#                  ^operator.name complete-learn-from-scene-external
+#                  ^superstate <ss>
+#                  ^information <info>)
+#--> 
+#    (<ss>    ^learned <info>)
+#    }
+
+sp {learn-from-scene-external*apply*complete-learn-spatial-concept*grounding*write-relation-to-world
     (state <s>    ^name learn-from-scene-external
                   ^operator.name complete-learn-from-scene-external
+                  ^grounding <g>
                   ^superstate <ss>
-                  ^information <info>)
---> 
+                  ^information <info>
+                  ^parses.parse <p>
+                  ^scene <scene>)
+    (<scene>     ^relations.relation <rel>)
+    (<rel>     ^spatial-concept <con>)
+-->
+    (<g> ^relation <rel>)
+    (<rel> ^_metadata.parse <p>)
     (<ss>    ^learned <info>)
     }
