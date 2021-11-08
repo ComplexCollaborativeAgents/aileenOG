@@ -29,7 +29,7 @@ sp {learn-from-scene-external*apply*send-instance-to-concept-memory*facts*new-re
     (<si>    ^facts <facts>)
     (<op>    ^scene.relations <rels>)
     (<rels>    ^relation <rel>)
-    (<rel>    ^internal <int>
+    (<rel>    ^spatial-concept <int>
               ^first.id_string <fid>
               ^second.id_string <sid>)
 -->
