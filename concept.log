@@ -1,0 +1,152 @@
+Warning: An error occurred ("server.lsp" does not exist, cannot load)
+         during the load "server.lsp"
+Warning: An error occurred
+         (Package "aileen" not found. [file position = 15]) during
+         the reading or evaluation of -e "(progn (aileen::start-server :port  :kbdir \"nextkb\") (do ()(nil nil)(sleep 10)))"
+Allegro CL Enterprise Edition
+10.1 [64-bit Linux (x86-64) *SMP*] (Mar 15, 2017 19:58)
+Copyright (C) 1985-2017, Franz Inc., Oakland, CA, USA.  All Rights Reserved.
+
+This development copy of Allegro CL is licensed to:
+   [TC15130] Palo Alto Research Center, Inc.
+
+;; Optimization settings: safety 1, space 1, speed 1, debug 2.
+;; For a complete description of all compiler switches given the
+;; current optimization settings evaluate (explain-compiler-settings).
+;;---
+;; Current reader case mode: :case-sensitive-lower
+cl-user(1): 
+Error: Received signal number 2 (Interrupt)
+  [condition type: interrupt-signal]
+
+Restart actions (select using :continue):
+ 0: continue computation
+ 1: Return to Top Level (an "abort" restart).
+ 2: Abort entirely from this (lisp) process.
+[1c] cl-user(2): 
+Error: Received signal number 2 (Interrupt)
+  [condition type: interrupt-signal]
+
+Restart actions (select using :continue):
+ 0: continue computation at break level 1
+ 1: Return to Debug Level 1 (an "abort" restart).
+ 2: continue computation
+ 3: Return to Top Level (an "abort" restart).
+ 4: Abort entirely from this (lisp) process.
+[2c] cl-user(3): 
+Error: Received signal number 2 (Interrupt)
+  [condition type: interrupt-signal]
+
+Restart actions (select using :continue):
+ 0: continue computation at break level 2
+ 1: Return to Debug Level 2 (an "abort" restart).
+ 2: continue computation at break level 1
+ 3: Return to Debug Level 1 (an "abort" restart).
+ 4: continue computation
+ 5: Return to Top Level (an "abort" restart).
+ 6: Abort entirely from this (lisp) process.
+[3c] cl-user(4): 
+Error: Received signal number 2 (Interrupt)
+  [condition type: interrupt-signal]
+
+Restart actions (select using :continue):
+ 0: continue computation at break level 3
+ 1: Return to Debug Level 3 (an "abort" restart).
+ 2: continue computation at break level 2
+ 3: Return to Debug Level 2 (an "abort" restart).
+ 4: continue computation at break level 1
+ 5: Return to Debug Level 1 (an "abort" restart).
+ 6: continue computation
+ 7: Return to Top Level (an "abort" restart).
+ 8: Abort entirely from this (lisp) process.
+[4c] cl-user(5): 
+Error: Received signal number 2 (Interrupt)
+  [condition type: interrupt-signal]
+
+Restart actions (select using :continue):
+  0: continue computation at break level 4
+  1: Return to Debug Level 4 (an "abort" restart).
+  2: continue computation at break level 3
+  3: Return to Debug Level 3 (an "abort" restart).
+  4: continue computation at break level 2
+  5: Return to Debug Level 2 (an "abort" restart).
+  6: continue computation at break level 1
+  7: Return to Debug Level 1 (an "abort" restart).
+  8: continue computation
+  9: Return to Top Level (an "abort" restart).
+ 10: Abort entirely from this (lisp) process.
+[5c] cl-user(6): 
+Error: Received signal number 2 (Interrupt)
+  [condition type: interrupt-signal]
+
+Restart actions (select using :continue):
+  0: continue computation at break level 5
+  1: Return to Debug Level 5 (an "abort" restart).
+  2: continue computation at break level 4
+  3: Return to Debug Level 4 (an "abort" restart).
+  4: continue computation at break level 3
+  5: Return to Debug Level 3 (an "abort" restart).
+  6: continue computation at break level 2
+  7: Return to Debug Level 2 (an "abort" restart).
+  8: continue computation at break level 1
+  9: Return to Debug Level 1 (an "abort" restart).
+ 10: continue computation
+ 11: Return to Top Level (an "abort" restart).
+ 12: Abort entirely from this (lisp) process.
+[6c] cl-user(7): 
+Error: Received signal number 2 (Interrupt)
+  [condition type: interrupt-signal]
+
+Restart actions (select using :continue):
+  0: continue computation at break level 6
+  1: Return to Debug Level 6 (an "abort" restart).
+  2: continue computation at break level 5
+  3: Return to Debug Level 5 (an "abort" restart).
+  4: continue computation at break level 4
+  5: Return to Debug Level 4 (an "abort" restart).
+  6: continue computation at break level 3
+  7: Return to Debug Level 3 (an "abort" restart).
+  8: continue computation at break level 2
+  9: Return to Debug Level 2 (an "abort" restart).
+ 10: continue computation at break level 1
+ 11: Return to Debug Level 1 (an "abort" restart).
+ 12: continue computation
+ 13: Return to Top Level (an "abort" restart).
+ 14: Abort entirely from this (lisp) process.
+[7c] cl-user(8): 
+Error: Received signal number 2 (Interrupt)
+  [condition type: interrupt-signal]
+
+Restart actions (select using :continue):
+  0: continue computation at break level 7
+  1: Return to Debug Level 7 (an "abort" restart).
+  2: continue computation at break level 6
+  3: Return to Debug Level 6 (an "abort" restart).
+  4: continue computation at break level 5
+  5: Return to Debug Level 5 (an "abort" restart).
+  6: continue computation at break level 4
+  7: Return to Debug Level 4 (an "abort" restart).
+  8: continue computation at break level 3
+  9: Return to Debug Level 3 (an "abort" restart).
+ 10: continue computation at break level 2
+ 11: Return to Debug Level 2 (an "abort" restart).
+ 12: continue computation at break level 1
+ 13: Return to Debug Level 1 (an "abort" restart).
+ 14: continue computation
+ 15: Return to Top Level (an "abort" restart).
+ 16: Abort entirely from this (lisp) process.
+[8c] cl-user(9): :pop
+Previous error: Received signal number 2 (Interrupt)
+If continued, continue computation at break level 6
+[7c] cl-user(9): :pop
+Previous error: Received signal number 2 (Interrupt)
+If continued, continue computation at break level 5
+[6c] cl-user(9): :pop
+Previous error: Received signal number 2 (Interrupt)
+If continued, continue computation at break level 4
+[5c] cl-user(9): :pop
+Previous error: Received signal number 2 (Interrupt)
+If continued, continue computation at break level 3
+[4c] cl-user(9): :pop
+; Received signal number 1 (Hangup).  Exiting...
+; Exiting

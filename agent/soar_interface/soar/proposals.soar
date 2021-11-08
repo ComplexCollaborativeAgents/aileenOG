@@ -3,6 +3,8 @@
 #
 # @created smohan 20191105
 
+
+
 sp {aileen*propose*interaction*message
     (state <s>    ^name aileen
                   ^message <m>
@@ -115,6 +117,18 @@ sp {aileen*propose*observe-demonstration
 -->
     (<s>    ^operator <op> +)
     (<op>    ^name observe-demonstration
+             ^segment <seg>)
+    }
+
+sp {aileen*propose*generate
+    (state <s>    ^name aileen
+                  ^interaction.stack.segment <seg>)
+    (<seg>    ^purpose <p>)
+    (<p>    -^completed
+             ^type generate)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name generate
              ^segment <seg>)
     }
               

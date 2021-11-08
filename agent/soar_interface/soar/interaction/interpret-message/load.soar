@@ -10,3 +10,7 @@ source "interpret-verify.soar"
 source "interpret-feedback.soar"
 
 source "interpret-react.soar"
+
+source ".soar"
+
+source "interpret-generate.soar"

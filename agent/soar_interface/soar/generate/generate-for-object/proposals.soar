@@ -1,0 +1,11 @@
+##!
+# @file
+#
+# @created smohan 20211102
+
+sp {generate-for-object*propose*query-visual-concept
+    (state <s>    ^name generate-for-object
+                  -^visual-concept <any>)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name look-up-visual-concept

@@ -34,3 +34,5 @@ source "initialize-agent/load.soar"
 source "action/load.soar"
 
 source "observe-demonstration/load.soar"
+
+source "generate/load.soar"

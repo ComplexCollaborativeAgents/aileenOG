@@ -1,0 +1,18 @@
+##!
+# @file
+#
+# @created smohan 20211102
+
+sp {interpret-message*apply*interpret-generate
+    (state <s>    ^name interpret-message
+                  ^operator <op>
+                  ^superstate <ss>)
+    (<op>    ^name interpret-generate)
+-->
+    (<ss>    ^new-segment <segment>)
+    (<segment>    ^purpose <p>
+                  ^originator instructor
+                  ^satisfaction interaction-event
+                  ^_metadata <met>)
+    (<p>    ^type generate)
+    }
