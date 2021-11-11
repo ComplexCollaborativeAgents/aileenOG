@@ -32,7 +32,7 @@ sp {compose-with-concept-learner*elaborate*relations*relevant*relation
     (state <s>    ^name compose-with-concept-learner
                   ^relations <rels>
                   ^map.concept <con>
-                  ^world.relations.relation <rel>)
+                  ^grounding.relation <rel>)
     (<rel>    ^spatial-concept <con>)
 -->
     (<rels>   ^relation <rel>)

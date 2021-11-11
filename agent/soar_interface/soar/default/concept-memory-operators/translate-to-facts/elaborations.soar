@@ -22,7 +22,7 @@ sp {translate-to-facts*write-facts*action
     (state <s>    ^name translate-to-facts
                   ^facts <facts>
                   ^trace.action <act>)
-    (<act>    ^internal <name>
+    (<act>    ^concept <name>
               ^first.id_string <obj-name1>
               ^second.id_string <obj-name2>)
 -->

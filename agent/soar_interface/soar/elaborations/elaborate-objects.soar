@@ -270,7 +270,7 @@ sp {aileen*elaborate*remove*csrs*no-root-object
     (<rels>    ^relation <rel>)
     (<rel>    ^root-object <root-obj>
               ^target-object <target-obj>
-              ^<< distance >> <val>)
+              ^distance <val>)
     (<objs>    -^object <root-obj>)
 -->
     (<rels>    ^relation <rel> -)
@@ -285,10 +285,9 @@ sp {aileen*elaborate*remove*csrs*no-target-object
     (<rels>    ^relation <rel>)
     (<rel>    ^root-object <root-obj>
               ^target-object <target-obj>
-              ^<< distance >> <val>)
+              ^distance <val>)
     (<objs>    -^object <target-obj>)
 -->
     (<rels>    ^relation <rel> -)
     }
-      
               
