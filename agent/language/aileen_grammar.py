@@ -58,6 +58,7 @@ class AileenGrammar:
                                "right of [obj]",
                                "in front of [obj]",
                                "behind [obj]",
+                               "near [obj]",
                                "next to [obj]"]
         self.action_rules = ["move [obj] [rel]", "pick up [obj]"]
         self.reset_parser()

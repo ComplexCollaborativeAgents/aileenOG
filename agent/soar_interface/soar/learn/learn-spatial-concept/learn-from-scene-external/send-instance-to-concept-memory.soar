@@ -21,12 +21,14 @@ sp {learn-from-scene-external*apply*send-instance-to-concept-memory
              ^facts <fact>)
     }
 
+
 sp {learn-from-scene-external*apply*send-instance-to-concept-memory*facts*new-rel
     (state <s>    ^name learn-from-scene-external
                   ^operator <op>
                   ^io.output-link.concept-memory.store <si>)
     (<si>    ^facts <facts>)
-    (<op>    ^scene.relations.relation <rel>)
+    (<op>    ^scene.relations <rels>)
+    (<rels>    ^relation <rel>)
     (<rel>    ^internal <int>
               ^first.id_string <fid>
               ^second.id_string <sid>)
@@ -36,20 +38,38 @@ sp {learn-from-scene-external*apply*send-instance-to-concept-memory*facts*new-re
            ^lsecond <fid>
            ^lthird <sid>)}
 
-sp {learn-from-scene-external*apply*send-instance-to-concept-memory*facts*objects
+sp {learn-from-scene-external*apply*send-instance-to-concept-memory*facts*objects*color*shape
     (state <s>    ^name learn-from-scene-external
                   ^operator <op>
-                  ^io.output-link.concept-memory.store <si>
-                  ^topstate._params.relevant-percept-set <set>)
-    (<set>    ^type <type>)
+                  ^io.output-link.concept-memory.store <si>)
+                  #^topstate._params.relevant-percept-set <set>)
+    #(<set>    ^type <type>)
     (<si>    ^facts <facts>)
     (<op>    ^scene.objects.object <obj>)
     (<obj>    ^id_string <id_string>
-              ^<type> <symbol>)
+              ^<< color shape >> <symbol>)
     (<si>    ^facts <facts>)
 -->
     (<facts> ^fact <f>)
     (<f>    ^lfirst isa
+            ^lsecond <id_string>
+            ^lthird <symbol>)
+    }
+
+sp {learn-from-scene-external*apply*send-instance-to-concept-memory*facts*objects*size
+    (state <s>    ^name learn-from-scene-external
+                  ^operator <op>
+                  ^io.output-link.concept-memory.store <si>)
+                  #^topstate._params.relevant-percept-set <set>)
+    #(<set>    ^type <type>)
+    (<si>    ^facts <facts>)
+    (<op>    ^scene.objects.object <obj>)
+    (<obj>    ^id_string <id_string>
+              ^size <symbol>)
+    (<si>    ^facts <facts>)
+-->
+    (<facts> ^fact <f>)
+    (<f>    ^lfirst size
             ^lsecond <id_string>
             ^lthird <symbol>)
     }
@@ -69,6 +89,22 @@ sp {learn-from-scene-external*apply*send-instance-to-concept-memory*spatial
     (<f>   ^lfirst <val>
            ^lsecond <fid>
            ^lthird <sid>)}
+
+sp {learn-from-scene-external*apply*send-instance-to-concept-memory*spatial*distance
+    (state <s>    ^name learn-from-scene-external
+                  ^operator <op>
+                  ^io.output-link.concept-memory.store <si>)
+    (<si>    ^facts <facts>)
+    (<op>    ^scene.relations.relation <rel>)
+    (<rel>    ^distance <val>
+              ^root-object.id_string <fid>
+              ^target-object.id_string <sid>)
+-->
+    (<facts> ^fact <f>)
+    (<f>   ^lfirst distance
+           ^lsecond <val>
+           ^lthird <fid>
+           ^lfourth <sid>)}
 
 
    

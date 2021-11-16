@@ -1,0 +1,75 @@
+[{
+    "comment": "Provide a grounded example of placing near",
+    "lesson-type": "action-word",
+    "description": {
+      "objects": ["<obj1>", "<obj2>"],
+      "relations": ["near"],
+      "action": "move-near",
+      "initial_configuration": [[["not","near"], "<obj2>", "<obj1>"], ["dc", "<obj2>", "<obj1>"]],
+          "trace-actions": [
+              {"name": "pick-up", "argument": "<obj1>"},
+              {"name": "place", "argument1": "<obj1>", "argument2": "<obj2>", "relation": "near"}],
+      "language": ["move", "<obj1>", "near", "<obj2>"],
+      "<obj1>": {"color": "red", "shape": "cone", "size": "medium"},
+      "<obj2>": {"color": "blue", "shape": "cone", "size": "medium"}
+    },
+    "content": "move red cone near blue cone",
+    "signal": "inform",
+    "distractors": 0
+  },
+  {
+    "comment": "Provide another grounded example of placing near",
+    "lesson-type": "action-word",
+    "description": {
+      "objects": ["<obj1>", "<obj2>"],
+      "relations": ["near"],
+      "action": "move-near",
+      "initial_configuration": [[["not","near"], "<obj2>", "<obj1>"], ["dc", "<obj2>", "<obj1>"]],
+          "trace-actions": [
+              {"name": "pick-up", "argument": "<obj1>"},
+              {"name": "place", "argument1": "<obj1>", "argument2": "<obj2>", "relation": "near"}],
+      "language": ["move", "<obj1>", "near", "<obj2>"],
+      "<obj1>": {"color": "blue", "shape": "cylinder", "size": "medium"},
+      "<obj2>": {"color": "red", "shape": "cylinder", "size": "medium"}
+    },
+    "content": "move blue cylinder near red cylinder",
+    "signal": "inform",
+    "distractors": 0
+  },
+  {
+    "comment": "Recognize action",
+    "lesson-type": "action-word",
+    "description": {
+      "objects": ["<obj1>", "<obj2>"],
+      "relations": ["near"],
+      "action": "move-near",
+      "initial_configuration": [[["not","near"], "<obj2>", "<obj1>"], ["dc", "<obj2>", "<obj1>"]],
+          "trace-actions": [
+              {"name": "pick-up", "argument": "<obj1>"},
+              {"name": "place", "argument1": "<obj1>", "argument2": "<obj2>", "relation": "near"}],
+      "language": ["move", "<obj1>", "near", "<obj2>"],
+      "<obj1>": {"color": "green", "shape": "sphere", "size": "medium"},
+      "<obj2>": {"color": "blue", "shape": "cylinder", "size": "medium"}
+    },
+    "content": "move green sphere near blue cylinder",
+    "signal": "verify",
+    "distractors": 0
+  },
+  {
+    "comment": "Try to do exactly what was taught.",
+    "lesson-type": "action-word",
+    "description": {
+      "objects": ["<obj1>", "<obj2>"],
+      "relations": ["near"],
+      "action": "move-near",
+      "initial_configuration": [[["not","near"], "<obj2>", "<obj1>"], ["dc", "<obj2>", "<obj1>"]],
+          "trace-actions": [
+              {"name": "pick-up", "argument": "<obj1>"},
+              {"name": "place", "argument1": "<obj1>", "argument2": "<obj2>", "relation": "near"}],
+      "language": ["move", "<obj1>", "near", "<obj2>"],
+      "<obj1>": {"color": "red", "shape": "box", "size": "medium"},
+      "<obj2>": {"color": "blue", "shape": "box", "size": "medium"}
+    },
+    "content": "move red box near blue box",
+    "signal": "react"
+  }]

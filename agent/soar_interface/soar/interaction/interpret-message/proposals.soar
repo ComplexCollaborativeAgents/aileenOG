@@ -65,4 +65,17 @@ sp {interpret-message*propose*interpret-comprehend
              ^message <m1>)
     }
 
+sp {interpret-message*propose*interpret-generate
+    (state <s>    ^name interpret-message
+                  ^superstate.operator <sop>)
+    (<sop>    ^name interpret-message
+              ^message <m1>)
+    (<m1>    ^signal generate)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name interpret-generate
+             ^message <m1>)
+    }
+                  
+
                   

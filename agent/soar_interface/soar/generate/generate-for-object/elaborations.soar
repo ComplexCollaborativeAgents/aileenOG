@@ -1,0 +1,13 @@
+##!
+# @file
+#
+# @created smohan 20211102
+
+sp {generate-for-object*elaborate*state
+    (state <s>    ^name generate-for-object
+                  ^superstate.operator <op>)
+    (<op>    ^name generate-for-object
+             ^object <obj>)
+-->
+    (<s>    ^object <obj>)
+    }

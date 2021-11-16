@@ -28,27 +28,49 @@ sp {learn-from-object*apply*send-instance-to-concept-memory
             ^lsecond <id_string>
             ^lthird <con>)
       ### HACK:: elaborate the object with this symbol. Basically, the inference leads to a hypothesis that this has to be true. This labeling is also stored in memory.
-    #(<obj>    ^isa <con>)
+    (<obj>    ^isa <con>)
     }
 
-sp {learn-from-object*apply*send-instance-to-concept-memory*object-attributes
+sp {learn-from-object*apply*send-instance-to-concept-memory*object-attributes*color*shape
     (state <s>    ^name learn-from-object
                   ^operator <op>
                   ^_params.visual-concepts external
-                  ^io.output-link <ol>
-                  ^topstate._params.relevant-percept-set <set>)
+                  ^io.output-link <ol>)
+                  #^topstate._params.relevant-percept-set <set>)
     (<op>    ^name send-instance-to-concept-memory
              ^concept <lti>
              ^object <obj>)
     (<ol>    ^concept-memory <cm>)
     (<cm>    ^store <si>)
     (<si>    ^facts <facts>)
-    (<set>    ^type <type>)
-    (<obj>    ^<type> <symbol>
+    #(<set>    ^type { <type> << color shape >>})
+    (<obj>    ^<< color shape >> <symbol>
               ^id_string <id_string>)
 -->
     (<facts>    ^fact <f>)
     (<f>    ^lfirst isa
+            ^lsecond <id_string>
+            ^lthird <symbol>)
+    }
+
+sp {learn-from-object*apply*send-instance-to-concept-memory*object-attributes*size
+    (state <s>    ^name learn-from-object
+                  ^operator <op>
+                  ^_params.visual-concepts external
+                  ^io.output-link <ol>)
+                  #^topstate._params.relevant-percept-set <set>)
+    (<op>    ^name send-instance-to-concept-memory
+             ^concept <lti>
+             ^object <obj>)
+    (<ol>    ^concept-memory <cm>)
+    (<cm>    ^store <si>)
+    (<si>    ^facts <facts>)
+    #(<set>    ^type {<type> << size >>})
+    (<obj>    ^size <symbol>
+              ^id_string <id_string>)
+-->
+    (<facts>    ^fact <f>)
+    (<f>    ^lfirst size
             ^lsecond <id_string>
             ^lthird <symbol>)
     }

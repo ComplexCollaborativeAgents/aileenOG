@@ -43,5 +43,26 @@
                         ]
                     ],
       "language": ["<obj2>", "between", "<obj1>", "<obj3>"]
-    }
+    },
+  "next-to": {
+        "comment": "with our current assumptions about the concept learner and interactive learning, we are unable to learn correct next-to",
+        "objects": ["<obj1>", "<obj2>"],
+        "definition": [["ec", "<obj2>", "<obj1>"]],
+        "language": ["<obj1>", "next to", "<obj2>"]
+    },
+  "behind1": {
+      "objects": ["<obj1>", "<obj2>"],
+        "definition": [["e" , "<obj2>", "<obj1>"], ["dc", "<obj2>", "<obj1>"]],
+        "language": ["<obj1>", "behind","<obj2>"]
+  },
+  "behind2": {
+      "objects": ["<obj1>", "<obj2>"],
+        "definition": [["ne" , "<obj2>", "<obj1>"], ["dc", "<obj2>", "<obj1>"]],
+        "language": ["<obj1>", "behind","<obj2>"]
+  },
+  "behind3": {
+      "objects": ["<obj1>", "<obj2>"],
+        "definition": [["se" , "<obj2>", "<obj1>"], ["dc", "<obj2>", "<obj1>"]],
+        "language": ["<obj1>", "behind","<obj2>"]
+  }
   }

@@ -1,5 +1,6 @@
 import os
 from os import path
+import random
 
 OS_ROOT_PATH = path.abspath(os.sep)
 ROOT_PATH = path.join(path.dirname(path.dirname(path.abspath(__file__))))
@@ -34,6 +35,7 @@ TEST_LOCATION = [0.771, 0.5610656650000001, -0.199]
 IN_POS_THRESH = .001
 INSTRUCTOR_VELOCITY = 0.15
 INSTRUCTOR_HOLD_POSITION = [1.2, 0.6, 0]
+SIMULATE_ACTIONS = True
 
 #Robot Config
 JOINT_NAMES = ['shoulder_pan_joint', 'shoulder_lift_joint', 'elbow_joint', 'wrist_1_joint', 'wrist_2_joint', 'wrist_3_joint']
@@ -111,8 +113,18 @@ AGENT_PRELOAD_SPATIAL_CONCEPTS_PARAM = 'true'
 AGENT_ACTION_CONCEPTS_PARAM = 'external'
 AGENT_PRELOAD_ACTION_CONCEPTS_PARAM = 'false'
 
+<<<<<<< HEAD
 AGENT_RECOMPREHEND_AFTER_LEARN = 'false'
 AGENT_PERCEPT_SYMBOLS_ATTR = 'color shape'
+=======
+AGENT_RECOMPREHEND_AFTER_LEARN = 'true'
+
+AGENT_PERCEPT_SYMBOLS_ATTR = 'size shape color'
+
+AGENT_PERCEPT_SYMBOLS_ATTR = 'color shape'
+
+QUANTISATION_FACTOR = .001
+>>>>>>> c20518a46cf577841ad3b8825436ae5514062cfd
 
 ## Experiments
 RUN_DATA_FILE_PATH = path.join(ROOT_PATH, 'experiments', 'results', 'run.csv')

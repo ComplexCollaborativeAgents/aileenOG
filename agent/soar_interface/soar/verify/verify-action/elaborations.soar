@@ -17,6 +17,13 @@ sp {verify-action*elaborate*grounding
     (<s>    ^grounding <g>)
     }
 
+sp {verify-action*elaborate*trace
+    (state <s>    ^name verify-action
+                  ^grounding.trace <t>)
+--> 
+    (<s>    ^trace <t>)
+    }
+
 sp {verify-action*elaborate*pattern
     (state <s>    ^name verify-action
                   ^action <act>)

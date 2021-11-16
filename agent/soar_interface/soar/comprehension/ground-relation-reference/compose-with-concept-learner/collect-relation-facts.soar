@@ -29,20 +29,59 @@ sp {compose-with-concept-learner*apply*query-concept-learner*relations
             ^lthird <sid>)
     }
 
-sp {compose-with-concept-learner*apply*query-concept-learner*objects
+sp {compose-with-concept-learner*apply*query-concept-learner*relations*distance
+    (state <s>    ^name compose-with-concept-learner
+                  ^operator.name collect-relation-facts
+                  ^world.relations.relation <rel>
+                  ^facts <facts>
+                  ^grounding <g>)
+    (<g>    ^entity.object <robj>
+            ^entity.object <tobj>)
+    (<rel>    ^distance <val>
+              ^root-object <robj>
+              ^target-object <tobj>)
+    (<robj>    ^id_string <fid>)
+    (<tobj>    ^id_string <sid>)
+-->
+    (<facts>    ^fact <f>)
+    (<f>    ^lfirst distance
+            ^lsecond <val>
+            ^lthird <fid>
+            ^lfourth <sid>)
+    }
+
+sp {compose-with-concept-learner*apply*query-concept-learner*objects*attrs*color*shape
     (state <s>    ^name compose-with-concept-learner
                   ^operator.name collect-relation-facts
                   ^world.objects.object <obj>
                   ^facts <facts>
-                  ^grounding <g>
-                  ^topstate._params.relevant-percept-set <set>)
+                  ^grounding <g>)
+                 # ^topstate._params.relevant-percept-set <set>)
     (<g>    ^entity.object <obj>)
-    (<set>    ^type <type>)
+    #(<set>    ^type <type>)
     (<obj>    ^id_string <id_string>
-              ^<type> <symbol>)
+              ^<< color shape >> <symbol>)
 -->
     (<facts>    ^fact <f>)
     (<f>    ^lfirst isa
             ^lsecond <id_string>
             ^lthird <symbol>)
+    }
+
+sp {compose-with-concept-learner*apply*query-concept-learner*objects*attrs*size
+    (state <s>    ^name compose-with-concept-learner
+                  ^operator.name collect-relation-facts
+                  ^world.objects.object <obj>
+                  ^facts <facts>
+                  ^grounding <g>)
+                 # ^topstate._params.relevant-percept-set <set>)
+    (<g>    ^entity.object <obj>)
+    #(<set>    ^type <type>)
+    (<obj>    ^id_string <id_string>
+              ^size <val>)
+-->
+    (<facts>    ^fact <f>)
+    (<f>    ^lfirst size
+            ^lsecond <id_string>
+            ^lthird <val>)
     }

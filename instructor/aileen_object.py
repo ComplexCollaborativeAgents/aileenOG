@@ -23,7 +23,7 @@ class AileenObject:
         self._name = "object{}".format(AileenObject.randomizer.uuid4())
         self._language = None
         self._connector_dim = None
-        logging.debug("[aileen_object] :: created a new object")
+        logging.info("[aileen_object] :: created a new object with height {}".format(self._height_y))
 
     def __eq__(self, other):
         return self._shape == other._shape and self._color.name == other._color.name and self._size.name == other._size.name
@@ -68,7 +68,7 @@ class AileenObject:
         description += "   physics Physics {\n}"
         description += "}"
 
-        logging.debug("[aileen_object] :: added string {}".format(description))
+        # logging.debug("[aileen_object] :: added string {}".format(description))
 
         return description
 
@@ -129,6 +129,7 @@ class AileenObject:
 
     @staticmethod
     def generate_random_object():
+        logging.info("[aileen_object] :: generating a random object")
         scene_object_color = AileenObject.randomizer.get_random_color()
         scene_object_color_vector = AileenObject.randomizer.get_color_vector_sample(scene_object_color)
         color = Color(scene_object_color, scene_object_color_vector)
@@ -147,11 +148,13 @@ class AileenObject:
 
     @staticmethod
     def generate_object(description):
+        logging.info("[aileen_object] :: generating an object {}".format(description))
         color = description.get('color', AileenObject.randomizer.get_random_color())
         scene_object_color_vector = description.get('rgb', AileenObject.randomizer.get_color_vector_sample(color))
         color = Color(color, scene_object_color_vector)
         shape = description.get('shape', AileenObject.randomizer.get_random_shape())
         size = description.get('size', AileenObject.randomizer.get_random_size())
+        # size = 'medium'
         size_vector = description.get('xyz', AileenObject.randomizer.get_size_vector_sample(size))
         size = Size(size, size_vector)
         scene_object = AileenObject(shape=shape, color=color, size=size)

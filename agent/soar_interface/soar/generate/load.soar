@@ -1,0 +1,10 @@
+##!
+# @file: 
+#
+# @created smohan 20211102
+
+source "elaborations.soar"
+
+source "proposals.soar"
+
+source "generate-for-object/load.soar"

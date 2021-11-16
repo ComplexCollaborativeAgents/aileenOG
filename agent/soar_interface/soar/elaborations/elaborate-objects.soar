@@ -55,6 +55,18 @@ sp {aileen*elaborate*objects*position
     (<wobj>    ^position <p>)
     }
 
+sp {aileen*elaborate*objects*size_bb
+    (state <s>    ^name aileen
+                  ^io.input-link <il>
+                  ^world.objects.object <wobj>)
+    (<il>    ^world.objects.object <obj>)
+    (<obj>    ^id <id>
+              ^size_bb <p>)
+    (<wobj>    ^id <id>)
+-->
+    (<wobj>    ^size_bb <p>)
+    }
+
 sp {aileen*elaborate*objects*update*held
     :o-support
     (state <s>    ^name aileen
@@ -176,6 +188,105 @@ sp {aileen*elaborate*remove*qsrs*no-qsr
     -{(<qsrs>  ^qsr <q>)
        (<q>    ^root <root-num>
                ^target <target-num>)}
+-->
+    (<rels>    ^relation <rel> -)
+    }
+
+#### CSR
+
+sp {aileen*elaborate*add*csrs
+    :o-support
+    (state <s>    ^name aileen
+                  ^io.input-link <il>
+                  ^world <w>)
+    (<w>    ^objects <objs>
+            ^relations <rels>)
+    (<il>    ^world.csrs.csr <qsr>)
+    (<qsr>    ^root <root-num>
+              ^target <target-num>
+              ^{<< distance >> <type>} <val>)
+    (<objs>    ^object <root-obj>
+               ^object <target-obj>)
+    (<root-obj>    ^id <root-num>)
+    (<target-obj>    ^id <target-num>)
+    -{(<rels>    ^relation <rel>)
+      (<rel>    ^root-object <root-obj>
+                ^target-object <target-obj>
+                ^<type> <val>)}
+-->
+    (<rels>    ^relation <rel-new>)
+    (<rel-new>    ^root-object <root-obj>
+                  ^target-object <target-obj>
+                  ^<type> <val>)
+    }
+
+
+sp {aileen*elaborate*remove*csrs*different-csr
+    :o-support
+    (state <s>    ^name aileen
+                  ^world <w>
+                  ^io.input-link.world.csrs.csr <irel>)
+    (<w>    ^objects <objs>
+            ^relations <rels>)
+    (<rels>    ^relation <rel>)
+    (<rel>    ^root-object <root-obj>
+              ^target-object <target-obj>
+              ^{<< distance >> <type>} <val>)
+    (<objs>    ^object <target-obj> <root-obj>)
+    (<irel>    ^root <root-num>
+               ^target <target-num>
+               ^<type> {<nval> <> <val>})
+    (<root-obj>    ^id <root-num>)
+    (<target-obj>    ^id <target-num>)
+-->
+    (<rels>    ^relation <rel> -)
+    }
+
+sp {aileen*elaborate*remove*csrs*no-csr
+    :o-support
+    (state <s>    ^name aileen
+                  ^world <w>
+                  ^io.input-link.world.csrs <qsrs>)
+    (<w>    ^objects <objs>
+            ^relations <rels>)
+    (<rels>    ^relation <rel>)
+    (<rel>    ^root-object <root-obj>
+              ^target-object <target-obj>
+              ^{<< distance >> <type>} <val>)
+    (<objs>    ^object <target-obj> <root-obj>)
+    -{(<qsrs>  ^csr <q>)
+       (<q>    ^root <root-num>
+               ^target <target-num>)}
+-->
+    (<rels>    ^relation <rel> -)
+    }
+
+sp {aileen*elaborate*remove*csrs*no-root-object
+    :o-support
+    (state <s>    ^name aileen
+                  ^world <w>)
+    (<w>    ^objects <objs>
+            ^relations <rels>)
+    (<rels>    ^relation <rel>)
+    (<rel>    ^root-object <root-obj>
+              ^target-object <target-obj>
+              ^<< distance >> <val>)
+    (<objs>    -^object <root-obj>)
+-->
+    (<rels>    ^relation <rel> -)
+    }
+
+sp {aileen*elaborate*remove*csrs*no-target-object
+    :o-support
+    (state <s>    ^name aileen
+                  ^world <w>)
+    (<w>    ^objects <objs>
+            ^relations <rels>)
+    (<rels>    ^relation <rel>)
+    (<rel>    ^root-object <root-obj>
+              ^target-object <target-obj>
+              ^<< distance >> <val>)
+    (<objs>    -^object <target-obj>)
 -->
     (<rels>    ^relation <rel> -)
     }
