@@ -1,4 +1,5 @@
 from random import uniform
+import numpy as np
 import settings
 from shapely.geometry import box
 from log_config import logging
@@ -13,6 +14,14 @@ except ImportError:
     exit()
 
 
+def normalize(v, tolerance=0.00001):
+    mag2 = sum(n * n for n in v)
+    if abs(mag2 - 1.0) > tolerance:
+        mag = np.sqrt(mag2)
+        v = tuple(n / mag for n in v)
+    return v
+
+
 class AileenScene:
 
     def __init__(self):
@@ -22,7 +31,6 @@ class AileenScene:
         self._objects.append(aileen_object)
 
     def generate_scene_world_config(self):
-        # logging.info("[action_word_lesson] :: generate scene world config {}".format(self._objects))
         description = []
         for scene_object in self._objects:
             description.append(scene_object.get_object_description())
@@ -30,7 +38,6 @@ class AileenScene:
 
     @staticmethod
     def place_two_objects_in_configuration(target_object_name, reference_object_name, scene_objects, configuration_definition):
-        logging.info("[aileen_scene] :: place two objects in config {} {} {} {}".format(target_object_name, reference_object_name, scene_objects, configuration_definition))
         translations = {}
         reference_object = scene_objects[reference_object_name]
         target_object = scene_objects[target_object_name]
@@ -190,5 +197,23 @@ class AileenScene:
 
         def sample_position_from_region(self, region):
             return qsr_realization.sample_position_from_region(region)
+
+        def get_random_rotation(self, shape):
+            rx = uniform(0, 1)
+            ry = uniform(0, 1)
+            rz = uniform(0, 1)
+            v = [rx, ry, rz]
+            v = normalize(v)
+            angle = uniform(-6.2832, 6.2832)
+            if shape == 'capsule':
+                angle = 1.5708
+            elif shape == 'cone':
+                angle = 0
+
+            rotation = [v[0],
+                        v[1],
+                        v[2],
+                        angle]
+            return rotation
 
     randomizer = Randomizer()
