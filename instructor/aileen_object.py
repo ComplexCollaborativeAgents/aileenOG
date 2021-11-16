@@ -119,6 +119,14 @@ class AileenObject:
         logging.debug("[aileen_object] :: setting translation of object to {}".format(position_vector))
         self._translation = position_vector
 
+    def set_rotation(self, position_vector):
+        if self._shape == "capsule":
+            position_vector[3] = 1.5708
+        elif self._shape == "cone":
+            position_vector[3] = 0
+        logging.debug("[aileen_object] :: setting rotation of object to {}".format(position_vector))
+        self._rotation = position_vector
+
     def set_language(self, word_list):
         self._language = word_list
 
@@ -146,7 +154,7 @@ class AileenObject:
         scene_object_size = AileenObject.randomizer.get_random_size()
         scene_object_color_vector = AileenObject.randomizer.get_size_vector_sample(scene_object_size)
         size = Size(scene_object_size, scene_object_color_vector)
-
+        # transparency =AileenObject.randomizer.get_random_transparency()
         scene_object = AileenObject(shape=scene_object_shape,
                                     color=color,
                                     size=size)
@@ -227,6 +235,9 @@ class AileenObject:
 
         def get_random_shape(self):
             return choice(settings.SHAPE_SET)
+
+        # def get_random_transparency(self):
+        #     return choice(settings.TRANSPARENCY_SET)
 
         def uuid4(self):
             return uuid.uuid4().node
