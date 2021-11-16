@@ -108,6 +108,13 @@ class AileenObject:
             self._connector_dim = self._width_x/2
             return description
 
+        if self._shape == "capsule":
+            description += "          radius {}\n".format(self._width_x / 2)
+            description += "          height {}\n".format(self._height_y / 2)
+            description += "        }"
+            self._connector_dim = self._height_y / 2
+            return description
+
     def set_translation(self, position_vector):
         logging.debug("[aileen_object] :: setting translation of object to {}".format(position_vector))
         self._translation = position_vector
