@@ -8,4 +8,5 @@ sp {generate-for-object*propose*query-visual-concept
                   -^visual-concept <any>)
 -->
     (<s>    ^operator <op> +)
-    (<op>    ^name look-up-visual-concept
+    (<op>    ^name look-up-visual-concept)
+    }
