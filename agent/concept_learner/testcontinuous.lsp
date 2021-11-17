@@ -69,6 +69,13 @@
   )
 
 
+(defun test-describe ()
+  (explain-concepts 
+    'd::((isa query-facts AileenCaseMt) (sw ob384 ob391) (distance 0.1634 ob384 ob391) (size ob391 0.01) (ne ob391 ob384) (size ob384 0.0121)
+         (qPred-size ob384) (qPred-distance ob384 ob391) (qPred-size ob391) (dc ob391 ob384) (isa ob384 CVCone) (isa ob384 CVGreen)
+         (dc ob384 ob391) (isa ob391 CVCylinder) (isa ob391 CVRed))
+    'd::query-facts))
+
 
 (defun load-test-flat-files ()
   (fire:kr-file->kb (qrg:make-qrg-file-name
