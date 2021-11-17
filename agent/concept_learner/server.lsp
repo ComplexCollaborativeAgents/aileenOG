@@ -286,23 +286,23 @@
               (pairlis '("matches" "pattern") '(nil nil))))))))
 
 
-(defun explain-helper (str)
+(defun describe-helper (str)
   (handler-bind ((error #'print-backtrace))
   (setq *str* str)
   (debug-format "Generating ~A~%" str)
   (let* ((json (cl-json:decode-json-from-string str))
          (facts (str->symbols (cdr (assoc :FACTS json)))) ;;; all facts in scene
-         (context 'data::explain-facts)) ;; Statement with variables
+         (context 'data::describe-facts)) ;; Statement with variables
     (cond (facts
            ;; Clear previous facts from context.
            (remove-facts-from-case context)
            ;; Store facts in context and match query.
-           (let ((concepts (explain-concepts facts context)))
+           (let ((concepts (describe-concepts facts context)))
              (debug-format "~%Found concepts ~A~%" cis)
              (cl-json:encode-json-alist-to-string
               (pairlis '("cis") (list (symbols->strs concepts))))))
           (t
-           (debug-format "Ill formed explain request ~A~%" str)
+           (debug-format "Ill formed describe request ~A~%" str)
            (cl-json:encode-json-alist-to-string
               (pairlis '("matches" "pattern") '(nil nil))))))))
 
@@ -386,7 +386,7 @@
      rcp '("project" project-helper)
      :base64 :base64)
     (net.xml-rpc:export-xml-rpc-method
-     rcp '("explain" explain-helper)
+     rcp '("describe" describe-helper)
      :base64 :base64)
     (net.xml-rpc:export-xml-rpc-method
      rcp '("checkpoint_kb" checkpoint-helper)

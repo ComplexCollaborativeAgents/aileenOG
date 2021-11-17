@@ -508,7 +508,7 @@
     :test 'equal))
 
 
-;;; mainly used for explain
+;;; mainly used for describe
 (defun object-configurations (objects)
   (cond ((null objects) nil)
         ((= (length objects) 1)
@@ -524,7 +524,7 @@
     concepts))
 
 
-(defun explain-concepts (all-facts context)
+(defun describe-concepts (all-facts context)
 
   (store-facts-in-case all-facts context)
 
@@ -542,19 +542,19 @@
 
             (format t "testing ~s against ~s~%" concept config)
 
-            (remove-facts-from-case 'd::explainscratch)
+            (remove-facts-from-case 'd::describescratch)
 
             (let ((facts (filter-facts-mentioning config context all-objects)))
 
               (format t "facts for ~s are~%~s~%" config facts)
 
-              (store-facts-in-case facts 'd::explainscratch)
+              (store-facts-in-case facts 'd::describescratch)
               (setf facts (append facts (maybe-add-quantity-preds facts (get-concept-gpool concept))))
-              (store-facts-in-case facts 'd::explainscratch)
+              (store-facts-in-case facts 'd::describescratch)
 
               ; (let ((matches (filter-scene-by-expression 
               ;                   facts 
-              ;                   'd::explainscratch 
+              ;                   'd::describescratch 
               ;                   (get-concept-gpool concept) 
               ;                   nil 
               ;                   concept)))
