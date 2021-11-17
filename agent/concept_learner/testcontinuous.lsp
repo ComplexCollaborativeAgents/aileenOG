@@ -32,8 +32,8 @@
 
   ; (create-test-generalizations 'd::rSmallNew (list 41 42 43 44 45) :symbol)
 
-  (create-test-generalizations 'd::r_move_near1 
-    'd::(episode1549 episode1615 episode236 episode307 episode373) :action)
+  (create-test-generalizations 'd::r_move_rightof1 
+    'd::(r-move-right-1072 r-move-right-1757) :action)
 
   )
 
@@ -51,6 +51,13 @@
 
   ; (run-query *small-pos* 'd::rSmallNew 'd::(isa ?obj rSmallNew))
   ; (run-query *small-neg* 'd::rSmallNew 'd::(isa ?obj rSmallNew))
+  )
+
+
+(defun test-project ()
+
+  (project-state-for-action (kb::list-mt-facts 'd::r-move-right-452) 'd::query-facts 'd::r_move_rightof1)
+
   )
 
 

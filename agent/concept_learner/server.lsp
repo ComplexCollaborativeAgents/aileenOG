@@ -285,6 +285,28 @@
            (cl-json:encode-json-alist-to-string
               (pairlis '("matches" "pattern") '(nil nil))))))))
 
+
+(defun explain-helper (str)
+  (handler-bind ((error #'print-backtrace))
+  (setq *str* str)
+  (debug-format "Generating ~A~%" str)
+  (let* ((json (cl-json:decode-json-from-string str))
+         (facts (str->symbols (cdr (assoc :FACTS json)))) ;;; all facts in scene
+         (context 'data::explain-facts)) ;; Statement with variables
+    (cond (facts
+           ;; Clear previous facts from context.
+           (remove-facts-from-case context)
+           ;; Store facts in context and match query.
+           (let ((concepts (explain-concepts facts context)))
+             (debug-format "~%Found concepts ~A~%" cis)
+             (cl-json:encode-json-alist-to-string
+              (pairlis '("cis") (list (symbols->strs concepts))))))
+          (t
+           (debug-format "Ill formed explain request ~A~%" str)
+           (cl-json:encode-json-alist-to-string
+              (pairlis '("matches" "pattern") '(nil nil))))))))
+
+
 (defun match-case-against-gpool-helper (str)
   (assert nil) ;;this is not used anymore
   (debug-format "Checking context against gpool for pattern ~A~%" str)
@@ -362,6 +384,9 @@
      :base64 :base64)
     (net.xml-rpc:export-xml-rpc-method
      rcp '("project" project-helper)
+     :base64 :base64)
+    (net.xml-rpc:export-xml-rpc-method
+     rcp '("explain" explain-helper)
      :base64 :base64)
     (net.xml-rpc:export-xml-rpc-method
      rcp '("checkpoint_kb" checkpoint-helper)

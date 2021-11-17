@@ -360,10 +360,11 @@
 
 ;; repeat? is only included as we had strange behavior where a match did not work the first time we tried it
 (defun match-query-against-gpool (context gpool pattern &optional repeat?)
-  (debug-format "Matching Pattern ~A Against Gpool ~A~%" pattern gpool)
+  (debug-format "Matching Context ~A, Pattern ~A Against Gpool ~A~%" context pattern gpool)
 
   (let ((num-cases (gpool->size gpool)))
     (when (< num-cases 3)
+      (debug-format "Less than three cases in ~A, failing" gpool)
       (return-from match-query-against-gpool nil)))
 
   (sme:with-sme-type
@@ -441,6 +442,14 @@
 	         :response 'd::?x))
 
 
+(defun obj-attrs-in-context (obj context)
+  (mapcar 'fire::decontextualize-statement
+    (append 
+      (fire::ask-it `d::(ist-Information ,aileen::context
+                        (isa ,aileen::obj ?col)))
+      (fire::ask-it `d::(ist-Information ,aileen::context
+                        (size ,aileen::obj ?what))))))
+
 
 (defun determine-state-correspondences (context gpool)
   ;; if there is one generalization
@@ -472,18 +481,110 @@
     (fire:kb-store `(d::requiredCorrespondence ,(car cor) ,(second cor))
 		   :mt *constraints-mt*)))
 
+
+(defun gpool->concept (gpool)
+  (let ((str (string gpool)))
+    (intern (subseq str 0 (- (length str) 2)) :data)))
+
+
+(defun facts-mentioning-entities (context entities all-entities)
+  (let ((nonparticipants (set-difference all-entities entities)))
+    (mapcan (lambda (fact)
+              (and (every (lambda (entity)
+                            (member entity fact))
+                          entities)
+                   (not (some (lambda (entity)
+                               (member entity fact)) 
+                             nonparticipants))
+                   (list fact))) 
+      (kb::list-mt-facts context))))
+
+
+(defun filter-facts-mentioning (entities context all-entities)
+  (remove-duplicates
+    (mapcan (lambda (objects)
+          (facts-mentioning-entities context objects all-entities)) 
+      (object-configurations entities))
+    :test 'equal))
+
+
+;;; mainly used for explain
+(defun object-configurations (objects)
+  (cond ((null objects) nil)
+        ((= (length objects) 1)
+          (list objects))
+        ((= (length objects) 2)
+          (list (list (car objects)) (list (second objects)) objects))
+        (t (break "Unhandled object configuration"))))
+
+
+(defun filter-concepts (concepts arity)
+  (remove-if-not (lambda (concept)
+                   (= arity (car (fire::ask-it `(d::arity ,concept ?what) :response '?what))))
+    concepts))
+
+
+(defun explain-concepts (all-facts context)
+
+  (store-facts-in-case all-facts context)
+
+  (let* ((concepts (mapcar 'gpool->concept (kb::list-gpools)))
+         (all-objects (objs-in-context context))
+         (obj-configurations (object-configurations all-objects))
+         (results))
+
+        (format t "objs are ~s~%" all-objects)
+        (format t "configs are ~s~%" obj-configurations)
+
+        (dolist (config obj-configurations results)
+
+          (dolist (concept (filter-concepts concepts (length config)))
+
+            (format t "testing ~s against ~s~%" concept config)
+
+            (remove-facts-from-case 'd::explainscratch)
+
+            (let ((facts (filter-facts-mentioning config context all-objects)))
+
+              (format t "facts for ~s are~%~s~%" config facts)
+
+              (store-facts-in-case facts 'd::explainscratch)
+              (setf facts (append facts (maybe-add-quantity-preds facts (get-concept-gpool concept))))
+              (store-facts-in-case facts 'd::explainscratch)
+
+              ; (let ((matches (filter-scene-by-expression 
+              ;                   facts 
+              ;                   'd::explainscratch 
+              ;                   (get-concept-gpool concept) 
+              ;                   nil 
+              ;                   concept)))
+
+              ; (setf results (append results matches)
+
+              )))))
+
+
 (defun project-state-for-action (facts context action)
+
   (store-facts-in-case facts context)
+
+  (setf facts (append facts (maybe-add-quantity-preds facts (get-concept-gpool action))))
+  (store-facts-in-case facts context)
+
   (fire:clear-wm)
   (fire:clear-dgroup-caches)
   (let* ((case-term `(d::KBCaseFn ,context))
          (gpool (get-concept-gpool action))
          (correspondences (determine-state-correspondences context gpool)))
-    (format t "~%~% ~A " (fire:ask-it `(d::gpoolAssimilationThreshold ,gpool ?x) :context gpool))
-    (format t "~%~%~% threshold : ~A" *projection-threshold*)
+
+    (debug-format "Gpool is ~s~%" gpool)
+    (debug-format "Correspondences are ~s~%" correspondences)
+    
+    (debug-format "Current ~s threshold: ~A " gpool (fire:ask-it `(d::gpoolAssimilationThreshold ,gpool ?x) :context gpool))
+    (debug-format "Projection threshold: ~A" *projection-threshold*)
     (fire:kb-forget `(d::gpoolAssimilationThreshold ,gpool ?x):mt gpool)
     (fire:kb-store `(d::gpoolAssimilationThreshold ,gpool ,*projection-threshold*) :mt gpool)
-    (format t "~%~% ~A " (fire:ask-it `(d::gpoolAssimilationThreshold ,gpool ?x) :context gpool))
+    (debug-format "New ~s set threshold: ~A " gpool (fire:ask-it `(d::gpoolAssimilationThreshold ,gpool ?x) :context gpool))
     (remove-facts-from-case case-term)
     (fire:clear-dgroup-caches)
     (fire:tell-it `(d::constructCaseInWM ,case-term))
