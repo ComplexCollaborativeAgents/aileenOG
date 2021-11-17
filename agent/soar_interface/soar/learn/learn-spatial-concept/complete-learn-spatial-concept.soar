@@ -22,16 +22,7 @@ sp {learn-spatial-concept*apply*complete-learn-spatial-concept*grounding*clear*l
     (<g>    ^complete true -)
     }
 
-sp {learn-spatial-concept*apply*complete-learn-spatial-concept*grounding*write-relation-to-world
-    (state <s>    ^name learn-spatial-concept
-                  ^operator.name complete-learn-spatial-concept
-                  ^world.relations <wrels>
-                  ^selected-scene <scene>)
-    (<scene>     ^relations.relation <rel>)
-    (<rel>     ^spatial-concept <con>)
--->
-    (<wrels> ^relation <rel>)
-    }
+
 
 sp {learn-spatial-concept*clear*concept-memory*topstate
     (state <s>    ^name learn-spatial-concept
