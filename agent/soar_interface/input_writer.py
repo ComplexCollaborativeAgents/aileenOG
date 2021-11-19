@@ -8,6 +8,7 @@ import cv2
 import numpy as np
 import settings
 import torch
+from scipy.spatial import distance
 import language_helper
 
 try:
@@ -88,11 +89,14 @@ class InputWriter(object):
             # img = torch.from_numpy(img)
             # im = img / 255.0
             cv_detections = self.detector.run(img)
-            # print('cv_detection is:', cv_detections)
-            # print('world objects is:', objects_list)
+            print('cv_detection is:', cv_detections)
+            print('world objects is:', objects_list)
+
             objects_list = self.align_cv_detections_to_world(cv_detections, objects_list)
-            # print('updated objects is:', objects_list)
+
             logging.debug("Aligned Detections: {}".format(objects_list))
+
+                # objects_list = self.use_gt_world(objects_list)
         else:
             objects_list = self.request_server_for_objects_info()
 
@@ -120,6 +124,10 @@ class InputWriter(object):
                 d = detections[i]
                 bbox1 = d['camera_bounding_box_mrcnn']
                 bbox2 = w['bounding_box_camera']
+                center1 = d['camera_mrcnn_position']
+                center2 = w['bbposition']
+
+                dst = distance.euclidean(center1, center2)
 
                 # detections should include the following fields, in addition to anything added below
                 # 'shape': e.g., CVCone
@@ -129,9 +137,11 @@ class InputWriter(object):
                 # 'camera_yolo_position': YOLO bounding box centroid
                 # 'camera_yolo_position_proj_to_world': World projection of YOLO bounding box centroid
 
-                if Detector.bb_iou(bbox1, bbox2) > .7:
+                # if Detector.bb_iou(bbox1, bbox2) > .7:
+                if dst < 2.0:
                     # Match
                     mapped[w_index] = 1
+                    detections[i]['held'] = w['held']
                     detections[i]['id'] = w['id']
                     detections[i]['id_name'] = w['id_name']
                     detections[i]['id_string'] = w['id_string']
@@ -161,6 +171,44 @@ class InputWriter(object):
 
                     updated_detections.append(detections[i])
                     break
+
+        return updated_detections
+
+    @staticmethod
+    def use_gt_world(objects_list):
+        world = objects_list
+        detections = world.copy()
+        updated_detections = []
+        mapped = np.zeros(len(world))
+        for i in range(len(world)):
+            detections[i]['id'] = world[i]['id']
+            detections[i]['id_name'] = world[i]['id_name']
+            detections[i]['id_string'] = world[i]['id_string']
+            detections[i]['held'] = world[i]['held']
+            #  The simulator groundtruth
+            detections[i]['position_simulator'] = world[i]['bbposition']
+            detections[i]['bounding_box_simulator'] = world[i]['bounding_box_camera']
+            detections[i]['bbox_size_simulator'] = world[i]['bbsize']
+            #  The detector output
+            detections[i]['position'] = detections[i]['camera_mrcnn_position']
+            detections[i]['bounding_box'] = detections[i]['camera_bounding_box_mrcnn']
+
+            #  Extra attributes
+            detections[i]['hasPlane'] = world[i]['hasPlane']
+            detections[i]['hasRectPlane'] = world[i]['hasRectPlane']
+            detections[i]['hasRoundPlane'] = world[i]['hasRoundPlane']
+            detections[i]['hasCurveContour'] = world[i]['hasCurveContour']
+            detections[i]['hasEdgeContour'] = world[i]['hasEdgeContour']
+
+            if settings.DETECTOR_MODE == 2:
+                detections[i]['cluster_id'] = detections[i]['cluster_id']
+
+            ##  SM: if settings have preload visual concepts on, just use information from the world to ensure 100% detection
+            if settings.AGENT_VISUAL_CONCEPTS_PARAM == 'soar' and settings.AGENT_PRELOAD_VISUAL_CONCEPTS_PARAM == 'true':
+                detections[i]['color'] = world[i]['color']
+                detections[i]['shape'] = world[i]['shape']
+
+            updated_detections.append(detections[i])
 
         return updated_detections
 
@@ -350,7 +398,9 @@ objects = [{'orientation': [1.0, -5.75539615965681e-17, 3.38996313371214e-17, 5.
         '''
         qsrlib = QSRlib() # We don't need a new object each time
         world = World_Trace()
+
         for obj in objects:
+            print('object = ', obj)
             if obj['held'] == 'false':
                 world.add_object_state_series(
                     [Object_State(name=str(obj['id']),timestamp=0,
@@ -364,6 +414,7 @@ objects = [{'orientation': [1.0, -5.75539615965681e-17, 3.38996313371214e-17, 5.
                                   # ysize=obj['bounding_box'][5]-obj['bounding_box'][2],
                                   # zsize=obj['bounding_box'][4]-obj['bounding_box'][1]
                     )])
+
         qsrlib_request_message = QSRlib_Request_Message(["rcc8","cardir","ra", "3dcd"], world)
         qsrlib_response_message = qsrlib.request_qsrs(req_msg=qsrlib_request_message)
         ret = {}
