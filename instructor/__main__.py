@@ -31,6 +31,7 @@ def create_connection_with_aileen_agent():
 def parse():
     parser = argparse.ArgumentParser(description='Aileen instructor.')
     parser.add_argument('--train-vision', action='store_true', help='Run vision training scripts')
+    parser.add_argument('--clean', action='store_true', help='Clean table')
     parser.add_argument('--json', help='Use curriculum from JSON file')
     parser.add_argument('--test-action', help='Test available actions', action='store_true')
     parser.add_argument('--test-sizes', help='Test different sizes', action='store_true')
@@ -63,7 +64,9 @@ def run_curriculum(json_path):
             agent_response = agent_server.process_interaction(lesson['interaction'])
             logging.info("[aileen_instructor] :: received from agent {}".format(agent_response))
             evaluation = lesson_object.evaluate_agent_response(agent_response)
-            gui.log('Agent: ' + agent_response['status'] + '. ' + str(agent_response['create_concept_count']) + ' new concept(s) created' + ' and ' + str(agent_response['store_instance_count']) + ' example(s) stored.')
+            gui.log('Agent: ' + agent_response['status'] + '. ' + str(
+                agent_response['create_concept_count']) + ' new concept(s) created' + ' and ' + str(
+                agent_response['store_instance_count']) + ' example(s) stored.')
 
             agent_response = agent_server.process_interaction(evaluation)
             logging.info("[aileen_instructor] :: provided feedback to agent")
@@ -76,10 +79,16 @@ if __name__ == '__main__':
 
     if arguments.train_vision:
         # run vision training scripts
-        print ('Generating images that will train vision system.')
+        print('Generating images that will train vision system.')
         from generate_training_images import TrainingImage
 
         TrainingImage.generate_scenes(world_server, agent_server)
+
+    elif arguments.clean:
+        print('Cleaning table.')
+        from generate_training_images import TrainingImage
+
+        TrainingImage.clean_scenes(world_server)
 
     elif arguments.json:
         curriculum_thread = Thread(target=run_curriculum, args=(arguments.json,))
@@ -98,7 +107,7 @@ if __name__ == '__main__':
         pass
     elif arguments.test_sizes:
         scene = AileenScene()
-        
+
     else:
         VisualWordLesson.administer_curriculum(world_server, agent_server)
         # SpatialWordLesson.administer_curriculum(world_server, agent_server)

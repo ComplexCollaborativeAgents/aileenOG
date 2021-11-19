@@ -4,10 +4,10 @@ from agent.log_config import logging
 import xmlrpclib
 from svs_helper import SVSHelper
 from agent.vision.Detector import Detector
-from itertools import combinations
 import cv2
 import numpy as np
 import settings
+import torch
 import language_helper
 
 try:
@@ -32,7 +32,6 @@ class InputWriter(object):
             self._world_link = self._input_link.CreateIdWME("world")
             self._objects_link = self._world_link.CreateIdWME("objects")
             self._qsrs_link = self._world_link.CreateIdWME("qsrs")
-            self._csrs_link = self._world_link.CreateIdWME("csrs")
 
             self._interaction_link = self._input_link.CreateIdWME("interaction-link")
             self._clean_interaction_link_flag = False
@@ -82,9 +81,17 @@ class InputWriter(object):
             objects_list = data['objects']
             # Assumption: Both world and agent are running on the same machine and that's why the image is stored in
             #             `settings.CURRENT_IMAGE_PATH.
-            im = cv2.imdecode(np.fromfile(settings.CURRENT_IMAGE_PATH, dtype=np.uint8), 1)
-            cv_detections = self.detector.run(im)
+            # im = cv2.imdecode(np.fromfile(settings.CURRENT_IMAGE_PATH, dtype=np.uint8), 1)
+            img = cv2.imread(settings.CURRENT_IMAGE_PATH)
+            # print('image shape = ', np.shape(img))
+            # img = np.moveaxis(img, -1, 0).astype(np.float32)
+            # img = torch.from_numpy(img)
+            # im = img / 255.0
+            cv_detections = self.detector.run(img)
+            # print('cv_detection is:', cv_detections)
+            # print('world objects is:', objects_list)
             objects_list = self.align_cv_detections_to_world(cv_detections, objects_list)
+            # print('updated objects is:', objects_list)
             logging.debug("Aligned Detections: {}".format(objects_list))
         else:
             objects_list = self.request_server_for_objects_info()
@@ -93,8 +100,6 @@ class InputWriter(object):
             self.add_objects_to_working_memory(objects_list)
         qsrs = self.create_qsrs(objects_list)
         self.write_qsrs_to_input_link(qsrs)
-        csrs = self.create_aux_info(objects_list)
-        self.write_csrs_to_input_link(csrs)
         self._soar_agent.commit()
 
     @staticmethod
@@ -113,7 +118,7 @@ class InputWriter(object):
                     continue
 
                 d = detections[i]
-                bbox1 = d['camera_bounding_box_yolo']
+                bbox1 = d['camera_bounding_box_mrcnn']
                 bbox2 = w['bounding_box_camera']
 
                 # detections should include the following fields, in addition to anything added below
@@ -131,12 +136,20 @@ class InputWriter(object):
                     detections[i]['id_name'] = w['id_name']
                     detections[i]['id_string'] = w['id_string']
                     detections[i]['held'] = w['held']
-                    #  These are from the simulator
-                    detections[i]['position_simulator'] = w['position']
-                    detections[i]['bounding_box_simulator'] = w['bounding_box']
+                    #  The simulator groundtruth
+                    detections[i]['position_simulator'] = w['bbposition']
+                    detections[i]['bounding_box_simulator'] = w['bounding_box_camera']
+                    detections[i]['bbox_size_simulator'] = w['bbsize']
+                    #  The detector output
+                    detections[i]['position'] = detections[i]['camera_mrcnn_position']
+                    detections[i]['bounding_box'] = detections[i]['camera_bounding_box_mrcnn']
 
-                    detections[i]['position'] = detections[i]['camera_yolo_position_proj_to_world']
-                    detections[i]['bounding_box'] = detections[i]['camera_bounding_box_yolo_proj_to_world']
+                    #  Extra attributes
+                    detections[i]['hasPlane'] = w['hasPlane']
+                    detections[i]['hasRectPlane'] = w['hasRectPlane']
+                    detections[i]['hasRoundPlane'] = w['hasRoundPlane']
+                    detections[i]['hasCurveContour'] = w['hasCurveContour']
+                    detections[i]['hasEdgeContour'] = w['hasEdgeContour']
 
                     if settings.DETECTOR_MODE == 2:
                         detections[i]['cluster_id'] = detections[i]['cluster_id']
@@ -152,10 +165,6 @@ class InputWriter(object):
         return updated_detections
 
     def write_qsrs_to_input_link(self, qsrs):
-
-        # if qsrs:
-        #     logging.info("[testing] writing qsrs to input link {}".format(qsrs))
-
         self._soar_agent.delete_all_children(self._qsrs_link)
         for root_obj_id in qsrs:
             root_obj_qsrs = qsrs[root_obj_id]
@@ -167,17 +176,6 @@ class InputWriter(object):
                     qsr_id.CreateIntWME("root", int(root_obj_id))
                     qsr_id.CreateIntWME("target", int(target_obj_id))
                     qsr_id.CreateStringWME(qsr_type, qsr_value)
-
-    def write_csrs_to_input_link(self, csrs):
-        # logging.debug("[input_writer] :: writing csrs to input link {}".format(csrs))
-        self._soar_agent.delete_all_children(self._csrs_link)
-        for csr in csrs:
-            csr_id = self._csrs_link.CreateIdWME('csr')
-            csr_id.CreateIntWME("root", csr[0])
-            csr_id.CreateIntWME("target", csr[1])
-            csr_id.CreateFloatWME("distance", csr[2])
-
-
 
     def clean_concept_memory(self):
         self._soar_agent.delete_all_children(self._concept_memory)
@@ -288,20 +286,23 @@ class InputWriter(object):
                 position_id = object_id.CreateIdWME('position')
                 position_id.CreateFloatWME('x', w_object['position'][0])
                 position_id.CreateFloatWME('y', w_object['position'][1])
-                position_id.CreateFloatWME('z', w_object['position'][2])
+                # position_id.CreateFloatWME('z', w_object['position'][2])
             if 'bounding_box' in w_object:
                 size_id = object_id.CreateIdWME('size_bb')
-                size_id.CreateFloatWME('xsize', w_object['bounding_box'][3]-w_object['bounding_box'][0])
-                size_id.CreateFloatWME('zsize', w_object['bounding_box'][5]-w_object['bounding_box'][2])
-                size_id.CreateFloatWME('ysize', w_object['bounding_box'][4]-w_object['bounding_box'][1])
-                object_id.CreateFloatWME('size', self.size_from_bounding_box(w_object['bounding_box']))
+                size_id.CreateFloatWME('xsize', w_object['bounding_box'][2]-w_object['bounding_box'][0])
+                # size_id.CreateFloatWME('zsize', w_object['bounding_box'][5]-w_object['bounding_box'][2])
+                size_id.CreateFloatWME('ysize', w_object['bounding_box'][3]-w_object['bounding_box'][1])
+                object_id.CreateStringWME('size', self.size_from_bounding_box(w_object['bounding_box']))
             object_id.CreateStringWME('held', w_object['held'])
             object_id.CreateStringWME('color', str(w_object['color']))
             object_id.CreateStringWME('shape', w_object['shape'])
+            object_id.CreateIntWME('hasPlane', w_object['hasPlane'])
+            object_id.CreateIntWME('hasRectPlane', w_object['hasRectPlane'])
+            object_id.CreateIntWME('hasRoundPlane', w_object['hasRoundPlane'])
+            object_id.CreateIntWME('hasEdgeContour', w_object['hasEdgeContour'])
+            object_id.CreateIntWME('hasCurveContour', w_object['hasCurveContour'])
             object_id.CreateStringWME('id_string', w_object['id_string'])
             object_id.CreateStringWME('id_uuid', w_object['id_name'])
-            if 'cluster_id' in w_object:
-                object_id.CreateStringWME('percept', 'CVc{}'.format(w_object['cluster_id']))
 
     def request_server_for_objects_info(self):
         try:
@@ -313,7 +314,7 @@ class InputWriter(object):
             logging.error("[input_writer] :: fault code {}; fault string{}".format(fault.faultCode, fault.faultString))
             return
 
-        # logging.debug("[input_writer] :: received objects from server {}".format(objects_dict))
+        logging.debug("[input_writer] :: received objects from server {}".format(objects_dict))
         objects_list = objects_dict['objects']
         return objects_list
 
@@ -338,37 +339,14 @@ class InputWriter(object):
             handle.write(binary_image.data)
 
 
-    '''
-    Added by Will. For now, using this to handle nearness relations. Can eventually extend
-    to estimating any continuous quantities. This should probably live somewhere else.
-    '''
-    def create_aux_info(self, objects):
-        rels = []
-
-        # logging.debug("[input_writer] :: cai objects are: {}".format(objects))
-        non_held_objs = [o for o in objects if not o['held'] == 'true']
-        # logging.debug("[input_writer] :: non held objects are: {}".format(non_held_objs))
-
-        # add distance information between pairs of objects
-        for items in combinations(non_held_objs, 2):
-
-            # logging.debug("[input_writer] :: vec 1 is: {}".format(np.array(items[0]['position'])))
-            # logging.debug("[input_writer] :: vec 2 is: {}".format(np.array(items[1]['position'])))
-
-            distance = np.linalg.norm(np.array(items[0]['position']) - np.array(items[1]['position']))
-            rels.append((items[0]['id'], items[1]['id'], distance))
-
-        return rels
-
-
     def create_qsrs(self, objects):
         '''
-        - Ignore y position as everything is on the table (use z instead)
-        - While qsrlib allows includes a parameter for orientation/rotation, it is not clear it is used. It is being ignored for now.
+- Ignore y position as everything is on the table (use z instead)
+- While qsrlib allows includes a parameter for orientation/rotation, it is not clear it is used. It is being ignored for now.
 
-        Saving sample input from aileen world for later testing.
+Saving sample input from aileen world for later testing.
 
-        objects = [{'orientation': [1.0, -5.75539615965681e-17, 3.38996313371214e-17, 5.75539615965681e-17, 1.0, 2.98427949019241e-17, -3.38996313371214e-17, -2.98427949019241e-17, 1.0], 'bounding_object': 'Box', 'held': 'false', 'bounding_box': [0.721, 0.3998037998119487, -0.249, 0.8210000000000001, 0.49980379981194867, -0.14900000000000002], 'position': [0.771, 0.4498037998119487, -0.199], 'id': 397}, {'orientation': [1.0, 4.8853319907279786e-17, -4.193655877514327e-17, -4.8853319907279786e-17, 1.0, -1.80524117148876e-16, 4.193655877514327e-17, 1.80524117148876e-16, 1.0], 'bounding_object': 'Cylinder', 'held': 'false', 'bounding_box': [0.369851, 0.39992295234206066, 0.067742, 0.46985099999999996, 0.49992295234206063, 0.167742], 'position': [0.419851, 0.44992295234206064, 0.117742], 'id': 403}]
+objects = [{'orientation': [1.0, -5.75539615965681e-17, 3.38996313371214e-17, 5.75539615965681e-17, 1.0, 2.98427949019241e-17, -3.38996313371214e-17, -2.98427949019241e-17, 1.0], 'bounding_object': 'Box', 'held': 'false', 'bounding_box': [0.721, 0.3998037998119487, -0.249, 0.8210000000000001, 0.49980379981194867, -0.14900000000000002], 'position': [0.771, 0.4498037998119487, -0.199], 'id': 397}, {'orientation': [1.0, 4.8853319907279786e-17, -4.193655877514327e-17, -4.8853319907279786e-17, 1.0, -1.80524117148876e-16, 4.193655877514327e-17, 1.80524117148876e-16, 1.0], 'bounding_object': 'Cylinder', 'held': 'false', 'bounding_box': [0.369851, 0.39992295234206066, 0.067742, 0.46985099999999996, 0.49992295234206063, 0.167742], 'position': [0.419851, 0.44992295234206064, 0.117742], 'id': 403}]
         '''
         qsrlib = QSRlib() # We don't need a new object each time
         world = World_Trace()
@@ -377,15 +355,17 @@ class InputWriter(object):
                 world.add_object_state_series(
                     [Object_State(name=str(obj['id']),timestamp=0,
                                   x=obj['position'][0],
-                                  y=obj['position'][2],
-                                  z=obj['position'][1],
-                                  xsize=obj['bounding_box'][3]-obj['bounding_box'][0],
-                                  ysize=obj['bounding_box'][5]-obj['bounding_box'][2],
-                                  zsize=obj['bounding_box'][4]-obj['bounding_box'][1]
+                                  y=obj['position'][1],
+                                  # y=obj['position'][2],
+                                  # z=obj['position'][1],
+                                  xsize=obj['bounding_box'][2]-obj['bounding_box'][0],
+                                  ysize=obj['bounding_box'][3]-obj['bounding_box'][1],
+                                  # xsize=obj['bounding_box'][3]-obj['bounding_box'][0],
+                                  # ysize=obj['bounding_box'][5]-obj['bounding_box'][2],
+                                  # zsize=obj['bounding_box'][4]-obj['bounding_box'][1]
                     )])
         qsrlib_request_message = QSRlib_Request_Message(["rcc8","cardir","ra", "3dcd"], world)
         qsrlib_response_message = qsrlib.request_qsrs(req_msg=qsrlib_request_message)
-        # logging.info("[input_writer] :: qsrs response message {}".format(qsrlib_response_message))
         ret = {}
         for t in qsrlib_response_message.qsrs.get_sorted_timestamps():
             for k, v in zip(qsrlib_response_message.qsrs.trace[t].qsrs.keys(),
@@ -398,26 +378,22 @@ class InputWriter(object):
                 if '3dcd' in v.qsr.keys():
                     v.qsr['depth'] = v.qsr['3dcd'][-1].lower()
                 ret[args[0]][args[1]] = v.qsr
-        # logging.debug("[input_writer] :: qsrs computed {}".format(ret))
+        logging.debug("[input_writer] :: qsrs computed {}".format(ret))
         return ret
-
 
     def size_from_bounding_box(self, bbox):
         """
         Place holder for something more principled.
         Arbitrary thresholds as a first pass -> clustering on witnessed examples later
         """
-        area = abs((bbox[3] - bbox[0]) * (bbox[5] - bbox[2]))
-
-        # logging.info("[input_writer] :: bbox is {}".format(bbox))
-        return area
-
-        # if area < settings.SIZE_SM:
-        #     return 'CVSmall'
-        # elif area < settings.SIZE_ML:
-        #     return 'CVMedium'
-        # else:
-        #     return 'CVLarge'
+        # area = abs((bbox[3] - bbox[0]) * (bbox[5] - bbox[2]))
+        area = abs((bbox[2] - bbox[0]) * (bbox[3] - bbox[1]))
+        if area < settings.SIZE_SM:
+            return 'CVSmall'
+        elif area < settings.SIZE_ML:
+            return 'CVMedium'
+        else:
+            return 'CVLarge'
 
     def get_rcc8_symbols_for_allen_intervals(self, symbols):
         """
