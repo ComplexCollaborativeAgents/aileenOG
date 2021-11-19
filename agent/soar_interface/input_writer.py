@@ -76,6 +76,12 @@ class InputWriter(object):
         if self._language is not None:
             self.write_language_to_input_link()
 
+        if settings.SIMULATE_CV:
+            data = self.request_server_for_current_state_image()
+            objects_list = data['objects']
+            objects_list = self.use_gt_world(objects_list)
+            logging.debug("Groundtruth world: {}".format(objects_list))
+
         if settings.SOAR_CV:
             # these will be used to map UUID, ID, and held status to CV detections
             data = self.request_server_for_current_state_image()
@@ -89,16 +95,14 @@ class InputWriter(object):
             # img = torch.from_numpy(img)
             # im = img / 255.0
             cv_detections = self.detector.run(img)
-            print('cv_detection is:', cv_detections)
-            print('world objects is:', objects_list)
+            # print('cv_detection is:', cv_detections)
+            # print('world objects is:', objects_list)
 
             objects_list = self.align_cv_detections_to_world(cv_detections, objects_list)
-
             logging.debug("Aligned Detections: {}".format(objects_list))
 
-                # objects_list = self.use_gt_world(objects_list)
-        else:
-            objects_list = self.request_server_for_objects_info()
+        # else:
+        #     objects_list = self.request_server_for_objects_info()
 
         if objects_list is not None:
             self.add_objects_to_working_memory(objects_list)
@@ -177,21 +181,20 @@ class InputWriter(object):
     @staticmethod
     def use_gt_world(objects_list):
         world = objects_list
-        detections = world.copy()
+        detections = objects_list
         updated_detections = []
-        mapped = np.zeros(len(world))
         for i in range(len(world)):
             detections[i]['id'] = world[i]['id']
             detections[i]['id_name'] = world[i]['id_name']
             detections[i]['id_string'] = world[i]['id_string']
             detections[i]['held'] = world[i]['held']
             #  The simulator groundtruth
-            detections[i]['position_simulator'] = world[i]['bbposition']
-            detections[i]['bounding_box_simulator'] = world[i]['bounding_box_camera']
-            detections[i]['bbox_size_simulator'] = world[i]['bbsize']
-            #  The detector output
-            detections[i]['position'] = detections[i]['camera_mrcnn_position']
-            detections[i]['bounding_box'] = detections[i]['camera_bounding_box_mrcnn']
+            detections[i]['position'] = world[i]['bbposition']
+            detections[i]['bounding_box'] = world[i]['bounding_box_camera']
+
+            # #  The detector output
+            # detections[i]['position'] = world[i]['bbposition']
+            # detections[i]['bounding_box'] = world[i]['bounding_box_camera']
 
             #  Extra attributes
             detections[i]['hasPlane'] = world[i]['hasPlane']
@@ -201,7 +204,7 @@ class InputWriter(object):
             detections[i]['hasEdgeContour'] = world[i]['hasEdgeContour']
 
             if settings.DETECTOR_MODE == 2:
-                detections[i]['cluster_id'] = detections[i]['cluster_id']
+                detections[i]['cluster_id'] = world[i]['cluster_id']
 
             ##  SM: if settings have preload visual concepts on, just use information from the world to ensure 100% detection
             if settings.AGENT_VISUAL_CONCEPTS_PARAM == 'soar' and settings.AGENT_PRELOAD_VISUAL_CONCEPTS_PARAM == 'true':
