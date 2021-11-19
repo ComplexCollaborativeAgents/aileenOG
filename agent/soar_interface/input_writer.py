@@ -76,12 +76,6 @@ class InputWriter(object):
         if self._language is not None:
             self.write_language_to_input_link()
 
-        if settings.SIMULATE_CV:
-            data = self.request_server_for_current_state_image()
-            objects_list = data['objects']
-            objects_list = self.use_gt_world(objects_list)
-            logging.debug("Groundtruth world: {}".format(objects_list))
-
         if settings.SOAR_CV:
             # these will be used to map UUID, ID, and held status to CV detections
             data = self.request_server_for_current_state_image()
@@ -101,8 +95,12 @@ class InputWriter(object):
             objects_list = self.align_cv_detections_to_world(cv_detections, objects_list)
             logging.debug("Aligned Detections: {}".format(objects_list))
 
-        # else:
-        #     objects_list = self.request_server_for_objects_info()
+        else:
+            data = self.request_server_for_current_state_image()
+            objects_list = data['objects']
+            objects_list = self.use_gt_world(objects_list)
+            logging.debug("Groundtruth world: {}".format(objects_list))
+            # objects_list = self.request_server_for_objects_info()
 
         if objects_list is not None:
             self.add_objects_to_working_memory(objects_list)
