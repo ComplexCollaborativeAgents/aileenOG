@@ -43,7 +43,7 @@ class InputWriter(object):
             self._concept_memory = self._input_link.CreateIdWME("concept-memory")
             self._clean_concept_memory_flag = False
 
-        if settings.SOAR_CV:
+        if settings.SIMULATE_CV:
             self.detector = Detector()
 
     def set_concept_memory_status(self, concept_memory_status_dictionary):
@@ -76,7 +76,7 @@ class InputWriter(object):
         if self._language is not None:
             self.write_language_to_input_link()
 
-        if settings.SOAR_CV:
+        if settings.SIMULATE_CV:
             # these will be used to map UUID, ID, and held status to CV detections
             data = self.request_server_for_current_state_image()
             objects_list = data['objects']
@@ -406,11 +406,11 @@ objects = [{'orientation': [1.0, -5.75539615965681e-17, 3.38996313371214e-17, 5.
                 world.add_object_state_series(
                     [Object_State(name=str(obj['id']),timestamp=0,
                                   x=obj['position'][0],
-                                  y=obj['position'][1],
+                                  z=obj['position'][1],
                                   # y=obj['position'][2],
                                   # z=obj['position'][1],
                                   xsize=obj['bounding_box'][2]-obj['bounding_box'][0],
-                                  ysize=obj['bounding_box'][3]-obj['bounding_box'][1],
+                                  zsize=obj['bounding_box'][3]-obj['bounding_box'][1],
                                   # xsize=obj['bounding_box'][3]-obj['bounding_box'][0],
                                   # ysize=obj['bounding_box'][5]-obj['bounding_box'][2],
                                   # zsize=obj['bounding_box'][4]-obj['bounding_box'][1]
