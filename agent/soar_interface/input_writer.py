@@ -76,7 +76,7 @@ class InputWriter(object):
         if self._language is not None:
             self.write_language_to_input_link()
 
-        if settings.SIMULATE_CV:
+        if settings.SIMULATE_CV is False:
             # these will be used to map UUID, ID, and held status to CV detections
             data = self.request_server_for_current_state_image()
             objects_list = data['objects']
