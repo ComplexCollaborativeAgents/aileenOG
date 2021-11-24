@@ -4,11 +4,3 @@
 # @created smohan 20211102
 
 
-sp {generate*propose*generate-for-object
-    (state <s>    ^name generate
-                  ^world.objects.object <obj>)
--->
-    (<s>    ^operator <op> +)
-    (<op>    ^name generate-for-object
-             ^object <obj>)
-    }

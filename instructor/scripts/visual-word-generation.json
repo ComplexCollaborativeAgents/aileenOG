@@ -7,10 +7,10 @@
     "content": "box"
   },
   {
-    "signal": "inform",
+    "signal": "generate",
     "lesson-type": "visual-word",
     "is_positive": "true",
-    "description": {"color": "red", "shape": "box", "size": "large"},
+    "description": {"color": "green", "shape": "box", "size": "medium"},
     "content": "box"
   },
   {

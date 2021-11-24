@@ -3,10 +3,23 @@
 #
 # @created smohan 20211102
 
-sp {generate-for-object*propose*query-visual-concept
+sp {generate-for-object*propose*translate-to-facts
     (state <s>    ^name generate-for-object
-                  -^visual-concept <any>)
+                  ^object <obj>
+                  -^facts <f>)
 -->
     (<s>    ^operator <op> +)
-    (<op>    ^name look-up-visual-concept)
+    (<op>    ^name translate-to-facts
+             ^object <obj>)
+    }
+
+sp {generate-for-object*propose*describe-subscene
+    (state <s>    ^name generate-for-object
+                  ^object <obj>
+                  ^facts <f>
+                  -^description <d>)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name describe-subscene
+             ^facts <f>)
     }

@@ -6,24 +6,28 @@ def process_concept_learner_request(commandId, concept_learner):
     logging.debug("[output_reader] :: processing concept_learner command")
     for i in range(0, commandId.GetNumberChildren()):
         cl_child = commandId.GetChild(i).ConvertToIdentifier()
+        attribute = cl_child.GetAttribute()
         if cl_child:
-            if cl_child.GetAttribute() == "store":
+            if attribute == "store":
                 ResultsHelper.record_processing_phase("cm")
                 ResultsHelper.increase_store_instance_count()
                 return process_store_command(cl_child, concept_learner)
             else:
-                if cl_child.GetAttribute() == "query":
+                if attribute == "query":
                     return process_query_command(cl_child, concept_learner)
                 else:
-                    if cl_child.GetAttribute() == "project":
-                        return process_project_command(cl_child, concept_learner)
+                    if attribute == "describe":
+                        return process_describe_command(cl_child, concept_learner)
                     else:
-                        if cl_child.GetAttribute() == "create":
-                            ResultsHelper.record_processing_phase("cm")
-                            ResultsHelper.increase_create_concept_count()
-                            return process_create_concept_command(cl_child, concept_learner)
+                        if attribute == "project":
+                            return process_project_command(cl_child, concept_learner)
                         else:
-                            logging.error("[output_reader] :: concept learner does not implement this command")
+                            if attribute == "create":
+                                ResultsHelper.record_processing_phase("cm")
+                                ResultsHelper.increase_create_concept_count()
+                                return process_create_concept_command(cl_child, concept_learner)
+                            else:
+                                logging.error("[output_reader] :: concept learner does not implement this command")
 
 def process_create_concept_command(create_command_id, concept_learner):
     request={}
@@ -43,8 +47,7 @@ def process_create_concept_command(create_command_id, concept_learner):
         response = concept_learner.create_new_concept(request)
         logging.debug("[concept-learner-helper] :: response from concept memory {}".format(response))
         if response is not None:
-            return {'s'
-                    'tatus': 'success', 'gpool': response['gpool']}
+            return {'status': 'success', 'gpool': response['gpool']}
         else:
             logging.error("[concept_learner_helper] :: concept memory returned with nothing. ill-formed command")
             return {'status': 'failure'}
@@ -138,6 +141,28 @@ def process_query_command(query_command_id, concept_learner):
         return {'status': 'success', 'matches': response['matches']}
     else:
         logging.error("[output_reader] :: incomplete query command. facts:{}, pattern:{}".format(added_facts, added_pattern))
+        return {'status': 'failure'}
+
+
+def process_describe_command(describe_command_id, concept_learner):
+    request = {}
+    logging.debug("[concept_learner_helper] :: processing describe command")
+
+    added_facts = None
+
+    for i in range(0, describe_command_id.GetNumberChildren()):
+        child_id = describe_command_id.GetChild(i)
+        if child_id.GetAttribute() == "facts":
+            request["facts"] = translate_soar_facts_to_tuple_list(child_id.ConvertToIdentifier())
+            added_facts = True
+
+    if added_facts:
+        logging.debug("[concept_learner_helper] :: request concept memory {}".format(request))
+        response = concept_learner.describe(request)
+        logging.debug("[concept_learner_helper :: response from concept memory {}".format(response))
+        return {'status': 'success', 'elaborations': response['concept']}
+    else:
+        logging.error("[output_reader] :: incomplete describe command. facts:{}".format(added_facts))
         return {'status': 'failure'}
 
 

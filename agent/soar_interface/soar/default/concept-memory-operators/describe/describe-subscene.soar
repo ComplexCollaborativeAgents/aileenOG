@@ -1,0 +1,36 @@
+##!
+# @file
+#
+# @created smohan 20211124
+
+sp {describe-subscene*write-to-output-link
+    (state <s>    ^operator <op>
+                  ^io.output-link <ol>)
+    (<op>    ^name describe-subscene
+             ^facts <f>)
+-->
+    (<ol>    ^concept-memory.describe <desc>)
+    (<desc>    ^facts <f>)
+    }
+
+sp {describe-subsecne*read-results*success
+    (state <s>    ^operator <op>
+                  ^io.input-link <il>)
+    (<op>    ^name describe-subscene
+             ^facts <f>)
+    (<il>    ^concept-memory.result <res>)
+    (<res>    ^status success
+              ^elaborations <el>)
+-->
+    (<s>    ^retrieved <el>)
+    }
+
+sp {describe-subscene*read-results*failure
+    (state <s>    ^operator <op>
+                  ^io-input-link <il>)
+    (<op>    ^name describe-subscene
+             ^facts <f>)
+    (<il>    ^concept-memory.result.failure <fail>)
+-->
+    (<s>    ^retrieved failure)
+    }

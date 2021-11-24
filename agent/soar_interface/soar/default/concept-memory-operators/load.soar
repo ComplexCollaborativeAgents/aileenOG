@@ -11,3 +11,5 @@ source "query-concept-memory/load.soar"
 source "store-in-concept-memory.soar"
 
 source "project-concept/load.soar"
+
+source "describe/load.soar"
