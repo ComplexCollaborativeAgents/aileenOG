@@ -140,7 +140,7 @@ class InputWriter(object):
                 # 'camera_yolo_position_proj_to_world': World projection of YOLO bounding box centroid
 
                 # if Detector.bb_iou(bbox1, bbox2) > .7:
-                if dst < 2.0:
+                if dst < 4.0:
                     # Match
                     mapped[w_index] = 1
                     detections[i]['held'] = w['held']
