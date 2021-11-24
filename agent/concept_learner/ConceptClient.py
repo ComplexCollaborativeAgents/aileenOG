@@ -7,6 +7,7 @@ def test_concept_learner_server(port=8085):
     server = xmlrpclib.ServerProxy('http://dubs:'+str(port)+'/ConceptLearner')
     test_reasoning_symbols(server)
     test_generalization(server)
+    test_describe(server)
 
 def test_reasoning_symbols(server):
     r = server.create_reasoning_symbol(xmlrpclib.Binary(json.dumps({'symbol':'RRed'})))
@@ -41,5 +42,23 @@ def test_generalization(server):
     r = server.match_case_against_gpool(xmlrpclib.Binary(json.dumps(data)))
     res = json.loads(r.data)
     assert len(res['matches']) == 1
+
+
+
+
+def test_describe(server):
+    data = {"facts":[["isa","O1","CVRed"],["isa","O1","CVCylinder"]]}
+    r = server.describe(xmlrpclib.Binary(json.dumps(data)))
+    res = json.loads(r.data)
+    assert res['matches'] is not None
+
+    data = {"facts":[["rightOf" "O1" "O2"],["isa","O1","CVRed"],["isa","O1","CVSphere"],["isa","O2","CVGreen"],["isa","O2","CVSphere"]]}
+    r = server.describe(xmlrpclib.Binary(json.dumps(data)))
+    res = json.loads(r.data)
+    assert res['matches'] is not None
+
+   
+
+
 
 test_concept_learner_server()
