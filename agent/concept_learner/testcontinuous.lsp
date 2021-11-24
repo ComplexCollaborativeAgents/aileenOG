@@ -70,11 +70,11 @@
 
 
 (defun test-describe ()
-  (explain-concepts 
-    'd::((isa query-facts AileenCaseMt) (sw ob384 ob391) (distance 0.1634 ob384 ob391) (size ob391 0.01) (ne ob391 ob384) (size ob384 0.0121)
-         (qPred-size ob384) (qPred-distance ob384 ob391) (qPred-size ob391) (dc ob391 ob384) (isa ob384 CVCone) (isa ob384 CVGreen)
+  (describe-concepts 
+    'd::((sw ob384 ob391) (distance 0.11 ob384 ob391) (size ob391 0.01) (ne ob391 ob384) (size ob384 0.0121)
+         (dc ob391 ob384) (isa ob384 CVCone) (isa ob384 CVGreen)
          (dc ob384 ob391) (isa ob391 CVCylinder) (isa ob391 CVRed))
-    'd::query-facts))
+    'd::describe-facts))
 
 
 (defun load-test-flat-files ()
@@ -104,7 +104,7 @@
       (let* ((mt (if (numberp id) (microtheory-by-id id) id))
              (facts (kb::list-mt-facts mt)))
 
-        (dolist (fact (maybe-add-quantity-preds facts gpool))
+        (dolist (fact (maybe-add-quantity-preds facts 'd::query-facts gpool))
           ; (format t "storing ~s in ~s" fact mt)
           (fire:kb-store fact :mt mt))
 
@@ -118,7 +118,7 @@
     (remove-facts-from-case *probe-mt*)
     (store-facts-in-case facts *probe-mt*)
     ;;; see if in-distribution, if so add preds
-    (setf facts (append facts (maybe-add-quantity-preds facts gpool)))
+    (setf facts (append facts (maybe-add-quantity-preds facts *probe-mt* gpool)))
     (filter-scene-by-expression facts *probe-mt* gpool nil concept-pred)
     ))
 
@@ -166,13 +166,13 @@
 
 
 (defun test-maybe-add (facts gpool)
-  (maybe-add-quantity-preds facts gpool))
+  (maybe-add-quantity-preds facts 'd::query-facts gpool))
 
 
 ;;; need gpool to see how many examples so far
 ;;; this lets us know if we have enough evidence to
 ;;; learn quantity distributions
-(defun maybe-add-quantity-preds (facts gpool &key (learn-after 3))
+(defun maybe-add-quantity-preds (facts facts-context gpool &key (learn-after 3))
 
   (let (;;; how many examples in gpool
         (example-count (gpool->size gpool))
@@ -192,7 +192,7 @@
                 (cond ((< example-count learn-after)
                        ; (debug-format "    Less than ~s examples, default add ~s~%" learn-after qfact-pred)
                        (list qfact-pred))
-                      ((in-distribution? fact gpool)
+                      ((in-distribution? fact facts-context gpool)
                        (debug-format "    In dist, adding ~s~%" qfact-pred)
                        (list qfact-pred))
                       (t 
@@ -201,8 +201,8 @@
       quantity-facts)))
 
 
-(defun in-distribution? (qpred gpool)
-  (let* ((dist-quants (pred-quantities qpred gpool))
+(defun in-distribution? (qpred probe-context gpool)
+  (let* ((dist-quants (pred-quantities qpred probe-context gpool))
          (probe-quant (fact-quantity qpred))
          (mean (mean dist-quants))
          (stddev (stddev dist-quants)))
@@ -213,11 +213,11 @@
 ;;; a dumb version that doesn't take structure mapping into account
 ;;; effectively trying to find the 1:1 mapping between qpred and
 ;;; facts in each gpool. returns a list of facts (one from each gpool)
-(defun pred-quantities (qpred gpool)
+(defun pred-quantities (qpred probe-context gpool)
   (mapcan (lambda (mt)
             ; (format t "    Checking mt ~s~%" mt)
             (let* ((facts (kb::list-mt-facts mt))
-                   (relevant-facts (filter-relevant-facts qpred facts mt)))
+                   (relevant-facts (filter-relevant-facts qpred facts probe-context mt)))
               ; (format t "    Rel facts are ~s~%" relevant-facts)
               (mapcar 'fact-quantity relevant-facts)))
     (gpool->cases gpool)))
@@ -228,36 +228,47 @@
       (find-if 'numberp (third fact))))
 
 
-(defun filter-relevant-facts (qfact facts context)
+(defun filter-relevant-facts (qfact facts probe-context target-context)
   (cond ((eql (car qfact) 'd::holdsIn)
-         (filter-relevant-temporal-facts qfact context))
-        (t (filter-relevant-facts-default qfact facts context))))
+         (filter-relevant-temporal-facts qfact probe-context target-context))
+        (t (filter-relevant-facts-default qfact facts))))
 
 
 ;;; returns facts in context that have the same relation (e.g. sizeOf)
 ;;; AND the same temporal position (first, middle, last) as qfact
-(defun filter-relevant-temporal-facts (qfact context)
+(defun filter-relevant-temporal-facts (qfact probe-context target-context)
   (let ((target-rln (car (third qfact)))
-        (target-episode (episode-ci (second qfact) context)))
-
-    ; (debug-format "    Mapped episode for ~s is ~s in ~s~%" (second qfact) target-episode context)
+        (target-episode (episode-ci (second qfact) probe-context target-context)))
+    
+    (debug-format "    Mapped episode for ~s is ~s in ~s~%" (second qfact) target-episode target-context)
     (assert target-episode)
-
+    
     (remove-if-not 
      (lambda (fact)
        (and (eql (second fact) target-episode)
             (listp (third fact))
             (eql target-rln (car (third fact)))))
-     (kb::list-mt-facts context))))
+     (kb::list-mt-facts target-context))))
 
 
-(defun episode-ci (base-episode target-context)
-  (let ((probe-episodes (episode-order 'd::query-facts))
+(defun episode-ci (base-episode probe-context target-context)
+  (let ((probe-position (episode-position base-episode probe-context))
         (target-episodes (episode-order target-context)))
-
+    
     ; (debug-format "    Probe episodes: ~s Target episodes: ~s~%" probe-episodes target-episodes)
+    
+    (nth probe-position target-episodes)))
 
-    (nth (position base-episode probe-episodes) target-episodes)))
+
+
+;;; this will probably need to be fixed for more complex situations
+(defun episode-position (episode context)
+  (cond ((fire::ask-it `(d::isa ,episode d::AileenActionStartTime)
+           :context context)
+         0)
+        (t (let ((order (episode-order context)))
+             (unless order (break "Can't find order of episodes"))
+             (position episode order)))))
 
 
 ;;; tied to four episodes per context
@@ -271,7 +282,7 @@
     (cons start (cons second terminal))))
 
 
-(defun filter-relevant-facts-default (qfact facts context)
+(defun filter-relevant-facts-default (qfact facts)
   (mapcan (lambda (fact)
             (and (eql (car fact) (car qfact)) (list fact)))
     facts))
