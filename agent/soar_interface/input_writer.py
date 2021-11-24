@@ -43,7 +43,7 @@ class InputWriter(object):
             self._concept_memory = self._input_link.CreateIdWME("concept-memory")
             self._clean_concept_memory_flag = False
 
-        if settings.SIMULATE_CV:
+        #if settings.SIMULATE_CV:
             self.detector = Detector()
 
     def set_concept_memory_status(self, concept_memory_status_dictionary):
@@ -140,7 +140,7 @@ class InputWriter(object):
                 # 'camera_yolo_position_proj_to_world': World projection of YOLO bounding box centroid
 
                 # if Detector.bb_iou(bbox1, bbox2) > .7:
-                if dst < 2.0:
+                if dst < 4.0:
                     # Match
                     mapped[w_index] = 1
                     detections[i]['held'] = w['held']
