@@ -43,7 +43,7 @@ class InputWriter(object):
             self._concept_memory = self._input_link.CreateIdWME("concept-memory")
             self._clean_concept_memory_flag = False
 
-        if settings.SIMULATE_CV:
+        #if settings.SIMULATE_CV:
             self.detector = Detector()
 
     def set_concept_memory_status(self, concept_memory_status_dictionary):
