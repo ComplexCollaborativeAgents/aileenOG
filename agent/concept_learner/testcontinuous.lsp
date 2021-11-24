@@ -32,8 +32,8 @@
 
   ; (create-test-generalizations 'd::rSmallNew (list 41 42 43 44 45) :symbol)
 
-  (create-test-generalizations 'd::r_move_near1 
-    'd::(episode1549 episode1615 episode236 episode307 episode373) :action)
+  (create-test-generalizations 'd::r_move_rightof1 
+    'd::(r-move-right-1072 r-move-right-1757) :action)
 
   )
 
@@ -54,6 +54,13 @@
   )
 
 
+(defun test-project ()
+
+  (project-state-for-action (kb::list-mt-facts 'd::r-move-right-452) 'd::query-facts 'd::r_move_rightof1)
+
+  )
+
+
 ;;; action generalizations need to exist already
 (defun test-action-quantities ()
 
@@ -61,6 +68,13 @@
 
   )
 
+
+(defun test-describe ()
+  (explain-concepts 
+    'd::((isa query-facts AileenCaseMt) (sw ob384 ob391) (distance 0.1634 ob384 ob391) (size ob391 0.01) (ne ob391 ob384) (size ob384 0.0121)
+         (qPred-size ob384) (qPred-distance ob384 ob391) (qPred-size ob391) (dc ob391 ob384) (isa ob384 CVCone) (isa ob384 CVGreen)
+         (dc ob384 ob391) (isa ob391 CVCylinder) (isa ob391 CVRed))
+    'd::query-facts))
 
 
 (defun load-test-flat-files ()
