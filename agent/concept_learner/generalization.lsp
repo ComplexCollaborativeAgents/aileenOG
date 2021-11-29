@@ -80,16 +80,18 @@
 (defun add-case-to-gpool (facts context concept)
 
 	(debug-format "Adding case to gpool ~s~%" concept)
+  (debug-format "facts are ~s~%" facts)
 
   (let ((gpool (get-concept-gpool concept)))
 
   	; (debug-format "foofacts are ~s~%" facts)
+    (remove-facts-from-case context)
 
     (debug-format "Storing case facts in ~s~%" context)
     (store-facts-in-case facts context)
 
   	;;; wwh adding quantity predicates if needed
-  	(setf facts (append facts (maybe-add-quantity-preds facts gpool)))
+  	(setf facts (append facts (maybe-add-quantity-preds facts context gpool)))
 
     (store-facts-in-case facts context)
     (dolist (fact facts)
@@ -198,7 +200,7 @@
   (when (not gpool)
     (setf gpool (get-concept-gpool (third pattern))))
 
-  (setf facts (append facts (maybe-add-quantity-preds facts gpool)))
+  (setf facts (append facts (maybe-add-quantity-preds facts context gpool)))
   (store-facts-in-case facts context)
 
   (fire:kb-forget `(d::gpoolAssimilationThreshold ,gpool ?x) :mt gpool)
@@ -212,6 +214,7 @@
     (mapcar #'(lambda (obj) (list 'd::isa obj (third pattern))) objs)))
 
 (defun match-score-exceeds-threshold? (base target &key (constraints '(d::TheSet))
+
 							 (threshold *probability-cutoff*)
 							 (inference-rel nil))
   ;;; base and target
@@ -235,7 +238,7 @@
       (let ((normalized-score (/ score
 				 (sme::self-score-dgroup (sme::target sme::*sme*)
 							 (sme::mapping-parameters sme::*sme*)))))
-	(format t "~% ~A score: ~A normalized score: ~A" sme score normalized-score)
+	(debug-format t "~% ~A score: ~A normalized score: ~A" sme score normalized-score)
 	(sme::in-sme sme)
 	(> normalized-score *normalized-threshold*)))))
 
@@ -283,7 +286,7 @@
   (when (not gpool)
     (setf gpool (get-concept-gpool (car pattern))))
 
-  (setf facts (append facts (maybe-add-quantity-preds facts gpool)))
+  (setf facts (append facts (maybe-add-quantity-preds facts context gpool)))
   (store-facts-in-case facts context)
 
   (cond ((null (vars-in-expr pattern))
@@ -317,7 +320,7 @@
 
   (store-facts-in-case facts context)
 
-  (setf facts (append facts (maybe-add-quantity-preds facts gpool)))
+  (setf facts (append facts (maybe-add-quantity-preds facts context gpool)))
   (store-facts-in-case facts context)
 
   (cond ((null (vars-in-expr pattern))
@@ -514,62 +517,69 @@
         ((= (length objects) 1)
           (list objects))
         ((= (length objects) 2)
-          (list (list (car objects)) (list (second objects)) objects))
+          ; (list (list (car objects)) (list (second objects)) objects)
+          (list objects)
+          )
         (t (break "Unhandled object configuration"))))
 
 
-(defun filter-concepts (concepts arity)
+(defun filter-concepts (concepts target-arity)
   (remove-if-not (lambda (concept)
-                   (= arity (car (fire::ask-it `(d::arity ,concept ?what) :response '?what))))
+                    (let ((attr? (fire:ask-it `(d::genls ,concept d::AileenReasoningSymbol)))
+                          (arity (car (fire::ask-it `(d::arity ,concept ?what) :response '?what))))
+                     (cond ((and (= target-arity 1) attr?)
+                            concept)
+                           ((and arity (= target-arity arity))
+                            concept)
+                           (t nil))))
     concepts))
+
+
+(defun make-pattern (concept objects)
+  (cond ((= (length objects) 1)
+         (list 'd::isa (car objects) concept))
+        (t (cons concept objects))))
 
 
 (defun describe-concepts (all-facts context)
 
+  (remove-facts-from-case context)
   (store-facts-in-case all-facts context)
 
   (let* ((concepts (mapcar 'gpool->concept (kb::list-gpools)))
          (all-objects (objs-in-context context))
          (obj-configurations (object-configurations all-objects))
          (results))
-
-        (format t "objs are ~s~%" all-objects)
-        (format t "configs are ~s~%" obj-configurations)
-
-        (dolist (config obj-configurations results)
-
-          (dolist (concept (filter-concepts concepts (length config)))
-
-            (format t "testing ~s against ~s~%" concept config)
-
-            (remove-facts-from-case 'd::describescratch)
-
-            (let ((facts (filter-facts-mentioning config context all-objects)))
-
-              (format t "facts for ~s are~%~s~%" config facts)
-
-              (store-facts-in-case facts 'd::describescratch)
-              (setf facts (append facts (maybe-add-quantity-preds facts (get-concept-gpool concept))))
-              (store-facts-in-case facts 'd::describescratch)
-
-              ; (let ((matches (filter-scene-by-expression 
-              ;                   facts 
-              ;                   'd::describescratch 
-              ;                   (get-concept-gpool concept) 
-              ;                   nil 
-              ;                   concept)))
-
-              ; (setf results (append results matches)
-
-              )))))
+    
+    (dolist (config obj-configurations results)
+      (dolist (concept (filter-concepts concepts (length config)))
+        
+        (remove-facts-from-case 'd::describescratch)
+        
+        (let ((pattern (make-pattern concept config))
+              (tmp-facts (append all-facts 
+                                 (maybe-add-quantity-preds 
+                                  all-facts 
+                                  'd::describescratch 
+                                  (get-concept-gpool concept)))))
+          
+          (store-facts-in-case tmp-facts 'd::describescratch)
+          
+          (setf results 
+            (append (filter-scene-by-expression 
+                     tmp-facts 
+                     'd::describescratch 
+                     (get-concept-gpool concept) 
+                     nil 
+                     pattern) 
+              results)
+            
+            ))))))
 
 
-(defun project-state-for-action (facts context action)
+(defun project-state-for-action (facts context action &optional repeat?)
 
-  (store-facts-in-case facts context)
-
-  (setf facts (append facts (maybe-add-quantity-preds facts (get-concept-gpool action))))
-  (store-facts-in-case facts context)
+  ; (ide::trace-format "projecting ~s" (kb::list-mt-facts context))
 
   (fire:clear-wm)
   (fire:clear-dgroup-caches)
@@ -615,7 +625,15 @@
       ;     gpool
       ;     full))
 
-      cis)))
+
+      (cond (cis cis)
+            ((not repeat?)
+               (debug-format "Re-trying project mapping~%")
+               (project-state-for-action facts context action t))
+            (t nil))
+
+      ; cis
+      )))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
