@@ -5,9 +5,9 @@ from settings import CONCEPT_LEARNER_HOST
 
 def test_concept_learner_server(port=8085):
     server = xmlrpclib.ServerProxy("http://" + CONCEPT_LEARNER_HOST + ":" + str(port) + "/ConceptLearner")
-    # test_reasoning_symbols(server)
-    # test_generalization(server)
-    # test_relational_generalization(server)
+    test_reasoning_symbols(server)
+    test_generalization(server)
+    test_relational_generalization(server)
     test_describe(server)
 
 def test_reasoning_symbols(server):
@@ -83,8 +83,8 @@ def test_relational_generalization(server):
 
 
     # NEAR EXAMPLES
-    data = {"facts":[["isa","O1","CVRed"],["isa","O1","CVCylinder"], ["size", "O1", ".01"],
-                     ["isa","O2","CVGreen"],["isa","O2","CVCone"], ["size", "O2", ".01"],
+    data = {"facts":[["isa","O1","CVRed"], ["isa","O1","CVCylinder"], ["size", "O1", ".01"],
+                     ["isa","O2","CVGreen"], ["isa","O2","CVCone"], ["size", "O2", ".01"],
                      ["distance", ".11", "O1", "O2"], ["r_near1", "O1", "O2"]],
             "context":"Test7",
             "gpool":"r_near1"}
@@ -109,17 +109,17 @@ def test_relational_generalization(server):
 
 def test_describe(server):
 
-    # data = {"facts":[["isa","O1","CVRed"], ["isa","O1","CVCylinder"], ["size", "O1", ".01"]]}
-    # r = server.describe(xmlrpclib.Binary(json.dumps(data)))
-    # res = json.loads(r.data)
-    # print("red test: ", res)
+    data = {"facts":[["isa","O1","CVRed"], ["isa","O1","CVCylinder"], ["size", "O1", ".01"]]}
+    r = server.describe(xmlrpclib.Binary(json.dumps(data)))
+    res = json.loads(r.data)
+    print("red test: ", res)
 
-    # data = {"facts":[["isa","O11","CVRed"], ["isa","O11","CVCylinder"], ["size", "O11", ".01"],
-    #                  ["isa","O22","CVGreen"], ["isa","O22","CVSphere"], ["size", "O22", ".01"],
-    #                  ["distance", ".11", "O11", "O22"], ["rightOf", "O11", "O22"]]}
-    # r = server.describe(xmlrpclib.Binary(json.dumps(data)))
-    # res = json.loads(r.data)
-    # print("rightOf test: ", res)
+    data = {"facts":[["isa","O11","CVRed"], ["isa","O11","CVCylinder"], ["size", "O11", ".01"],
+                     ["isa","O22","CVGreen"], ["isa","O22","CVSphere"], ["size", "O22", ".01"],
+                     ["distance", ".11", "O11", "O22"], ["rightOf", "O11", "O22"]]}
+    r = server.describe(xmlrpclib.Binary(json.dumps(data)))
+    res = json.loads(r.data)
+    print("rightOf test: ", res)
 
     data = {"facts":[["isa","O55","CVRed"], ["isa","O55","CVCylinder"], ["size", "O55", ".01"],
                      ["isa","O66","CVGreen"], ["isa","O66","CVCone"], ["size", "O66", ".01"],
