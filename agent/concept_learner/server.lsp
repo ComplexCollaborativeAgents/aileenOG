@@ -294,7 +294,7 @@
 (defun describe-helper (str)
   (handler-bind ((error #'print-backtrace))
   (setq *str* str)
-  (debug-format "Generating ~A~%" str)
+  (debug-format "Describing ~A~%" str)
   (let* ((json (cl-json:decode-json-from-string str))
          (facts (str->symbols (cdr (assoc :FACTS json)))) ;;; all facts in scene
          (context 'data::describe-facts)) ;; Statement with variables
@@ -303,7 +303,7 @@
            (remove-facts-from-case context)
            ;; Store facts in context and match query.
            (let ((concepts (describe-concepts facts context)))
-             (debug-format "~%Found concepts ~A~%" cis)
+             (debug-format "~%Found concepts ~A~%" concepts)
              (cl-json:encode-json-alist-to-string
               (pairlis '("matches") (list (symbols->strs concepts))))))
           (t

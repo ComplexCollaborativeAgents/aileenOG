@@ -80,10 +80,12 @@
 (defun add-case-to-gpool (facts context concept)
 
 	(debug-format "Adding case to gpool ~s~%" concept)
+  (debug-format "facts are ~s~%" facts)
 
   (let ((gpool (get-concept-gpool concept)))
 
   	; (debug-format "foofacts are ~s~%" facts)
+    (remove-facts-from-case context)
 
     (debug-format "Storing case facts in ~s~%" context)
     (store-facts-in-case facts context)
@@ -236,7 +238,7 @@
       (let ((normalized-score (/ score
 				 (sme::self-score-dgroup (sme::target sme::*sme*)
 							 (sme::mapping-parameters sme::*sme*)))))
-	(format t "~% ~A score: ~A normalized score: ~A" sme score normalized-score)
+	(debug-format t "~% ~A score: ~A normalized score: ~A" sme score normalized-score)
 	(sme::in-sme sme)
 	(> normalized-score *normalized-threshold*)))))
 
@@ -521,9 +523,15 @@
         (t (break "Unhandled object configuration"))))
 
 
-(defun filter-concepts (concepts arity)
+(defun filter-concepts (concepts target-arity)
   (remove-if-not (lambda (concept)
-                   (= arity (car (fire::ask-it `(d::arity ,concept ?what) :response '?what))))
+                    (let ((attr? (fire:ask-it `(d::genls ,concept d::AileenReasoningSymbol)))
+                          (arity (car (fire::ask-it `(d::arity ,concept ?what) :response '?what))))
+                     (cond ((and (= target-arity 1) attr?)
+                            concept)
+                           ((and arity (= target-arity arity))
+                            concept)
+                           (t nil))))
     concepts))
 
 
