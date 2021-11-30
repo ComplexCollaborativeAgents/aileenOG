@@ -238,7 +238,7 @@
       (let ((normalized-score (/ score
 				 (sme::self-score-dgroup (sme::target sme::*sme*)
 							 (sme::mapping-parameters sme::*sme*)))))
-	(debug-format t "~% ~A score: ~A normalized score: ~A" sme score normalized-score)
+	(debug-format "~% ~A score: ~A normalized score: ~A" sme score normalized-score)
 	(sme::in-sme sme)
 	(> normalized-score *normalized-threshold*)))))
 
