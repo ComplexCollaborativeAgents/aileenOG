@@ -240,11 +240,12 @@
   (let* ((json (cl-json:decode-json-from-string str))
          (facts (str->symbols (cdr (assoc :FACTS json)))) ;;; all facts in scene
          (context 'data::query-facts)
-	 (pattern (str->symbols (cdr (assoc :PATTERN json))))) ;; Statement with variables
+	 			 (pattern (str->symbols (cdr (assoc :PATTERN json))))) ;; Statement with variables
     (cond ((and facts pattern)
            ;; Clear previous facts from context.
            (remove-facts-from-case context)
 
+           (debug-format "QUERY HELPER~%")
            ;;; adding quantity preds if needed
            ;;; not the right place to do this
            ; (setf facts (append facts (maybe-add-quantity-preds facts (get-concept-gpool (car pattern)))))
@@ -260,7 +261,7 @@
           (t
            (debug-format "Ill formed filter scene request ~A~%" str)
            (cl-json:encode-json-alist-to-string
-	    (pairlis '("matches" "pattern") '(nil nil))))))))
+	    		 (pairlis '("matches" "pattern") '(nil nil))))))))
 
 (defun project-helper (str)
   (handler-bind ((error #'print-backtrace))
@@ -269,12 +270,16 @@
   (let* ((json (cl-json:decode-json-from-string str))
          (facts (str->symbols (cdr (assoc :FACTS json)))) ;;; all facts in scene
          (context 'data::project-facts)
-	 (action (str->symbols (cdr (assoc :ACTION json))))) ;; Statement with variables
+	       (action (str->symbols (cdr (assoc :ACTION json))))) ;; Statement with variables
     (cond ((and facts action)
            ;; Clear previous facts from context.
            (remove-facts-from-case context)
            ;; Store facts in context and match query.
-           (let ((cis (project-state-for-action facts context  action)))
+           (store-facts-in-case facts context)
+  				 (setf facts (append facts (maybe-add-quantity-preds facts context (get-concept-gpool action))))
+  				 (store-facts-in-case facts context)
+
+           (let ((cis (project-state-for-action facts context action)))
              (debug-format "~%Found candidate inferences  ~A~%" cis)
              (cl-json:encode-json-alist-to-string
               (pairlis '("cis")
@@ -289,7 +294,7 @@
 (defun describe-helper (str)
   (handler-bind ((error #'print-backtrace))
   (setq *str* str)
-  (debug-format "Generating ~A~%" str)
+  (debug-format "Describing ~A~%" str)
   (let* ((json (cl-json:decode-json-from-string str))
          (facts (str->symbols (cdr (assoc :FACTS json)))) ;;; all facts in scene
          (context 'data::describe-facts)) ;; Statement with variables
@@ -298,9 +303,9 @@
            (remove-facts-from-case context)
            ;; Store facts in context and match query.
            (let ((concepts (describe-concepts facts context)))
-             (debug-format "~%Found concepts ~A~%" cis)
+             (debug-format "~%Found concepts ~A~%" concepts)
              (cl-json:encode-json-alist-to-string
-              (pairlis '("cis") (list (symbols->strs concepts))))))
+              (pairlis '("matches") (list (symbols->strs concepts))))))
           (t
            (debug-format "Ill formed describe request ~A~%" str)
            (cl-json:encode-json-alist-to-string

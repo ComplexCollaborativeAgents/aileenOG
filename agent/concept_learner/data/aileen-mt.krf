@@ -276,12 +276,6 @@
 (arg2Isa size Quantity)
 
 
-(isa size Relation)
-(arity size 2)
-(arg1Isa size Thing)
-(arg2Isa size Quantity)
-
-
 
 (in-microtheory BaseKB)
 (notForAnalogy AileenCaseMt)
