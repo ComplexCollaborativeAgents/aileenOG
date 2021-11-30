@@ -341,7 +341,7 @@ class InputWriter(object):
                 size_id.CreateFloatWME('xsize', w_object['bounding_box'][2]-w_object['bounding_box'][0])
                 # size_id.CreateFloatWME('zsize', w_object['bounding_box'][5]-w_object['bounding_box'][2])
                 size_id.CreateFloatWME('ysize', w_object['bounding_box'][3]-w_object['bounding_box'][1])
-                object_id.CreateStringWME('size', self.size_from_bounding_box(w_object['bounding_box']))
+                object_id.CreateFloatWME('size', self.size_from_bounding_box(w_object['bounding_box']))
             object_id.CreateStringWME('held', w_object['held'])
             object_id.CreateStringWME('color', str(w_object['color']))
             object_id.CreateStringWME('shape', w_object['shape'])
@@ -440,12 +440,13 @@ objects = [{'orientation': [1.0, -5.75539615965681e-17, 3.38996313371214e-17, 5.
         """
         # area = abs((bbox[3] - bbox[0]) * (bbox[5] - bbox[2]))
         area = abs((bbox[2] - bbox[0]) * (bbox[3] - bbox[1]))
-        if area < settings.SIZE_SM:
-            return 'CVSmall'
-        elif area < settings.SIZE_ML:
-            return 'CVMedium'
-        else:
-            return 'CVLarge'
+        # if area < settings.SIZE_SM:
+        #     return 'CVSmall'
+        # elif area < settings.SIZE_ML:
+        #     return 'CVMedium'
+        # else:
+        #     return 'CVLarge'
+        return area
 
     def get_rcc8_symbols_for_allen_intervals(self, symbols):
         """
