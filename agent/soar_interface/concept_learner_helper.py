@@ -160,7 +160,7 @@ def process_describe_command(describe_command_id, concept_learner):
         logging.debug("[concept_learner_helper] :: request concept memory {}".format(request))
         response = concept_learner.describe(request)
         logging.debug("[concept_learner_helper :: response from concept memory {}".format(response))
-        return {'status': 'success', 'elaborations': response['concept']}
+        return {'status': 'success', 'matches': response['matches']}
     else:
         logging.error("[output_reader] :: incomplete describe command. facts:{}".format(added_facts))
         return {'status': 'failure'}
