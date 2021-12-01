@@ -6,3 +6,11 @@
 source "proposals.soar"
 
 source "elaborations.soar"
+
+source "mark-no-known-concept.soar"
+
+source "lookup-token.soar"
+
+source "complete-generate-object.soar"
+
+source "generate-content.soar"

@@ -1,0 +1,24 @@
+##!
+# @file
+#
+# @created smohan 20211201
+
+sp {generate*apply*generate-content
+    (state <s>    ^name generate
+                  ^operator <op>
+                  ^io.output-link <ol>)
+    (<op>    ^name generate-content
+             ^information <info>)
+-->
+    (<ol>    ^language <l>)
+    (<l>    ^generate-content <cont>)
+    }
+
+sp {generate*apply*generate-content*write
+    (state <s>    ^name generate
+                  ^segment <seg>
+                  ^operator <op>
+                  ^io.input-link.language-link.language.sentence <sen>)
+-->
+    (<s>    ^content <sen>)
+    }

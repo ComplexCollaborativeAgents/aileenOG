@@ -15,6 +15,18 @@ sp {interaction-purpose-status*propose*requestion-acknowledgement
     (<op>    ^name request-acknowldegement)
     }
 
+sp {interaction-purpose-status*propose*provide-description
+    (state <s>   ^name interpret-purpose-status
+              ^purpose <p>)
+    (<p>    ^type generate
+            ^completed true
+            ^information <info>)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name provide-description
+             ^information <info>)
+    }
+
 sp {interaction-purpose-status*propose*complete-learning-status
     (state <s>    ^name interpret-purpose-status
                   ^purpose <p>)

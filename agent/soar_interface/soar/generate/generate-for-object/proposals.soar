@@ -16,10 +16,58 @@ sp {generate-for-object*propose*translate-to-facts
 sp {generate-for-object*propose*describe-subscene
     (state <s>    ^name generate-for-object
                   ^object <obj>
-                  ^facts <f>
-                  -^description <d>)
+                  ^facts <f>)
+    (<obj> -^isa <con>)
 -->
     (<s>    ^operator <op> +)
     (<op>    ^name describe-subscene
              ^facts <f>)
+    }
+
+sp {generate-for-object*propose*lookup-token
+    (state <s>    ^name generate-for-object
+                  ^object <obj>
+                  -^smem.result.retrieved <ret>)
+    (<obj>    ^isa <con>)
+-->
+    (<s> ^operator <op> + =)
+    (<op>    ^name lookup-token
+             ^concept <con>)
+    }
+
+sp {generate-for-object*propose*generate-content
+    (state <s>    ^name generate-for-object
+                  ^smem.result <sres>
+                  ^object <obj>
+                  -^content <sen>)
+    (<obj>    ^id_string <id_string>)
+    (<sres>    ^success <any>
+               ^retrieved <ret>)
+    (<ret>    ^nl <nl>)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name generate-content
+             ^information <info>)
+    (<info>    ^id <id_string>
+               ^word <nl>)
+    }
+
+sp {generate-for-object*propose*complete-generate-object
+    (state <s>    ^name generate-for-object
+                  ^object <obj>
+                  ^content <con>)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name complete-generate-for-object
+             ^content <con>)
+    }
+
+sp {generate-for-object*propose*mark-no-known-concept
+    (state <s>    ^name generate-for-object
+                  ^object <obj>
+                  ^memory-lookup-status complete)
+    (<obj> -^isa <con>)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name mark-no-known-concept)
     }

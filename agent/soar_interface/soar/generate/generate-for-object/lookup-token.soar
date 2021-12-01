@@ -1,0 +1,16 @@
+##!
+# @file
+#
+# @created smohan 20211201
+
+
+sp {generate-for-object*apply*lookup-token
+    (state <s>    ^name generate-for-object
+                  ^operator <op>
+                  ^smem.command <scomm>)
+    (<op>    ^name lookup-token
+             ^concept <con>)
+-->
+    (<scomm> ^query <cue>)
+    (<cue>    ^concept <con>)
+    }

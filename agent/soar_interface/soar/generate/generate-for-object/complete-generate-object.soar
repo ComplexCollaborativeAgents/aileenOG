@@ -1,0 +1,15 @@
+##!
+# @file
+#
+# @created smohan 20211201
+
+sp {generate-for-object*apply*complete-generate-for-object
+    (state <s>    ^name generate-for-object
+                  ^operator <op>
+                  ^segment.purpose <p>)
+    (<op>    ^name complete-generate-for-object
+             ^info <info>)
+-->
+    (<p>    ^completed true
+            ^information <info>)
+    }

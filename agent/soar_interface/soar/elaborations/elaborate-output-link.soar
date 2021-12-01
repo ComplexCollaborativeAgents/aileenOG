@@ -3,6 +3,18 @@
 #
 # @created smohan 20191114
 
+sp {topstate*elaborate*output-link*response*generate*temp
+    (state <s>    ^name aileen
+                  ^io.output-link <ol>
+                  ^response <res>)
+    (<res>    ^information.nl <nl>)
+-->
+    (<ol>    ^interaction <inter>)
+    (<inter>    ^response <nl>)
+    (<res>    ^processed true)
+    }
+
+
 sp {topstate*elaborate*output-link*response
     (state <s>    ^name aileen
                   ^io.output-link <ol>

@@ -11,3 +11,36 @@ sp {generate-for-object*elaborate*state
 -->
     (<s>    ^object <obj>)
     }
+
+sp {generate-for-object*elaborate*segment
+    (state <s>    ^name generate-for-object
+                  ^superstate.segment <seg>)
+-->
+    (<s>    ^segment <seg>)
+    }
+
+sp {generate-for-object*elaborate-with-concept*object*matches
+    (state <s>    ^name generate-for-object
+                  ^operator <op>
+                  ^io.input-link.concept-memory.result <cm>
+                  ^object <obj>)
+    (<obj>    ^id_string <id-name>)
+    (<cm>    ^matches.match <m>)
+    (<m>    ^first isa
+            ^second <id-name>
+            ^third <val>)
+    (<op>    ^name describe-subscene)
+-->
+    (<obj>    ^isa <val>)
+    }
+
+sp {generate-for-object*elaborate-with-concept*status*success
+    (state <s>    ^name generate-for-obeuject
+                  ^operator <op>
+                  ^io.input-link.concept-memory.result <cm>
+                  ^object <obj>)
+    (<cm>    ^status success)
+-->
+    (<s>    ^memory-lookup-status complete)
+    }
+                  

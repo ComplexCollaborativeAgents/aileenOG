@@ -126,6 +126,8 @@ sp {aileen*propose*generate
     (<seg>    ^purpose <p>)
     (<p>    -^completed
              ^type generate)
+    -{(<s>    ^processing-status <ps>)
+      (<ps>    ^source generate)}
 -->
     (<s>    ^operator <op> +)
     (<op>    ^name generate

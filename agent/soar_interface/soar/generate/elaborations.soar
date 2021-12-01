@@ -4,3 +4,11 @@
 # @created smohan 20211102
 
 
+sp {generate*elaborate*segment
+    (state <s>    ^name generate
+                  ^superstate.operator <sop>)
+    (<sop>    ^name generate
+              ^segment <seg>)
+-->
+    (<s>    ^segment <seg>)
+    }
