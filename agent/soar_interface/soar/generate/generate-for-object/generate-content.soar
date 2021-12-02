@@ -4,18 +4,18 @@
 # @created smohan 20211201
 
 sp {generate*apply*generate-content
-    (state <s>    ^name generate
+    (state <s>    ^name generate-for-object
                   ^operator <op>
                   ^io.output-link <ol>)
     (<op>    ^name generate-content
              ^information <info>)
 -->
     (<ol>    ^language <l>)
-    (<l>    ^generate-content <cont>)
+    (<l>    ^generate-content <info>)
     }
 
 sp {generate*apply*generate-content*write
-    (state <s>    ^name generate
+    (state <s>    ^name generate-for-object
                   ^segment <seg>
                   ^operator <op>
                   ^io.input-link.language-link.language.sentence <sen>)

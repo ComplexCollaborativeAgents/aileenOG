@@ -31,6 +31,9 @@ class LanguageLearner:
         # Parse the sentence again with the new grammar.
         return self.grammar.parse(sentence)
 
+    def generate(self, content_list):
+        return self.grammar.generate(content_list)
+
     def parse_action(self, sentence, scenes=[]):
         """Parse a natural language representation of an action.
         Learns grammar rules as a side effect.

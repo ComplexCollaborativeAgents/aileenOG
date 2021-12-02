@@ -114,22 +114,18 @@ def test_describe(server):
     res = json.loads(r.data)
     print("red test: ", res)
 
-    data = {"facts":[["isa","O11","CVRed"], ["isa","O11","CVCylinder"], ["size", "O11", ".01"],
-                     ["isa","O22","CVGreen"], ["isa","O22","CVSphere"], ["size", "O22", ".01"],
-                     ["distance", ".11", "O11", "O22"], ["rightOf", "O11", "O22"]]}
-    r = server.describe(xmlrpclib.Binary(json.dumps(data)))
-    res = json.loads(r.data)
-    print("rightOf test: ", res)
-
-    data = {"facts":[["isa","O55","CVRed"], ["isa","O55","CVCylinder"], ["size", "O55", ".01"],
-                     ["isa","O66","CVGreen"], ["isa","O66","CVCone"], ["size", "O66", ".01"],
-                     ["distance", ".11", "O55", "O6"]]}
-    r = server.describe(xmlrpclib.Binary(json.dumps(data)))
-    res = json.loads(r.data)
-    print("near test: ", res)
-
-   
+    # data = {"facts":[["isa","O11","CVRed"], ["isa","O11","CVCylinder"], ["size", "O11", ".01"],
+    #                  ["isa","O22","CVGreen"], ["isa","O22","CVSphere"], ["size", "O22", ".01"],
+    #                  ["distance", ".11", "O11", "O22"], ["rightOf", "O11", "O22"]]}
+    # r = server.describe(xmlrpclib.Binary(json.dumps(data)))
+    # res = json.loads(r.data)
+    # print("rightOf test: ", res)
+    #
+    # data = {"facts":[["isa","O55","CVRed"], ["isa","O55","CVCylinder"], ["size", "O55", ".01"],
+    #                  ["isa","O66","CVGreen"], ["isa","O66","CVCone"], ["size", "O66", ".01"],
+    #                  ["distance", ".11", "O55", "O6"]]}
+    # r = server.describe(xmlrpclib.Binary(json.dumps(data)))
+    # res = json.loads(r.data)
+    # print("near test: ", res)
 
 
-
-test_concept_learner_server()

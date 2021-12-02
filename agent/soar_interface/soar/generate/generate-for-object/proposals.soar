@@ -47,7 +47,7 @@ sp {generate-for-object*propose*generate-content
 -->
     (<s>    ^operator <op> +)
     (<op>    ^name generate-content
-             ^information <info>)
+             ^information.object <info>)
     (<info>    ^id <id_string>
                ^word <nl>)
     }

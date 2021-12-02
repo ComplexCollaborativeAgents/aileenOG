@@ -20,11 +20,11 @@ sp {interaction-purpose-status*propose*provide-description
               ^purpose <p>)
     (<p>    ^type generate
             ^completed true
-            ^information <info>)
+            ^content <info>)
 -->
     (<s>    ^operator <op> +)
     (<op>    ^name provide-description
-             ^information <info>)
+             ^content <info>)
     }
 
 sp {interaction-purpose-status*propose*complete-learning-status

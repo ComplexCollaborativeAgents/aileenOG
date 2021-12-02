@@ -81,6 +81,31 @@ class OutputReader(object):
                 parsed_content = self._grammar.parse(content)
                 logging.debug("[output-reader] :: parsed content to {}".format(parsed_content))
                 self._soar_agent._input_writer.set_language({'parses': parsed_content})
+            if child.GetAttribute() == 'generate-content':
+                child_id = child.ConvertToIdentifier()
+                content_list = []
+                for j in range(0, child_id.GetNumberChildren()):
+                    subchild = child_id.GetChild(j)
+                    subchild_attribute = subchild.GetAttribute()
+                    if subchild_attribute == 'object':
+                        subchild_id = subchild.ConvertToIdentifier()
+                        words = []
+                        identifier = None
+                        for k in range(0, subchild_id.GetNumberChildren()):
+                            item = subchild_id.GetChild(k)
+                            if item.GetAttribute() == 'id':
+                                identifier = item.GetValueAsString()
+                            if item.GetAttribute() == 'word':
+                                words.append(item.GetValueAsString())
+                        if identifier and len(words) > 0:
+                            object_dict = {'id': identifier, 'type': 'object', 'tokens': words}
+                            content_list.append(object_dict)
+                        else:
+                            logging.error("[output_reader] :: malformed language request".format(subchild))
+                logging.debug("[output_reader] :: requesting generation for {}".format(content_list))
+                content = self._grammar.generate(content_list)
+                self._soar_agent._input_writer.set_language({'sentence': content})
+                logging.debug("[output_reader] :: generated sentence: {}".format(content))
         commandID.AddStatusComplete()
 
     def process_repsonse(self, commandID):

@@ -48,6 +48,6 @@ class ConceptLearner(object):
         return response
 
     def describe(self, request):
-        response_json = self._server.project(xmlrpclib.Binary(json.dumps(request)))
+        response_json = self._server.describe(xmlrpclib.Binary(json.dumps(request)))
         response = json.loads(response_json.data)
         return response

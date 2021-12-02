@@ -34,6 +34,13 @@ class AileenGrammarTest(unittest.TestCase):
         self.assertEquals(len(outputs), 1)
         self.assertEquals(outputs[0], ['fragments', "foo", ['obj', 'box']])
 
+    def test_generate(self):
+        grammar = AileenGrammar()
+        grammar.use_default_rules()
+
+        sentence = grammar.generate([{'id': 'ob432', 'type':'object', 'tokens': ['green', 'box']}])
+        self.assertEquals(sentence, "green box")
+
 
 if __name__ == '__main__':
     unittest.main()

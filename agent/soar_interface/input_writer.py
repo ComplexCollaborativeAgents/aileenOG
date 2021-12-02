@@ -295,11 +295,15 @@ class InputWriter(object):
 
     def write_language_to_input_link(self):
         new_language_link = self._language_link.CreateIdWME("language")
-        logging.debug("[input_writer] :: writing generated parse to input link")
+        logging.debug("[input_writer] :: writing language info to input link")
         ## write all parses
-        parses = self._language['parses']
-        parses_link = new_language_link.CreateIdWME("parses")
-        language_helper.translate_to_soar_structure(parses, parses_link)
+        if 'parses' in self._language:
+            parses = self._language['parses']
+            parses_link = new_language_link.CreateIdWME("parses")
+            language_helper.translate_to_soar_structure(parses, parses_link)
+        if 'sentence' in self._language:
+            sentence = self._language['sentence']
+            new_language_link.CreateStringWME('sentence', sentence)
         self._language = None
         self._clean_language_link_flag = True
 

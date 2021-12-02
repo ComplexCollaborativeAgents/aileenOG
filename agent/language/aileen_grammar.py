@@ -182,6 +182,21 @@ class AileenGrammar:
         logging.info("[aileen_grammar] :: parse({}) = {}".format(sentence, outputs))
         return outputs
 
+    def generate(self, list_objects):
+        """Generate a description given descriptors for objects and current grammar"""
+        content = None
+        content = self._generate_dummy(list_objects)
+        return content
+
+    def _generate_dummy(self, list_objects):
+        sentence = ""
+        for object in list_objects:
+            object_id = object['id']
+            list_tokens = object['tokens']
+            string = " ".join(list_tokens)
+            sentence = "{} {}".format(sentence, string).strip()
+        return sentence
+
     def _convert_markup_to_list(self, string):
         """Convert strings like "<obj><prop>blue</prop> box</obj>" to lists like [obj [prop blue] box]."""
         result = []
