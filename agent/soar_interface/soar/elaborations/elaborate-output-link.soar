@@ -7,10 +7,11 @@ sp {topstate*elaborate*output-link*response*generate*temp
     (state <s>    ^name aileen
                   ^io.output-link <ol>
                   ^response <res>)
-    (<res>    ^information.nl <nl>)
+    (<res>    ^content <nl>
+              ^type describe)
 -->
     (<ol>    ^interaction <inter>)
-    (<inter>    ^response <nl>)
+    (<inter>    ^language <nl>)
     (<res>    ^processed true)
     }
 
@@ -22,7 +23,7 @@ sp {topstate*elaborate*output-link*response
     (<res>    ^status <stat>)
 -->
     (<ol>    ^interaction <inter>)
-    (<inter>    ^response <stat>)
+    (<inter>    ^status <stat>)
     (<res>    ^processed true)
     }
 

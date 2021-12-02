@@ -10,11 +10,11 @@ sp {interpret-message*apply*interpret-feedback
                   ^io.output-link <ol>)
     (<op>    ^name interpret-feedback
              ^message <m>)
-    (<seg>    ^purpose.type verify)
+    (<seg>    ^purpose.type << verify generate >>)
     (<ss>    ^interaction.stack.segment <seg>)
     (<m>    ^signal << correct incorrect >>)
 -->
     (<ss>    ^terminate-segment <seg>)
-    (<seg>    ^message <m>)
-    (<ol>    ^interaction.response ok)
+    #(<seg>    ^message <m>)
+    (<ol>    ^interaction.status ok)
     }

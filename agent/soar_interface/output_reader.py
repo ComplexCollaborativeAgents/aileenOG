@@ -111,7 +111,10 @@ class OutputReader(object):
     def process_repsonse(self, commandID):
         for i in range(0, commandID.GetNumberChildren()):
             child = commandID.GetChild(i)
-            if child.GetAttribute() == 'response':
+            if child.GetAttribute() == 'language':
+                self._response = {'language': child.GetValueAsString()}
+            if child.GetAttribute() == 'status':
                 self._response = {'status': child.GetValueAsString()}
-                logging.debug("[output_reader] :: repsonding with {}".format(self._response))
+
+        logging.debug("[output_reader] :: repsonding with {}".format(self._response))
         commandID.AddStatusComplete()

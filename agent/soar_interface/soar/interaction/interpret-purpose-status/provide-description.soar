@@ -10,11 +10,11 @@ sp {interpret-purpose-status*apply*provide-description
                   ^topstate <ts>
                   ^superstate.interaction.stack.segment <seg>)
     (<p>    ^type generate
-            ^information <info>)
+            ^content <info>)
 -->
     (<ts>    ^response <res>)
     (<res>    ^type describe
-              ^information <info>)
+              ^content <info>)
     (<seg>    ^communicated <res>)
     }
               

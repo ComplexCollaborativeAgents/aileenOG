@@ -397,6 +397,7 @@ class AileenSupervisor(Supervisor):
                            'id': id,
                            'bbposition': position,
                            'bbsize': bbsize,
+                           'bounding_box': self.computeBoundingBox(child),
                            'bounding_box_camera': [tx, ty, bx, by],
                            'resolution': [self.resX, self.resY],
                            'shape': self.get_object_shape(child),

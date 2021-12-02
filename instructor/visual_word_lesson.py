@@ -13,7 +13,11 @@ class VisualWordLesson:
         self._is_positive = is_positive
         self._description = description
         self._distractors = distractors
-        self._content = content
+        if self._signal == 'generate':
+            self._content = None
+            self._test_content = content
+        else:
+            self._content = content
         self._language = None
 
     def generate_lesson(self):
@@ -27,11 +31,20 @@ class VisualWordLesson:
         lesson['scene'] = self._scene.generate_scene_world_config()
         lesson['interaction'] = self._interaction
 
+        if self._signal == 'generate':
+            content = ""
+        else:
+            if self._content is not None:
+                content = self._content
+            else:
+                content = self._language
+
+
         lesson = {
             'scene': self._scene.generate_scene_world_config(),
             'interaction': {
                 'signal': self._signal,
-                'content': self._content if self._content is not None else self._language
+                'content': content
             }
         }
         return lesson
@@ -68,13 +81,19 @@ class VisualWordLesson:
 
 
     def evaluate_agent_response(self, agent_response):
-        if self._is_positive:
-            if agent_response['status'] == 'success':
-                return {'signal': 'correct', 'score': 1}
+        if 'status' in agent_response:
+            if self._is_positive:
+                if agent_response['status'] == 'success':
+                    return {'signal': 'correct', 'score': 1}
+                else:
+                    return {'signal': 'incorrect', 'score': 0}
             else:
-                return {'signal': 'incorrect', 'score': 0}
-        else:
-            if agent_response['status'] == 'failure':
+                if agent_response['status'] == 'failure':
+                    return {'signal': 'correct', 'score': 1}
+                else:
+                    return {'signal': 'incorrect', 'score': 0}
+        if 'language' in agent_response:
+            if self._test_content == agent_response['language']:
                 return {'signal': 'correct', 'score': 1}
             else:
                 return {'signal': 'incorrect', 'score': 0}

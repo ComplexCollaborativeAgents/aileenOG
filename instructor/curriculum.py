@@ -21,7 +21,7 @@ class Curriculum(object):
 
         description = lesson_configuration.get('description', None)
         distractors = lesson_configuration.get('distractors', 0)
-        is_positive = True if lesson_configuration.get('is_positive', "True") == "True" else False
+        is_positive = True if (lesson_configuration.get('is_positive', "True") == "True" or lesson_configuration.get('is_positive', "true")) else False
         content = lesson_configuration.get('content', None)
 
         lesson = {}

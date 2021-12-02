@@ -75,102 +75,102 @@ Opened KB from /home/smohan/AILEEN/aileen-agent/agent/concept_learner/analogysta
 ; Fast loading from bundle code/ef-e-crcrlf.fasl.
 
 Creating Reasoning Symbol2 {"symbol": "r_box1"}Creating Reasoning Symbol {"symbol": "r_box1"}
-127.0.0.1 - - [Thu, 02 Dec 2021 00:37:33 GMT] "POST /ConceptLearner HTTP/1.1" 200 387
-Storing {"facts": [["isa", "ob964", "r_box1"], ["size", "ob964", "7680"], ["isa", "ob964", "CVGreen"], ["isa", "ob964", "CVBox"]], "concept": "r_box1", "context": "episode81"}
+127.0.0.1 - - [Thu, 02 Dec 2021 20:50:37 GMT] "POST /ConceptLearner HTTP/1.1" 200 387
+Storing {"facts": [["isa", "ob481", "r_box1"], ["size", "ob481", "7000"], ["isa", "ob481", "CVGreen"], ["isa", "ob481", "CVBox"]], "concept": "r_box1", "context": "episode146"}
 Adding case to gpool r_box1
-facts are ((isa ob964 r_box1) (size ob964 7680) (isa ob964 CVGreen)
-           (isa ob964 CVBox))
-Storing case facts in episode81
+facts are ((isa ob481 r_box1) (size ob481 7000) (isa ob481 CVGreen)
+           (isa ob481 CVBox))
+Storing case facts in episode146
 
 ------------------------
 0 examples for r_box1Mt
-    Checking (qPred-size ob964)
+    Checking (qPred-size ob481)
 Gpool for r_box1 has 0 generalizations and 1 examples
-127.0.0.1 - - [Thu, 02 Dec 2021 00:37:35 GMT] "POST /ConceptLearner HTTP/1.1" 200 396
+127.0.0.1 - - [Thu, 02 Dec 2021 20:50:38 GMT] "POST /ConceptLearner HTTP/1.1" 200 396
 QUERY HELPER
 
 ------------------------
 1 examples for r_box1Mt
-    Checking (qPred-size ob964)
-53768080 bytes have been tenured, next gc will be global.
+    Checking (qPred-size ob481)
+53780256 bytes have been tenured, next gc will be global.
 See the documentation for variable *global-gc-behavior* for more information.
 Matching Context query-facts, Pattern (isa
-                                       ob964
+                                       ob481
                                        r_box1) Against Gpool r_box1Mt
 Less than three cases in r_box1Mt, failingFound matches nil
-127.0.0.1 - - [Thu, 02 Dec 2021 00:37:42 GMT] "POST /ConceptLearner HTTP/1.1" 200 403
+127.0.0.1 - - [Thu, 02 Dec 2021 20:50:45 GMT] "POST /ConceptLearner HTTP/1.1" 200 403
 QUERY HELPER
 
 ------------------------
 1 examples for r_box1Mt
-    Checking (qPred-size ob971)
+    Checking (qPred-size ob488)
 Matching Context query-facts, Pattern (isa
-                                       ob971
+                                       ob488
                                        r_box1) Against Gpool r_box1Mt
 Less than three cases in r_box1Mt, failingFound matches nil
-127.0.0.1 - - [Thu, 02 Dec 2021 00:37:56 GMT] "POST /ConceptLearner HTTP/1.1" 200 403
-Storing {"facts": [["isa", "ob971", "r_box1"], ["size", "ob971", "1472"], ["isa", "ob971", "CVRed"], ["isa", "ob971", "CVBox"]], "concept": "r_box1", "context": "episode177"}
+127.0.0.1 - - [Thu, 02 Dec 2021 20:51:00 GMT] "POST /ConceptLearner HTTP/1.1" 200 403
+Storing {"facts": [["isa", "ob488", "r_box1"], ["size", "ob488", "4340"], ["isa", "ob488", "CVRed"], ["isa", "ob488", "CVBox"]], "concept": "r_box1", "context": "episode245"}
 Adding case to gpool r_box1
-facts are ((isa ob971 r_box1) (size ob971 1472) (isa ob971 CVRed)
-           (isa ob971 CVBox))
-Storing case facts in episode177
+facts are ((isa ob488 r_box1) (size ob488 4340) (isa ob488 CVRed)
+           (isa ob488 CVBox))
+Storing case facts in episode245
 
 ------------------------
 1 examples for r_box1Mt
-    Checking (qPred-size ob971)
+    Checking (qPred-size ob488)
 Gpool for r_box1 has 1 generalizations and 0 examples
-127.0.0.1 - - [Thu, 02 Dec 2021 00:38:03 GMT] "POST /ConceptLearner HTTP/1.1" 200 396
+127.0.0.1 - - [Thu, 02 Dec 2021 20:51:07 GMT] "POST /ConceptLearner HTTP/1.1" 200 396
 QUERY HELPER
 
 ------------------------
 2 examples for r_box1Mt
-    Checking (qPred-size ob971)
+    Checking (qPred-size ob488)
 Matching Context query-facts, Pattern (isa
-                                       ob971
+                                       ob488
                                        r_box1) Against Gpool r_box1Mt
 Less than three cases in r_box1Mt, failingFound matches nil
-127.0.0.1 - - [Thu, 02 Dec 2021 00:38:09 GMT] "POST /ConceptLearner HTTP/1.1" 200 403
+127.0.0.1 - - [Thu, 02 Dec 2021 20:51:13 GMT] "POST /ConceptLearner HTTP/1.1" 200 403
 QUERY HELPER
 
 ------------------------
 2 examples for r_box1Mt
-    Checking (qPred-size ob978)
+    Checking (qPred-size ob495)
 Matching Context query-facts, Pattern (isa
-                                       ob978
+                                       ob495
                                        r_box1) Against Gpool r_box1Mt
 Less than three cases in r_box1Mt, failingFound matches nil
-127.0.0.1 - - [Thu, 02 Dec 2021 00:38:29 GMT] "POST /ConceptLearner HTTP/1.1" 200 403
-Storing {"facts": [["isa", "ob978", "r_box1"], ["size", "ob978", "16416"], ["isa", "ob978", "CVBlue"], ["isa", "ob978", "CVBox"]], "concept": "r_box1", "context": "episode295"}
+127.0.0.1 - - [Thu, 02 Dec 2021 20:51:27 GMT] "POST /ConceptLearner HTTP/1.1" 200 403
+Storing {"facts": [["isa", "ob495", "r_box1"], ["size", "ob495", "20400"], ["isa", "ob495", "CVBlue"], ["isa", "ob495", "CVBox"]], "concept": "r_box1", "context": "episode337"}
 Adding case to gpool r_box1
-facts are ((isa ob978 r_box1) (size ob978 16416) (isa ob978 CVBlue)
-           (isa ob978 CVBox))
-Storing case facts in episode295
+facts are ((isa ob495 r_box1) (size ob495 20400) (isa ob495 CVBlue)
+           (isa ob495 CVBox))
+Storing case facts in episode337
 
 ------------------------
 2 examples for r_box1Mt
-    Checking (qPred-size ob978)
+    Checking (qPred-size ob495)
 Gpool for r_box1 has 1 generalizations and 0 examples
-127.0.0.1 - - [Thu, 02 Dec 2021 00:38:34 GMT] "POST /ConceptLearner HTTP/1.1" 200 396
+127.0.0.1 - - [Thu, 02 Dec 2021 20:51:31 GMT] "POST /ConceptLearner HTTP/1.1" 200 396
 QUERY HELPER
 
 ------------------------
 3 examples for r_box1Mt
-    Checking (qPred-size ob978)
-    Checking dist: probe is 16416, quants are (1472 7680 16416)
-lower is -3737.1152
-upper is 20782.45
-    In dist, adding (qPred-size ob978)
+    Checking (qPred-size ob495)
+    Checking dist: probe is 20400, quants are (4340 7000 20400)
+lower is -3476.3818
+upper is 24636.383
+    In dist, adding (qPred-size ob495)
 Matching Context query-facts, Pattern (isa
-                                       ob978
+                                       ob495
                                        r_box1) Against Gpool r_box1Mt
 
- (d::sageRequireInMapping ob978)CI Found for query-facts in r_box1Mt is nil
+ (d::sageRequireInMapping ob495)CI Found for query-facts in r_box1Mt is nil
 
  Strange bug of mapping with a score of 0 that is corrected with a repeated callMatching Context query-facts, Pattern (isa
-                                                                                                                       ob978
+                                                                                                                       ob495
                                                                                                                        r_box1) Against Gpool r_box1Mt
 
- (d::sageRequireInMapping ob978)CI Found for query-facts in r_box1Mt is ((SageGenFn
+ (d::sageRequireInMapping ob495)CI Found for query-facts in r_box1Mt is ((SageGenFn
                                                                           0
                                                                           r_box1Mt))
 
@@ -180,23 +180,23 @@ Matching Context query-facts, Pattern (isa
  ((<attribute r_box1> <Exp r_box11>) (<attribute r_box1> <Exp r_box11>)
   (<attribute r_box1> <Exp r_box11>))
  <SME 5> score: 0.0175 normalized score: 1.0000001Found matches ((isa
-                                                                  ob978
+                                                                  ob495
                                                                   r_box1))
-127.0.0.1 - - [Thu, 02 Dec 2021 00:38:53 GMT] "POST /ConceptLearner HTTP/1.1" 200 413
+127.0.0.1 - - [Thu, 02 Dec 2021 20:51:49 GMT] "POST /ConceptLearner HTTP/1.1" 200 414
 QUERY HELPER
 
 ------------------------
 3 examples for r_box1Mt
-    Checking (qPred-size ob985)
-    Checking dist: probe is 1216, quants are (1472 7680 16416)
-lower is -3737.1152
-upper is 20782.45
-    In dist, adding (qPred-size ob985)
+    Checking (qPred-size ob502)
+    Checking dist: probe is 1920, quants are (4340 7000 20400)
+lower is -3476.3818
+upper is 24636.383
+    In dist, adding (qPred-size ob502)
 Matching Context query-facts, Pattern (isa
-                                       ob985
+                                       ob502
                                        r_box1) Against Gpool r_box1Mt
 
- (d::sageRequireInMapping ob985)CI Found for query-facts in r_box1Mt is ((SageGenFn
+ (d::sageRequireInMapping ob502)CI Found for query-facts in r_box1Mt is ((SageGenFn
                                                                           0
                                                                           r_box1Mt))
 
@@ -206,31 +206,31 @@ Matching Context query-facts, Pattern (isa
  ((<attribute r_box1> <Exp r_box11>) (<attribute r_box1> <Exp r_box11>)
   (<attribute r_box1> <Exp r_box11>))
  <SME 8> score: 0.0175 normalized score: 1.0000001Found matches ((isa
-                                                                  ob985
+                                                                  ob502
                                                                   r_box1))
-127.0.0.1 - - [Thu, 02 Dec 2021 00:39:15 GMT] "POST /ConceptLearner HTTP/1.1" 200 413
-Describing {"facts": [["size", "ob992", "16800"], ["isa", "ob992", "CVGreen"], ["isa", "ob992", "CVBox"]]}
+127.0.0.1 - - [Thu, 02 Dec 2021 20:52:11 GMT] "POST /ConceptLearner HTTP/1.1" 200 414
+Describing {"facts": [["size", "ob509", "18056"], ["isa", "ob509", "CVGreen"], ["isa", "ob509", "CVBox"]]}
 
 ------------------------
 3 examples for r_box1Mt
-    Checking (qPred-size ob992)
-    Checking dist: probe is 16800, quants are (1472 7680 16416)
-lower is -3737.1152
-upper is 20782.45
-    In dist, adding (qPred-size ob992)
+    Checking (qPred-size ob509)
+    Checking dist: probe is 18056, quants are (4340 7000 20400)
+lower is -3476.3818
+upper is 24636.383
+    In dist, adding (qPred-size ob509)
 
 ------------------------
 3 examples for r_box1Mt
-    Checking (qPred-size ob992)
-    Checking dist: probe is 16800, quants are (1472 7680 16416)
-lower is -3737.1152
-upper is 20782.45
-    In dist, adding (qPred-size ob992)
+    Checking (qPred-size ob509)
+    Checking dist: probe is 18056, quants are (4340 7000 20400)
+lower is -3476.3818
+upper is 24636.383
+    In dist, adding (qPred-size ob509)
 Matching Context describescratch, Pattern (isa
-                                           ob992
+                                           ob509
                                            r_box1) Against Gpool r_box1Mt
 
- (d::sageRequireInMapping ob992)CI Found for describescratch in r_box1Mt is ((SageGenFn
+ (d::sageRequireInMapping ob509)CI Found for describescratch in r_box1Mt is ((SageGenFn
                                                                               0
                                                                               r_box1Mt))
 
@@ -240,5 +240,5 @@ Matching Context describescratch, Pattern (isa
  ((<attribute r_box1> <Exp r_box11>) (<attribute r_box1> <Exp r_box11>)
   (<attribute r_box1> <Exp r_box11>))
  <SME 11> score: 0.0175 normalized score: 1.0000001
-Found concepts ((isa ob992 r_box1))
-127.0.0.1 - - [Thu, 02 Dec 2021 00:39:39 GMT] "POST /ConceptLearner HTTP/1.1" 200 392
+Found concepts ((isa ob509 r_box1))
+127.0.0.1 - - [Thu, 02 Dec 2021 20:52:33 GMT] "POST /ConceptLearner HTTP/1.1" 200 392

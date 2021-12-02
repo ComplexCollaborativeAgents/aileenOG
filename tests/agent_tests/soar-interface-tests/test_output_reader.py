@@ -17,6 +17,22 @@ def test_process_language_command():
     agent.stop()
     agent.quit()
 
+def test_generate_language_command():
+    agent = SoarAgent(None)
+    oreader = agent._output_reader
+    olink = agent._input_link
+
+    language_link = olink.CreateIdWME("language")
+    cid = language_link.CreateIdWME("generate-content")
+    oid = cid.CreateIdWME("object")
+    oid.CreateStringWME("id", "ob432")
+    oid.CreateStringWME("word", "blue")
+    oid.CreateStringWME("word", "box")
+    oreader.process_language_command(language_link)
+    assert agent._input_writer._language == {'sentence': "blue box"}
+    agent.stop()
+    agent.quit()
+
 
 def test_place_object_in_configuration_with():
 
