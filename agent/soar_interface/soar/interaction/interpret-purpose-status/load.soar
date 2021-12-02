@@ -16,3 +16,5 @@ source "complete-observe-demonstration.soar"
 source "complete-react-status.soar"
 
 source "provide-description.soar"
+
+source ".soar"

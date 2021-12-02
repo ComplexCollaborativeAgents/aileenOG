@@ -4,6 +4,7 @@
 # @created smohan 20191114
 
 sp {topstate*elaborate*output-link*response*generate*temp
+    :o-support
     (state <s>    ^name aileen
                   ^io.output-link <ol>
                   ^response <res>)
@@ -17,6 +18,7 @@ sp {topstate*elaborate*output-link*response*generate*temp
 
 
 sp {topstate*elaborate*output-link*response
+    :o-support
     (state <s>    ^name aileen
                   ^io.output-link <ol>
                   ^response <res>)

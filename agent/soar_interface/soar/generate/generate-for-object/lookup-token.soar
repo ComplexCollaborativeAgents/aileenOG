@@ -14,3 +14,13 @@ sp {generate-for-object*apply*lookup-token
     (<scomm> ^query <cue>)
     (<cue>    ^concept <con>)
     }
+
+
+sp {generate-for-object*status*failure*semantic-memory
+    (state <s>    ^name generate-for-object
+                  ^smem.result.failure <fail>)
+-->
+    (<s>    ^memory-lookup-status failed)
+    }
+           
+    

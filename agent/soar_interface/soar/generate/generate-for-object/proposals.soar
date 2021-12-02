@@ -16,7 +16,8 @@ sp {generate-for-object*propose*translate-to-facts
 sp {generate-for-object*propose*describe-subscene
     (state <s>    ^name generate-for-object
                   ^object <obj>
-                  ^facts <f>)
+                  ^facts <f>
+                  -^memory-lookup-status failed)
     (<obj> -^isa <con>)
 -->
     (<s>    ^operator <op> +)
@@ -27,7 +28,7 @@ sp {generate-for-object*propose*describe-subscene
 sp {generate-for-object*propose*lookup-token
     (state <s>    ^name generate-for-object
                   ^object <obj>
-                  -^smem.result.retrieved <ret>)
+                  -^smem.result.<< retrieved failure >> <ret>)
     (<obj>    ^isa <con>)
 -->
     (<s> ^operator <op> + =)
@@ -64,9 +65,7 @@ sp {generate-for-object*propose*complete-generate-object
 
 sp {generate-for-object*propose*mark-no-known-concept
     (state <s>    ^name generate-for-object
-                  ^object <obj>
-                  ^memory-lookup-status complete)
-    (<obj> -^isa <con>)
+                  ^memory-lookup-status failed)
 -->
     (<s>    ^operator <op> +)
     (<op>    ^name mark-no-known-concept)

@@ -17,4 +17,19 @@ sp {interpret-purpose-status*apply*provide-description
               ^content <info>)
     (<seg>    ^communicated <res>)
     }
-              
+     
+
+sp {interpret-purpose-status*apply*provide-description*falirue
+    (state <s>    ^name interpret-purpose-status
+                  ^operator.name provide-description
+                  ^purpose <p>
+                  ^topstate <ts>
+                  ^superstate.interaction.stack.segment <seg>)
+    (<p>    ^type generate
+            ^status failure)
+-->
+    (<ts>  ^response <res>)
+    (<res>    ^type describe
+              ^status failure)
+    (<seg>    ^communicated <res>)
+}         

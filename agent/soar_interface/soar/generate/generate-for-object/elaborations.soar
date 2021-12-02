@@ -34,13 +34,13 @@ sp {generate-for-object*elaborate-with-concept*object*matches
     (<obj>    ^isa <val>)
     }
 
-sp {generate-for-object*elaborate-with-concept*status*success
-    (state <s>    ^name generate-for-obeuject
+sp {generate-for-object*elaborate-with-concept*status*failure*concept-memory
+    (state <s>    ^name generate-for-object
                   ^operator <op>
                   ^io.input-link.concept-memory.result <cm>
                   ^object <obj>)
-    (<cm>    ^status success)
+    (<cm>    ^status success
+             -^matches.match)
 -->
-    (<s>    ^memory-lookup-status complete)
+    (<s>    ^memory-lookup-status failed)
     }
-                  
