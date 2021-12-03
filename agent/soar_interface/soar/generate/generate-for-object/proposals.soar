@@ -27,8 +27,10 @@ sp {generate-for-object*propose*describe-subscene
 
 sp {generate-for-object*propose*lookup-token
     (state <s>    ^name generate-for-object
-                  ^object <obj>
-                  -^smem.result.<< retrieved failure >> <ret>)
+                  ^object <obj>)
+    -{(<s>    ^pair <p>)
+      (<p>    ^concept <con>
+              ^token <token>)}
     (<obj>    ^isa <con>)
 -->
     (<s> ^operator <op> + =)
@@ -38,19 +40,37 @@ sp {generate-for-object*propose*lookup-token
 
 sp {generate-for-object*propose*generate-content
     (state <s>    ^name generate-for-object
-                  ^smem.result <sres>
                   ^object <obj>
-                  -^content <sen>)
+                  -^content <sen>
+                   ^pair <p>)
     (<obj>    ^id_string <id_string>)
-    (<sres>    ^success <any>
-               ^retrieved <ret>)
-    (<ret>    ^nl <nl>)
+    (<p>     ^concept <con>
+             ^token <t>)
+    (<obj>    ^isa <con>)
 -->
-    (<s>    ^operator <op> +)
+    (<s>    ^operator <op> + < =)
     (<op>    ^name generate-content
              ^information.object <info>)
     (<info>    ^id <id_string>
-               ^word <nl>)
+               ^word <t>)
+    }
+
+sp {generate-for-object*propose*generate-content*elaborate
+    (state <s>    ^name generate-for-object
+                  ^object <obj>
+                  -^content <sen>
+                   ^pair <p>
+                   ^operator <op> +)
+    (<obj>    ^id_string <id_string>)
+    (<p>     ^concept <con>
+             ^token <t>)
+    (<obj>    ^isa <con>
+              ^id_string <id_string>)
+    (<op>    ^name generate-content
+             ^information.object <info>)
+    (<info>    ^id <id_string>)
+-->
+    (<info>    ^word <t>)
     }
 
 sp {generate-for-object*propose*complete-generate-object

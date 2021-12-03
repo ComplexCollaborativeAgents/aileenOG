@@ -5,22 +5,40 @@
 
 
 sp {generate-for-object*apply*lookup-token
-    (state <s>    ^name generate-for-object
-                  ^operator <op>
-                  ^smem.command <scomm>)
-    (<op>    ^name lookup-token
+    (state <s>  ^name lookup-token  
+                ^superstate <ss>
+                ^smem.command <scomm>)
+    (<ss>   ^name generate-for-object
+            ^operator <sop>)
+    (<sop>    ^name lookup-token
              ^concept <con>)
 -->
     (<scomm> ^query <cue>)
     (<cue>    ^concept <con>)
     }
 
+sp {generate-for-object*apply*lookup-token*copy-results
+    (state <s>    ^name lookup-token
+                  ^superstate <ss>
+                  ^smem.result.retrieved <ret>)
+    (<ss>    ^operator <sop>)
+    (<sop>    ^name lookup-token
+              ^concept <con>)
+    (<ret>    ^concept <con>
+              ^nl <nl>)
+-->
+    (<ss>    ^pair <p>)
+    (<p>    ^concept <con>
+            ^token <nl>)
+    }
+
 
 sp {generate-for-object*status*failure*semantic-memory
-    (state <s>    ^name generate-for-object
+    (state <s>    ^name lookup-token
+                  ^superstate <ss>
                   ^smem.result.failure <fail>)
 -->
-    (<s>    ^memory-lookup-status failed)
+    (<ss>    ^memory-lookup-status failed)
     }
            
     
