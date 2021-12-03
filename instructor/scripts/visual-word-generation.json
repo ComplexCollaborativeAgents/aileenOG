@@ -44,5 +44,44 @@
       "size": "medium"
     },
     "content": "box"
+  },
+  {
+    "signal": "inform",
+    "lesson-type": "visual-word",
+    "is_positive": "True",
+    "description": {"color": "green", "shape": "cone", "size": "large"},
+    "content": "green cone"
+  },
+   {
+    "signal": "inform",
+    "lesson-type": "visual-word",
+    "is_positive": "True",
+    "description": {"color": "green", "shape": "cylinder", "size": "small"},
+    "content": "green cylinder"
+  },
+  {
+    "signal": "inform",
+    "lesson-type": "visual-word",
+    "is_positive": "True",
+    "description": {"color": "green", "shape": "sphere", "size": "medium"},
+    "content": "green sphere"
+  },
+  {
+    "signal": "inform",
+    "lesson-type": "visual-word",
+    "is_positive": "True",
+    "description": {"color": "green", "shape": "capsule", "size": "large"},
+    "content": "green capsule"
+  },
+   {
+    "signal": "generate",
+    "lesson-type": "visual-word",
+    "is_positive": "True",
+    "description": {
+      "color": "green",
+      "shape": "box",
+      "size": "medium"
+    },
+    "content": "green box"
   }
 ]
