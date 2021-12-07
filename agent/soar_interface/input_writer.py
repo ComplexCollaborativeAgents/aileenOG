@@ -91,6 +91,45 @@ class InputWriter(object):
             cv_detections = self.detector.run(img)
             # print('cv_detection is:', cv_detections)
             # print('world objects is:', objects_list)
+            # Refine gt bbox
+            for i in range(len(objects_list)):
+                w = objects_list[i]
+                position = w['bbposition']
+                bbsize = w['bbsize']
+                tx = w['bounding_box_camera'][0]
+                ty = w['bounding_box_camera'][1]
+                bx = w['bounding_box_camera'][2]
+                by = w['bounding_box_camera'][3]
+                gray = cv2.cvtColor(mask_img, cv2.COLOR_BGR2GRAY)
+                mask = np.zeros(gray.shape[:2], dtype="uint8")
+                cv2.rectangle(mask, (int(tx), int(ty)), (int(bx), int(by)), 255, -1)
+                tmp = cv2.bitwise_and(gray, gray, mask=mask)
+                non_zero_tmp = tmp[np.nonzero(tmp)]
+                if mode(non_zero_tmp)[0]:
+                    value = mode(non_zero_tmp)[0]
+                    # print target
+                    up = value + 5
+                    low = value - 5
+                    if low < 0:
+                        low = 0
+                    loc = np.where(np.logical_and(tmp > low, tmp <= up))
+                    tmp[loc] = value
+                    tmp[np.where(tmp != value)] = 0
+                    tmp[tmp > 0] = 100
+
+                    # print np.shape(tmp)
+                    x, y, w, h = cv2.boundingRect(tmp)
+
+                    tx = x
+                    ty = y
+                    bx = x + w
+                    by = y + h
+                    position = [x + w/2.0, y + h/2.0]
+                    bbsize = [bx - tx, by - ty]
+                    objects_list[i]['bounding_box_camera'] = [tx, ty, bx, by]
+                    objects_list[i]['bbposition'] = position
+                    objects_list[i]['bbsize'] = bbsize
+
 
             objects_list = self.align_cv_detections_to_world(cv_detections, objects_list)
             logging.debug("Aligned Detections: {}".format(objects_list))
@@ -140,7 +179,7 @@ class InputWriter(object):
                 # 'camera_yolo_position_proj_to_world': World projection of YOLO bounding box centroid
 
                 # if Detector.bb_iou(bbox1, bbox2) > .7:
-                if dst < 4.0:
+                if Detector.bb_iou(bbox1, bbox2) > .7 or dst < 4.0:
                     # Match
                     mapped[w_index] = 1
                     detections[i]['held'] = w['held']
