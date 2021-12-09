@@ -650,7 +650,9 @@
 
 
       (cond (cis
-              (sample-internal-preds cis context gpool))
+              ; (sample-internal-preds cis context gpool)
+              cis
+              )
             ((not repeat?)
               (debug-format "Re-trying project mapping~%")
               (project-state-for-action facts context action t))

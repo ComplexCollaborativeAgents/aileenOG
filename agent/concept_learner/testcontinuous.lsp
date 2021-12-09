@@ -167,6 +167,14 @@
   (member (car (decontextualize-temporal-pred fact)) internal-preds))
 
 
+;;; maybe optimize this? it gets called a lot, so maybe don't ask
+(defun continuous->internal-fact (fact)
+  (cond ((eql (car fact) 'd::holdsIn)
+          (list 'd::holdsIn (second fact) (continuous->internal-fact (third fact))))
+        (t (let ((rln (car (fire:ask-it `(d::encodingOf ,(car fact) ?what) :response '?what))))
+          (list rln (remove-if 'numberp (cdr fact)))))))
+
+
 (defun remove-quantity-facts (facts internal-preds)
   (remove-if (lambda (fact)
     (let ((decon (decontextualize-temporal-pred fact)))
@@ -177,23 +185,52 @@
 
 ;;; We will have just performed a mapping, as facts are a set of candidate inferences
 ;;; from that mapping
-(defun sample-internal-preds-new (facts probe-mt sme concept)
+(defun sample-internal-preds-new (facts sme)
   (let* ((internal-preds (fire:ask-it '(d::isa ?pred d::AileenInternalPredicate) :response '?pred))
          (filtered-facts (remove-quantity-facts facts internal-preds))
          (sampled-facts (sample-quantity-mhs sme internal-preds)))
     (append filtered-facts sampled-facts)))
 
 
+(defmethod reconstruct-exp ((exp sme::probablistic-expression))
+  (cons (sme::name (sme::predicate exp))
+        (mapcar 'reconstruct-exp (mapcar 'cdr (sme::arguments exp)))))
+
+
+(defmethod reconstruct-exp ((exp sme::entity))
+  (cond ((numberp (sme::user-form exp))
+          (format t "number~%")
+          (sme::user-form exp))
+        (t (sme::user-form exp))
+    ))
+
+
+
 (defun sample-quantity-mhs (sme internal-preds)
 
   (let ((sampled-facts nil)
+        (cached-mhs (make-hash-table :test 'equal))
         (mapping (car (sme::mappings sme))))
+
+    ;;; we need to get mhs for continuous expressions from internal facts,
+    ;;; so go through and cache this mapping for easy retrieval
+    (dolist (mh (sme::top-level-mhs mapping))
+      (let ((base-form (sme::user-form (sme::base-item mh))))
+        (when (fact-has-quantity? base-form)
+          (let ((internal-rep (continuous->internal-fact base-form)))
+            (setf (gethash internal-rep cached-mhs) mh)))))
+
     (dolist (mh (sme::top-level-mhs mapping) sampled-facts)
       (let ((base-form (sme::user-form (sme::base-item mh))))
         (when (internal-fact? base-form internal-preds)
           
-          
-          )))))
+          (let ((mapped-mh (gethash base-form cached-mhs)))
+
+            (when mapped-mh
+
+
+
+              )))))))
 
 
 ;;; given a case potentially having quantity preds,
@@ -202,7 +239,7 @@
   (let ((match (sage-select probe-context concept)))
     (when match
       (let ((ipreds (use-mapping-to-support-internal-continuous-preds sme::*sme*)))
-        (store-facts-in-case (append (kb::list-mt-facts) ipreds))))))
+        (store-facts-in-case (append (kb::list-mt-facts probe-context) ipreds) probe-context)))))
 
 
 (defun filter-quantity-mhs (mhs)
@@ -217,6 +254,7 @@
         ,(sme::user-form (sme::target-item mh))
         ,(sme::name (sme::target (sme::sme mh))) ?x)
     :response '?x))))
+
 
 (defun quantity-mh-in-distribution? (mh)
   (let ((quants (mh-history mh))
