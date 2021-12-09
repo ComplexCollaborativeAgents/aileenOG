@@ -1,29 +1,34 @@
 import json
 import uuid
 from collections import namedtuple
-from random import choice
+from random import choice, uniform
 import settings
 from log_config import logging
 
 Color = namedtuple('Color', ['name', 'rgb'])
 Size = namedtuple('Size', ['name', 'xyz'])
 
-class AileenObject:
 
-    #def __init__(self, shape, color, translation=[0, 0, 0], height_y=settings.OBJECT_STANDARD_HEIGHT,
-    #             width_x=settings.OBJECT_STANDARD_WIDTH_X, width_z=settings.OBJECT_STANDARD_WIDTH_Z):
-    def __init__(self, shape, color, size, translation=[0, 0, 0]):
+class AileenObject:
+    def __init__(self, shape, color, size, translation=[0.0, 0.0, 0.0], rotation=[0.0, 1.0, 0.0, 0.0], transparency=0):
         self._shape = shape
         self._color = color
         self._size = size
-        self._height_y = self._size.xyz[1]
+        self._size_name = str(size.name)
+        self._translation = translation
+        self._rotation = rotation
+        self._transparency = transparency
+        if self._shape == "capsule":
+            self._height_y = self._size.xyz[1] * 2
+        else:
+            self._height_y = self._size.xyz[1]
         self._width_x = self._size.xyz[0]
         self._width_z = self._size.xyz[2]
-        self._translation = translation
+        self._center = [self._width_x / 2.0, self._height_y / 2.0, self._width_z / 2.0]
         self._name = "object{}".format(AileenObject.randomizer.uuid4())
         self._language = None
         self._connector_dim = None
-        logging.info("[aileen_object] :: created a new object with height {}".format(self._height_y))
+        logging.debug("[aileen_object] :: created a new object")
 
     def __eq__(self, other):
         return self._shape == other._shape and self._color.name == other._color.name and self._size.name == other._size.name
@@ -31,7 +36,16 @@ class AileenObject:
     def __ne__(self, other):
         return not self.__eq__(other)
 
+    def get_shape(self):
+        return self._shape
+
     def get_object_description(self):
+        # description = "Can {\n"
+        # description += "   translation {} {} {}\n".format(self._translation[0],
+        #                                                   self._translation[1],
+        #                                                   self._translation[2])
+        # description += "   physics Physics {\n}"
+        # description += "}"
         description = "Solid {\n"
         description += "   recognitionColors {} {} {}\n".format(self._color.rgb[0],
                                                                 self._color.rgb[1],
@@ -39,13 +53,17 @@ class AileenObject:
         description += "   translation {} {} {}\n".format(self._translation[0],
                                                           self._translation[1],
                                                           self._translation[2])
+        description += "   rotation {} {} {} {}\n".format(self._rotation[0], self._rotation[1], self._rotation[2], self._rotation[3])
         description += "   children [\n"
         description += "       Shape {\n"
         description += "          appearance PBRAppearance {\n"
         description += "          baseColor {} {} {}\n".format(self._color.rgb[0],
                                                                self._color.rgb[1],
                                                                self._color.rgb[2])
+        # description += "          transparency {}\n".format(self._transparency)
+        description += "          transparency 0\n"
         description += "          metalness 0\n"
+        # description += "          shininess 0\n"
         description += "          emissiveColor {} {} {}\n".format(self._color.rgb[0],
                                                                    self._color.rgb[1],
                                                                    self._color.rgb[2])
@@ -65,10 +83,11 @@ class AileenObject:
         description += "    ]\n"
         description += "    name \"{}\"\n".format(self._name)
         description += "   boundingObject {}".format(self.get_bounding_object_description())
-        description += "   physics Physics {\n}"
+        description += "   physics Physics {\n}\n"
+        description += "   description \"{}\"\n".format(self._size_name.title())
         description += "}"
 
-        # logging.debug("[aileen_object] :: added string {}".format(description))
+        logging.debug("[aileen_object] :: added string {}".format(description))
 
         return description
 
@@ -76,7 +95,11 @@ class AileenObject:
         description = "Box {\n"
         description += "     size {} {} {}\n".format(self._width_x, self._height_y, self._width_z)
         description += "   }\n"
+
         return description
+
+    def get_size_type(self):
+        return self._size_name
 
     def get_geometry_description(self):
         description = "{} {{\n".format(self._shape.title())
@@ -132,26 +155,27 @@ class AileenObject:
 
     @staticmethod
     def get_colors():
-        with open(settings.COLOR_PATH) as f:
+        # print('COLOR_PATH = ', settings.COLOR_PATH)
+        # with open(settings.COLOR_PATH) as f:
+        with open("./instructor/resources/colors.json") as f:
             colors = json.load(f)
         return colors
 
     @staticmethod
     def get_sizes():
-        with open(settings.SIZE_PATH) as f:
+        with open("./instructor/resources/sizes.json") as f: # settings.SIZE_PATH
             sizes = json.load(f)
         return sizes
 
     @staticmethod
     def generate_random_object():
-        logging.info("[aileen_object] :: generating a random object")
         scene_object_color = AileenObject.randomizer.get_random_color()
         scene_object_color_vector = AileenObject.randomizer.get_color_vector_sample(scene_object_color)
         color = Color(scene_object_color, scene_object_color_vector)
-
         scene_object_shape = AileenObject.randomizer.get_random_shape()
-
+        # scene_object_shape = 'sphere'
         scene_object_size = AileenObject.randomizer.get_random_size()
+        # print('object size = ', scene_object_size)
         scene_object_color_vector = AileenObject.randomizer.get_size_vector_sample(scene_object_size)
         size = Size(scene_object_size, scene_object_color_vector)
         # transparency =AileenObject.randomizer.get_random_transparency()
@@ -163,13 +187,11 @@ class AileenObject:
 
     @staticmethod
     def generate_object(description):
-        logging.info("[aileen_object] :: generating an object {}".format(description))
         color = description.get('color', AileenObject.randomizer.get_random_color())
         scene_object_color_vector = description.get('rgb', AileenObject.randomizer.get_color_vector_sample(color))
         color = Color(color, scene_object_color_vector)
         shape = description.get('shape', AileenObject.randomizer.get_random_shape())
         size = description.get('size', AileenObject.randomizer.get_random_size())
-        # size = 'medium'
         size_vector = description.get('xyz', AileenObject.randomizer.get_size_vector_sample(size))
         size = Size(size, size_vector)
         scene_object = AileenObject(shape=shape, color=color, size=size)

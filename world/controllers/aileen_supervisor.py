@@ -1,7 +1,7 @@
 from threading import Thread
 from controller import Supervisor, Field, Camera, CameraRecognitionObject
 import settings
-# from agent.vision.Detector import Detector
+#from agent.vision.Detector import Detector
 import os
 import cv2
 from scipy.stats import mode
@@ -14,7 +14,6 @@ from ikpy.chain import Chain
 from ikpy.link import OriginLink, URDFLink
 from ikpy.utils.geometry import *
 import numpy as np
-
 
 class AileenSupervisor(Supervisor):
 
@@ -51,38 +50,38 @@ class AileenSupervisor(Supervisor):
         self._numObj = self._camera.getRecognitionNumberOfObjects()
         self._world_thread = None
 
-        self._ur10Chain = Chain(links=[
-            OriginLink(),
-            URDFLink(name='shoulder_pan_joint',
-                     translation_vector=[0, 0, .1273],
-                     orientation=[0, 0, 0],
-                     rotation=[0, 0, 1]),
-            URDFLink(name='shoulder_lift_joint',
-                     translation_vector=[0, .220941, 0],
-                     orientation=[0, 1.57, 0],
-                     rotation=[0, 1, 0]),
-            URDFLink(name='elbow_joint',
-                     translation_vector=[0, -.1719, .612],
-                     orientation=[0, 0, 0],
-                     rotation=[0, 1, 0]),
-            URDFLink(name='wrist_1_joint',
-                     translation_vector=[0, 0, .5723],
-                     orientation=[0, 1.57, 0],
-                     rotation=[0, 1, 0]),
-            URDFLink(name='wrist_2_joint',
-                     translation_vector=[0, .1149, 0],
-                     orientation=[0, 0, 0],
-                     rotation=[0, 0, 1]),
-            URDFLink(name='wrist_3_joint',
-                     translation_vector=[0, 0, .1157],
-                     orientation=[0, 0, 0],
-                     rotation=[0, 1, 0]),
-            URDFLink(name='ee',
-                     translation_vector=[0, .0922, 0],
-                     orientation=[0, 0, 1.57],
-                     rotation=[0, 0, 1])],
-            active_links_mask=[True, True, True, True, True, True, True, True]
-        )
+        self._ur10Chain = Chain( links=[
+                            OriginLink(),
+                            URDFLink(name='shoulder_pan_joint',
+                                     translation_vector=[0,0,.1273],
+                                     orientation=[0,0,0],
+                                     rotation=[0,0,1]),
+                            URDFLink(name='shoulder_lift_joint',
+                                    translation_vector=[0, .220941, 0],
+                                    orientation=[0, 1.57, 0],
+                                    rotation=[0,1,0]),
+                            URDFLink(name='elbow_joint',
+                                    translation_vector=[0, -.1719, .612],
+                                    orientation=[0,0,0],
+                                    rotation=[0,1,0]),
+                            URDFLink(name='wrist_1_joint',
+                                    translation_vector=[0, 0, .5723],
+                                    orientation=[0, 1.57,0],
+                                    rotation=[0,1,0]),
+                            URDFLink(name='wrist_2_joint',
+                                    translation_vector=[0, .1149, 0],
+                                    orientation=[0,0,0],
+                                    rotation=[0,0,1]),
+                            URDFLink(name='wrist_3_joint',
+                                    translation_vector=[0,0,.1157],
+                                    orientation=[0,0,0],
+                                    rotation=[0,1,0]),
+                            URDFLink(name='ee',
+                                    translation_vector=[0, .0922,0],
+                                    orientation=[0,0,1.57],
+                                    rotation=[0,0,1])],
+                            active_links_mask=[True, True, True, True, True, True, True, True]
+                        )
         self.initialize_robot()
 
     def get_cameraM(self):
@@ -109,8 +108,7 @@ class AileenSupervisor(Supervisor):
             # self._motorSensorNodes.append(self.getPositionSensor(name+'_sensor'))
             self._motorSensorNodes.append(self.getDevice(name + '_sensor'))
             self._motorSensorNodes[-1].enable(settings.TIME_STEP)
-        logging.info('[aileen_supervisor] :: got {} motors and {} position sensors'.format(len(self._motorNodes),
-                                                                                           len(self._motorSensorNodes)))
+        logging.info('[aileen_supervisor] :: got {} motors and {} position sensors'.format(len(self._motorNodes), len(self._motorSensorNodes)))
         logging.info('[aileen_supervisor] :: moving to start position')
         self.command_pose(settings.START_LOCATION_1)
         self.wait_for_motion_complete()
@@ -118,15 +116,16 @@ class AileenSupervisor(Supervisor):
         self.wait_for_motion_complete()
         logging.info('[aileen_supervisor] :: reached start position')
         T = self._ur10Chain.forward_kinematics(self.pose_to_ikpy(settings.HOME_POSE))
-        self._home = T[0:3, 3]
+        self._home = T[0:3,3]
         # self._orientation = T[0:3,0:3]
         # print(self._orientation)
         self._orientation = [0, 1, 0]
         logging.info('[aileen_supervisor] :: camera recognition is {}'.format(self._camera.hasRecognition()))
         if self._camera.hasRecognition():
             self._camera.enableRecognitionSegmentation()
-        logging.info('[aileen_supervisor] :: camera recognition and segmentation is {}'.format(
-            self._camera.isRecognitionSegmentationEnabled()))
+        logging.info('[aileen_supervisor] :: camera recognition and segmentation is {}'.format(self._camera.isRecognitionSegmentationEnabled()))
+        logging.info('[aileen_supervisor] :: camera focal length is {}'.format(self.flen))
+        logging.info('[aileen_supervisor] :: camera fov is {}'.format(self.fov))
 
     def pose_to_ikpy(self, joints):
         j = [0]
@@ -143,11 +142,10 @@ class AileenSupervisor(Supervisor):
         Assumes point is only XYZ coord right now.  Assuming fixed orientation is correct.  can change in future
         point should be a list: [X, Y, Z]
         """
-        # Tmat = to_transformation_matrix(point, self._orientation)
-        # tpoint = self.transform_point_to_robot_frame(point)
+        #Tmat = to_transformation_matrix(point, self._orientation)
+        #tpoint = self.transform_point_to_robot_frame(point)
         init_pos = self.pose_to_ikpy(self.get_current_position())
-        ikpy_pose = self._ur10Chain.inverse_kinematics(target_position=point, target_orientation=self._orientation,
-                                                       orientation_mode="Z", initial_position=init_pos, max_iter=50000)
+        ikpy_pose = self._ur10Chain.inverse_kinematics(target_position=point, target_orientation=self._orientation, orientation_mode="Z", initial_position=init_pos, max_iter=50000)
         return self.pose_from_ikpy(ikpy_pose)
 
     def go_to_point(self, point, wait=True):
@@ -175,12 +173,10 @@ class AileenSupervisor(Supervisor):
         if motor < 0:
             truth = list()
             for i in range(len(self._motorNodes)):
-                truth.append(abs(self._motorNodes[i].getTargetPosition() - self._motorSensorNodes[
-                    i].getValue()) < settings.IN_POS_THRESH)
+                truth.append(abs(self._motorNodes[i].getTargetPosition() - self._motorSensorNodes[i].getValue()) < settings.IN_POS_THRESH)
             return all(truth)
         else:
-            return abs(self._motorNodes[motor].getTargetPosition() - self._motorSensorNodes[
-                motor].getValue()) < settings.IN_POS_THRESH
+            return abs(self._motorNodes[motor].getTargetPosition() - self._motorSensorNodes[motor].getValue()) < settings.IN_POS_THRESH
 
     def command_pose(self, pose):
         for i in range(len(pose)):
@@ -190,8 +186,7 @@ class AileenSupervisor(Supervisor):
 
     def print_status(self):
         for i in range(len(self._motorNodes)):
-            print('MOTOR {}: POS: {} TAR: {}'.format(i, self._motorSensorNodes[i].getValue(),
-                                                     self._motorNodes[i].getTargetPosition()))
+            print('MOTOR {}: POS: {} TAR: {}'.format(i,self._motorSensorNodes[i].getValue(),self._motorNodes[i].getTargetPosition()))
         print('===================')
 
     def transform_point_to_robot_frame(self, point):
@@ -202,14 +197,14 @@ class AileenSupervisor(Supervisor):
         newpoint.append(1)
         pArr = np.array(newpoint)
         T1 = np.array([[1, 0, 0, 0],
-                       [0, 0, -1, 0],
-                       [0, 1, 0, 0],
-                       [0, 0, 0, 1]])
+                    [0, 0, -1, 0],
+                    [0, 1, 0, 0],
+                    [0, 0, 0, 1]])
         T2 = np.array([[0, -1, 0, 0],
-                       [1, 0, 0, 0],
-                       [0, 0, 1, 0],
-                       [0, 0, 0, 1]])
-        newpoint2 = np.matmul(T2, np.matmul(T1, pArr))
+                    [1, 0, 0, 0],
+                    [0, 0, 1, 0],
+                    [0, 0, 0, 1]])
+        newpoint2 = np.matmul(T2, np.matmul(T1,pArr))
         return list(newpoint2[0:3])
 
     """==========================================================Motion Commands================================================="""
@@ -217,16 +212,16 @@ class AileenSupervisor(Supervisor):
     def indicate_object(self, point):
         logging.info('[aileen supervisor] :: Indicating Object')
         tPoint = self.transform_point_to_robot_frame(point)
-        above = [tPoint[0], tPoint[1], tPoint[2] + .2]
-        down = [tPoint[0], tPoint[1], tPoint[2] + .1]
+        above = [tPoint[0], tPoint[1], tPoint[2]+.2]
+        down = [tPoint[0], tPoint[1], tPoint[2]+.1]
         self.go_to_point(above)
-        # self.print_status()
+        #self.print_status()
         self.go_to_point(down)
-        # self.print_status()
+        #self.print_status()
         self.go_to_point(above)
-        # self.print_status()
+        #self.print_status()
         self.return_home()
-        # self.print_status()
+        #self.print_status()
         return None
 
     def pick_object(self, position):
@@ -234,13 +229,13 @@ class AileenSupervisor(Supervisor):
             position: list [X, Y, Z] of object to pick in world frame
         """
         logging.info('[aileen supervisor] :: Picking Object')
-        position = [position[0], position[1] + .051, position[2]]
+        position = [position[0], position[1]+.051, position[2]]
         self.go_to_point(self.transform_point_to_robot_frame(position))
         logging.info('[aileen supervisor] :: Locking')
         self._connectorNode.lock()
         currJnts = self.get_current_position()
         newJnts = currJnts
-        newJnts[2] -= 3.14 / 4
+        newJnts[2] -= 3.14/4
         self.command_pose(newJnts)
         logging.debug('[aileen supervisor] :: Returning Home')
         self.return_home()
@@ -248,14 +243,14 @@ class AileenSupervisor(Supervisor):
 
     def place_object(self, target):
         logging.info('[aileen supervisor] :: Placing Object')
-        above_target = [target[0], target[1] + .25, target[2]]
-        target = [target[0], target[1] + .051, target[2]]
+        above_target = [target[0], target[1]+.25, target[2]]
+        target = [target[0], target[1]+.051, target[2]]
         self.go_to_point(self.transform_point_to_robot_frame(above_target))
         self.go_to_point(self.transform_point_to_robot_frame(target))
         self._connectorNode.unlock()
         currJnts = self.get_current_position()
         newJnts = currJnts
-        newJnts[2] -= 3.14 / 4
+        newJnts[2] -= 3.14/4
         self.command_pose(newJnts)
         self.return_home()
         return None
@@ -269,31 +264,29 @@ class AileenSupervisor(Supervisor):
         nlegs = len(waypoints) - 1
 
         for i in np.arange(nlegs):
-            # Find vector in 3d space
-            delta_vec = [waypoints[i + 1][0] - waypoints[i][0], waypoints[i + 1][1] - waypoints[i][1],
-                         waypoints[i + 1][2] - waypoints[i][2]]
-            delta_mag = ((delta_vec[0] ** 2) + (delta_vec[1] ** 2) + (delta_vec[2] ** 2)) ** 0.5
-            # Calculate number of points in vector
-            npoints = np.floor((delta_mag / settings.INSTRUCTOR_VELOCITY) / (settings.TIME_STEP / 1000.0))
-            # Find motion step through space
-            delta_step = delta_vec / npoints
+            #Find vector in 3d space
+            delta_vec = [waypoints[i+1][0] - waypoints[i][0], waypoints[i+1][1] - waypoints[i][1], waypoints[i+1][2] - waypoints[i][2]]
+            delta_mag = ((delta_vec[0]**2) + (delta_vec[1]**2) + (delta_vec[2]**2))**0.5
+            #Calculate number of points in vector
+            npoints = np.floor((delta_mag/settings.INSTRUCTOR_VELOCITY)/(settings.TIME_STEP/1000.0))
+            #Find motion step through space
+            delta_step = delta_vec/npoints
             for i in np.arange(npoints):
-                traj.append(list(traj[-1] + delta_step))
+                traj.append(list(traj[-1]+delta_step))
         return traj
 
     def animate(self, node, positions):
         trans_field = node.getField('translation')
         for point in positions:
             trans_field.setSFVec3f(point)
-            # node.resetPhysics()
+            #node.resetPhysics()
             self.step(settings.TIME_STEP)
         return None
 
     def disable_physics(self, node):
 
-        import pdb;
-        pdb.set_trace()
-        # node.getField('physics').importMFNode('/usr/local/webots/resources/nodes/Physics.wrl')
+        import pdb; pdb.set_trace()
+        #node.getField('physics').importMFNode('/usr/local/webots/resources/nodes/Physics.wrl')
         return None
 
     def enable_physics(self, node):
@@ -321,14 +314,11 @@ class AileenSupervisor(Supervisor):
         return None
 
     def test_ikpy(self, n=5):
-        # generate faux object location, move to directly above it, move down, move up, move home
+        #generate faux object location, move to directly above it, move down, move up, move home
         for i in range(n):
-            point = [np.random.random() * (
-                        settings.OBJECT_POSITION_MAX_X - settings.OBJECT_POSITION_MIN_X) + settings.OBJECT_POSITION_MIN_X,
-                     np.random.random() * (
-                                 settings.OBJECT_POSITION_MAX_Y - settings.OBJECT_POSITION_MIN_Y) + settings.OBJECT_POSITION_MIN_Y,
-                     np.random.random() * (
-                                 settings.OBJECT_POSITION_MAX_Z - settings.OBJECT_POSITION_MIN_Z) + settings.OBJECT_POSITION_MIN_Z]
+            point = [np.random.random()*(settings.OBJECT_POSITION_MAX_X-settings.OBJECT_POSITION_MIN_X) + settings.OBJECT_POSITION_MIN_X,
+                    np.random.random()*(settings.OBJECT_POSITION_MAX_Y-settings.OBJECT_POSITION_MIN_Y) + settings.OBJECT_POSITION_MIN_Y,
+                    np.random.random()*(settings.OBJECT_POSITION_MAX_Z-settings.OBJECT_POSITION_MIN_Z) + settings.OBJECT_POSITION_MIN_Z]
             self.indicate_object(point)
 
     def return_home(self):
@@ -368,20 +358,30 @@ class AileenSupervisor(Supervisor):
             object_name = object_node.getTypeName()
             if 'Solid' in object_name:
                 cnt_obj += 1
+
         # Test if the camera can see all the generated objects
         if self._camera.getRecognitionNumberOfObjects() == cnt_obj and cnt_obj > 0:
             self.save = True
             self.num_rec = cnt_obj
         else:
             self.save = False
-        print('object num = ', self.num_rec)
-        print('object gt num = ', cnt_obj)
+        # print('object num = ', self.num_rec)
+        # print('object gt num = ', cnt_obj)
         objects = self._camera.getRecognitionObjects()
-        mask_img = cv2.imread(settings.CURRENT_REC_SEG_IMAGE_PATH)
+        mask_img = self._camera.getRecognitionSegmentationImage()
         for object in objects:
-            # webots camera recognized object is bounded with the gt object by the id
+            # webots camera recognized object is linked with the gt object by the id
             id = object.get_id()
-            child = self.getFromId(id)
+            child = self.getFromId(id) # gt child
+            wcentroid = child.getPosition()
+            worientation = child.getOrientation()
+            wbbox_node = child.getField("boundingObject")
+            wbbox_size = wbbox_node.getSFNode().getField('size').getSFVec3f()
+            # size = bounding_obj.getField('size').getSFVec3f()
+
+            # self.get_object_size_type(child)
+            obj_position = object.get_position()
+            obj_orientation = object.get_orientation()
             position = object.get_position_on_image()
             bbsize = object.get_size_on_image()
             cx = int(position[0])
@@ -394,30 +394,37 @@ class AileenSupervisor(Supervisor):
             by = int(cy + h / 2)
 
             object_dict = {'id_string': "ob{}".format(str(id)),
-                           'id': id,
-                           'bbposition': position,
-                           'bbsize': bbsize,
-                           'bounding_box': self.computeBoundingBox(child),
-                           'bounding_box_camera': [tx, ty, bx, by],
-                           'resolution': [self.resX, self.resY],
-                           'shape': self.get_object_shape(child),
-                           'color': self.get_object_color(child),
-                           'texture': self.get_object_texture(child),
-                           'hasCurveContour': self.get_object_hasCurveContour(child),
-                           'hasEdgeContour': self.get_object_hasEdgeContour(child),
-                           'hasPlane': self.get_object_hasPlane(child),
-                           'hasRectPlane': self.get_object_hasRectPlane(child),
-                           'hasRoundPlane': self.get_object_hasRoundPlane(child),
-                           'id_name': self.get_object_name(child),
-                           'held': 'false'
+                               'id': id,
+                               'bbposition': position,
+                               'bbsize': bbsize,
+                               'bounding_box_camera': [tx, ty, bx, by],
+                               'world_centroid': wcentroid,
+                               'world_orientation': worientation,
+                               'world_bbox_size': wbbox_size,
+                               # 'obj_relative_position':obj_position,
+                               # 'obj_relative_orientation': obj_orientation,
+                               'resolution': [self.resX, self.resY],
+                               'shape': self.get_object_shape(child),
+                               'color': self.get_object_color(child),
+                               'texture': self.get_object_texture(child),
+                               'hasCurveContour': self.get_object_hasCurveContour(child),
+                               'hasEdgeContour': self.get_object_hasEdgeContour(child),
+                               'hasPlane': self.get_object_hasPlane(child),
+                               'hasRectPlane': self.get_object_hasRectPlane(child),
+                               'hasRoundPlane': self.get_object_hasRoundPlane(child),
+                               'id_name': self.get_object_name(child),
+                               # 'focal_length': self.flen,
+                               'held': 'false'
                            }
             obj_dicts.append(object_dict)
         output_dict = {'objects': obj_dicts, 'image': '', 'save': self.save, 'obj_num': self.num_rec}
         return output_dict
 
+
     def get_object_name(self, object_node):
         object_id = object_node.getField('name').getSFString()
         return object_id
+
 
     def get_object_shape(self, object_node):
         children = object_node.getField('children')
@@ -426,17 +433,24 @@ class AileenSupervisor(Supervisor):
             if shape_node.getTypeName() == "Shape":
                 geometry_node = shape_node.getField('geometry').getSFNode()
                 geometry_string = geometry_node.getTypeName()
+                # print geometry_string.title()
                 label_string = "CV{}".format(geometry_string.title())
                 return label_string
 
-        def get_object_hasCurveContour(self, object_node):
+        # for i in range(0, children.getCount()):
+        #     size_type = children.getMFNode(i)
+        #     print('shape_node', size_type)
+        #     return size_type
+
+
+    def get_object_hasCurveContour(self, object_node):
         children = object_node.getField('children')
         for i in range(0, children.getCount()):
             shape_node = children.getMFNode(i)
             if shape_node.getTypeName() == "Shape":
                 geometry_node = shape_node.getField('geometry').getSFNode()
                 geometry_string = geometry_node.getTypeName()
-                print geometry_string.title()
+                # print geometry_string.title()
                 if geometry_string.title() == "Box":
                     return 0
                 else:
@@ -450,7 +464,6 @@ class AileenSupervisor(Supervisor):
             if shape_node.getTypeName() == "Shape":
                 geometry_node = shape_node.getField('geometry').getSFNode()
                 geometry_string = geometry_node.getTypeName()
-                print("geometry_string = ", geometry_string.title())
                 if geometry_string.title() == 'Sphere':
                     return 0
                 else:
@@ -481,6 +494,7 @@ class AileenSupervisor(Supervisor):
                     return 1
                 else:
                     return 0
+
 
     def get_object_hasRoundPlane(self, object_node):
         children = object_node.getField('children')
@@ -561,8 +575,7 @@ class AileenSupervisor(Supervisor):
         logging.debug("[aileen_supervisor] :: saved current image at {}".format(settings.CURRENT_IMAGE_PATH))
         if self._camera.hasRecognitionSegmentation():
             self._camera.saveRecognitionSegmentationImage(settings.CURRENT_REC_SEG_IMAGE_PATH, 100)
-            logging.debug("[aileen_supervisor] :: saved current recognition and segmentation image at {}".format(
-                settings.CURRENT_REC_SEG_IMAGE_PATH))
+            logging.debug("[aileen_supervisor] :: saved current recognition and segmentation image at {}".format(settings.CURRENT_REC_SEG_IMAGE_PATH))
 
         if settings.GET_IMAGE_RETURNS_IMAGE_BINARY:
             with open(settings.CURRENT_IMAGE_PATH, "rb") as handle:
@@ -595,7 +608,7 @@ class AileenSupervisor(Supervisor):
             if 'Solid' in object_name:
                 nodes_to_remove.append(object_node.getId())
 
-        print len(nodes_to_remove)
+        # print len(nodes_to_remove)
         for i in range(0, len(nodes_to_remove)):
             node_id = nodes_to_remove[i]
             node = self.getFromId(node_id)

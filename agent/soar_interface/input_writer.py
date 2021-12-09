@@ -8,6 +8,7 @@ import cv2
 import numpy as np
 import settings
 import torch
+from scipy.stats import mode
 from scipy.spatial import distance
 import language_helper
 
@@ -43,7 +44,7 @@ class InputWriter(object):
             self._concept_memory = self._input_link.CreateIdWME("concept-memory")
             self._clean_concept_memory_flag = False
 
-        #if settings.SIMULATE_CV:
+        # if settings.SIMULATE_CV:
             self.detector = Detector()
 
     def set_concept_memory_status(self, concept_memory_status_dictionary):
@@ -84,14 +85,16 @@ class InputWriter(object):
             #             `settings.CURRENT_IMAGE_PATH.
             # im = cv2.imdecode(np.fromfile(settings.CURRENT_IMAGE_PATH, dtype=np.uint8), 1)
             img = cv2.imread(settings.CURRENT_IMAGE_PATH)
+            mask_img = cv2.imread(settings.CURRENT_REC_SEG_IMAGE_PATH)
             # print('image shape = ', np.shape(img))
             # img = np.moveaxis(img, -1, 0).astype(np.float32)
             # img = torch.from_numpy(img)
             # im = img / 255.0
+
+            # print('world objects is:', objects_list)
             cv_detections = self.detector.run(img)
             # print('cv_detection is:', cv_detections)
-            # print('world objects is:', objects_list)
-            # Refine gt bbox
+
             for i in range(len(objects_list)):
                 w = objects_list[i]
                 position = w['bbposition']
@@ -130,8 +133,30 @@ class InputWriter(object):
                     objects_list[i]['bbposition'] = position
                     objects_list[i]['bbsize'] = bbsize
 
+            # if len(cv_detections) > 0:
+            #     detections = cv_detections['objects']
+            #     for i in range(len(detections)):
+            #         d = detections[i]
+            #         w = objects_list[i]
+            #         bbox1 = d['camera_bounding_box_mrcnn']
+            #         bbox2 = w['bounding_box_camera']
+            #         wtx = bbox2[0]
+            #         wty = bbox2[1]
+            #         wbx = bbox2[2]
+            #         wby = bbox2[3]
+            #
+            #         dtx = bbox1[0]
+            #         dty = bbox1[1]
+            #         dbx = bbox1[2]
+            #         dby = bbox1[3]
+            #
+            #         cv2.rectangle(img, (wtx, wty), (wbx, wby), (255, 0, 0), 2)
+            #         cv2.rectangle(img, (dtx, dty), (dbx, dby), (0, 255, 0), 2)
+            #         cv2.imshow('bbox', img)
+            #         cv2.waitKey(0)
 
             objects_list = self.align_cv_detections_to_world(cv_detections, objects_list)
+            # print('updated is:', objects_list)
             logging.debug("Aligned Detections: {}".format(objects_list))
 
         else:
@@ -177,10 +202,10 @@ class InputWriter(object):
                 # 'color': e.g., CVRed
                 # 'camera_yolo_position': YOLO bounding box centroid
                 # 'camera_yolo_position_proj_to_world': World projection of YOLO bounding box centroid
-
-                # if Detector.bb_iou(bbox1, bbox2) > .7:
+                # print Detector.bb_iou(bbox1, bbox2)
+                # print dst
                 if Detector.bb_iou(bbox1, bbox2) > .7 or dst < 4.0:
-                    # Match
+                # if dst < 4.0:
                     mapped[w_index] = 1
                     detections[i]['held'] = w['held']
                     detections[i]['id'] = w['id']
@@ -191,9 +216,13 @@ class InputWriter(object):
                     detections[i]['position_simulator'] = w['bbposition']
                     detections[i]['bounding_box_simulator'] = w['bounding_box_camera']
                     detections[i]['bbox_size_simulator'] = w['bbsize']
+                    detections[i]['orientation'] = w['world_orientation']
+                    detections[i]['wbbox_size'] = w['world_bbox_size']
+                    detections[i]['wbbox_position'] = w['world_centroid']
                     #  The detector output
-                    detections[i]['position'] = detections[i]['camera_mrcnn_position']
+                    #detections[i]['position'] = detections[i]['camera_mrcnn_position']
                     detections[i]['bounding_box'] = detections[i]['camera_bounding_box_mrcnn']
+                    detections[i]['position'] = detections[i]['wbbox_position']
 
                     #  Extra attributes
                     detections[i]['hasPlane'] = w['hasPlane']
@@ -226,9 +255,13 @@ class InputWriter(object):
             detections[i]['id_string'] = world[i]['id_string']
             detections[i]['held'] = world[i]['held']
             #  The simulator groundtruth
-            detections[i]['position'] = world[i]['bbposition']
+            # detections[i]['position'] = world[i]['bbposition']
+            detections[i]['position'] = world[i]['world_centroid']
             detections[i]['bounding_box'] = world[i]['bounding_box_camera']
 
+            detections[i]['orientation'] = world[i]['world_orientation']
+            detections[i]['wbbox_size'] = world[i]['world_bbox_size']
+            detections[i]['wbbox_position'] = world[i]['world_centroid']
             # #  The detector output
             # detections[i]['position'] = world[i]['bbposition']
             # detections[i]['bounding_box'] = world[i]['bounding_box_camera']
@@ -334,15 +367,11 @@ class InputWriter(object):
 
     def write_language_to_input_link(self):
         new_language_link = self._language_link.CreateIdWME("language")
-        logging.debug("[input_writer] :: writing language info to input link")
+        logging.debug("[input_writer] :: writing generated parse to input link")
         ## write all parses
-        if 'parses' in self._language:
-            parses = self._language['parses']
-            parses_link = new_language_link.CreateIdWME("parses")
-            language_helper.translate_to_soar_structure(parses, parses_link)
-        if 'sentence' in self._language:
-            sentence = self._language['sentence']
-            new_language_link.CreateStringWME('sentence', sentence)
+        parses = self._language['parses']
+        parses_link = new_language_link.CreateIdWME("parses")
+        language_helper.translate_to_soar_structure(parses, parses_link)
         self._language = None
         self._clean_language_link_flag = True
 
@@ -378,13 +407,16 @@ class InputWriter(object):
                 position_id = object_id.CreateIdWME('position')
                 position_id.CreateFloatWME('x', w_object['position'][0])
                 position_id.CreateFloatWME('y', w_object['position'][1])
-                # position_id.CreateFloatWME('z', w_object['position'][2])
+                position_id.CreateFloatWME('z', w_object['position'][2])
             if 'bounding_box' in w_object:
                 size_id = object_id.CreateIdWME('size_bb')
-                size_id.CreateFloatWME('xsize', w_object['bounding_box'][2]-w_object['bounding_box'][0])
+                # size_id.CreateFloatWME('xsize', w_object['bounding_box'][2]-w_object['bounding_box'][0])
                 # size_id.CreateFloatWME('zsize', w_object['bounding_box'][5]-w_object['bounding_box'][2])
-                size_id.CreateFloatWME('ysize', w_object['bounding_box'][3]-w_object['bounding_box'][1])
-                object_id.CreateFloatWME('size', self.size_from_bounding_box(w_object['bounding_box']))
+                # size_id.CreateFloatWME('ysize', w_object['bounding_box'][3]-w_object['bounding_box'][1])
+                size_id.CreateFloatWME('xsize', w_object['wbbox_size'][0])
+                size_id.CreateFloatWME('zsize', w_object['wbbox_size'][2])
+                size_id.CreateFloatWME('ysize', w_object['wbbox_size'][1])
+                object_id.CreateStringWME('size', self.size_from_bounding_box(w_object['bounding_box']))
             object_id.CreateStringWME('held', w_object['held'])
             object_id.CreateStringWME('color', str(w_object['color']))
             object_id.CreateStringWME('shape', w_object['shape'])
@@ -444,16 +476,17 @@ objects = [{'orientation': [1.0, -5.75539615965681e-17, 3.38996313371214e-17, 5.
         world = World_Trace()
 
         for obj in objects:
-            print('object = ', obj)
+            # print('object = ', obj)
             if obj['held'] == 'false':
                 world.add_object_state_series(
                     [Object_State(name=str(obj['id']),timestamp=0,
                                   x=obj['position'][0],
+                                  #z=obj['position'][1],
+                                  y=obj['position'][2],
                                   z=obj['position'][1],
-                                  # y=obj['position'][2],
-                                  # z=obj['position'][1],
-                                  xsize=obj['bounding_box'][2]-obj['bounding_box'][0],
-                                  zsize=obj['bounding_box'][3]-obj['bounding_box'][1],
+                                  xsize=obj['wbbox_size'][0],
+                                  zsize=obj['wbbox_size'][1],
+                                  ysize=obj['wbbox_size'][2]
                                   # xsize=obj['bounding_box'][3]-obj['bounding_box'][0],
                                   # ysize=obj['bounding_box'][5]-obj['bounding_box'][2],
                                   # zsize=obj['bounding_box'][4]-obj['bounding_box'][1]
@@ -483,13 +516,12 @@ objects = [{'orientation': [1.0, -5.75539615965681e-17, 3.38996313371214e-17, 5.
         """
         # area = abs((bbox[3] - bbox[0]) * (bbox[5] - bbox[2]))
         area = abs((bbox[2] - bbox[0]) * (bbox[3] - bbox[1]))
-        # if area < settings.SIZE_SM:
-        #     return 'CVSmall'
-        # elif area < settings.SIZE_ML:
-        #     return 'CVMedium'
-        # else:
-        #     return 'CVLarge'
-        return area
+        if area < settings.SIZE_SM:
+            return 'CVSmall'
+        elif area < settings.SIZE_ML:
+            return 'CVMedium'
+        else:
+            return 'CVLarge'
 
     def get_rcc8_symbols_for_allen_intervals(self, symbols):
         """
