@@ -429,17 +429,19 @@ class AileenSupervisor(Supervisor):
                 label_string = "CV{}".format(geometry_string.title())
                 return label_string
 
-    def get_object_hasCurveContour(self, object_node):
+        def get_object_hasCurveContour(self, object_node):
         children = object_node.getField('children')
         for i in range(0, children.getCount()):
             shape_node = children.getMFNode(i)
             if shape_node.getTypeName() == "Shape":
                 geometry_node = shape_node.getField('geometry').getSFNode()
                 geometry_string = geometry_node.getTypeName()
-                if geometry_string == "box":
+                print geometry_string.title()
+                if geometry_string.title() == "Box":
                     return 0
                 else:
                     return 1
+
 
     def get_object_hasEdgeContour(self, object_node):
         children = object_node.getField('children')
@@ -448,10 +450,12 @@ class AileenSupervisor(Supervisor):
             if shape_node.getTypeName() == "Shape":
                 geometry_node = shape_node.getField('geometry').getSFNode()
                 geometry_string = geometry_node.getTypeName()
-                if geometry_string == "sphere":
+                print("geometry_string = ", geometry_string.title())
+                if geometry_string.title() == 'Sphere':
                     return 0
                 else:
                     return 1
+
 
     def get_object_hasPlane(self, object_node):
         children = object_node.getField('children')
@@ -460,10 +464,11 @@ class AileenSupervisor(Supervisor):
             if shape_node.getTypeName() == "Shape":
                 geometry_node = shape_node.getField('geometry').getSFNode()
                 geometry_string = geometry_node.getTypeName()
-                if geometry_string == "sphere":
+                if geometry_string.title() == "Sphere":
                     return 0
                 else:
                     return 1
+
 
     def get_object_hasRectPlane(self, object_node):
         children = object_node.getField('children')
@@ -472,7 +477,7 @@ class AileenSupervisor(Supervisor):
             if shape_node.getTypeName() == "Shape":
                 geometry_node = shape_node.getField('geometry').getSFNode()
                 geometry_string = geometry_node.getTypeName()
-                if geometry_string == "box":
+                if geometry_string.title() == "Box":
                     return 1
                 else:
                     return 0
@@ -484,10 +489,11 @@ class AileenSupervisor(Supervisor):
             if shape_node.getTypeName() == "Shape":
                 geometry_node = shape_node.getField('geometry').getSFNode()
                 geometry_string = geometry_node.getTypeName()
-                if geometry_string == "cylinder" or geometry_string == "cone":
+                if geometry_string.title() == "Cylinder" or geometry_string.title() == "Cone":
                     return 1
                 else:
                     return 0
+
 
     def get_object_color(self, object_node):
         children = object_node.getField('children')
