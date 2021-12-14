@@ -9,6 +9,8 @@
 (isa AileenReasoningSymbol Collection)
 (comment AileenReasoningSymbol "These are symbols that are created by aileen to refer to objects")
 
+(isa AileenInternalPredicate Collection)
+
 (isa AileenReasoningPredicate Collection)
 (comment AileenReasoningPredicate "These are symbols that are created by aileen to refer to sets of objects")
 

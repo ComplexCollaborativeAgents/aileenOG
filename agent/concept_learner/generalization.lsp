@@ -58,7 +58,9 @@
     (values (length (fire:ask-it `d::(isa ?x AileenReasoningPredicate)))
 	    gpool)))
 
-(defun create-reasoning-predicate-simple (pred arity)
+(defun create-internal-predicate (pred continuous-pred arity)
+  (fire:kb-store `d::(encodingOf ,aileen::continuous-pred ,aileen::pred) :mt 'd::BaseKB)
+  (fire:kb-store `d::(isa ,aileen::pred AileenInternalPredicate) :mt 'd::BaseKB)
 	(fire:kb-store `d::(isa ,aileen::pred AileenReasoningPredicate) :mt 'd::BaseKB)
   (fire:kb-store `d::(arity ,aileen::pred ,aileen::arity) :mt 'd::BaseKB))
 
@@ -79,46 +81,67 @@
 ;;; Assumes gpool is aready created
 (defun add-case-to-gpool (facts context concept)
 
-	(debug-format "Adding case to gpool ~s~%" concept)
+  (debug-format "Adding case to gpool ~s~%" concept)
   (debug-format "facts are ~s~%" facts)
-
+  
   (let ((gpool (get-concept-gpool concept)))
-
-  	; (debug-format "foofacts are ~s~%" facts)
+    
+    ; (debug-format "foofacts are ~s~%" facts)
     (remove-facts-from-case context)
-
+    
     (debug-format "Storing case facts in ~s~%" context)
     (store-facts-in-case facts context)
-
-  	;;; wwh adding quantity predicates if needed
-  	(setf facts (append facts (maybe-add-quantity-preds facts context gpool)))
+    
+    ;;; wwh adding quantity predicates if needed
+    (setf facts (append facts (maybe-add-quantity-preds facts context gpool)))
 
     (store-facts-in-case facts context)
     (dolist (fact facts)
       (cond ((eql concept (car fact))
-	     (fire:kb-store `d::(sageRequireInMapping ,aileen::fact) :mt context))
-	    ((and (eql concept (third fact))
-		  (eql 'd::isa (car fact)))
-	     (fire:kb-store `(d::sageRequireInMapping
-			      (,(third fact) ,(second fact))) :mt context))
-	    ((find concept fact)
-	     (error "unexpected concept in fact"))
-	    (t nil)))
+             (fire:kb-store `d::(sageRequireInMapping ,aileen::fact) :mt context))
+            ((and (eql concept (third fact))
+                  (eql 'd::isa (car fact)))
+             (fire:kb-store `(d::sageRequireInMapping
+                              (,(third fact) ,(second fact))) :mt context))
+            ((find concept fact)
+             (error "unexpected concept in fact"))
+            (t nil)))
     (fire:clear-wm)
     (fire:kb-forget `(d::gpoolAssimilationThreshold ,gpool ?x) :mt gpool)
     (fire:kb-store `(d::gpoolAssimilationThreshold ,gpool ,*assimilation-threshold*) :mt gpool)
     (fire:tell-it `(d::sageSelectAndGeneralize ,context ,gpool) :context 'd::BaseKB)
-
+    
     ; (multiple-value-bind (rbrowse full url) (rbrowse::browse-sme sme::*sme*)
     ;   (declare (ignore url rbrowse))
     ;   (format t "~% rbrowse-sme: ~A base:~A target: ~A url: ~A "
-	   ;    sme::*sme*
-	   ;    context
-	   ;    gpool
-	   ;    full))
-
+    ;    sme::*sme*
+    ;    context
+    ;    gpool
+    ;    full))
+    
     (values (length (fire:ask-it `(d::kbOnly (d::gpoolGeneralization ,gpool ?num))))
-	    (length (fire:ask-it `(d::kbOnly (d::gpoolExample ,gpool ?num)) ))) ))
+            (length (fire:ask-it `(d::kbOnly (d::gpoolExample ,gpool ?num)) ))) ))
+
+
+(defun sage-select (probe-mt concept)
+  (let ((gpool (get-concept-gpool concept))
+        (facts (kb::list-mt-facts probe-mt)))
+    (dolist (fact facts)
+      (cond ((eql concept (car fact))
+             (fire:kb-store `d::(sageRequireInMapping ,aileen::fact) :mt probe-mt))
+            ((and (eql concept (third fact))
+                  (eql 'd::isa (car fact)))
+             (fire:kb-store `(d::sageRequireInMapping
+                              (,(third fact) ,(second fact))) :mt probe-mt))
+            ((find concept fact)
+             (error "unexpected concept in fact"))
+            (t nil)))
+    (fire:clear-wm)
+    (fire:kb-forget `(d::gpoolAssimilationThreshold ,gpool ?x) :mt gpool)
+    (fire:kb-store `(d::gpoolAssimilationThreshold ,gpool ,*assimilation-threshold*) :mt gpool)
+    (fire:ask-it `(d::sageSelect ,probe-mt ,gpool ?target ?mapping) :context 'd::BaseKB :response '?mapping)
+    ))
+
 
 (defun store-facts-in-case (facts context)
   (remove-facts-from-case context)
@@ -626,10 +649,13 @@
       ;     full))
 
 
-      (cond (cis cis)
+      (cond (cis
+              ; (sample-internal-preds cis context gpool)
+              cis
+              )
             ((not repeat?)
-               (debug-format "Re-trying project mapping~%")
-               (project-state-for-action facts context action t))
+              (debug-format "Re-trying project mapping~%")
+              (project-state-for-action facts context action t))
             (t nil))
 
       ; cis

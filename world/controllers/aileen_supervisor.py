@@ -253,6 +253,7 @@ class AileenSupervisor(Supervisor):
         newJnts[2] -= 3.14/4
         self.command_pose(newJnts)
         self.return_home()
+        logging.info('[aileen supervisor] :: Finished Placing Object')
         return None
 
     def create_trajectory(self, waypoints):

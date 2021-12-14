@@ -2,41 +2,25 @@
     "left-of": {
         "objects": ["<obj1>", "<obj2>"],
         "definition": [["s" , "<obj2>", "<obj1>"], ["ec", "<obj2>", "<obj1>"]],
-        "language": ["<obj1>", "left of","<obj2>"]
+        "language": ["<obj1>", "left of","<obj2>"],
+        "negation": "right-of"
     },
     "right-of": {
         "objects": ["<obj1>", "<obj2>"],
         "definition": [["n" , "<obj2>", "<obj1>"], ["dc", "<obj2>", "<obj1>"]],
-        "language": ["<obj1>", "right of","<obj2>"]
-    },
-    "front-of": {
-        "objects": ["<obj1>", "<obj2>"],
-        "definition": [["w" , "<obj2>", "<obj1>"], ["dc", "<obj2>", "<obj1>"]],
-        "language": ["<obj1>", "in front of","<obj2>"]
-    },
-    "behind-disjunctive": {
-        "objects": ["<obj1>", "<obj2>"],
-        "definition": [
-                        [
-                            [["dc", "<obj2>", "<obj1>"],["e", "<obj2>", "<obj1>"]]
-                        ],
-                        [
-                            [["dc", "<obj2>", "<obj1>"],["ne", "<obj2>", "<obj1>"]]
-                        ],
-                        [
-                            [["dc", "<obj2>", "<obj1>"], ["se", "<obj2>", "<obj1>"]]
-                        ]
-                    ],
-        "language": ["<obj1>", "behind","<obj2>"]
+        "language": ["<obj1>", "right of","<obj2>"],
+        "negation": "left-of"
     },
     "near": {
         "objects": ["<obj1>", "<obj2>"],
         "definition": [["near" , "<obj2>", "<obj1>"], ["dc", "<obj2>", "<obj1>"]],
-        "language": ["<obj1>", "near","<obj2>"]
+        "language": ["<obj1>", "near","<obj2>"],
+        "negation": "distant"
     },
     "distant": {
         "objects": ["<obj1>", "<obj2>"],
         "definition": [["distant" , "<obj2>", "<obj1>"], ["dc", "<obj2>", "<obj1>"]],
-        "language": ["<obj1>", "far from","<obj2>"]
+        "language": ["<obj1>", "far from","<obj2>"],
+        "negation": "near"
     }
 }
