@@ -11,8 +11,8 @@
               {"name": "pick-up", "argument": "<obj1>"},
               {"name": "place", "argument1": "<obj1>", "argument2": "<obj2>", "relation": "right-of"}],
       "language": ["move", "<obj1>", "right of", "<obj2>"],
-      "<obj1>": {"color": "red", "shape": "box"},
-      "<obj2>": {"color": "blue", "shape": "box"}
+      "<obj1>": {"color": "red", "shape": "box", "size":  "medium"},
+      "<obj2>": {"color": "blue", "shape": "box", "size":  "medium"}
     },
     "content": "move red box right of blue box",
     "signal": "inform"
@@ -29,8 +29,8 @@
               {"name": "pick-up", "argument": "<obj1>"},
               {"name": "place", "argument1": "<obj1>", "argument2": "<obj2>", "relation": "right-of"}],
       "language": ["move", "<obj1>", "right of", "<obj2>"],
-      "<obj1>": {"color": "blue", "shape": "cylinder"},
-      "<obj2>": {"color": "red", "shape": "cylinder"}
+      "<obj1>": {"color": "blue", "shape": "cylinder", "size": "medium"},
+      "<obj2>": {"color": "red", "shape": "cylinder", "size":  "medium"}
     },
     "content": "move blue cylinder right of red cylinder",
     "signal": "inform"
@@ -47,8 +47,8 @@
               {"name": "pick-up", "argument": "<obj1>"},
               {"name": "place", "argument1": "<obj1>", "argument2": "<obj2>", "relation": "right-of"}],
       "language": ["move", "<obj1>", "right of", "<obj2>"],
-      "<obj1>": {"color": "red", "shape": "box"},
-      "<obj2>": {"color": "blue", "shape": "box"}
+      "<obj1>": {"color": "red", "shape": "box", "size":  "medium"},
+      "<obj2>": {"color": "blue", "shape": "box", "size":  "medium"}
     },
     "content": "move red box right of blue box",
     "signal": "react"
