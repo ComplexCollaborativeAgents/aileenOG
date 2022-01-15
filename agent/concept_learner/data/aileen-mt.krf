@@ -279,6 +279,13 @@
 
 
 
-(in-microtheory BaseKB)
+
+
+(in-microtheory AnalogyCtrlMt)
+
 (notForAnalogy AileenCaseMt)
 (notForAnalogy sageRequireInMapping)
+
+(notForAnalogy size)
+(notForAnalogy distance)
+; (notForAnalogy dc)
