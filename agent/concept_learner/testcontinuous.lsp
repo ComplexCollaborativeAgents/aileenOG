@@ -192,17 +192,17 @@
     (append filtered-facts sampled-facts)))
 
 
-(defmethod reconstruct-exp ((exp sme::probablistic-expression))
-  (cons (sme::name (sme::predicate exp))
-        (mapcar 'reconstruct-exp (mapcar 'cdr (sme::arguments exp)))))
+; (defmethod reconstruct-exp ((exp sme::probablistic-expression))
+;   (cons (sme::name (sme::predicate exp))
+;         (mapcar 'reconstruct-exp (mapcar 'cdr (sme::arguments exp)))))
 
 
-(defmethod reconstruct-exp ((exp sme::entity))
-  (cond ((numberp (sme::user-form exp))
-          (format t "number~%")
-          (sme::user-form exp))
-        (t (sme::user-form exp))
-    ))
+; (defmethod reconstruct-exp ((exp sme::entity))
+;   (cond ((numberp (sme::user-form exp))
+;           (format t "number~%")
+;           (sme::user-form exp))
+;         (t (sme::user-form exp))
+;     ))
 
 
 
@@ -307,28 +307,33 @@
   (let (;;; how many examples in gpool
         (example-count (gpool->size gpool))
         ;;; get quantity preds from facts in case
-        (quantity-facts (find-quantities *test-preds* facts)))
+        ; (quantity-facts (find-quantities *test-preds* facts))
+        )
 
     (debug-format "~%------------------------~%~s examples for ~s~%" example-count gpool)
 
     ; (format t "qfacts are ~s~%" quantity-facts)
     (mapcan (lambda (fact)
-              ;;; take the predicate that has at least one quantity arg
-              ;;; introduce a new predicate without the quantity
-              (let ((qfact-pred (make-qfact-pred fact)))
 
-                (debug-format "    Checking ~A~%" qfact-pred)
+              (cond ((quantity-fact? fact *test-preds*)
 
-                (cond ((< example-count learn-after)
-                       ; (debug-format "    Less than ~s examples, default add ~s~%" learn-after qfact-pred)
-                       (list qfact-pred))
-                      ((in-distribution? fact facts-context gpool)
-                       (debug-format "    In dist, adding ~s~%" qfact-pred)
-                       (list qfact-pred))
-                      (t 
-                        (debug-format "    Out of dist, not adding ~s~%" qfact-pred)
-                        nil)))) 
-      quantity-facts)))
+                     ;;; take the predicate that has at least one quantity arg
+                     ;;; introduce a new predicate without the quantity
+                     (let ((qfact-pred (make-qfact-pred fact)))
+                       
+                       (debug-format "    Checking ~A~%" qfact-pred)
+                       
+                       (cond ((< example-count learn-after)
+                              ; (debug-format "    Less than ~s examples, default add ~s~%" learn-after qfact-pred)
+                              (list fact qfact-pred))
+                             ((in-distribution? fact facts-context gpool)
+                              (debug-format "    In dist, adding ~s~%" qfact-pred)
+                              (list fact qfact-pred))
+                             (t 
+                              (debug-format "    Out of dist, not adding ~s~%" qfact-pred)
+                              (list fact)))))
+                    (t (list fact))))
+      facts)))
 
 
 (defun decontextualize-temporal-pred (pred)
@@ -517,6 +522,9 @@
                        (and (eq (car fact) 'd::holdsIn) (member (car (third fact)) preds))))
                  facts))
 
+(defun quantity-fact? (fact preds)
+  (or (member (car fact) preds)
+      (and (eq (car fact) 'd::holdsIn) (member (car (third fact)) preds))))
 
 
 ;;; this is making ugly assumptions; essentially

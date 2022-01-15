@@ -248,8 +248,7 @@
            (debug-format "QUERY HELPER~%")
            ;;; adding quantity preds if needed
            ;;; not the right place to do this
-           ; (setf facts (append facts (maybe-add-quantity-preds facts (get-concept-gpool (car pattern)))))
-
+          
            ;; Store facts in context and match query.
            ; (debug-format "in query-helper. facts are~%~% ~A.~%~%Context is ~A~%~% Pattern is ~A" facts context pattern)
            (let ((matches (filter-scene-by-expression facts context nil nil pattern)))
@@ -272,12 +271,16 @@
          (context 'data::project-facts)
 	       (action (str->symbols (cdr (assoc :ACTION json))))) ;; Statement with variables
     (cond ((and facts action)
+           
            ;; Clear previous facts from context.
            (remove-facts-from-case context)
+           
            ;; Store facts in context and match query.
            (store-facts-in-case facts context)
-  				 (setf facts (append facts (maybe-add-quantity-preds facts context (get-concept-gpool action))))
-  				 (store-facts-in-case facts context)
+  				 
+           (setf facts (maybe-add-quantity-preds facts context (get-concept-gpool action)))
+  				 
+           (store-facts-in-case facts context)
 
            (let ((cis (project-state-for-action facts context action)))
              (debug-format "~%Found candidate inferences  ~A~%" cis)

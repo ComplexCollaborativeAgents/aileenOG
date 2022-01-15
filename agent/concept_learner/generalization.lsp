@@ -18,7 +18,7 @@
 (defparameter *match-threshold* 0.2 "sage threshold for matching to generalizations. because we are doing our own scoring this is low")
 (defparameter *projection-threshold* 0.003 "when projecting, we do not expect much overlap between the current situation and the generalization")
 (defparameter *probability-cutoff* 0.6 "facts below this threshold in generalizations do not contribute to score calculations")
-(defparameter *normalized-threshold* 0.75 "mapping threshold normalized against the target without the inference fact")
+(defparameter *normalized-threshold* 0.65 "mapping threshold normalized against the target without the inference fact")
 ;;; Klenk tried making this .999, but I ran into a problem with some mapping scores not being as high expected in the relational cases
 
 (defun make-reasoner (&key (kbdir "nextkb"))
@@ -55,6 +55,14 @@
     (fire:kb-store `d::(isa ,aileen::pred AileenReasoningPredicate) :mt 'd::BaseKB)
     (fire:kb-store `d::(arity ,aileen::pred
 			      ,aileen::arity) :mt 'd::BaseKB)
+
+    ; (fire:kb-store `(d::genlMt ,gpool d::AnalogyCtrlMt) :mt 'd::BaseKB)
+
+    ; (dolist (rln *test-preds*)
+    ;   (fire::kb-store `(d::ubiquitousForAnalogy ,rln)))
+    ; (fire::kb-store `(d::ubiquitousForAnalogy d::rcc8-DC))
+
+
     (values (length (fire:ask-it `d::(isa ?x AileenReasoningPredicate)))
 	    gpool)))
 
@@ -93,7 +101,10 @@
     (store-facts-in-case facts context)
     
     ;;; wwh adding quantity predicates if needed
-    (setf facts (append facts (maybe-add-quantity-preds facts context gpool)))
+    (setf facts (maybe-add-quantity-preds facts context gpool))
+
+
+    (debug-format "new facts are ~s~%" facts)
 
     (store-facts-in-case facts context)
     (dolist (fact facts)
@@ -109,7 +120,7 @@
     (fire:clear-wm)
     (fire:kb-forget `(d::gpoolAssimilationThreshold ,gpool ?x) :mt gpool)
     (fire:kb-store `(d::gpoolAssimilationThreshold ,gpool ,*assimilation-threshold*) :mt gpool)
-    (fire:tell-it `(d::sageSelectAndGeneralize ,context ,gpool) :context 'd::BaseKB)
+    (fire:tell-it `(d::sageSelectAndGeneralize ,context ,gpool) :context 'd::AnalogyCtrlMt)
     
     ; (multiple-value-bind (rbrowse full url) (rbrowse::browse-sme sme::*sme*)
     ;   (declare (ignore url rbrowse))
@@ -223,7 +234,7 @@
   (when (not gpool)
     (setf gpool (get-concept-gpool (third pattern))))
 
-  (setf facts (append facts (maybe-add-quantity-preds facts context gpool)))
+  (setf facts (maybe-add-quantity-preds facts context gpool))
   (store-facts-in-case facts context)
 
   (fire:kb-forget `(d::gpoolAssimilationThreshold ,gpool ?x) :mt gpool)
@@ -309,7 +320,7 @@
   (when (not gpool)
     (setf gpool (get-concept-gpool (car pattern))))
 
-  (setf facts (append facts (maybe-add-quantity-preds facts context gpool)))
+  (setf facts (maybe-add-quantity-preds facts context gpool))
   (store-facts-in-case facts context)
 
   (cond ((null (vars-in-expr pattern))
@@ -343,7 +354,7 @@
 
   (store-facts-in-case facts context)
 
-  (setf facts (append facts (maybe-add-quantity-preds facts context gpool)))
+  (setf facts (maybe-add-quantity-preds facts context gpool))
   (store-facts-in-case facts context)
 
   (cond ((null (vars-in-expr pattern))
@@ -409,6 +420,10 @@
       (dolist (obj objs) ;; analogy control predicates
         (format t "~% (d::sageRequireInMapping ~A)" obj)
         (fire:kb-store `(d::sageRequireInMapping ,obj) :mt case-term))
+
+      ; (dolist (rln *test-preds*)
+      ;   (fire::kb-store `(d::ubiquitousForAnalogy ,rln)))
+
       (let ((ci-found? (fire:ask-it
                            `(d::reverseCIsAllowed
                              (d::and
@@ -580,11 +595,10 @@
         (remove-facts-from-case 'd::describescratch)
         
         (let ((pattern (make-pattern concept config))
-              (tmp-facts (append all-facts 
-                                 (maybe-add-quantity-preds 
-                                  all-facts 
-                                  'd::describescratch 
-                                  (get-concept-gpool concept)))))
+              (tmp-facts (maybe-add-quantity-preds 
+                            all-facts 
+                            'd::describescratch 
+                            (get-concept-gpool concept))))
           
           (store-facts-in-case tmp-facts 'd::describescratch)
           
