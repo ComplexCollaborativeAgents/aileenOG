@@ -1,0 +1,86 @@
+#VRML_SIM R2019b utf8
+WorldInfo {
+  info [
+    "Simulation of the KUKA youBot robot."
+    "This model includes an accurate and fast simulation of the Meccanum wheels."
+    "The robot can be equiped with various sensors (including the Microsoft Kinect) and configured with zero, one or two arms."
+  ]
+  title "KUKA youBot"
+  basicTimeStep 16
+  contactProperties [
+    ContactProperties {
+      material1 "InteriorWheelMat"
+      coulombFriction [
+        1.8, 0, 0.2
+      ]
+      frictionRotation -0.9648 0
+      bounce 0
+      forceDependentSlip [
+        10, 0
+      ]
+    }
+    ContactProperties {
+      material1 "ExteriorWheelMat"
+      coulombFriction [
+        1.8, 0, 0.2
+      ]
+      frictionRotation 0.9648 0
+      bounce 0
+      forceDependentSlip [
+        10, 0
+      ]
+    }
+  ]
+}
+Viewpoint {
+  orientation 0.41515535857615715 -0.9026833622688187 -0.11317586195193297 5.446515687375686
+  position 2.0570470607853286 1.258171510846724 1.5504956538459849
+  follow "floor"
+  # followType TRUE
+}
+TexturedBackground {
+}
+TexturedBackgroundLight {
+}
+Floor {
+  size 100 100
+}
+WoodenBox {
+  translation 0.605448 0.2 -0.00121984
+  size 0.6 0.4 0.6
+  locked TRUE
+}
+DEF ur10 UR10e {
+  translation 0 0 0
+  rotation -0.5773502691896258 -0.5773502691896258 -0.5773502691896258 2.0944
+  controller "<extern>"
+  supervisor TRUE
+  toolSlot [
+    Connector {
+      rotation -1 0 0 1.57
+      type "active"
+      distanceTolerance 0.1
+      rotationTolerance 0
+      numberOfRotations 0
+    }
+    Camera {
+      translation 0.17 -0.72 -0.0762
+      rotation -1 0 0 -1.83
+      recognitionColors [
+        1 0 0,
+        0 1 0,
+        0 0 1
+      ]
+      width 512
+      height 512
+      recognition Recognition {
+          maxRange 100
+          maxObjects -1
+          frameThickness 4
+          occlusion TRUE
+          segmentation TRUE
+      }
+    }
+  ]
+  
+}
