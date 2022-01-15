@@ -113,7 +113,7 @@ class OutputReader(object):
             child = commandID.GetChild(i)
             if child.GetAttribute() == 'language':
                 self._response = {'language': child.GetValueAsString()}
-            if child.GetAttribute() == 'status':
+            if child.GetAttribute() == 'response':
                 self._response = {'status': child.GetValueAsString()}
 
         logging.debug("[output_reader] :: repsonding with {}".format(self._response))
