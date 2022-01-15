@@ -9,48 +9,32 @@
   },
   {
     "lesson-type": "spatial-word",
-    "content": "yellow cone near red cylinder",
+    "content": "green cone near red cylinder",
     "description": {
-      "objects": [{"color": "yellow", "shape": "cone"},  {"color": "red", "shape": "cylinder"}],
+      "objects": [{"color": "green", "shape": "cone"},  {"color": "red", "shape": "cylinder"}],
       "relation": "near"},
      "signal": "inform"
   },
   {
     "lesson-type": "spatial-word",
-    "content": "yellow sphere near red sphere",
+    "content": "green sphere near red sphere",
     "description": {
-      "objects": [{"color": "yellow", "shape": "sphere"},  {"color": "red", "shape": "sphere"}],
+      "objects": [{"color": "green", "shape": "sphere"},  {"color": "red", "shape": "sphere"}],
       "relation": "near"},
      "signal": "inform"
   },
   {
     "lesson-type": "spatial-word",
-    "content": "green box near green cylinder",
+    "content": "green cone near red sphere",
     "description": {
-      "objects": [{"color": "green", "shape": "box"},  {"color": "green", "shape": "cylinder"}],
-      "relation": "near"},
-     "signal": "inform"
-  },
-  {
-    "lesson-type": "spatial-word",
-    "content": "blue box near green box",
-    "description": {
-      "objects": [{"color": "blue", "shape": "box"},  {"color": "green", "shape": "box"}],
-      "relation": "near"},
-     "signal": "inform"
-  },
-  {
-    "lesson-type": "spatial-word",
-    "content": "blue cone near green sphere",
-    "description": {
-      "objects": [{"color": "blue", "shape": "cone"},  {"color": "green", "shape": "sphere"}],
+      "objects": [{"color": "green", "shape": "cone"},  {"color": "red", "shape": "sphere"}],
       "relation": "near"},
      "signal": "verify",
     "distractors": 0
   },
   {
     "lesson-type": "spatial-word",
-    "content": "green box near blue sphere",
+    "content": "blue sphere near green box",
     "description": {
       "objects": [{"color": "blue", "shape": "sphere"},  {"color": "green", "shape": "box"}],
       "relation": "distant"},

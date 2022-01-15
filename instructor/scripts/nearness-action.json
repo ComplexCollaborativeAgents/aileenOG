@@ -18,7 +18,7 @@
     "distractors": 0
   },
   {
-    "comment": "Provide another grounded example of placing near",
+    "comment": "Provide a grounded example of placing near",
     "lesson-type": "action-word",
     "description": {
       "objects": ["<obj1>", "<obj2>"],
@@ -29,15 +29,15 @@
               {"name": "pick-up", "argument": "<obj1>"},
               {"name": "place", "argument1": "<obj1>", "argument2": "<obj2>", "relation": "near"}],
       "language": ["move", "<obj1>", "near", "<obj2>"],
-      "<obj1>": {"color": "blue", "shape": "cylinder", "size": "medium"},
-      "<obj2>": {"color": "red", "shape": "cylinder", "size": "medium"}
+      "<obj1>": {"color": "green", "shape": "cone", "size": "medium"},
+      "<obj2>": {"color": "yellow", "shape": "cone", "size": "medium"}
     },
-    "content": "move blue cylinder near red cylinder",
+    "content": "move green cone near yellow cone",
     "signal": "inform",
     "distractors": 0
   },
   {
-    "comment": "Recognize action",
+    "comment": "Provide a grounded example of placing near",
     "lesson-type": "action-word",
     "description": {
       "objects": ["<obj1>", "<obj2>"],
@@ -48,11 +48,11 @@
               {"name": "pick-up", "argument": "<obj1>"},
               {"name": "place", "argument1": "<obj1>", "argument2": "<obj2>", "relation": "near"}],
       "language": ["move", "<obj1>", "near", "<obj2>"],
-      "<obj1>": {"color": "green", "shape": "sphere", "size": "medium"},
-      "<obj2>": {"color": "blue", "shape": "cylinder", "size": "medium"}
+      "<obj1>": {"color": "yellow", "shape": "cone", "size": "medium"},
+      "<obj2>": {"color": "green", "shape": "cone", "size": "medium"}
     },
-    "content": "move green sphere near blue cylinder",
-    "signal": "verify",
+    "content": "move yellow cone near green cone",
+    "signal": "inform",
     "distractors": 0
   },
   {
@@ -67,9 +67,9 @@
               {"name": "pick-up", "argument": "<obj1>"},
               {"name": "place", "argument1": "<obj1>", "argument2": "<obj2>", "relation": "near"}],
       "language": ["move", "<obj1>", "near", "<obj2>"],
-      "<obj1>": {"color": "red", "shape": "box", "size": "medium"},
-      "<obj2>": {"color": "blue", "shape": "box", "size": "medium"}
+      "<obj1>": {"color": "red", "shape": "cone", "size": "medium"},
+      "<obj2>": {"color": "green", "shape": "cone", "size": "medium"}
     },
-    "content": "move red box near blue box",
-    "signal": "react"
+    "content": "move red cone near green cone",
+    "signal": "verify"
   }]
