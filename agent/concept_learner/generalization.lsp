@@ -14,7 +14,7 @@
 ;; (load "analogystack/qrgsetup.lsp")
 ;; (require-module "fire" :fire)
 
-(defparameter *assimilation-threshold* 0.6 "sage threshold for storing new cases. A low number means we want everything to be in one generalization and that we don't expect disjunctive concepts")
+(defparameter *assimilation-threshold* 0.003 "sage threshold for storing new cases. A low number means we want everything to be in one generalization and that we don't expect disjunctive concepts")
 (defparameter *match-threshold* 0.2 "sage threshold for matching to generalizations. because we are doing our own scoring this is low")
 (defparameter *projection-threshold* 0.003 "when projecting, we do not expect much overlap between the current situation and the generalization")
 (defparameter *probability-cutoff* 0.6 "facts below this threshold in generalizations do not contribute to score calculations")
