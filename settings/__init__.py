@@ -37,6 +37,7 @@ TEST_LOCATION = [0.771, 0.5610656650000001, -0.199]
 IN_POS_THRESH = .001
 INSTRUCTOR_VELOCITY = 0.15
 INSTRUCTOR_HOLD_POSITION = [1.2, 0.6, 0]
+SIMULATE_ACTIONS = True
 
 #Robot Config
 JOINT_NAMES = ['shoulder_pan_joint', 'shoulder_lift_joint', 'elbow_joint', 'wrist_1_joint', 'wrist_2_joint', 'wrist_3_joint']

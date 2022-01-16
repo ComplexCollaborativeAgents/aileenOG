@@ -4,6 +4,8 @@ from agent.log_config import logging
 import xmlrpclib
 from svs_helper import SVSHelper
 from agent.vision.Detector import Detector
+from itertools import combinations
+
 import cv2
 import numpy as np
 import settings
@@ -34,6 +36,7 @@ class InputWriter(object):
             self._world_link = self._input_link.CreateIdWME("world")
             self._objects_link = self._world_link.CreateIdWME("objects")
             self._qsrs_link = self._world_link.CreateIdWME("qsrs")
+            self._csrs_link = self._world_link.CreateIdWME("csrs")
 
             self._interaction_link = self._input_link.CreateIdWME("interaction-link")
             self._clean_interaction_link_flag = False
@@ -170,6 +173,8 @@ class InputWriter(object):
             self.add_objects_to_working_memory(objects_list)
         qsrs = self.create_qsrs(objects_list)
         self.write_qsrs_to_input_link(qsrs)
+        csrs = self.create_aux_info(objects_list)
+        self.write_csrs_to_input_link(csrs)
         self._soar_agent.commit()
 
     @staticmethod
@@ -297,6 +302,15 @@ class InputWriter(object):
                     qsr_id.CreateIntWME("root", int(root_obj_id))
                     qsr_id.CreateIntWME("target", int(target_obj_id))
                     qsr_id.CreateStringWME(qsr_type, qsr_value)
+
+    def write_csrs_to_input_link(self, csrs):
+        # logging.debug("[input_writer] :: writing csrs to input link {}".format(csrs))
+        self._soar_agent.delete_all_children(self._csrs_link)
+        for csr in csrs:
+            csr_id = self._csrs_link.CreateIdWME('csr')
+            csr_id.CreateIntWME("root", csr[0])
+            csr_id.CreateIntWME("target", csr[1])
+            csr_id.CreateFloatWME("distance", csr[2])
 
     def clean_concept_memory(self):
         self._soar_agent.delete_all_children(self._concept_memory)
@@ -461,6 +475,32 @@ class InputWriter(object):
             os.mkdir(dir_name)
         with open(settings.CURRENT_IMAGE_PATH, "wb") as handle:
             handle.write(binary_image.data)
+
+
+    '''
+    Added by Will. For now, using this to handle nearness relations. Can eventually extend
+    to estimating any continuous quantities. This should probably live somewhere else.
+    '''
+    def create_aux_info(self, objects):
+        rels = []
+
+        if len(objects) > 0:
+
+            # logging.debug("[input_writer] :: cai objects are: {}".format(objects))
+            non_held_objs = [o for o in objects if not o['held'] == 'true']
+            logging.debug("[input_writer] :: non held objects are: {}".format(non_held_objs))
+
+            # add distance information between pairs of objects
+            for items in combinations(non_held_objs, 2):
+
+                # logging.debug("[input_writer] :: vec 1 is: {}".format(np.array(items[0]['position'])))
+                # logging.debug("[input_writer] :: vec 2 is: {}".format(np.array(items[1]['position'])))
+
+                distance = np.linalg.norm(np.array(items[0]['position']) - np.array(items[1]['position']))
+                rels.append((items[0]['id'], items[1]['id'], distance))
+
+        return rels
+
 
 
     def create_qsrs(self, objects):

@@ -36,7 +36,7 @@ class AileenSupervisor(Supervisor):
         self._motorSensorNodes = list()
         # self._connectorNode = self.getConnector('connector')
         self._connectorNode = self.getDevice('connector')
-        # self._camera = self.getCamera('camera')
+        #self._camera = self.getCamera('camera')
         self._camera = self.getDevice('camera')
         self._camera.enable(settings.TIME_STEP)
         self._camera.recognitionEnable(settings.TIME_STEP)

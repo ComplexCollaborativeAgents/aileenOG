@@ -115,6 +115,8 @@ class OutputReader(object):
                 self._response = {'language': child.GetValueAsString()}
             if child.GetAttribute() == 'response':
                 self._response = {'status': child.GetValueAsString()}
+            if child.GetAttribute() == 'status':
+                self._response = {'status': child.GetValueAsString()}
 
         logging.debug("[output_reader] :: repsonding with {}".format(self._response))
         commandID.AddStatusComplete()
