@@ -16,7 +16,8 @@ sp {aileen*elaborate*objects*copy
               ^id <id>
               ^id_uuid <id-uuid>
               ^id_string <id-string>
-              ^size <sz>)
+              ^size <sz>
+              ^size_bb <sbb>)
    -{(<wobjs>    ^object <wobj>)
     (<wobj>    ^id <id>)}
 -->
@@ -27,7 +28,8 @@ sp {aileen*elaborate*objects*copy
                   ^id <id>
                   ^id_uuid <id-uuid>
                   ^id_string <id-string>
-                  ^size <sz>)
+                  ^size <sz>
+                  ^size_bb <sbb>)
     }
 
 sp {aileen*elaborate*objects*remove
@@ -55,17 +57,18 @@ sp {aileen*elaborate*objects*position
     (<wobj>    ^position <p>)
     }
 
-sp {aileen*elaborate*objects*size_bb
-    (state <s>    ^name aileen
-                  ^io.input-link <il>
-                  ^world.objects.object <wobj>)
-    (<il>    ^world.objects.object <obj>)
-    (<obj>    ^id <id>
-              ^size_bb <p>)
-    (<wobj>    ^id <id>)
--->
-    (<wobj>    ^size_bb <p>)
-    }
+#sp {aileen*elaborate*objects*size_bb
+#    :o-support
+#    (state <s>    ^name aileen
+#                  ^io.input-link <il>
+#                  ^world.objects.object <wobj>)
+#    (<il>    ^world.objects.object <obj>)
+#    (<obj>    ^id <id>
+#              ^size_bb <p>)
+#    (<wobj>    ^id <id>)
+#-->
+#    (<wobj>    ^size_bb <p>)
+#    }
 
 sp {aileen*elaborate*objects*update*held
     :o-support

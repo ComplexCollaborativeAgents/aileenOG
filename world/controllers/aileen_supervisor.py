@@ -229,17 +229,18 @@ class AileenSupervisor(Supervisor):
             position: list [X, Y, Z] of object to pick in world frame
         """
         logging.info('[aileen supervisor] :: Picking Object')
-        position = [position[0], position[1]+.051, position[2]]
+        position = [position[0], position[1]+.03, position[2]]
         self.go_to_point(self.transform_point_to_robot_frame(position))
         logging.info('[aileen supervisor] :: Locking')
         self._connectorNode.lock()
+        is_locked = self._connectorNode.isLocked()
         currJnts = self.get_current_position()
         newJnts = currJnts
         newJnts[2] -= 3.14/4
         self.command_pose(newJnts)
         logging.debug('[aileen supervisor] :: Returning Home')
         self.return_home()
-        return None
+        return is_locked
 
     def place_object(self, target):
         logging.info('[aileen supervisor] :: Placing Object')
@@ -372,6 +373,7 @@ class AileenSupervisor(Supervisor):
         mask_img = self._camera.getRecognitionSegmentationImage()
         for object in objects:
             # webots camera recognized object is linked with the gt object by the id
+            # webots camera recognized object is linked with the gt object by the id
             id = object.get_id()
             child = self.getFromId(id) # gt child
             wcentroid = child.getPosition()
@@ -418,6 +420,25 @@ class AileenSupervisor(Supervisor):
                                'held': 'false'
                            }
             obj_dicts.append(object_dict)
+
+        if self._held_node:
+            object_dict = {'id_string': "ob{}".format(str(self._held_node.getId())),
+                            'id': self._held_node.getId(),
+                            'shape': self.get_object_shape(self._held_node),
+                            'color': self.get_object_color(self._held_node),
+                            'texture': self.get_object_texture(self._held_node),
+                            'id_name': self.get_object_name(self._held_node),
+                            'held': 'true',
+                            'hasPlane': self.get_object_hasPlane(self._held_node),
+                            'hasRectPlane': self.get_object_hasRectPlane(self._held_node),
+                            'hasRoundPlane': self.get_object_hasRoundPlane(self._held_node),
+                            'hasCurveContour': self.get_object_hasCurveContour(self._held_node),
+                            'hasEdgeContour': self.get_object_hasEdgeContour(self._held_node)
+
+            }
+            obj_dicts.append(object_dict)
+            logging.debug("[aileen_supervisor]: added held object to the object list {}".format(self._held_node))
+
         output_dict = {'objects': obj_dicts, 'image': '', 'save': self.save, 'obj_num': self.num_rec}
         return output_dict
 

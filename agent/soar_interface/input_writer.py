@@ -166,7 +166,7 @@ class InputWriter(object):
             data = self.request_server_for_current_state_image()
             objects_list = data['objects']
             objects_list = self.use_gt_world(objects_list)
-            logging.debug("Groundtruth world: {}".format(objects_list))
+            #logging.debug("Groundtruth world: {}".format(objects_list))
             # objects_list = self.request_server_for_objects_info()
 
         if objects_list is not None:
@@ -261,12 +261,12 @@ class InputWriter(object):
             detections[i]['held'] = world[i]['held']
             #  The simulator groundtruth
             # detections[i]['position'] = world[i]['bbposition']
-            detections[i]['position'] = world[i]['world_centroid']
-            detections[i]['bounding_box'] = world[i]['bounding_box_camera']
-
-            detections[i]['orientation'] = world[i]['world_orientation']
-            detections[i]['wbbox_size'] = world[i]['world_bbox_size']
-            detections[i]['wbbox_position'] = world[i]['world_centroid']
+            if 'world_centroid' in world[i]:
+                detections[i]['position'] = world[i]['world_centroid']
+                detections[i]['bounding_box'] = world[i]['bounding_box_camera']
+                detections[i]['orientation'] = world[i]['world_orientation']
+                detections[i]['wbbox_size'] = world[i]['world_bbox_size']
+                detections[i]['wbbox_position'] = world[i]['world_centroid']
             # #  The detector output
             # detections[i]['position'] = world[i]['bbposition']
             # detections[i]['bounding_box'] = world[i]['bounding_box_camera']
@@ -488,7 +488,7 @@ class InputWriter(object):
 
             # logging.debug("[input_writer] :: cai objects are: {}".format(objects))
             non_held_objs = [o for o in objects if not o['held'] == 'true']
-            logging.debug("[input_writer] :: non held objects are: {}".format(non_held_objs))
+            #logging.debug("[input_writer] :: non held objects are: {}".format(non_held_objs))
 
             # add distance information between pairs of objects
             for items in combinations(non_held_objs, 2):
@@ -545,6 +545,9 @@ objects = [{'orientation': [1.0, -5.75539615965681e-17, 3.38996313371214e-17, 5.
                     v.qsr['ra'] = self.get_rcc8_symbols_for_allen_intervals(v.qsr['ra'])
                 if '3dcd' in v.qsr.keys():
                     v.qsr['depth'] = v.qsr['3dcd'][-1].lower()
+                print(v.qsr)
+                if v.qsr['depth'] == 'o' and v.qsr['rcc8'] == 'po':
+                    v.qsr['rcc8'] = 'dc'
                 ret[args[0]][args[1]] = v.qsr
         logging.debug("[input_writer] :: qsrs computed {}".format(ret))
         return ret

@@ -70,12 +70,15 @@ class ActionExecutor:
         logging.debug("[action_executor] :: picking up object id {}".format(object_id))
         translation = node.getField('translation')
         pos = translation.getSFVec3f()
+        is_picked = False
         if settings.SIMULATE_ACTIONS:
-            self._supervisor.pick_object(pos)
+            is_picked = self._supervisor.pick_object(pos)
+            logging.info("[aileen_executor] :: successful in picking up object? {}".format(is_picked))
         else:
             translation.setSFVec3f(settings.ROBOT_PLATE_LOCATION)
         logging.debug("[action_executor] :: object {} moved to {}".format(object_id, node.getPosition()))
-        self._supervisor.set_held_node(node)
+        if is_picked:
+            self._supervisor.set_held_node(node)
         return True
 
     def place_object(self, location):

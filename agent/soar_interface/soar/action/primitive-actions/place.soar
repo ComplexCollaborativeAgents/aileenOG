@@ -37,8 +37,8 @@ sp {action*apply*place*target-object
     (<op>    ^name op_place
              ^object <obj1>)
     (<obj1>    ^id <id>
-               ^size.xsize <xsize>
-               ^size.zsize <zsize>)
+               ^size_bb.xsize <xsize>
+               ^size_bb.zsize <zsize>)
 -->
     (<ol>    ^action <act>)
     (<act>    ^name place
@@ -61,8 +61,8 @@ sp {action*apply*place*reference-object
     (<obj2>    ^position.x <xpos>
                ^position.y <ypos>
                ^position.z <zpos>
-               ^size.xsize <xsize>
-               ^size.zsize <zsize>
+               ^size_bb.xsize <xsize>
+               ^size_bb.zsize <zsize>
                ^id <id>)
 -->
     (<act>    ^reference <ref>)

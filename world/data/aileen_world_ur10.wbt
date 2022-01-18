@@ -67,11 +67,18 @@ DEF ur10 UR10e {
     Camera {
       translation 0 0.6 1.2
       recognitionColors [
-        0 0 0
+        1 0 0,
+        0 1 0,
+        0 0 1
       ]
       width 512
       height 512
       recognition Recognition {
+          maxRange 100
+          maxObjects -1
+          frameThickness 4
+          occlusion TRUE
+          segmentation TRUE
       }
     }
   ]
