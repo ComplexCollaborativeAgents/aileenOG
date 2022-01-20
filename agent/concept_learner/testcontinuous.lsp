@@ -157,7 +157,6 @@
                   ,gpool)))
 
 
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; New Quantity Reasoning
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -203,7 +202,6 @@
 ;           (sme::user-form exp))
 ;         (t (sme::user-form exp))
 ;     ))
-
 
 
 (defun sample-quantity-mhs (sme internal-preds)
@@ -441,7 +439,7 @@
 
 (defun episode-ci (base-episode probe-context target-context)
   (let ((probe-position (episode-position base-episode probe-context))
-        (target-episodes (episode-order target-context)))
+        (target-episodes (episode-order-new target-context)))
     
     ; (debug-format "    Probe episodes: ~s Target episodes: ~s~%" probe-episodes target-episodes)
     
@@ -454,20 +452,37 @@
   (cond ((fire::ask-it `(d::isa ,episode d::AileenActionStartTime)
            :context context)
          0)
-        (t (let ((order (episode-order context)))
+        (t (let ((order (episode-order-new context)))
              (unless order (break "Can't find order of episodes"))
              (position episode order)))))
 
 
 ;;; tied to four episodes per context
-(defun episode-order (context)
+; (defun episode-order (context)
+;   (let* ((start (car (fire::ask-it '(d::isa ?what d::AileenActionStartTime) 
+;                        :response '?what :context context)))
+;          (second (car (fire:ask-it `(d::startsAfterEndingOf ?second ,start)
+;                         :response '?second :context context)))
+;          (terminal (car (fire::ask-it '(d::aileenTerminalTransition ?one ?two) 
+;                           :response (list '?one '?two) :context context))))
+;     (cons start (cons second terminal))))
+
+
+;;; this should be structure mapped
+(defun episode-order-new (context)
   (let* ((start (car (fire::ask-it '(d::isa ?what d::AileenActionStartTime) 
                        :response '?what :context context)))
-         (second (car (fire:ask-it `(d::startsAfterEndingOf ?second ,start)
-                        :response '?second :context context)))
-         (terminal (car (fire::ask-it '(d::aileenTerminalTransition ?one ?two) 
-                          :response (list '?one '?two) :context context))))
-    (cons start (cons second terminal))))
+         (pairs (mapcar 'fire::decontextualize-statement
+                  (fire:ask-it '(d::startsAfterEndingOf ?second ?first) :context context)))
+         (start-pair (find-if (lambda (pair) (eql start (third pair))) pairs))
+         (order (list start)))
+    ; (format t "start is ~s~%" start)
+    ; (format t "pairs are ~s~%" pairs)
+    ; (format t "start pair is ~s~%" start-pair)
+    (do ((cur-pair start-pair (find-if (lambda (pair) (eql (second cur-pair) (third pair))) pairs)))
+        ((null cur-pair) (reverse order))
+      ; (format t "cur pair is ~s~%" cur-pair)
+      (push (second cur-pair) order))))
 
 
 (defun filter-relevant-facts-default (qfact facts)
