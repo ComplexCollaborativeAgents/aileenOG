@@ -53,8 +53,9 @@ sp {action*elaborate*goal*match*relation
 sp {action*elaborate*goal*match*full
     (state <s>    ^name action
                   ^desired <d>)
-    (<s>    -^not-matched <any>
-             ^matched <some>)
+    (<s>    -^not-matched <any>)
+    (<d>    ^type terminal)
+             #^matched <some>)
 -->
     (<s>    ^success <d>)
     }

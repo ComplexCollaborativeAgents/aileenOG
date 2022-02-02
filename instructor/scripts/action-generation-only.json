@@ -1,0 +1,92 @@
+[
+  {
+    "comment": "Provide a grounded example of action",
+    "lesson-type": "action-word",
+    "description": {
+      "objects": ["<obj1>", "<obj2>"],
+      "relations": ["right-of"],
+      "action": "move-right-of",
+      "initial_configuration": [[["not","n"], "<obj2>", "<obj1>"], ["dc", "<obj2>", "<obj1>"]],
+          "trace-actions": [
+              {"name": "pick-up", "argument": "<obj1>"},
+              {"name": "place", "argument1": "<obj1>", "argument2": "<obj2>", "relation": "right-of"}],
+      "language": ["move", "<obj1>", "right of", "<obj2>"],
+      "<obj1>": {"color": "green", "shape": "cylinder", "size":  "medium"},
+      "<obj2>": {"color": "blue", "shape": "cone", "size":  "medium"}
+    },
+    "content": "move green cylinder right of blue cone",
+    "signal": "inform"
+  },
+  {
+    "comment": "Provide another grounded example of action",
+    "lesson-type": "action-word",
+    "description": {
+      "objects": ["<obj1>", "<obj2>"],
+      "relations": ["right-of"],
+      "action": "move-right-of",
+      "initial_configuration": [[["not","n"], "<obj2>", "<obj1>"], ["dc", "<obj2>", "<obj1>"]],
+          "trace-actions": [
+              {"name": "pick-up", "argument": "<obj1>"},
+              {"name": "place", "argument1": "<obj1>", "argument2": "<obj2>", "relation": "right-of"}],
+      "language": ["move", "<obj1>", "right of", "<obj2>"],
+      "<obj1>": {"color": "blue", "shape": "cylinder", "size": "medium"},
+      "<obj2>": {"color": "red", "shape": "cylinder", "size":  "medium"}
+    },
+    "content": "move blue cylinder right of red cylinder",
+    "signal": "inform"
+  },
+   {
+    "comment": "Provide another grounded example of action",
+    "lesson-type": "action-word",
+    "description": {
+      "objects": ["<obj1>", "<obj2>"],
+      "relations": ["right-of"],
+      "action": "move-right-of",
+      "initial_configuration": [[["not","n"], "<obj2>", "<obj1>"], ["dc", "<obj2>", "<obj1>"]],
+          "trace-actions": [
+              {"name": "pick-up", "argument": "<obj1>"},
+              {"name": "place", "argument1": "<obj1>", "argument2": "<obj2>", "relation": "right-of"}],
+      "language": ["move", "<obj1>", "right of", "<obj2>"],
+      "<obj1>": {"color": "yellow", "shape": "cone", "size": "medium"},
+      "<obj2>": {"color": "blue", "shape": "cone", "size":  "medium"}
+    },
+    "content": "move yellow cone right of blue cone",
+    "signal": "inform"
+  },
+    {
+    "comment": "Provide another grounded example of action",
+    "lesson-type": "action-word",
+    "description": {
+      "objects": ["<obj1>", "<obj2>"],
+      "relations": ["right-of"],
+      "action": "move-right-of",
+      "initial_configuration": [[["not","n"], "<obj2>", "<obj1>"], ["dc", "<obj2>", "<obj1>"]],
+          "trace-actions": [
+              {"name": "pick-up", "argument": "<obj1>"},
+              {"name": "place", "argument1": "<obj1>", "argument2": "<obj2>", "relation": "right-of"}],
+      "language": ["move", "<obj1>", "right of", "<obj2>"],
+      "<obj1>": {"color": "yellow", "shape": "sphere", "size": "medium"},
+      "<obj2>": {"color": "green", "shape": "cone", "size":  "medium"}
+    },
+    "content": "move yellow sphere right of green cone",
+    "signal": "inform"
+  },
+  {
+    "comment": "Try to do exactly what was taught.",
+    "lesson-type": "action-word",
+    "description": {
+      "objects": ["<obj1>", "<obj2>"],
+      "relations": ["right-of"],
+      "action": "move-right-of",
+      "initial_configuration": [[["not","n"], "<obj2>", "<obj1>"], ["dc", "<obj2>", "<obj1>"]],
+          "trace-actions": [
+              {"name": "pick-up", "argument": "<obj1>"},
+              {"name": "place", "argument1": "<obj1>", "argument2": "<obj2>", "relation": "right-of"}],
+      "language": ["move", "<obj1>", "right of", "<obj2>"],
+      "<obj1>": {"color": "red", "shape": "box", "size":  "medium"},
+      "<obj2>": {"color": "blue", "shape": "box", "size":  "medium"}
+    },
+    "content": "move red box right of blue box",
+    "signal": "react"
+  }
+]
