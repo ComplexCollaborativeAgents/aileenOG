@@ -87,6 +87,6 @@ sp {generate-for-object*propose*mark-no-known-concept
     (state <s>    ^name generate-for-object
                   ^memory-lookup-status failed)
 -->
-    (<s>    ^operator <op> +)
+    (<s>    ^operator <op> + <)
     (<op>    ^name mark-no-known-concept)
     }

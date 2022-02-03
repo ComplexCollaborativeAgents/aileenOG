@@ -5,7 +5,7 @@ from log_config import logging
 
 
 class VisualWordLesson:
-    def __init__(self, is_positive, signal, description, distractors, content):
+    def __init__(self, is_positive, signal, description, distractors, content, concept):
         self._scene = AileenScene()
         self._interaction = {}
 
@@ -13,11 +13,8 @@ class VisualWordLesson:
         self._is_positive = is_positive
         self._description = description
         self._distractors = distractors
-        if self._signal == 'generate':
-            self._content = None
-            self._test_content = content
-        else:
-            self._content = content
+        self._content = content
+        self._concept = concept
         self._language = None
 
     def generate_lesson(self):
@@ -33,7 +30,9 @@ class VisualWordLesson:
 
         if self._signal == 'generate':
             content = ""
+            concept = self._concept
         else:
+            concept=""
             if self._content is not None:
                 content = self._content
             else:
@@ -44,7 +43,8 @@ class VisualWordLesson:
             'scene': self._scene.generate_scene_world_config(),
             'interaction': {
                 'signal': self._signal,
-                'content': content
+                'content': content,
+                'concept': concept
             }
         }
         return lesson
@@ -93,7 +93,7 @@ class VisualWordLesson:
                 else:
                     return {'signal': 'incorrect', 'score': 0}
         if 'language' in agent_response:
-            if self._test_content == agent_response['language']:
+            if self._content == agent_response['language']:
                 return {'signal': 'correct', 'score': 1}
             else:
                 return {'signal': 'incorrect', 'score': 0}

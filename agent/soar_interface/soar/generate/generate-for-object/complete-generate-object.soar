@@ -6,10 +6,13 @@
 sp {generate-for-object*apply*complete-generate-for-object
     (state <s>    ^name generate-for-object
                   ^operator <op>
+                  ^object <obj>
+                  ^superstate <ss>
                   ^segment.purpose <p>)
     (<op>    ^name complete-generate-for-object
              ^content <info>)
 -->
-    (<p>    ^completed true
-            ^content <info>)
+    (<ss>    ^generated-for <gen>)
+    (<gen>    ^object <obj>
+              ^content <info>)
     }

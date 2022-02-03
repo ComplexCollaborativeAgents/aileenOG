@@ -5,11 +5,14 @@
 
 sp {generate-for-object*apply*mark-no-known-concept
     (state <s>    ^name generate-for-object
+                  ^object <obj>
                   ^operator <op>
+                  ^superstate <ss>
                   ^segment.purpose <p>
                   ^topstate <ts>)
     (<op>    ^name mark-no-known-concept)
 -->
-    (<p> ^completed true 
-         ^status failure)
+    (<ss>    ^generated-for <gen>)
+    (<gen>    ^object <obj>
+              ^content no-known-concept)
  }

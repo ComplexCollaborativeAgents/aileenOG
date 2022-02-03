@@ -6,9 +6,54 @@
 
 sp {generate*propose*generate-for-object
     (state <s>    ^name generate
-                  ^world.objects.object <obj>)
+                  ^world.objects.object <obj>
+                  ^for-concept object
+                  -^generated-for.object <obj>)
 -->
-    (<s>    ^operator <op> +)
+    (<s>    ^operator <op> + =)
     (<op>    ^name generate-for-object
              ^object <obj>)
+    }
+
+sp {generate*propose*generate-for-relation
+    (state <s>    ^name generate
+                  ^world <w>
+                  ^for-concept relation)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name generate-for-relation
+             ^world <w>)
+    }
+
+sp {generate*propose*mark-no-known-concept
+    (state <s>    ^name generate
+                  ^world.objects <objs>)
+    -{(<objs>    ^object <obj>)
+      (<s>    ^generated-for <gen>)
+      (<gen>    ^object <obj>
+                -^content no-known-concept)}
+-->
+    (<s>    ^operator <op> + <)
+    (<op>    ^name mark-no-known-concept)
+    }
+
+sp {apply*mark-no-known-concept
+    (state <s>    ^name generate
+                  ^segment.purpose <p>
+                  ^operator.name mark-no-known-concept)
+-->
+    (<p>    ^completed true
+            ^status failure)
+    }
+
+sp {generate*propose*complete-generate
+    (state <s>    ^name generate
+                  ^for-concept object
+                  ^generated-for <gen>
+                  ^segment.purpose <p>)
+    (<gen>    ^object <obj>
+              ^content <cont>)
+-->
+    (<p>    ^completed true
+            ^content <cont>)
     }

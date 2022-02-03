@@ -1,5 +1,9 @@
-from agent.log_config import logging
+# from agent.log_config import logging
 import pynini
+import inflect
+
+infl = inflect.engine()
+
 
 class AileenGrammar:
     """An AileenGrammar contains grammar rules for aileen's syntax.
@@ -90,11 +94,11 @@ class AileenGrammar:
         replacements.append([self._rename_categories("[fragments]"), fragments])
         root = self._string_map(["[fragments]"])
         self._fragment_parser = pynini.pdt_replace(root.optimize(), replacements)
-    
+
     def _append_replacement(self, category, rules, replacements):
         if len(rules) > 0:
             replacements.append([self._rename_categories(category), self._string_map(rules)])
-    
+
     def _string_map(self, rules):
         """Create an FST that represents the union of the given rules."""
         fst = None
@@ -105,7 +109,7 @@ class AileenGrammar:
             else:
                 fst = pynini.union(fst, rule_fst)
         return fst.optimize()
-    
+
     def _convert_rule_to_fst(self, rule):
         """Convert the given rule into an FST."""
         if rule.lower() != rule:
@@ -126,7 +130,7 @@ class AileenGrammar:
             index2 = rule.find("]", index)
             if index2 < 0:
                 raise Exception("missing ] in {}".format(rule))
-            cat = rule[index:index2+1]
+            cat = rule[index:index2 + 1]
             # Add a start tag.
             if cat in tag_cats:
                 fst.concat(pynini.transducer("", "<" + cat[1:-1] + ">"))
@@ -158,7 +162,7 @@ class AileenGrammar:
         string = string.replace("[rel]", "R")
         string = string.replace("[word]", "W")
         return string
-    
+
     def parse(self, sentence):
         """Parse the given sentence using a parser compiled from the current grammar.
         If there are no grammar rules, uses the default rules.
@@ -179,13 +183,14 @@ class AileenGrammar:
         for string in pynini.StringPathIterator(fst).ostrings():
             outputs.append(self._convert_markup_to_list(string))
         outputs = self._filter_fragments(outputs)
-        logging.info("[aileen_grammar] :: parse({}) = {}".format(sentence, outputs))
+        # logging.info("[aileen_grammar] :: parse({}) = {}".format(sentence, outputs))
         return outputs
 
     def generate(self, list_objects):
         """Generate a description given descriptors for objects and current grammar"""
         content = None
-        content = self._generate_dummy(list_objects)
+        #content = self._generate_dummy(list_objects)
+        content = self.generate_colloquial(list_objects)
         return content
 
     def _generate_dummy(self, list_objects):
@@ -196,6 +201,63 @@ class AileenGrammar:
             string = " ".join(list_tokens)
             sentence = "{} {}".format(sentence, string).strip()
         return sentence
+
+    def generate_simple(self, list_objects):
+        """Generate a description of objects in scene, using associated property tokens.
+        Each object must have exactly 1 token that is an object_name in the grammar,
+        and all other tokens should be pre-nominal adjectives"""
+        description = ''
+        for i,object in enumerate(list_objects):
+            # object_id = object['id']
+            list_tokens = object['tokens']
+            nouns = [l for l in list_tokens if l in self.object_names]
+            if len(nouns) != 1:
+                raise Exception("token list does not have exactly 1 object_name")
+            list_tokens.sort(key=lambda x: x == nouns[0])
+            description += ' '.join(list_tokens)
+            if (i + 1) < len(list_objects):
+                description += ', and '
+        return description
+
+    def generate_colloquial(self, list_objects):
+        """Generate a description of objects in scene, using associated property tokens.
+        Each object must have exactly 1 token that is an object_name in the grammar,
+        and all other tokens should be pre-nominal adjectives.
+        Requires:
+            import inflect
+            infl = inflect.engine()
+        """
+        ## compute description of each object and count repetitions if any
+        dcount = {}
+        for i, list_tokens in enumerate([object['tokens'] for object in list_objects]):
+            print(list_tokens)
+            description = ''
+            nouns = []
+            # for l in list_tokens:
+            #     print l
+            #     print grammar.object_names
+            #     if l in grammar.object_names:
+            #         nouns.append(l)
+            nouns = [l for l in list_tokens if l in self.object_names]
+            if len(nouns) != 1:
+                raise Exception('token list does not have exactly 1 object_name')
+            list_tokens.sort(key=lambda x: (x == nouns[0], x))
+            description += ' '.join(list_tokens)
+            if description in dcount.keys():
+                dcount[description] += 1
+            else:
+                dcount[description] = 1
+            dcounts = dcount.items()
+        ## now number words > 1, add inflection for plural and indef article, and conjoin
+        scene_description = ''
+        for j, (description, count) in enumerate(dcounts):
+            if count == 1:
+                scene_description += infl.a(description)
+            else:
+                scene_description += ' '.join([infl.number_to_words(count), infl.plural(description)])
+            if (j + 1) < len(dcounts):
+                scene_description += ', and '
+        return scene_description
 
     def _convert_markup_to_list(self, string):
         """Convert strings like "<obj><prop>blue</prop> box</obj>" to lists like [obj [prop blue] box]."""
@@ -213,7 +275,7 @@ class AileenGrammar:
                 token = ""
                 # Then find the rest of the tag.
                 index2 = string.find(">", index)
-                cat = string[index+1:index2]
+                cat = string[index + 1:index2]
                 if cat[0] == "/":
                     # We found an end tag.  Pop the stack.
                     stack.pop()
@@ -272,6 +334,29 @@ class AileenGrammar:
 if __name__ == '__main__':
     grammar = AileenGrammar()
     grammar.use_default_rules()
-    outputs = grammar.parse("pick up blue box")
-    for output in outputs:
-        logging.info("[aileen_grammar] :: test: {}".format(output))
+
+    sentence = grammar.generate([{'tokens': ['box'], 'type': 'object', 'id': 'ob474'}])
+    print sentence
+
+    # for object_list in [
+    #         [ {'tokens':['box', 'red']} ],
+    #         [ {'tokens':['box', 'red']}, {'tokens': ['yellow', 'cylinder']} ],
+    #         [ {'tokens':['large', 'box', 'red']}, {'tokens': ['cylinder', 'orange']}, {'tokens':['box', 'red', 'large']} ],
+    #         ]:
+    #     print '    -------'
+    #     print '    simple: '+str([o['tokens'] for o in object_list])+' => '+grammar.generate_simple( object_list )
+    #     print '    colloq: '+str([o['tokens'] for o in object_list])+' => '+grammar.generate_colloquial( object_list )
+    #
+    # #description=grammar.generate_colloquial([{'tokens':['box', 'red']}, {'tokens': ['yellow', 'cylinder']}])
+    # #print(description)
+
+#    relation_description = grammar.colloquial_generate({
+#        'relation': {
+#            'tokens': 'right of',
+#            'first': {'obj32'},
+#            'second': {'obj35'},
+#        },
+#        'obj32': ['box', 'red'],
+#        'obj35': ['yellow', 'cylinder']
+#    })
+#    assert relation_description == "red box right of yellow cylinder"

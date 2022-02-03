@@ -5,36 +5,8 @@
 
 ### SM: THIS FILE NEEDS TO BE REFACTORED. SOME OF THE CODE IS DUPLICATED
 
-sp {translate-to-facts*elaborate*object*color*shape
-    (state <s>    ^name translate-to-facts
-                  ^superstate.operator <sop>
-                  ^facts <facts>)
-    (<sop>    ^name translate-to-facts
-              ^object <obj>)
-    (<obj>    ^id_string <id_string>
-              ^<< color shape >> <symbol>)
--->
-    (<facts>    ^fact <f>)
-    (<f>    ^lfirst isa
-               ^lsecond <id_string>
-               ^lthird <symbol>)
-    }
+### Get the basic stuff
 
-sp {translate-to-facts*elaborate*object*size
-    (state <s>    ^name translate-to-facts
-                  ^superstate.operator <sop>
-                  ^facts <facts>)
-    (<sop>    ^name translate-to-facts
-              ^object <obj>)
-   (<obj>    ^id_string <id_string>
-              ^size <symbol>)
--->
-    (<facts>    ^fact <f>)
-    (<f>    ^lfirst size
-               ^lsecond <id_string>
-               ^lthird <symbol>)
-    }
-    
 
 sp {translate-to-facts*elaborate*trace
     (state <s>    ^name translate-to-facts
@@ -50,6 +22,114 @@ sp {translate-to-facts*elaborate*facts
 -->
     (<s>    ^facts <facts>)
     }
+
+##### Objects
+
+sp {translate-to-facts*elaborate*object*color*shape
+    (state <s>    ^name translate-to-facts
+                  ^superstate.operator <sop>
+                  ^facts <facts>)
+    (<sop>    ^name translate-to-facts
+              ^object <obj>)
+    (<obj>    ^id_string <id_string>
+              ^<< color shape >> <symbol>)
+-->
+    (<facts>    ^fact <f>)
+    (<f>    ^lfirst isa
+               ^lsecond <id_string>
+               ^lthird <symbol>)
+    }
+
+
+sp {translate-to-facts*elaborate*object*size
+    (state <s>    ^name translate-to-facts
+                  ^superstate.operator <sop>
+                  ^facts <facts>)
+    (<sop>    ^name translate-to-facts
+              ^object <obj>)
+   (<obj>    ^id_string <id_string>
+              ^size <symbol>)
+-->
+    (<facts>    ^fact <f>)
+    (<f>    ^lfirst size
+               ^lsecond <id_string>
+               ^lthird <symbol>)
+    }
+
+#### Translating scene to facts
+
+sp {translate-to-facts*elaborate*scene*objects*color*shape
+    (state <s>    ^name translate-to-facts
+                  ^superstate.operator <sop>
+                  ^facts <facts>)
+    (<sop>    ^name translate-to-facts
+              ^scene <scene>)
+    (<scene>    ^objects.object <obj>)
+    (<obj>    ^id_string <id_string>
+              ^<< color shape >> <symbol>)
+-->
+    (<facts>    ^fact <f>)
+    (<f>    ^lfirst isa
+            ^lsecond <id_string>
+            ^lthird <symbol>)
+    }
+
+sp {translate-to-facts*elaborate*scene*objects*size
+    (state <s>    ^name translate-to-facts
+                  ^superstate.operator <sop>
+                  ^facts <facts>)
+    (<sop>    ^name translate-to-facts
+              ^scene <scene>)
+    (<scene>    ^objects.object <obj>)
+    (<obj>    ^id_string <id_string>
+              ^size <symbol>)
+-->
+    (<facts>    ^fact <f>)
+    (<f>    ^lfirst size
+            ^lsecond <id_string>
+            ^lthird <symbol>)
+    }
+
+sp {translate-to-facts*elaborate*scene*relations
+    (state <s>    ^name translate-to-facts
+                  ^superstate.operator <sop>
+                  ^facts <facts>)
+    (<sop>    ^name translate-to-facts
+              ^scene <scene>)
+    (<scene>    ^relations.relation <rel>)
+    (<rel>    ^<< rcc8 cardir >> <val>
+              ^root-object.id_string <fid>
+              ^target-object.id_string <sid>)
+-->
+    (<facts>    ^fact <f>)
+    (<f>    ^lfirst <val>
+               ^lsecond <fid>
+               ^lthird <sid>)
+    }
+
+
+sp {translate-to-facts*elaborate*scene*relations*distance
+    (state <s>    ^name translate-to-facts
+                  ^superstate.operator <sop>
+                  ^facts <facts>)
+    (<sop>    ^name translate-to-facts
+              ^scene <scene>)
+    (<scene>    ^relations.relation <rel>)
+    (<rel>    ^distance <val>
+              ^root-object.id_string <fid>
+              ^target-object.id_string <sid>)
+-->
+    (<facts>    ^fact <f>)
+    (<f>    ^lfirst distance
+            ^lsecond <val>
+               ^lthird <fid>
+               ^lfourth <sid>)
+    }
+
+
+
+
+######## Trace to facts
 
 sp {translate-to-facts*write-facts*action
     (state <s>    ^name translate-to-facts
