@@ -73,109 +73,116 @@ Warning: System definition file #P"/home/smohan/AILEEN/aileen-agent/agent/concep
 AllegroCache version 3.0.9
 Opened KB from /home/smohan/AILEEN/aileen-agent/agent/concept_learner/analogystack/planb/kbs/nextkb/.
 ; Fast loading from bundle code/ef-e-crcrlf.fasl.
-Describing {"facts": [["size", "ob495", "0.0121"], ["isa", "ob495", "CVGreen"], ["isa", "ob495", "CVBox"]]}
+Describing {"facts": [["size", "ob817", "0.0081"], ["isa", "ob817", "CVGreen"], ["isa", "ob817", "CVBox"]]}
 55660080 bytes have been tenured, next gc will be global.
 See the documentation for variable *global-gc-behavior* for more information.
 
 Found concepts nil
-127.0.0.1 - - [Thu, 03 Feb 2022 02:11:49 GMT] "POST /ConceptLearner HTTP/1.1" 200 364
+127.0.0.1 - - [Thu, 03 Feb 2022 17:41:32 GMT] "POST /ConceptLearner HTTP/1.1" 200 364
+Describing {"facts": [["size", "ob817", "0.0081"], ["isa", "ob817", "CVGreen"], ["isa", "ob817", "CVBox"]]}
+
+Found concepts nil
+127.0.0.1 - - [Thu, 03 Feb 2022 17:43:05 GMT] "POST /ConceptLearner HTTP/1.1" 200 364
+Describing {"facts": [["size", "ob817", "0.0081"], ["isa", "ob817", "CVGreen"], ["isa", "ob817", "CVBox"]]}
+
+Found concepts nil
+127.0.0.1 - - [Thu, 03 Feb 2022 17:48:54 GMT] "POST /ConceptLearner HTTP/1.1" 200 364
 
 Creating Reasoning Symbol2 {"symbol": "r_box1"}Creating Reasoning Symbol {"symbol": "r_box1"}
-127.0.0.1 - - [Thu, 03 Feb 2022 02:12:02 GMT] "POST /ConceptLearner HTTP/1.1" 200 387
-Storing {"facts": [["isa", "ob502", "r_box1"], ["size", "ob502", "0.0036"], ["isa", "ob502", "CVRed"], ["isa", "ob502", "CVBox"]], "concept": "r_box1", "context": "episode139"}
+127.0.0.1 - - [Thu, 03 Feb 2022 17:50:01 GMT] "POST /ConceptLearner HTTP/1.1" 200 387
+Storing {"facts": [["isa", "ob824", "r_box1"], ["size", "ob824", "0.0025"], ["isa", "ob824", "CVRed"], ["isa", "ob824", "CVBox"]], "concept": "r_box1", "context": "episode139"}
 Adding case to gpool r_box1
-facts are ((isa ob502 r_box1) (size ob502 0.0036) (isa ob502 CVRed)
-           (isa ob502 CVBox))
+facts are ((isa ob824 r_box1) (size ob824 0.0025) (isa ob824 CVRed)
+           (isa ob824 CVBox))
 Storing case facts in episode139
 
 ------------------------
 0 examples for r_box1Mt
-    Checking (qPred-size ob502)
-new facts are ((isa ob502 r_box1) (size ob502 0.0036)
-               (qPred-size ob502) (isa ob502 CVRed) (isa ob502 CVBox))
+    Checking (qPred-size ob824)
+new facts are ((isa ob824 r_box1) (size ob824 0.0025)
+               (qPred-size ob824) (isa ob824 CVRed) (isa ob824 CVBox))
 Gpool for r_box1 has 0 generalizations and 1 examples
-127.0.0.1 - - [Thu, 03 Feb 2022 02:12:03 GMT] "POST /ConceptLearner HTTP/1.1" 200 396
+127.0.0.1 - - [Thu, 03 Feb 2022 17:50:01 GMT] "POST /ConceptLearner HTTP/1.1" 200 396
 QUERY HELPER
 
 ------------------------
 1 examples for r_box1Mt
-    Checking (qPred-size ob502)
+    Checking (qPred-size ob824)
 Matching Context query-facts, Pattern (isa
-                                       ob502
+                                       ob824
                                        r_box1) Against Gpool r_box1Mt
 Less than three cases in r_box1Mt, failingFound matches nil
-127.0.0.1 - - [Thu, 03 Feb 2022 02:12:08 GMT] "POST /ConceptLearner HTTP/1.1" 200 403
+127.0.0.1 - - [Thu, 03 Feb 2022 17:50:06 GMT] "POST /ConceptLearner HTTP/1.1" 200 403
 QUERY HELPER
 
 ------------------------
 1 examples for r_box1Mt
-    Checking (qPred-size ob509)
+    Checking (qPred-size ob831)
 Matching Context query-facts, Pattern (isa
-                                       ob509
+                                       ob831
                                        r_box1) Against Gpool r_box1Mt
 Less than three cases in r_box1Mt, failingFound matches nil
-127.0.0.1 - - [Thu, 03 Feb 2022 02:14:06 GMT] "POST /ConceptLearner HTTP/1.1" 200 403
-Storing {"facts": [["isa", "ob509", "r_box1"], ["size", "ob509", "0.0256000000000000"], ["isa", "ob509", "CVBlue"], ["isa", "ob509", "CVBox"]], "concept": "r_box1", "context": "episode244"}
+127.0.0.1 - - [Thu, 03 Feb 2022 17:50:19 GMT] "POST /ConceptLearner HTTP/1.1" 200 403
+Storing {"facts": [["isa", "ob831", "r_box1"], ["size", "ob831", "0.0256"], ["isa", "ob831", "CVBlue"], ["isa", "ob831", "CVBox"]], "concept": "r_box1", "context": "episode234"}
 Adding case to gpool r_box1
-facts are ((isa ob509 r_box1) (size ob509 0.0256) (isa ob509 CVBlue)
-           (isa ob509 CVBox))
-Storing case facts in episode244
+facts are ((isa ob831 r_box1) (size ob831 0.0256) (isa ob831 CVBlue)
+           (isa ob831 CVBox))
+Storing case facts in episode234
 
 ------------------------
 1 examples for r_box1Mt
-    Checking (qPred-size ob509)
-new facts are ((isa ob509 r_box1) (size ob509 0.0256)
-               (qPred-size ob509) (isa ob509 CVBlue) (isa ob509 CVBox))
+    Checking (qPred-size ob831)
+new facts are ((isa ob831 r_box1) (size ob831 0.0256)
+               (qPred-size ob831) (isa ob831 CVBlue) (isa ob831 CVBox))
 Gpool for r_box1 has 1 generalizations and 0 examples
-127.0.0.1 - - [Thu, 03 Feb 2022 02:14:12 GMT] "POST /ConceptLearner HTTP/1.1" 200 396
+127.0.0.1 - - [Thu, 03 Feb 2022 17:50:25 GMT] "POST /ConceptLearner HTTP/1.1" 200 396
 QUERY HELPER
 
 ------------------------
 2 examples for r_box1Mt
-    Checking (qPred-size ob509)
+    Checking (qPred-size ob831)
 Matching Context query-facts, Pattern (isa
-                                       ob509
+                                       ob831
                                        r_box1) Against Gpool r_box1Mt
 Less than three cases in r_box1Mt, failingFound matches nil
-127.0.0.1 - - [Thu, 03 Feb 2022 02:14:17 GMT] "POST /ConceptLearner HTTP/1.1" 200 403
+127.0.0.1 - - [Thu, 03 Feb 2022 17:50:30 GMT] "POST /ConceptLearner HTTP/1.1" 200 403
 QUERY HELPER
 
 ------------------------
 2 examples for r_box1Mt
-    Checking (qPred-size ob516)
+    Checking (qPred-size ob838)
 Matching Context query-facts, Pattern (isa
-                                       ob516
+                                       ob838
                                        r_box1) Against Gpool r_box1Mt
 Less than three cases in r_box1Mt, failingFound matches nil
-127.0.0.1 - - [Thu, 03 Feb 2022 02:14:28 GMT] "POST /ConceptLearner HTTP/1.1" 200 403
-Storing {"facts": [["isa", "ob516", "r_box1"], ["size", "ob516", "0.0081000000000000"], ["isa", "ob516", "CVYellow"], ["isa", "ob516", "CVBox"]], "concept": "r_box1", "context": "episode336"}
+127.0.0.1 - - [Thu, 03 Feb 2022 17:50:42 GMT] "POST /ConceptLearner HTTP/1.1" 200 403
+Storing {"facts": [["isa", "ob838", "r_box1"], ["size", "ob838", "0.01"], ["isa", "ob838", "CVYellow"], ["isa", "ob838", "CVBox"]], "concept": "r_box1", "context": "episode327"}
 Adding case to gpool r_box1
-facts are ((isa ob516 r_box1) (size ob516 0.0081) (isa ob516 CVYellow)
-           (isa ob516 CVBox))
-Storing case facts in episode336
+facts are ((isa ob838 r_box1) (size ob838 0.01) (isa ob838 CVYellow)
+           (isa ob838 CVBox))
+Storing case facts in episode327
 
 ------------------------
 2 examples for r_box1Mt
-    Checking (qPred-size ob516)
-new facts are ((isa ob516 r_box1) (size ob516 0.0081)
-               (qPred-size ob516) (isa ob516 CVYellow)
-               (isa ob516 CVBox))
+    Checking (qPred-size ob838)
+new facts are ((isa ob838 r_box1) (size ob838 0.01) (qPred-size ob838)
+               (isa ob838 CVYellow) (isa ob838 CVBox))
 Gpool for r_box1 has 1 generalizations and 0 examples
-127.0.0.1 - - [Thu, 03 Feb 2022 02:14:32 GMT] "POST /ConceptLearner HTTP/1.1" 200 396
+127.0.0.1 - - [Thu, 03 Feb 2022 17:50:46 GMT] "POST /ConceptLearner HTTP/1.1" 200 396
 QUERY HELPER
 
 ------------------------
 3 examples for r_box1Mt
-    Checking (qPred-size ob516)
-    Checking dist: probe is 0.0081, quants are (0.0256 0.0036 0.0081)
-lower is -0.006546187
-upper is 0.03141285
-    In dist, adding (qPred-size ob516)
+    Checking (qPred-size ob838)
+    Checking dist: probe is 0.01, quants are (0.0256 0.0025 0.01)
+lower is -0.0065436997
+upper is 0.031943697
+    In dist, adding (qPred-size ob838)
 Matching Context query-facts, Pattern (isa
-                                       ob516
+                                       ob838
                                        r_box1) Against Gpool r_box1Mt
 
- (d::sageRequireInMapping ob516)CI Found for query-facts in r_box1Mt is ((SageGenFn
+ (d::sageRequireInMapping ob838)CI Found for query-facts in r_box1Mt is ((SageGenFn
                                                                           0
                                                                           r_box1Mt))
 
@@ -184,23 +191,23 @@ Matching Context query-facts, Pattern (isa
   (<attribute r_box1> <Exp r_box11>))
  ((<attribute r_box1> <Exp r_box11>) (<attribute r_box1> <Exp r_box11>))
  <SME 4> score: 0.009000001 normalized score: 1.0Found matches ((isa
-                                                                 ob516
+                                                                 ob838
                                                                  r_box1))
-127.0.0.1 - - [Thu, 03 Feb 2022 02:14:46 GMT] "POST /ConceptLearner HTTP/1.1" 200 414
+127.0.0.1 - - [Thu, 03 Feb 2022 17:50:59 GMT] "POST /ConceptLearner HTTP/1.1" 200 414
 QUERY HELPER
 
 ------------------------
 3 examples for r_box1Mt
-    Checking (qPred-size ob523)
-    Checking dist: probe is 0.0256, quants are (0.0256 0.0036 0.0081)
-lower is -0.006546187
-upper is 0.03141285
-    In dist, adding (qPred-size ob523)
+    Checking (qPred-size ob845)
+    Checking dist: probe is 0.0196, quants are (0.0256 0.0025 0.01)
+lower is -0.0065436997
+upper is 0.031943697
+    In dist, adding (qPred-size ob845)
 Matching Context query-facts, Pattern (isa
-                                       ob523
+                                       ob845
                                        r_box1) Against Gpool r_box1Mt
 
- (d::sageRequireInMapping ob523)CI Found for query-facts in r_box1Mt is ((SageGenFn
+ (d::sageRequireInMapping ob845)CI Found for query-facts in r_box1Mt is ((SageGenFn
                                                                           0
                                                                           r_box1Mt))
 
@@ -209,31 +216,31 @@ Matching Context query-facts, Pattern (isa
   (<attribute r_box1> <Exp r_box11>))
  ((<attribute r_box1> <Exp r_box11>) (<attribute r_box1> <Exp r_box11>))
  <SME 7> score: 0.009000001 normalized score: 1.0Found matches ((isa
-                                                                 ob523
+                                                                 ob845
                                                                  r_box1))
-127.0.0.1 - - [Thu, 03 Feb 2022 02:15:06 GMT] "POST /ConceptLearner HTTP/1.1" 200 413
-Describing {"facts": [["size", "ob530", "0.0121000000000000"], ["isa", "ob530", "CVGreen"], ["isa", "ob530", "CVBox"]]}
+127.0.0.1 - - [Thu, 03 Feb 2022 17:51:19 GMT] "POST /ConceptLearner HTTP/1.1" 200 414
+Describing {"facts": [["size", "ob852", "0.01"], ["isa", "ob852", "CVGreen"], ["isa", "ob852", "CVBox"]]}
 
 ------------------------
 3 examples for r_box1Mt
-    Checking (qPred-size ob530)
-    Checking dist: probe is 0.0121, quants are (0.0256 0.0036 0.0081)
-lower is -0.006546187
-upper is 0.03141285
-    In dist, adding (qPred-size ob530)
+    Checking (qPred-size ob852)
+    Checking dist: probe is 0.01, quants are (0.0256 0.0025 0.01)
+lower is -0.0065436997
+upper is 0.031943697
+    In dist, adding (qPred-size ob852)
 
 ------------------------
 3 examples for r_box1Mt
-    Checking (qPred-size ob530)
-    Checking dist: probe is 0.0121, quants are (0.0256 0.0036 0.0081)
-lower is -0.006546187
-upper is 0.03141285
-    In dist, adding (qPred-size ob530)
+    Checking (qPred-size ob852)
+    Checking dist: probe is 0.01, quants are (0.0256 0.0025 0.01)
+lower is -0.0065436997
+upper is 0.031943697
+    In dist, adding (qPred-size ob852)
 Matching Context describescratch, Pattern (isa
-                                           ob530
+                                           ob852
                                            r_box1) Against Gpool r_box1Mt
 
- (d::sageRequireInMapping ob530)CI Found for describescratch in r_box1Mt is ((SageGenFn
+ (d::sageRequireInMapping ob852)CI Found for describescratch in r_box1Mt is ((SageGenFn
                                                                               0
                                                                               r_box1Mt))
 
@@ -242,30 +249,30 @@ Matching Context describescratch, Pattern (isa
   (<attribute r_box1> <Exp r_box11>))
  ((<attribute r_box1> <Exp r_box11>) (<attribute r_box1> <Exp r_box11>))
  <SME 10> score: 0.009000001 normalized score: 1.0
-Found concepts ((isa ob530 r_box1))
-127.0.0.1 - - [Thu, 03 Feb 2022 02:15:25 GMT] "POST /ConceptLearner HTTP/1.1" 200 392
-Describing {"facts": [["size", "ob537", "0.0081000000000000"], ["isa", "ob537", "CVGreen"], ["isa", "ob537", "CVBox"]]}
+Found concepts ((isa ob852 r_box1))
+127.0.0.1 - - [Thu, 03 Feb 2022 17:51:39 GMT] "POST /ConceptLearner HTTP/1.1" 200 392
+Describing {"facts": [["size", "ob866", "0.0196"], ["isa", "ob866", "CVYellow"], ["isa", "ob866", "CVBox"]]}
 
 ------------------------
 3 examples for r_box1Mt
-    Checking (qPred-size ob537)
-    Checking dist: probe is 0.0081, quants are (0.0256 0.0036 0.0081)
-lower is -0.006546187
-upper is 0.03141285
-    In dist, adding (qPred-size ob537)
+    Checking (qPred-size ob866)
+    Checking dist: probe is 0.0196, quants are (0.0256 0.0025 0.01)
+lower is -0.0065436997
+upper is 0.031943697
+    In dist, adding (qPred-size ob866)
 
 ------------------------
 3 examples for r_box1Mt
-    Checking (qPred-size ob537)
-    Checking dist: probe is 0.0081, quants are (0.0256 0.0036 0.0081)
-lower is -0.006546187
-upper is 0.03141285
-    In dist, adding (qPred-size ob537)
+    Checking (qPred-size ob866)
+    Checking dist: probe is 0.0196, quants are (0.0256 0.0025 0.01)
+lower is -0.0065436997
+upper is 0.031943697
+    In dist, adding (qPred-size ob866)
 Matching Context describescratch, Pattern (isa
-                                           ob537
+                                           ob866
                                            r_box1) Against Gpool r_box1Mt
 
- (d::sageRequireInMapping ob537)CI Found for describescratch in r_box1Mt is ((SageGenFn
+ (d::sageRequireInMapping ob866)CI Found for describescratch in r_box1Mt is ((SageGenFn
                                                                               0
                                                                               r_box1Mt))
 
@@ -274,30 +281,30 @@ Matching Context describescratch, Pattern (isa
   (<attribute r_box1> <Exp r_box11>))
  ((<attribute r_box1> <Exp r_box11>) (<attribute r_box1> <Exp r_box11>))
  <SME 13> score: 0.009000001 normalized score: 1.0
-Found concepts ((isa ob537 r_box1))
-127.0.0.1 - - [Thu, 03 Feb 2022 02:17:23 GMT] "POST /ConceptLearner HTTP/1.1" 200 392
-Describing {"facts": [["size", "ob544", "0.0081"], ["isa", "ob544", "CVGreen"], ["isa", "ob544", "CVBox"]]}
+Found concepts ((isa ob866 r_box1))
+127.0.0.1 - - [Thu, 03 Feb 2022 17:52:16 GMT] "POST /ConceptLearner HTTP/1.1" 200 392
+Describing {"facts": [["size", "ob859", "0.0196"], ["isa", "ob859", "CVGreen"], ["isa", "ob859", "CVBox"]]}
 
 ------------------------
 3 examples for r_box1Mt
-    Checking (qPred-size ob544)
-    Checking dist: probe is 0.0081, quants are (0.0256 0.0036 0.0081)
-lower is -0.006546187
-upper is 0.03141285
-    In dist, adding (qPred-size ob544)
+    Checking (qPred-size ob859)
+    Checking dist: probe is 0.0196, quants are (0.0256 0.0025 0.01)
+lower is -0.0065436997
+upper is 0.031943697
+    In dist, adding (qPred-size ob859)
 
 ------------------------
 3 examples for r_box1Mt
-    Checking (qPred-size ob544)
-    Checking dist: probe is 0.0081, quants are (0.0256 0.0036 0.0081)
-lower is -0.006546187
-upper is 0.03141285
-    In dist, adding (qPred-size ob544)
+    Checking (qPred-size ob859)
+    Checking dist: probe is 0.0196, quants are (0.0256 0.0025 0.01)
+lower is -0.0065436997
+upper is 0.031943697
+    In dist, adding (qPred-size ob859)
 Matching Context describescratch, Pattern (isa
-                                           ob544
+                                           ob859
                                            r_box1) Against Gpool r_box1Mt
 
- (d::sageRequireInMapping ob544)CI Found for describescratch in r_box1Mt is ((SageGenFn
+ (d::sageRequireInMapping ob859)CI Found for describescratch in r_box1Mt is ((SageGenFn
                                                                               0
                                                                               r_box1Mt))
 
@@ -306,55 +313,304 @@ Matching Context describescratch, Pattern (isa
   (<attribute r_box1> <Exp r_box11>))
  ((<attribute r_box1> <Exp r_box11>) (<attribute r_box1> <Exp r_box11>))
  <SME 16> score: 0.009000001 normalized score: 1.0
-Found concepts ((isa ob544 r_box1))
-127.0.0.1 - - [Thu, 03 Feb 2022 02:20:44 GMT] "POST /ConceptLearner HTTP/1.1" 200 392
+Found concepts ((isa ob859 r_box1))
+127.0.0.1 - - [Thu, 03 Feb 2022 17:52:27 GMT] "POST /ConceptLearner HTTP/1.1" 200 392
+
+Creating Reasoning Symbol2 {"symbol": "r_cone2"}Creating Reasoning Symbol {"symbol": "r_cone2"}
+127.0.0.1 - - [Thu, 03 Feb 2022 17:52:46 GMT] "POST /ConceptLearner HTTP/1.1" 200 388
+Storing {"facts": [["isa", "ob873", "r_cone2"], ["size", "ob873", "0.0196"], ["isa", "ob873", "CVGreen"], ["isa", "ob873", "CVCone"]], "concept": "r_cone2", "context": "episode590"}
+Adding case to gpool r_cone2
+facts are ((isa ob873 r_cone2) (size ob873 0.0196) (isa ob873 CVGreen)
+           (isa ob873 CVCone))
+Storing case facts in episode590
+
+------------------------
+0 examples for r_cone2Mt
+    Checking (qPred-size ob873)
+new facts are ((isa ob873 r_cone2) (size ob873 0.0196)
+               (qPred-size ob873) (isa ob873 CVGreen)
+               (isa ob873 CVCone))
+Gpool for r_cone2 has 0 generalizations and 1 examples
+127.0.0.1 - - [Thu, 03 Feb 2022 17:52:47 GMT] "POST /ConceptLearner HTTP/1.1" 200 396
 QUERY HELPER
 
 ------------------------
-3 examples for r_box1Mt
-    Checking (qPred-size ob558)
-    Checking dist: probe is 0.0025, quants are (0.0256 0.0036 0.0081)
-lower is -0.006546187
-upper is 0.03141285
-    In dist, adding (qPred-size ob558)
+1 examples for r_cone2Mt
+    Checking (qPred-size ob873)
 Matching Context query-facts, Pattern (isa
-                                       ob558
-                                       r_box1) Against Gpool r_box1Mt
+                                       ob873
+                                       r_cone2) Against Gpool r_cone2Mt
+Less than three cases in r_cone2Mt, failingFound matches nil
+127.0.0.1 - - [Thu, 03 Feb 2022 17:52:52 GMT] "POST /ConceptLearner HTTP/1.1" 200 406
 
- (d::sageRequireInMapping ob558)CI Found for query-facts in r_box1Mt is ((SageGenFn
-                                                                          0
-                                                                          r_box1Mt))
+Creating Reasoning Symbol2 {"symbol": "r_green3"}Creating Reasoning Symbol {"symbol": "r_green3"}
+127.0.0.1 - - [Thu, 03 Feb 2022 17:52:57 GMT] "POST /ConceptLearner HTTP/1.1" 200 392
+Storing {"facts": [["isa", "ob873", "r_green3"], ["size", "ob873", "0.0196"], ["isa", "ob873", "CVGreen"], ["isa", "ob873", "CVCone"]], "concept": "r_green3", "context": "episode635"}
+Adding case to gpool r_green3
+facts are ((isa ob873 r_green3) (size ob873 0.0196) (isa ob873 CVGreen)
+           (isa ob873 CVCone))
+Storing case facts in episode635
 
- ((<attribute CVBox> <Exp CVBox3>)
+------------------------
+0 examples for r_green3Mt
+    Checking (qPred-size ob873)
+new facts are ((isa ob873 r_green3) (size ob873 0.0196)
+               (qPred-size ob873) (isa ob873 CVGreen)
+               (isa ob873 CVCone))
+Gpool for r_green3 has 0 generalizations and 1 examples
+127.0.0.1 - - [Thu, 03 Feb 2022 17:52:58 GMT] "POST /ConceptLearner HTTP/1.1" 200 396
+QUERY HELPER
+
+------------------------
+1 examples for r_cone2Mt
+    Checking (qPred-size ob873)
+Matching Context query-facts, Pattern (isa
+                                       ob873
+                                       r_cone2) Against Gpool r_cone2Mt
+Less than three cases in r_cone2Mt, failingFound matches nil
+127.0.0.1 - - [Thu, 03 Feb 2022 17:53:03 GMT] "POST /ConceptLearner HTTP/1.1" 200 406
+QUERY HELPER
+
+------------------------
+1 examples for r_green3Mt
+    Checking (qPred-size ob873)
+Matching Context query-facts, Pattern (isa
+                                       ob873
+                                       r_green3) Against Gpool r_green3Mt
+Less than three cases in r_green3Mt, failingFound matches nil
+127.0.0.1 - - [Thu, 03 Feb 2022 17:53:06 GMT] "POST /ConceptLearner HTTP/1.1" 200 406
+QUERY HELPER
+
+------------------------
+1 examples for r_green3Mt
+    Checking (qPred-size ob880)
+Matching Context query-facts, Pattern (isa
+                                       ob880
+                                       r_green3) Against Gpool r_green3Mt
+Less than three cases in r_green3Mt, failingFound matches nil
+127.0.0.1 - - [Thu, 03 Feb 2022 17:53:18 GMT] "POST /ConceptLearner HTTP/1.1" 200 406
+Storing {"facts": [["isa", "ob880", "r_green3"], ["size", "ob880", "0.0025"], ["isa", "ob880", "CVGreen"], ["isa", "ob880", "CVCylinder"]], "concept": "r_green3", "context": "episode734"}
+Adding case to gpool r_green3
+facts are ((isa ob880 r_green3) (size ob880 0.0025) (isa ob880 CVGreen)
+           (isa ob880 CVCylinder))
+Storing case facts in episode734
+
+------------------------
+1 examples for r_green3Mt
+    Checking (qPred-size ob880)
+new facts are ((isa ob880 r_green3) (size ob880 0.0025)
+               (qPred-size ob880) (isa ob880 CVGreen)
+               (isa ob880 CVCylinder))
+Gpool for r_green3 has 1 generalizations and 0 examples
+127.0.0.1 - - [Thu, 03 Feb 2022 17:53:23 GMT] "POST /ConceptLearner HTTP/1.1" 200 396
+QUERY HELPER
+
+------------------------
+2 examples for r_green3Mt
+    Checking (qPred-size ob880)
+Matching Context query-facts, Pattern (isa
+                                       ob880
+                                       r_green3) Against Gpool r_green3Mt
+Less than three cases in r_green3Mt, failingFound matches nil
+127.0.0.1 - - [Thu, 03 Feb 2022 17:53:29 GMT] "POST /ConceptLearner HTTP/1.1" 200 406
+
+Creating Reasoning Symbol2 {"symbol": "r_cylinder4"}Creating Reasoning Symbol {"symbol": "r_cylinder4"}
+127.0.0.1 - - [Thu, 03 Feb 2022 17:53:33 GMT] "POST /ConceptLearner HTTP/1.1" 200 396
+Storing {"facts": [["isa", "ob880", "r_cylinder4"], ["size", "ob880", "0.0025"], ["isa", "ob880", "CVGreen"], ["isa", "ob880", "CVCylinder"]], "concept": "r_cylinder4", "context": "episode779"}
+Adding case to gpool r_cylinder4
+facts are ((isa ob880 r_cylinder4) (size ob880 0.0025)
+           (isa ob880 CVGreen) (isa ob880 CVCylinder))
+Storing case facts in episode779
+
+------------------------
+0 examples for r_cylinder4Mt
+    Checking (qPred-size ob880)
+new facts are ((isa ob880 r_cylinder4) (size ob880 0.0025)
+               (qPred-size ob880) (isa ob880 CVGreen)
+               (isa ob880 CVCylinder))
+Gpool for r_cylinder4 has 0 generalizations and 1 examples
+127.0.0.1 - - [Thu, 03 Feb 2022 17:53:34 GMT] "POST /ConceptLearner HTTP/1.1" 200 396
+QUERY HELPER
+
+------------------------
+2 examples for r_green3Mt
+    Checking (qPred-size ob880)
+Matching Context query-facts, Pattern (isa
+                                       ob880
+                                       r_green3) Against Gpool r_green3Mt
+Less than three cases in r_green3Mt, failingFound matches nil
+127.0.0.1 - - [Thu, 03 Feb 2022 17:53:39 GMT] "POST /ConceptLearner HTTP/1.1" 200 406
+QUERY HELPER
+
+------------------------
+1 examples for r_cylinder4Mt
+    Checking (qPred-size ob880)
+Matching Context query-facts, Pattern (isa
+                                       ob880
+                                       r_cylinder4) Against Gpool r_cylinder4Mt
+Less than three cases in r_cylinder4Mt, failingFound matches nil
+127.0.0.1 - - [Thu, 03 Feb 2022 17:53:42 GMT] "POST /ConceptLearner HTTP/1.1" 200 408
+QUERY HELPER
+
+------------------------
+2 examples for r_green3Mt
+    Checking (qPred-size ob887)
+Matching Context query-facts, Pattern (isa
+                                       ob887
+                                       r_green3) Against Gpool r_green3Mt
+Less than three cases in r_green3Mt, failingFound matches nil
+127.0.0.1 - - [Thu, 03 Feb 2022 17:53:55 GMT] "POST /ConceptLearner HTTP/1.1" 200 406
+Storing {"facts": [["isa", "ob887", "r_green3"], ["size", "ob887", "0.0081"], ["isa", "ob887", "CVGreen"], ["isa", "ob887", "CVSphere"]], "concept": "r_green3", "context": "episode882"}
+Adding case to gpool r_green3
+facts are ((isa ob887 r_green3) (size ob887 0.0081) (isa ob887 CVGreen)
+           (isa ob887 CVSphere))
+Storing case facts in episode882
+
+------------------------
+2 examples for r_green3Mt
+    Checking (qPred-size ob887)
+new facts are ((isa ob887 r_green3) (size ob887 0.0081)
+               (qPred-size ob887) (isa ob887 CVGreen)
+               (isa ob887 CVSphere))
+Gpool for r_green3 has 1 generalizations and 0 examples
+127.0.0.1 - - [Thu, 03 Feb 2022 17:53:59 GMT] "POST /ConceptLearner HTTP/1.1" 200 396
+
+Creating Reasoning Symbol2 {"symbol": "r_sphere5"}Creating Reasoning Symbol {"symbol": "r_sphere5"}
+127.0.0.1 - - [Thu, 03 Feb 2022 17:54:07 GMT] "POST /ConceptLearner HTTP/1.1" 200 392
+Storing {"facts": [["isa", "ob887", "r_sphere5"], ["size", "ob887", "0.0081"], ["isa", "ob887", "CVGreen"], ["isa", "ob887", "CVSphere"]], "concept": "r_sphere5", "context": "episode919"}
+Adding case to gpool r_sphere5
+facts are ((isa ob887 r_sphere5) (size ob887 0.0081)
+           (isa ob887 CVGreen) (isa ob887 CVSphere))
+Storing case facts in episode919
+
+------------------------
+0 examples for r_sphere5Mt
+    Checking (qPred-size ob887)
+new facts are ((isa ob887 r_sphere5) (size ob887 0.0081)
+               (qPred-size ob887) (isa ob887 CVGreen)
+               (isa ob887 CVSphere))
+Gpool for r_sphere5 has 0 generalizations and 1 examples
+127.0.0.1 - - [Thu, 03 Feb 2022 17:54:07 GMT] "POST /ConceptLearner HTTP/1.1" 200 396
+QUERY HELPER
+
+------------------------
+1 examples for r_sphere5Mt
+    Checking (qPred-size ob887)
+Matching Context query-facts, Pattern (isa
+                                       ob887
+                                       r_sphere5) Against Gpool r_sphere5Mt
+Less than three cases in r_sphere5Mt, failingFound matches nil
+127.0.0.1 - - [Thu, 03 Feb 2022 17:54:13 GMT] "POST /ConceptLearner HTTP/1.1" 200 406
+QUERY HELPER
+
+------------------------
+3 examples for r_green3Mt
+    Checking (qPred-size ob887)
+    Checking dist: probe is 0.0081, quants are (0.0025 0.0196 0.0081)
+lower is -0.004169751
+upper is 0.024303084
+    In dist, adding (qPred-size ob887)
+Matching Context query-facts, Pattern (isa
+                                       ob887
+                                       r_green3) Against Gpool r_green3Mt
+
+ (d::sageRequireInMapping ob887)CI Found for query-facts in r_green3Mt is ((SageGenFn
+                                                                            0
+                                                                            r_green3Mt))
+
+ ((<attribute CVGreen> <Exp CVGreen3>)
   (<relation qPred-size> <Exp qPred-size2>)
-  (<attribute r_box1> <Exp r_box11>))
- ((<attribute r_box1> <Exp r_box11>) (<attribute r_box1> <Exp r_box11>))
- <SME 19> score: 0.009000001 normalized score: 1.0Found matches ((isa
-                                                                  ob558
-                                                                  r_box1))
-127.0.0.1 - - [Thu, 03 Feb 2022 02:23:05 GMT] "POST /ConceptLearner HTTP/1.1" 200 413
-Describing {"facts": [["size", "ob565", "0.01"], ["isa", "ob565", "CVGreen"], ["isa", "ob565", "CVBox"]]}
+  (<attribute r_green3> <Exp r_green31>))
+ ((<attribute r_green3> <Exp r_green31>)
+  (<attribute r_green3> <Exp r_green31>))
+ <SME 21> score: 0.009000001 normalized score: 1.0Found matches ((isa
+                                                                  ob887
+                                                                  r_green3))
+127.0.0.1 - - [Thu, 03 Feb 2022 17:54:24 GMT] "POST /ConceptLearner HTTP/1.1" 200 429
+Describing {"facts": [["size", "ob901", "0.01"], ["isa", "ob901", "CVGreen"], ["isa", "ob901", "CVBox"]]}
 
 ------------------------
-3 examples for r_box1Mt
-    Checking (qPred-size ob565)
-    Checking dist: probe is 0.01, quants are (0.0256 0.0036 0.0081)
-lower is -0.006546187
-upper is 0.03141285
-    In dist, adding (qPred-size ob565)
+1 examples for r_sphere5Mt
+    Checking (qPred-size ob901)
 
 ------------------------
-3 examples for r_box1Mt
-    Checking (qPred-size ob565)
-    Checking dist: probe is 0.01, quants are (0.0256 0.0036 0.0081)
-lower is -0.006546187
-upper is 0.03141285
-    In dist, adding (qPred-size ob565)
+1 examples for r_sphere5Mt
+    Checking (qPred-size ob901)
 Matching Context describescratch, Pattern (isa
-                                           ob565
+                                           ob901
+                                           r_sphere5) Against Gpool r_sphere5Mt
+Less than three cases in r_sphere5Mt, failing
+------------------------
+1 examples for r_cylinder4Mt
+    Checking (qPred-size ob901)
+
+------------------------
+1 examples for r_cylinder4Mt
+    Checking (qPred-size ob901)
+Matching Context describescratch, Pattern (isa
+                                           ob901
+                                           r_cylinder4) Against Gpool r_cylinder4Mt
+Less than three cases in r_cylinder4Mt, failing
+------------------------
+3 examples for r_green3Mt
+    Checking (qPred-size ob901)
+    Checking dist: probe is 0.01, quants are (0.0025 0.0196 0.0081)
+lower is -0.004169751
+upper is 0.024303084
+    In dist, adding (qPred-size ob901)
+
+------------------------
+3 examples for r_green3Mt
+    Checking (qPred-size ob901)
+    Checking dist: probe is 0.01, quants are (0.0025 0.0196 0.0081)
+lower is -0.004169751
+upper is 0.024303084
+    In dist, adding (qPred-size ob901)
+Matching Context describescratch, Pattern (isa
+                                           ob901
+                                           r_green3) Against Gpool r_green3Mt
+
+ (d::sageRequireInMapping ob901)CI Found for describescratch in r_green3Mt is ((SageGenFn
+                                                                                0
+                                                                                r_green3Mt))
+
+ ((<attribute CVGreen> <Exp CVGreen3>)
+  (<relation qPred-size> <Exp qPred-size2>)
+  (<attribute r_green3> <Exp r_green31>))
+ ((<attribute r_green3> <Exp r_green31>)
+  (<attribute r_green3> <Exp r_green31>))
+ <SME 24> score: 0.009000001 normalized score: 1.0
+------------------------
+1 examples for r_cone2Mt
+    Checking (qPred-size ob901)
+
+------------------------
+1 examples for r_cone2Mt
+    Checking (qPred-size ob901)
+Matching Context describescratch, Pattern (isa
+                                           ob901
+                                           r_cone2) Against Gpool r_cone2Mt
+Less than three cases in r_cone2Mt, failing
+------------------------
+3 examples for r_box1Mt
+    Checking (qPred-size ob901)
+    Checking dist: probe is 0.01, quants are (0.0256 0.0025 0.01)
+lower is -0.0065436997
+upper is 0.031943697
+    In dist, adding (qPred-size ob901)
+
+------------------------
+3 examples for r_box1Mt
+    Checking (qPred-size ob901)
+    Checking dist: probe is 0.01, quants are (0.0256 0.0025 0.01)
+lower is -0.0065436997
+upper is 0.031943697
+    In dist, adding (qPred-size ob901)
+Matching Context describescratch, Pattern (isa
+                                           ob901
                                            r_box1) Against Gpool r_box1Mt
 
- (d::sageRequireInMapping ob565)CI Found for describescratch in r_box1Mt is ((SageGenFn
+ (d::sageRequireInMapping ob901)CI Found for describescratch in r_box1Mt is ((SageGenFn
                                                                               0
                                                                               r_box1Mt))
 
@@ -362,193 +618,95 @@ Matching Context describescratch, Pattern (isa
   (<relation qPred-size> <Exp qPred-size2>)
   (<attribute r_box1> <Exp r_box11>))
  ((<attribute r_box1> <Exp r_box11>) (<attribute r_box1> <Exp r_box11>))
- <SME 22> score: 0.009000001 normalized score: 1.0
-Found concepts ((isa ob565 r_box1))
-127.0.0.1 - - [Thu, 03 Feb 2022 02:24:35 GMT] "POST /ConceptLearner HTTP/1.1" 200 392
-Describing {"facts": [["size", "ob572", "0.01"], ["isa", "ob572", "CVGreen"], ["isa", "ob572", "CVBox"]]}
+ <SME 27> score: 0.009000001 normalized score: 1.0
+Found concepts ((isa ob901 r_box1) (isa ob901 r_green3))
+127.0.0.1 - - [Thu, 03 Feb 2022 17:55:06 GMT] "POST /ConceptLearner HTTP/1.1" 200 422
+Describing {"facts": [["size", "ob915", "0.0081"], ["isa", "ob915", "CVYellow"], ["isa", "ob915", "CVBox"]]}
 
 ------------------------
-3 examples for r_box1Mt
-    Checking (qPred-size ob572)
-    Checking dist: probe is 0.01, quants are (0.0256 0.0036 0.0081)
-lower is -0.006546187
-upper is 0.03141285
-    In dist, adding (qPred-size ob572)
+1 examples for r_sphere5Mt
+    Checking (qPred-size ob915)
 
 ------------------------
-3 examples for r_box1Mt
-    Checking (qPred-size ob572)
-    Checking dist: probe is 0.01, quants are (0.0256 0.0036 0.0081)
-lower is -0.006546187
-upper is 0.03141285
-    In dist, adding (qPred-size ob572)
+1 examples for r_sphere5Mt
+    Checking (qPred-size ob915)
 Matching Context describescratch, Pattern (isa
-                                           ob572
-                                           r_box1) Against Gpool r_box1Mt
-
- (d::sageRequireInMapping ob572)CI Found for describescratch in r_box1Mt is ((SageGenFn
-                                                                              0
-                                                                              r_box1Mt))
-
- ((<attribute CVBox> <Exp CVBox3>)
-  (<relation qPred-size> <Exp qPred-size2>)
-  (<attribute r_box1> <Exp r_box11>))
- ((<attribute r_box1> <Exp r_box11>) (<attribute r_box1> <Exp r_box11>))
- <SME 25> score: 0.009000001 normalized score: 1.0
-Found concepts ((isa ob572 r_box1))
-127.0.0.1 - - [Thu, 03 Feb 2022 02:26:55 GMT] "POST /ConceptLearner HTTP/1.1" 200 392
-Describing {"facts": [["size", "ob579", "0.0081"], ["isa", "ob579", "CVGreen"], ["isa", "ob579", "CVBox"]]}
+                                           ob915
+                                           r_sphere5) Against Gpool r_sphere5Mt
+Less than three cases in r_sphere5Mt, failing
+------------------------
+1 examples for r_cylinder4Mt
+    Checking (qPred-size ob915)
 
 ------------------------
-3 examples for r_box1Mt
-    Checking (qPred-size ob579)
-    Checking dist: probe is 0.0081, quants are (0.0256 0.0036 0.0081)
-lower is -0.006546187
-upper is 0.03141285
-    In dist, adding (qPred-size ob579)
-
-------------------------
-3 examples for r_box1Mt
-    Checking (qPred-size ob579)
-    Checking dist: probe is 0.0081, quants are (0.0256 0.0036 0.0081)
-lower is -0.006546187
-upper is 0.03141285
-    In dist, adding (qPred-size ob579)
+1 examples for r_cylinder4Mt
+    Checking (qPred-size ob915)
 Matching Context describescratch, Pattern (isa
-                                           ob579
-                                           r_box1) Against Gpool r_box1Mt
-
- (d::sageRequireInMapping ob579)CI Found for describescratch in r_box1Mt is ((SageGenFn
-                                                                              0
-                                                                              r_box1Mt))
-
- ((<attribute CVBox> <Exp CVBox3>)
-  (<relation qPred-size> <Exp qPred-size2>)
-  (<attribute r_box1> <Exp r_box11>))
- ((<attribute r_box1> <Exp r_box11>) (<attribute r_box1> <Exp r_box11>))
- <SME 28> score: 0.009000001 normalized score: 1.0
-Found concepts ((isa ob579 r_box1))
-127.0.0.1 - - [Thu, 03 Feb 2022 02:37:02 GMT] "POST /ConceptLearner HTTP/1.1" 200 392
-Describing {"facts": [["size", "ob586", "0.0081"], ["isa", "ob586", "CVGreen"], ["isa", "ob586", "CVBox"]]}
+                                           ob915
+                                           r_cylinder4) Against Gpool r_cylinder4Mt
+Less than three cases in r_cylinder4Mt, failing
+------------------------
+3 examples for r_green3Mt
+    Checking (qPred-size ob915)
+    Checking dist: probe is 0.0081, quants are (0.0025 0.0196 0.0081)
+lower is -0.004169751
+upper is 0.024303084
+    In dist, adding (qPred-size ob915)
 
 ------------------------
-3 examples for r_box1Mt
-    Checking (qPred-size ob586)
-    Checking dist: probe is 0.0081, quants are (0.0256 0.0036 0.0081)
-lower is -0.006546187
-upper is 0.03141285
-    In dist, adding (qPred-size ob586)
-
-------------------------
-3 examples for r_box1Mt
-    Checking (qPred-size ob586)
-    Checking dist: probe is 0.0081, quants are (0.0256 0.0036 0.0081)
-lower is -0.006546187
-upper is 0.03141285
-    In dist, adding (qPred-size ob586)
+3 examples for r_green3Mt
+    Checking (qPred-size ob915)
+    Checking dist: probe is 0.0081, quants are (0.0025 0.0196 0.0081)
+lower is -0.004169751
+upper is 0.024303084
+    In dist, adding (qPred-size ob915)
 Matching Context describescratch, Pattern (isa
-                                           ob586
-                                           r_box1) Against Gpool r_box1Mt
+                                           ob915
+                                           r_green3) Against Gpool r_green3Mt
 
- (d::sageRequireInMapping ob586)CI Found for describescratch in r_box1Mt is ((SageGenFn
-                                                                              0
-                                                                              r_box1Mt))
-
- ((<attribute CVBox> <Exp CVBox3>)
-  (<relation qPred-size> <Exp qPred-size2>)
-  (<attribute r_box1> <Exp r_box11>))
- ((<attribute r_box1> <Exp r_box11>) (<attribute r_box1> <Exp r_box11>))
- <SME 31> score: 0.009000001 normalized score: 1.0
-Found concepts ((isa ob586 r_box1))
-127.0.0.1 - - [Thu, 03 Feb 2022 02:40:19 GMT] "POST /ConceptLearner HTTP/1.1" 200 392
-Describing {"facts": [["size", "ob593", "0.0121"], ["isa", "ob593", "CVGreen"], ["isa", "ob593", "CVBox"]]}
-
-------------------------
-3 examples for r_box1Mt
-    Checking (qPred-size ob593)
-    Checking dist: probe is 0.0121, quants are (0.0256 0.0036 0.0081)
-lower is -0.006546187
-upper is 0.03141285
-    In dist, adding (qPred-size ob593)
-
-------------------------
-3 examples for r_box1Mt
-    Checking (qPred-size ob593)
-    Checking dist: probe is 0.0121, quants are (0.0256 0.0036 0.0081)
-lower is -0.006546187
-upper is 0.03141285
-    In dist, adding (qPred-size ob593)
-Matching Context describescratch, Pattern (isa
-                                           ob593
-                                           r_box1) Against Gpool r_box1Mt
-
- (d::sageRequireInMapping ob593)CI Found for describescratch in r_box1Mt is ((SageGenFn
-                                                                              0
-                                                                              r_box1Mt))
-
- ((<attribute CVBox> <Exp CVBox3>)
-  (<relation qPred-size> <Exp qPred-size2>)
-  (<attribute r_box1> <Exp r_box11>))
- ((<attribute r_box1> <Exp r_box11>) (<attribute r_box1> <Exp r_box11>))
- <SME 34> score: 0.009000001 normalized score: 1.0
-Found concepts ((isa ob593 r_box1))
-127.0.0.1 - - [Thu, 03 Feb 2022 02:41:48 GMT] "POST /ConceptLearner HTTP/1.1" 200 392
-Describing {"facts": [["size", "ob600", "0.01"], ["isa", "ob600", "CVGreen"], ["isa", "ob600", "CVBox"]]}
-
-------------------------
-3 examples for r_box1Mt
-    Checking (qPred-size ob600)
-    Checking dist: probe is 0.01, quants are (0.0256 0.0036 0.0081)
-lower is -0.006546187
-upper is 0.03141285
-    In dist, adding (qPred-size ob600)
-
-------------------------
-3 examples for r_box1Mt
-    Checking (qPred-size ob600)
-    Checking dist: probe is 0.01, quants are (0.0256 0.0036 0.0081)
-lower is -0.006546187
-upper is 0.03141285
-    In dist, adding (qPred-size ob600)
-Matching Context describescratch, Pattern (isa
-                                           ob600
-                                           r_box1) Against Gpool r_box1Mt
-
- (d::sageRequireInMapping ob600)CI Found for describescratch in r_box1Mt is ((SageGenFn
-                                                                              0
-                                                                              r_box1Mt))
-52546592 bytes have been tenured, next gc will be global.
+ (d::sageRequireInMapping ob915)CI Found for describescratch in r_green3Mt is ((SageGenFn
+                                                                                0
+                                                                                r_green3Mt))
+52440240 bytes have been tenured, next gc will be global.
 See the documentation for variable *global-gc-behavior* for more information.
 
- ((<attribute CVBox> <Exp CVBox3>)
+ ((<attribute CVGreen> <Exp CVGreen3>)
   (<relation qPred-size> <Exp qPred-size2>)
-  (<attribute r_box1> <Exp r_box11>))
- ((<attribute r_box1> <Exp r_box11>) (<attribute r_box1> <Exp r_box11>))
- <SME 37> score: 0.009000001 normalized score: 1.0
-Found concepts ((isa ob600 r_box1))
-127.0.0.1 - - [Thu, 03 Feb 2022 02:45:18 GMT] "POST /ConceptLearner HTTP/1.1" 200 392
-Describing {"facts": [["size", "ob607", "0.01"], ["isa", "ob607", "CVGreen"], ["isa", "ob607", "CVBox"]]}
+  (<attribute r_green3> <Exp r_green31>))
+ ((<attribute r_green3> <Exp r_green31>)
+  (<attribute r_green3> <Exp r_green31>))
+ <SME 30> score: 0.0045000003 normalized score: 0.5
+------------------------
+1 examples for r_cone2Mt
+    Checking (qPred-size ob915)
 
 ------------------------
-3 examples for r_box1Mt
-    Checking (qPred-size ob607)
-    Checking dist: probe is 0.01, quants are (0.0256 0.0036 0.0081)
-lower is -0.006546187
-upper is 0.03141285
-    In dist, adding (qPred-size ob607)
-
-------------------------
-3 examples for r_box1Mt
-    Checking (qPred-size ob607)
-    Checking dist: probe is 0.01, quants are (0.0256 0.0036 0.0081)
-lower is -0.006546187
-upper is 0.03141285
-    In dist, adding (qPred-size ob607)
+1 examples for r_cone2Mt
+    Checking (qPred-size ob915)
 Matching Context describescratch, Pattern (isa
-                                           ob607
+                                           ob915
+                                           r_cone2) Against Gpool r_cone2Mt
+Less than three cases in r_cone2Mt, failing
+------------------------
+3 examples for r_box1Mt
+    Checking (qPred-size ob915)
+    Checking dist: probe is 0.0081, quants are (0.0256 0.0025 0.01)
+lower is -0.0065436997
+upper is 0.031943697
+    In dist, adding (qPred-size ob915)
+
+------------------------
+3 examples for r_box1Mt
+    Checking (qPred-size ob915)
+    Checking dist: probe is 0.0081, quants are (0.0256 0.0025 0.01)
+lower is -0.0065436997
+upper is 0.031943697
+    In dist, adding (qPred-size ob915)
+Matching Context describescratch, Pattern (isa
+                                           ob915
                                            r_box1) Against Gpool r_box1Mt
 
- (d::sageRequireInMapping ob607)CI Found for describescratch in r_box1Mt is ((SageGenFn
+ (d::sageRequireInMapping ob915)CI Found for describescratch in r_box1Mt is ((SageGenFn
                                                                               0
                                                                               r_box1Mt))
 
@@ -556,970 +714,6 @@ Matching Context describescratch, Pattern (isa
   (<relation qPred-size> <Exp qPred-size2>)
   (<attribute r_box1> <Exp r_box11>))
  ((<attribute r_box1> <Exp r_box11>) (<attribute r_box1> <Exp r_box11>))
- <SME 40> score: 0.009000001 normalized score: 1.0
-Found concepts ((isa ob607 r_box1))
-127.0.0.1 - - [Thu, 03 Feb 2022 02:47:00 GMT] "POST /ConceptLearner HTTP/1.1" 200 392
-Describing {"facts": [["size", "ob614", "0.0121"], ["isa", "ob614", "CVGreen"], ["isa", "ob614", "CVBox"]]}
-
-------------------------
-3 examples for r_box1Mt
-    Checking (qPred-size ob614)
-    Checking dist: probe is 0.0121, quants are (0.0256 0.0036 0.0081)
-lower is -0.006546187
-upper is 0.03141285
-    In dist, adding (qPred-size ob614)
-
-------------------------
-3 examples for r_box1Mt
-    Checking (qPred-size ob614)
-    Checking dist: probe is 0.0121, quants are (0.0256 0.0036 0.0081)
-lower is -0.006546187
-upper is 0.03141285
-    In dist, adding (qPred-size ob614)
-Matching Context describescratch, Pattern (isa
-                                           ob614
-                                           r_box1) Against Gpool r_box1Mt
-
- (d::sageRequireInMapping ob614)CI Found for describescratch in r_box1Mt is ((SageGenFn
-                                                                              0
-                                                                              r_box1Mt))
-
- ((<attribute CVBox> <Exp CVBox3>)
-  (<relation qPred-size> <Exp qPred-size2>)
-  (<attribute r_box1> <Exp r_box11>))
- ((<attribute r_box1> <Exp r_box11>) (<attribute r_box1> <Exp r_box11>))
- <SME 43> score: 0.009000001 normalized score: 1.0
-Found concepts ((isa ob614 r_box1))
-127.0.0.1 - - [Thu, 03 Feb 2022 02:50:40 GMT] "POST /ConceptLearner HTTP/1.1" 200 392
-Describing {"facts": [["size", "ob621", "0.0121"], ["isa", "ob621", "CVGreen"], ["isa", "ob621", "CVBox"]]}
-
-------------------------
-3 examples for r_box1Mt
-    Checking (qPred-size ob621)
-    Checking dist: probe is 0.0121, quants are (0.0256 0.0036 0.0081)
-lower is -0.006546187
-upper is 0.03141285
-    In dist, adding (qPred-size ob621)
-
-------------------------
-3 examples for r_box1Mt
-    Checking (qPred-size ob621)
-    Checking dist: probe is 0.0121, quants are (0.0256 0.0036 0.0081)
-lower is -0.006546187
-upper is 0.03141285
-    In dist, adding (qPred-size ob621)
-Matching Context describescratch, Pattern (isa
-                                           ob621
-                                           r_box1) Against Gpool r_box1Mt
-
- (d::sageRequireInMapping ob621)CI Found for describescratch in r_box1Mt is ((SageGenFn
-                                                                              0
-                                                                              r_box1Mt))
-
- ((<attribute CVBox> <Exp CVBox3>)
-  (<relation qPred-size> <Exp qPred-size2>)
-  (<attribute r_box1> <Exp r_box11>))
- ((<attribute r_box1> <Exp r_box11>) (<attribute r_box1> <Exp r_box11>))
- <SME 46> score: 0.009000001 normalized score: 1.0
-Found concepts ((isa ob621 r_box1))
-127.0.0.1 - - [Thu, 03 Feb 2022 04:32:14 GMT] "POST /ConceptLearner HTTP/1.1" 200 392
-Describing {"facts": [["size", "ob628", "0.01"], ["isa", "ob628", "CVGreen"], ["isa", "ob628", "CVBox"]]}
-
-------------------------
-3 examples for r_box1Mt
-    Checking (qPred-size ob628)
-    Checking dist: probe is 0.01, quants are (0.0256 0.0036 0.0081)
-lower is -0.006546187
-upper is 0.03141285
-    In dist, adding (qPred-size ob628)
-
-------------------------
-3 examples for r_box1Mt
-    Checking (qPred-size ob628)
-    Checking dist: probe is 0.01, quants are (0.0256 0.0036 0.0081)
-lower is -0.006546187
-upper is 0.03141285
-    In dist, adding (qPred-size ob628)
-Matching Context describescratch, Pattern (isa
-                                           ob628
-                                           r_box1) Against Gpool r_box1Mt
-
- (d::sageRequireInMapping ob628)CI Found for describescratch in r_box1Mt is ((SageGenFn
-                                                                              0
-                                                                              r_box1Mt))
-
- ((<attribute CVBox> <Exp CVBox3>)
-  (<relation qPred-size> <Exp qPred-size2>)
-  (<attribute r_box1> <Exp r_box11>))
- ((<attribute r_box1> <Exp r_box11>) (<attribute r_box1> <Exp r_box11>))
- <SME 49> score: 0.009000001 normalized score: 1.0
-Found concepts ((isa ob628 r_box1))
-127.0.0.1 - - [Thu, 03 Feb 2022 04:44:39 GMT] "POST /ConceptLearner HTTP/1.1" 200 392
-Describing {"facts": [["size", "ob635", "0.0081"], ["isa", "ob635", "CVGreen"], ["isa", "ob635", "CVBox"]]}
-
-------------------------
-3 examples for r_box1Mt
-    Checking (qPred-size ob635)
-    Checking dist: probe is 0.0081, quants are (0.0256 0.0036 0.0081)
-lower is -0.006546187
-upper is 0.03141285
-    In dist, adding (qPred-size ob635)
-
-------------------------
-3 examples for r_box1Mt
-    Checking (qPred-size ob635)
-    Checking dist: probe is 0.0081, quants are (0.0256 0.0036 0.0081)
-lower is -0.006546187
-upper is 0.03141285
-    In dist, adding (qPred-size ob635)
-Matching Context describescratch, Pattern (isa
-                                           ob635
-                                           r_box1) Against Gpool r_box1Mt
-
- (d::sageRequireInMapping ob635)CI Found for describescratch in r_box1Mt is ((SageGenFn
-                                                                              0
-                                                                              r_box1Mt))
-
- ((<attribute CVBox> <Exp CVBox3>)
-  (<relation qPred-size> <Exp qPred-size2>)
-  (<attribute r_box1> <Exp r_box11>))
- ((<attribute r_box1> <Exp r_box11>) (<attribute r_box1> <Exp r_box11>))
- <SME 52> score: 0.009000001 normalized score: 1.0
-Found concepts ((isa ob635 r_box1))
-127.0.0.1 - - [Thu, 03 Feb 2022 04:46:32 GMT] "POST /ConceptLearner HTTP/1.1" 200 392
-Describing {"facts": [["size", "ob677", "0.0256"], ["isa", "ob677", "CVYellow"], ["isa", "ob677", "CVBox"]]}
-
-------------------------
-3 examples for r_box1Mt
-    Checking (qPred-size ob677)
-    Checking dist: probe is 0.0256, quants are (0.0256 0.0036 0.0081)
-lower is -0.006546187
-upper is 0.03141285
-    In dist, adding (qPred-size ob677)
-
-------------------------
-3 examples for r_box1Mt
-    Checking (qPred-size ob677)
-    Checking dist: probe is 0.0256, quants are (0.0256 0.0036 0.0081)
-lower is -0.006546187
-upper is 0.03141285
-    In dist, adding (qPred-size ob677)
-Matching Context describescratch, Pattern (isa
-                                           ob677
-                                           r_box1) Against Gpool r_box1Mt
-
- (d::sageRequireInMapping ob677)CI Found for describescratch in r_box1Mt is ((SageGenFn
-                                                                              0
-                                                                              r_box1Mt))
-
- ((<attribute CVBox> <Exp CVBox3>)
-  (<relation qPred-size> <Exp qPred-size2>)
-  (<attribute r_box1> <Exp r_box11>))
- ((<attribute r_box1> <Exp r_box11>) (<attribute r_box1> <Exp r_box11>))
- <SME 55> score: 0.009000001 normalized score: 1.0
-Found concepts ((isa ob677 r_box1))
-127.0.0.1 - - [Thu, 03 Feb 2022 15:37:03 GMT] "POST /ConceptLearner HTTP/1.1" 200 392
-Describing {"facts": [["size", "ob670", "0.0016"], ["isa", "ob670", "CVGreen"], ["isa", "ob670", "CVBox"]]}
-
-------------------------
-3 examples for r_box1Mt
-    Checking (qPred-size ob670)
-    Checking dist: probe is 0.0016, quants are (0.0256 0.0036 0.0081)
-lower is -0.006546187
-upper is 0.03141285
-    In dist, adding (qPred-size ob670)
-
-------------------------
-3 examples for r_box1Mt
-    Checking (qPred-size ob670)
-    Checking dist: probe is 0.0016, quants are (0.0256 0.0036 0.0081)
-lower is -0.006546187
-upper is 0.03141285
-    In dist, adding (qPred-size ob670)
-Matching Context describescratch, Pattern (isa
-                                           ob670
-                                           r_box1) Against Gpool r_box1Mt
-
- (d::sageRequireInMapping ob670)CI Found for describescratch in r_box1Mt is ((SageGenFn
-                                                                              0
-                                                                              r_box1Mt))
-
- ((<attribute CVBox> <Exp CVBox3>)
-  (<relation qPred-size> <Exp qPred-size2>)
-  (<attribute r_box1> <Exp r_box11>))
- ((<attribute r_box1> <Exp r_box11>) (<attribute r_box1> <Exp r_box11>))
- <SME 58> score: 0.009000001 normalized score: 1.0
-Found concepts ((isa ob670 r_box1))
-127.0.0.1 - - [Thu, 03 Feb 2022 15:40:10 GMT] "POST /ConceptLearner HTTP/1.1" 200 392
-Describing {"facts": [["size", "ob677", "0.0256"], ["isa", "ob677", "CVYellow"], ["isa", "ob677", "CVBox"]]}
-
-------------------------
-3 examples for r_box1Mt
-    Checking (qPred-size ob677)
-    Checking dist: probe is 0.0256, quants are (0.0256 0.0036 0.0081)
-lower is -0.006546187
-upper is 0.03141285
-    In dist, adding (qPred-size ob677)
-
-------------------------
-3 examples for r_box1Mt
-    Checking (qPred-size ob677)
-    Checking dist: probe is 0.0256, quants are (0.0256 0.0036 0.0081)
-lower is -0.006546187
-upper is 0.03141285
-    In dist, adding (qPred-size ob677)
-Matching Context describescratch, Pattern (isa
-                                           ob677
-                                           r_box1) Against Gpool r_box1Mt
-
- (d::sageRequireInMapping ob677)CI Found for describescratch in r_box1Mt is ((SageGenFn
-                                                                              0
-                                                                              r_box1Mt))
-
- ((<attribute CVBox> <Exp CVBox3>)
-  (<relation qPred-size> <Exp qPred-size2>)
-  (<attribute r_box1> <Exp r_box11>))
- ((<attribute r_box1> <Exp r_box11>) (<attribute r_box1> <Exp r_box11>))
- <SME 61> score: 0.009000001 normalized score: 1.0
-Found concepts ((isa ob677 r_box1))
-127.0.0.1 - - [Thu, 03 Feb 2022 15:43:17 GMT] "POST /ConceptLearner HTTP/1.1" 200 392
-Describing {"facts": [["size", "ob670", "0.0016"], ["isa", "ob670", "CVGreen"], ["isa", "ob670", "CVBox"]]}
-
-------------------------
-3 examples for r_box1Mt
-    Checking (qPred-size ob670)
-    Checking dist: probe is 0.0016, quants are (0.0256 0.0036 0.0081)
-lower is -0.006546187
-upper is 0.03141285
-    In dist, adding (qPred-size ob670)
-
-------------------------
-3 examples for r_box1Mt
-    Checking (qPred-size ob670)
-    Checking dist: probe is 0.0016, quants are (0.0256 0.0036 0.0081)
-lower is -0.006546187
-upper is 0.03141285
-    In dist, adding (qPred-size ob670)
-Matching Context describescratch, Pattern (isa
-                                           ob670
-                                           r_box1) Against Gpool r_box1Mt
-
- (d::sageRequireInMapping ob670)CI Found for describescratch in r_box1Mt is ((SageGenFn
-                                                                              0
-                                                                              r_box1Mt))
-
- ((<attribute CVBox> <Exp CVBox3>)
-  (<relation qPred-size> <Exp qPred-size2>)
-  (<attribute r_box1> <Exp r_box11>))
- ((<attribute r_box1> <Exp r_box11>) (<attribute r_box1> <Exp r_box11>))
- <SME 64> score: 0.009000001 normalized score: 1.0
-Found concepts ((isa ob670 r_box1))
-127.0.0.1 - - [Thu, 03 Feb 2022 15:55:45 GMT] "POST /ConceptLearner HTTP/1.1" 200 392
-Describing {"facts": [["size", "ob677", "0.0256"], ["isa", "ob677", "CVYellow"], ["isa", "ob677", "CVBox"]]}
-
-------------------------
-3 examples for r_box1Mt
-    Checking (qPred-size ob677)
-    Checking dist: probe is 0.0256, quants are (0.0256 0.0036 0.0081)
-lower is -0.006546187
-upper is 0.03141285
-    In dist, adding (qPred-size ob677)
-
-------------------------
-3 examples for r_box1Mt
-    Checking (qPred-size ob677)
-    Checking dist: probe is 0.0256, quants are (0.0256 0.0036 0.0081)
-lower is -0.006546187
-upper is 0.03141285
-    In dist, adding (qPred-size ob677)
-Matching Context describescratch, Pattern (isa
-                                           ob677
-                                           r_box1) Against Gpool r_box1Mt
-
- (d::sageRequireInMapping ob677)CI Found for describescratch in r_box1Mt is ((SageGenFn
-                                                                              0
-                                                                              r_box1Mt))
-
- ((<attribute CVBox> <Exp CVBox3>)
-  (<relation qPred-size> <Exp qPred-size2>)
-  (<attribute r_box1> <Exp r_box11>))
- ((<attribute r_box1> <Exp r_box11>) (<attribute r_box1> <Exp r_box11>))
- <SME 67> score: 0.009000001 normalized score: 1.0
-Found concepts ((isa ob677 r_box1))
-127.0.0.1 - - [Thu, 03 Feb 2022 15:55:59 GMT] "POST /ConceptLearner HTTP/1.1" 200 392
-Describing {"facts": [["size", "ob670", "0.0016"], ["isa", "ob670", "CVGreen"], ["isa", "ob670", "CVBox"]]}
-
-------------------------
-3 examples for r_box1Mt
-    Checking (qPred-size ob670)
-    Checking dist: probe is 0.0016, quants are (0.0256 0.0036 0.0081)
-lower is -0.006546187
-upper is 0.03141285
-    In dist, adding (qPred-size ob670)
-
-------------------------
-3 examples for r_box1Mt
-    Checking (qPred-size ob670)
-    Checking dist: probe is 0.0016, quants are (0.0256 0.0036 0.0081)
-lower is -0.006546187
-upper is 0.03141285
-    In dist, adding (qPred-size ob670)
-Matching Context describescratch, Pattern (isa
-                                           ob670
-                                           r_box1) Against Gpool r_box1Mt
-
- (d::sageRequireInMapping ob670)CI Found for describescratch in r_box1Mt is ((SageGenFn
-                                                                              0
-                                                                              r_box1Mt))
-
- ((<attribute CVBox> <Exp CVBox3>)
-  (<relation qPred-size> <Exp qPred-size2>)
-  (<attribute r_box1> <Exp r_box11>))
- ((<attribute r_box1> <Exp r_box11>) (<attribute r_box1> <Exp r_box11>))
- <SME 70> score: 0.009000001 normalized score: 1.0
-Found concepts ((isa ob670 r_box1))
-127.0.0.1 - - [Thu, 03 Feb 2022 16:01:47 GMT] "POST /ConceptLearner HTTP/1.1" 200 392
-Describing {"facts": [["size", "ob677", "0.0256"], ["isa", "ob677", "CVYellow"], ["isa", "ob677", "CVBox"]]}
-
-------------------------
-3 examples for r_box1Mt
-    Checking (qPred-size ob677)
-    Checking dist: probe is 0.0256, quants are (0.0256 0.0036 0.0081)
-lower is -0.006546187
-upper is 0.03141285
-    In dist, adding (qPred-size ob677)
-
-------------------------
-3 examples for r_box1Mt
-    Checking (qPred-size ob677)
-    Checking dist: probe is 0.0256, quants are (0.0256 0.0036 0.0081)
-lower is -0.006546187
-upper is 0.03141285
-    In dist, adding (qPred-size ob677)
-Matching Context describescratch, Pattern (isa
-                                           ob677
-                                           r_box1) Against Gpool r_box1Mt
-
- (d::sageRequireInMapping ob677)CI Found for describescratch in r_box1Mt is ((SageGenFn
-                                                                              0
-                                                                              r_box1Mt))
-
- ((<attribute CVBox> <Exp CVBox3>)
-  (<relation qPred-size> <Exp qPred-size2>)
-  (<attribute r_box1> <Exp r_box11>))
- ((<attribute r_box1> <Exp r_box11>) (<attribute r_box1> <Exp r_box11>))
- <SME 73> score: 0.009000001 normalized score: 1.0
-Found concepts ((isa ob677 r_box1))
-127.0.0.1 - - [Thu, 03 Feb 2022 16:02:03 GMT] "POST /ConceptLearner HTTP/1.1" 200 392
-Describing {"facts": [["size", "ob705", "0.0081"], ["isa", "ob705", "CVYellow"], ["isa", "ob705", "CVBox"]]}
-
-------------------------
-3 examples for r_box1Mt
-    Checking (qPred-size ob705)
-    Checking dist: probe is 0.0081, quants are (0.0256 0.0036 0.0081)
-lower is -0.006546187
-upper is 0.03141285
-    In dist, adding (qPred-size ob705)
-
-------------------------
-3 examples for r_box1Mt
-    Checking (qPred-size ob705)
-    Checking dist: probe is 0.0081, quants are (0.0256 0.0036 0.0081)
-lower is -0.006546187
-upper is 0.03141285
-    In dist, adding (qPred-size ob705)
-Matching Context describescratch, Pattern (isa
-                                           ob705
-                                           r_box1) Against Gpool r_box1Mt
-
- (d::sageRequireInMapping ob705)CI Found for describescratch in r_box1Mt is ((SageGenFn
-                                                                              0
-                                                                              r_box1Mt))
-
- ((<attribute CVBox> <Exp CVBox3>)
-  (<relation qPred-size> <Exp qPred-size2>)
-  (<attribute r_box1> <Exp r_box11>))
- ((<attribute r_box1> <Exp r_box11>) (<attribute r_box1> <Exp r_box11>))
- <SME 76> score: 0.009000001 normalized score: 1.0
-Found concepts ((isa ob705 r_box1))
-127.0.0.1 - - [Thu, 03 Feb 2022 16:51:08 GMT] "POST /ConceptLearner HTTP/1.1" 200 392
-Describing {"facts": [["size", "ob698", "0.0025"], ["isa", "ob698", "CVGreen"], ["isa", "ob698", "CVBox"]]}
-
-------------------------
-3 examples for r_box1Mt
-    Checking (qPred-size ob698)
-    Checking dist: probe is 0.0025, quants are (0.0256 0.0036 0.0081)
-lower is -0.006546187
-upper is 0.03141285
-    In dist, adding (qPred-size ob698)
-
-------------------------
-3 examples for r_box1Mt
-    Checking (qPred-size ob698)
-    Checking dist: probe is 0.0025, quants are (0.0256 0.0036 0.0081)
-lower is -0.006546187
-upper is 0.03141285
-    In dist, adding (qPred-size ob698)
-Matching Context describescratch, Pattern (isa
-                                           ob698
-                                           r_box1) Against Gpool r_box1Mt
-52442080 bytes have been tenured, next gc will be global.
-See the documentation for variable *global-gc-behavior* for more information.
-
- (d::sageRequireInMapping ob698)CI Found for describescratch in r_box1Mt is ((SageGenFn
-                                                                              0
-                                                                              r_box1Mt))
-
- ((<attribute CVBox> <Exp CVBox3>)
-  (<relation qPred-size> <Exp qPred-size2>)
-  (<attribute r_box1> <Exp r_box11>))
- ((<attribute r_box1> <Exp r_box11>) (<attribute r_box1> <Exp r_box11>))
- <SME 79> score: 0.009000001 normalized score: 1.0
-Found concepts ((isa ob698 r_box1))
-127.0.0.1 - - [Thu, 03 Feb 2022 16:51:39 GMT] "POST /ConceptLearner HTTP/1.1" 200 392
-Describing {"facts": [["size", "ob705", "0.0081"], ["isa", "ob705", "CVYellow"], ["isa", "ob705", "CVBox"]]}
-
-------------------------
-3 examples for r_box1Mt
-    Checking (qPred-size ob705)
-    Checking dist: probe is 0.0081, quants are (0.0256 0.0036 0.0081)
-lower is -0.006546187
-upper is 0.03141285
-    In dist, adding (qPred-size ob705)
-
-------------------------
-3 examples for r_box1Mt
-    Checking (qPred-size ob705)
-    Checking dist: probe is 0.0081, quants are (0.0256 0.0036 0.0081)
-lower is -0.006546187
-upper is 0.03141285
-    In dist, adding (qPred-size ob705)
-Matching Context describescratch, Pattern (isa
-                                           ob705
-                                           r_box1) Against Gpool r_box1Mt
-
- (d::sageRequireInMapping ob705)CI Found for describescratch in r_box1Mt is ((SageGenFn
-                                                                              0
-                                                                              r_box1Mt))
-
- ((<attribute CVBox> <Exp CVBox3>)
-  (<relation qPred-size> <Exp qPred-size2>)
-  (<attribute r_box1> <Exp r_box11>))
- ((<attribute r_box1> <Exp r_box11>) (<attribute r_box1> <Exp r_box11>))
- <SME 82> score: 0.009000001 normalized score: 1.0
-Found concepts ((isa ob705 r_box1))
-127.0.0.1 - - [Thu, 03 Feb 2022 16:54:26 GMT] "POST /ConceptLearner HTTP/1.1" 200 392
-Describing {"facts": [["size", "ob698", "0.0025"], ["isa", "ob698", "CVGreen"], ["isa", "ob698", "CVBox"]]}
-
-------------------------
-3 examples for r_box1Mt
-    Checking (qPred-size ob698)
-    Checking dist: probe is 0.0025, quants are (0.0256 0.0036 0.0081)
-lower is -0.006546187
-upper is 0.03141285
-    In dist, adding (qPred-size ob698)
-
-------------------------
-3 examples for r_box1Mt
-    Checking (qPred-size ob698)
-    Checking dist: probe is 0.0025, quants are (0.0256 0.0036 0.0081)
-lower is -0.006546187
-upper is 0.03141285
-    In dist, adding (qPred-size ob698)
-Matching Context describescratch, Pattern (isa
-                                           ob698
-                                           r_box1) Against Gpool r_box1Mt
-
- (d::sageRequireInMapping ob698)CI Found for describescratch in r_box1Mt is ((SageGenFn
-                                                                              0
-                                                                              r_box1Mt))
-
- ((<attribute CVBox> <Exp CVBox3>)
-  (<relation qPred-size> <Exp qPred-size2>)
-  (<attribute r_box1> <Exp r_box11>))
- ((<attribute r_box1> <Exp r_box11>) (<attribute r_box1> <Exp r_box11>))
- <SME 85> score: 0.009000001 normalized score: 1.0
-Found concepts ((isa ob698 r_box1))
-127.0.0.1 - - [Thu, 03 Feb 2022 16:54:38 GMT] "POST /ConceptLearner HTTP/1.1" 200 392
-Describing {"facts": [["size", "ob698", "0.0025"], ["isa", "ob698", "CVGreen"], ["isa", "ob698", "CVBox"]]}
-
-------------------------
-3 examples for r_box1Mt
-    Checking (qPred-size ob698)
-    Checking dist: probe is 0.0025, quants are (0.0256 0.0036 0.0081)
-lower is -0.006546187
-upper is 0.03141285
-    In dist, adding (qPred-size ob698)
-
-------------------------
-3 examples for r_box1Mt
-    Checking (qPred-size ob698)
-    Checking dist: probe is 0.0025, quants are (0.0256 0.0036 0.0081)
-lower is -0.006546187
-upper is 0.03141285
-    In dist, adding (qPred-size ob698)
-Matching Context describescratch, Pattern (isa
-                                           ob698
-                                           r_box1) Against Gpool r_box1Mt
-
- (d::sageRequireInMapping ob698)CI Found for describescratch in r_box1Mt is ((SageGenFn
-                                                                              0
-                                                                              r_box1Mt))
-
- ((<attribute CVBox> <Exp CVBox3>)
-  (<relation qPred-size> <Exp qPred-size2>)
-  (<attribute r_box1> <Exp r_box11>))
- ((<attribute r_box1> <Exp r_box11>) (<attribute r_box1> <Exp r_box11>))
- <SME 88> score: 0.009000001 normalized score: 1.0
-Found concepts ((isa ob698 r_box1))
-127.0.0.1 - - [Thu, 03 Feb 2022 17:00:47 GMT] "POST /ConceptLearner HTTP/1.1" 200 392
-Describing {"facts": [["size", "ob705", "0.0081"], ["isa", "ob705", "CVYellow"], ["isa", "ob705", "CVBox"]]}
-
-------------------------
-3 examples for r_box1Mt
-    Checking (qPred-size ob705)
-    Checking dist: probe is 0.0081, quants are (0.0256 0.0036 0.0081)
-lower is -0.006546187
-upper is 0.03141285
-    In dist, adding (qPred-size ob705)
-
-------------------------
-3 examples for r_box1Mt
-    Checking (qPred-size ob705)
-    Checking dist: probe is 0.0081, quants are (0.0256 0.0036 0.0081)
-lower is -0.006546187
-upper is 0.03141285
-    In dist, adding (qPred-size ob705)
-Matching Context describescratch, Pattern (isa
-                                           ob705
-                                           r_box1) Against Gpool r_box1Mt
-
- (d::sageRequireInMapping ob705)CI Found for describescratch in r_box1Mt is ((SageGenFn
-                                                                              0
-                                                                              r_box1Mt))
-
- ((<attribute CVBox> <Exp CVBox3>)
-  (<relation qPred-size> <Exp qPred-size2>)
-  (<attribute r_box1> <Exp r_box11>))
- ((<attribute r_box1> <Exp r_box11>) (<attribute r_box1> <Exp r_box11>))
- <SME 91> score: 0.009000001 normalized score: 1.0
-Found concepts ((isa ob705 r_box1))
-127.0.0.1 - - [Thu, 03 Feb 2022 17:00:59 GMT] "POST /ConceptLearner HTTP/1.1" 200 392
-Describing {"facts": [["size", "ob726", "0.0016"], ["isa", "ob726", "CVGreen"], ["isa", "ob726", "CVBox"]]}
-
-------------------------
-3 examples for r_box1Mt
-    Checking (qPred-size ob726)
-    Checking dist: probe is 0.0016, quants are (0.0256 0.0036 0.0081)
-lower is -0.006546187
-upper is 0.03141285
-    In dist, adding (qPred-size ob726)
-
-------------------------
-3 examples for r_box1Mt
-    Checking (qPred-size ob726)
-    Checking dist: probe is 0.0016, quants are (0.0256 0.0036 0.0081)
-lower is -0.006546187
-upper is 0.03141285
-    In dist, adding (qPred-size ob726)
-Matching Context describescratch, Pattern (isa
-                                           ob726
-                                           r_box1) Against Gpool r_box1Mt
-
- (d::sageRequireInMapping ob726)CI Found for describescratch in r_box1Mt is ((SageGenFn
-                                                                              0
-                                                                              r_box1Mt))
-
- ((<attribute CVBox> <Exp CVBox3>)
-  (<relation qPred-size> <Exp qPred-size2>)
-  (<attribute r_box1> <Exp r_box11>))
- ((<attribute r_box1> <Exp r_box11>) (<attribute r_box1> <Exp r_box11>))
- <SME 94> score: 0.009000001 normalized score: 1.0
-Found concepts ((isa ob726 r_box1))
-127.0.0.1 - - [Thu, 03 Feb 2022 17:05:39 GMT] "POST /ConceptLearner HTTP/1.1" 200 392
-Describing {"facts": [["size", "ob733", "0.0196"], ["isa", "ob733", "CVYellow"], ["isa", "ob733", "CVBox"]]}
-
-------------------------
-3 examples for r_box1Mt
-    Checking (qPred-size ob733)
-    Checking dist: probe is 0.0196, quants are (0.0256 0.0036 0.0081)
-lower is -0.006546187
-upper is 0.03141285
-    In dist, adding (qPred-size ob733)
-
-------------------------
-3 examples for r_box1Mt
-    Checking (qPred-size ob733)
-    Checking dist: probe is 0.0196, quants are (0.0256 0.0036 0.0081)
-lower is -0.006546187
-upper is 0.03141285
-    In dist, adding (qPred-size ob733)
-Matching Context describescratch, Pattern (isa
-                                           ob733
-                                           r_box1) Against Gpool r_box1Mt
-
- (d::sageRequireInMapping ob733)CI Found for describescratch in r_box1Mt is ((SageGenFn
-                                                                              0
-                                                                              r_box1Mt))
-
- ((<attribute CVBox> <Exp CVBox3>)
-  (<relation qPred-size> <Exp qPred-size2>)
-  (<attribute r_box1> <Exp r_box11>))
- ((<attribute r_box1> <Exp r_box11>) (<attribute r_box1> <Exp r_box11>))
- <SME 97> score: 0.009000001 normalized score: 1.0
-Found concepts ((isa ob733 r_box1))
-127.0.0.1 - - [Thu, 03 Feb 2022 17:05:52 GMT] "POST /ConceptLearner HTTP/1.1" 200 392
-Describing {"facts": [["size", "ob740", "0.0025"], ["isa", "ob740", "CVGreen"], ["isa", "ob740", "CVBox"]]}
-
-------------------------
-3 examples for r_box1Mt
-    Checking (qPred-size ob740)
-    Checking dist: probe is 0.0025, quants are (0.0256 0.0036 0.0081)
-lower is -0.006546187
-upper is 0.03141285
-    In dist, adding (qPred-size ob740)
-
-------------------------
-3 examples for r_box1Mt
-    Checking (qPred-size ob740)
-    Checking dist: probe is 0.0025, quants are (0.0256 0.0036 0.0081)
-lower is -0.006546187
-upper is 0.03141285
-    In dist, adding (qPred-size ob740)
-Matching Context describescratch, Pattern (isa
-                                           ob740
-                                           r_box1) Against Gpool r_box1Mt
-
- (d::sageRequireInMapping ob740)CI Found for describescratch in r_box1Mt is ((SageGenFn
-                                                                              0
-                                                                              r_box1Mt))
-
- ((<attribute CVBox> <Exp CVBox3>)
-  (<relation qPred-size> <Exp qPred-size2>)
-  (<attribute r_box1> <Exp r_box11>))
- ((<attribute r_box1> <Exp r_box11>) (<attribute r_box1> <Exp r_box11>))
- <SME 100> score: 0.009000001 normalized score: 1.0
-Found concepts ((isa ob740 r_box1))
-127.0.0.1 - - [Thu, 03 Feb 2022 17:07:51 GMT] "POST /ConceptLearner HTTP/1.1" 200 392
-Describing {"facts": [["size", "ob747", "0.01"], ["isa", "ob747", "CVYellow"], ["isa", "ob747", "CVBox"]]}
-
-------------------------
-3 examples for r_box1Mt
-    Checking (qPred-size ob747)
-    Checking dist: probe is 0.01, quants are (0.0256 0.0036 0.0081)
-lower is -0.006546187
-upper is 0.03141285
-    In dist, adding (qPred-size ob747)
-
-------------------------
-3 examples for r_box1Mt
-    Checking (qPred-size ob747)
-    Checking dist: probe is 0.01, quants are (0.0256 0.0036 0.0081)
-lower is -0.006546187
-upper is 0.03141285
-    In dist, adding (qPred-size ob747)
-Matching Context describescratch, Pattern (isa
-                                           ob747
-                                           r_box1) Against Gpool r_box1Mt
-
- (d::sageRequireInMapping ob747)CI Found for describescratch in r_box1Mt is ((SageGenFn
-                                                                              0
-                                                                              r_box1Mt))
-
- ((<attribute CVBox> <Exp CVBox3>)
-  (<relation qPred-size> <Exp qPred-size2>)
-  (<attribute r_box1> <Exp r_box11>))
- ((<attribute r_box1> <Exp r_box11>) (<attribute r_box1> <Exp r_box11>))
- <SME 103> score: 0.009000001 normalized score: 1.0
-Found concepts ((isa ob747 r_box1))
-127.0.0.1 - - [Thu, 03 Feb 2022 17:08:05 GMT] "POST /ConceptLearner HTTP/1.1" 200 392
-Describing {"facts": [["size", "ob754", "0.0016"], ["isa", "ob754", "CVGreen"], ["isa", "ob754", "CVBox"]]}
-
-------------------------
-3 examples for r_box1Mt
-    Checking (qPred-size ob754)
-    Checking dist: probe is 0.0016, quants are (0.0256 0.0036 0.0081)
-lower is -0.006546187
-upper is 0.03141285
-    In dist, adding (qPred-size ob754)
-
-------------------------
-3 examples for r_box1Mt
-    Checking (qPred-size ob754)
-    Checking dist: probe is 0.0016, quants are (0.0256 0.0036 0.0081)
-lower is -0.006546187
-upper is 0.03141285
-    In dist, adding (qPred-size ob754)
-Matching Context describescratch, Pattern (isa
-                                           ob754
-                                           r_box1) Against Gpool r_box1Mt
-
- (d::sageRequireInMapping ob754)CI Found for describescratch in r_box1Mt is ((SageGenFn
-                                                                              0
-                                                                              r_box1Mt))
-
- ((<attribute CVBox> <Exp CVBox3>)
-  (<relation qPred-size> <Exp qPred-size2>)
-  (<attribute r_box1> <Exp r_box11>))
- ((<attribute r_box1> <Exp r_box11>) (<attribute r_box1> <Exp r_box11>))
- <SME 106> score: 0.009000001 normalized score: 1.0
-Found concepts ((isa ob754 r_box1))
-127.0.0.1 - - [Thu, 03 Feb 2022 17:09:31 GMT] "POST /ConceptLearner HTTP/1.1" 200 392
-Describing {"facts": [["size", "ob761", "0.0196"], ["isa", "ob761", "CVYellow"], ["isa", "ob761", "CVBox"]]}
-
-------------------------
-3 examples for r_box1Mt
-    Checking (qPred-size ob761)
-    Checking dist: probe is 0.0196, quants are (0.0256 0.0036 0.0081)
-lower is -0.006546187
-upper is 0.03141285
-    In dist, adding (qPred-size ob761)
-
-------------------------
-3 examples for r_box1Mt
-    Checking (qPred-size ob761)
-    Checking dist: probe is 0.0196, quants are (0.0256 0.0036 0.0081)
-lower is -0.006546187
-upper is 0.03141285
-    In dist, adding (qPred-size ob761)
-Matching Context describescratch, Pattern (isa
-                                           ob761
-                                           r_box1) Against Gpool r_box1Mt
-
- (d::sageRequireInMapping ob761)CI Found for describescratch in r_box1Mt is ((SageGenFn
-                                                                              0
-                                                                              r_box1Mt))
-
- ((<attribute CVBox> <Exp CVBox3>)
-  (<relation qPred-size> <Exp qPred-size2>)
-  (<attribute r_box1> <Exp r_box11>))
- ((<attribute r_box1> <Exp r_box11>) (<attribute r_box1> <Exp r_box11>))
- <SME 109> score: 0.009000001 normalized score: 1.0
-Found concepts ((isa ob761 r_box1))
-127.0.0.1 - - [Thu, 03 Feb 2022 17:09:42 GMT] "POST /ConceptLearner HTTP/1.1" 200 392
-Describing {"facts": [["size", "ob768", "0.0036"], ["isa", "ob768", "CVGreen"], ["isa", "ob768", "CVBox"]]}
-
-------------------------
-3 examples for r_box1Mt
-    Checking (qPred-size ob768)
-    Checking dist: probe is 0.0036, quants are (0.0256 0.0036 0.0081)
-lower is -0.006546187
-upper is 0.03141285
-    In dist, adding (qPred-size ob768)
-
-------------------------
-3 examples for r_box1Mt
-    Checking (qPred-size ob768)
-    Checking dist: probe is 0.0036, quants are (0.0256 0.0036 0.0081)
-lower is -0.006546187
-upper is 0.03141285
-    In dist, adding (qPred-size ob768)
-Matching Context describescratch, Pattern (isa
-                                           ob768
-                                           r_box1) Against Gpool r_box1Mt
-
- (d::sageRequireInMapping ob768)CI Found for describescratch in r_box1Mt is ((SageGenFn
-                                                                              0
-                                                                              r_box1Mt))
-
- ((<attribute CVBox> <Exp CVBox3>)
-  (<relation qPred-size> <Exp qPred-size2>)
-  (<attribute r_box1> <Exp r_box11>))
- ((<attribute r_box1> <Exp r_box11>) (<attribute r_box1> <Exp r_box11>))
- <SME 112> score: 0.009000001 normalized score: 1.0
-Found concepts ((isa ob768 r_box1))
-127.0.0.1 - - [Thu, 03 Feb 2022 17:11:00 GMT] "POST /ConceptLearner HTTP/1.1" 200 392
-Describing {"facts": [["size", "ob775", "0.01"], ["isa", "ob775", "CVYellow"], ["isa", "ob775", "CVBox"]]}
-
-------------------------
-3 examples for r_box1Mt
-    Checking (qPred-size ob775)
-    Checking dist: probe is 0.01, quants are (0.0256 0.0036 0.0081)
-lower is -0.006546187
-upper is 0.03141285
-    In dist, adding (qPred-size ob775)
-
-------------------------
-3 examples for r_box1Mt
-    Checking (qPred-size ob775)
-    Checking dist: probe is 0.01, quants are (0.0256 0.0036 0.0081)
-lower is -0.006546187
-upper is 0.03141285
-    In dist, adding (qPred-size ob775)
-Matching Context describescratch, Pattern (isa
-                                           ob775
-                                           r_box1) Against Gpool r_box1Mt
-
- (d::sageRequireInMapping ob775)CI Found for describescratch in r_box1Mt is ((SageGenFn
-                                                                              0
-                                                                              r_box1Mt))
-
- ((<attribute CVBox> <Exp CVBox3>)
-  (<relation qPred-size> <Exp qPred-size2>)
-  (<attribute r_box1> <Exp r_box11>))
- ((<attribute r_box1> <Exp r_box11>) (<attribute r_box1> <Exp r_box11>))
- <SME 115> score: 0.009000001 normalized score: 1.0
-Found concepts ((isa ob775 r_box1))
-127.0.0.1 - - [Thu, 03 Feb 2022 17:11:33 GMT] "POST /ConceptLearner HTTP/1.1" 200 392
-Describing {"facts": [["size", "ob789", "0.0016"], ["isa", "ob789", "CVYellow"], ["isa", "ob789", "CVBox"]]}
-
-------------------------
-3 examples for r_box1Mt
-    Checking (qPred-size ob789)
-    Checking dist: probe is 0.0016, quants are (0.0256 0.0036 0.0081)
-lower is -0.006546187
-upper is 0.03141285
-    In dist, adding (qPred-size ob789)
-
-------------------------
-3 examples for r_box1Mt
-    Checking (qPred-size ob789)
-    Checking dist: probe is 0.0016, quants are (0.0256 0.0036 0.0081)
-lower is -0.006546187
-upper is 0.03141285
-    In dist, adding (qPred-size ob789)
-Matching Context describescratch, Pattern (isa
-                                           ob789
-                                           r_box1) Against Gpool r_box1Mt
-
- (d::sageRequireInMapping ob789)CI Found for describescratch in r_box1Mt is ((SageGenFn
-                                                                              0
-                                                                              r_box1Mt))
-52448848 bytes have been tenured, next gc will be global.
-See the documentation for variable *global-gc-behavior* for more information.
-
- ((<attribute CVBox> <Exp CVBox3>)
-  (<relation qPred-size> <Exp qPred-size2>)
-  (<attribute r_box1> <Exp r_box11>))
- ((<attribute r_box1> <Exp r_box11>) (<attribute r_box1> <Exp r_box11>))
- <SME 118> score: 0.009000001 normalized score: 1.0
-Found concepts ((isa ob789 r_box1))
-127.0.0.1 - - [Thu, 03 Feb 2022 17:15:31 GMT] "POST /ConceptLearner HTTP/1.1" 200 392
-Describing {"facts": [["size", "ob782", "0.0025"], ["isa", "ob782", "CVGreen"], ["isa", "ob782", "CVBox"]]}
-
-------------------------
-3 examples for r_box1Mt
-    Checking (qPred-size ob782)
-    Checking dist: probe is 0.0025, quants are (0.0256 0.0036 0.0081)
-lower is -0.006546187
-upper is 0.03141285
-    In dist, adding (qPred-size ob782)
-
-------------------------
-3 examples for r_box1Mt
-    Checking (qPred-size ob782)
-    Checking dist: probe is 0.0025, quants are (0.0256 0.0036 0.0081)
-lower is -0.006546187
-upper is 0.03141285
-    In dist, adding (qPred-size ob782)
-Matching Context describescratch, Pattern (isa
-                                           ob782
-                                           r_box1) Against Gpool r_box1Mt
-
- (d::sageRequireInMapping ob782)CI Found for describescratch in r_box1Mt is ((SageGenFn
-                                                                              0
-                                                                              r_box1Mt))
-
- ((<attribute CVBox> <Exp CVBox3>)
-  (<relation qPred-size> <Exp qPred-size2>)
-  (<attribute r_box1> <Exp r_box11>))
- ((<attribute r_box1> <Exp r_box11>) (<attribute r_box1> <Exp r_box11>))
- <SME 121> score: 0.009000001 normalized score: 1.0
-Found concepts ((isa ob782 r_box1))
-127.0.0.1 - - [Thu, 03 Feb 2022 17:15:43 GMT] "POST /ConceptLearner HTTP/1.1" 200 392
-Describing {"facts": [["size", "ob796", "0.0025"], ["isa", "ob796", "CVGreen"], ["isa", "ob796", "CVBox"]]}
-
-------------------------
-3 examples for r_box1Mt
-    Checking (qPred-size ob796)
-    Checking dist: probe is 0.0025, quants are (0.0256 0.0036 0.0081)
-lower is -0.006546187
-upper is 0.03141285
-    In dist, adding (qPred-size ob796)
-
-------------------------
-3 examples for r_box1Mt
-    Checking (qPred-size ob796)
-    Checking dist: probe is 0.0025, quants are (0.0256 0.0036 0.0081)
-lower is -0.006546187
-upper is 0.03141285
-    In dist, adding (qPred-size ob796)
-Matching Context describescratch, Pattern (isa
-                                           ob796
-                                           r_box1) Against Gpool r_box1Mt
-
- (d::sageRequireInMapping ob796)CI Found for describescratch in r_box1Mt is ((SageGenFn
-                                                                              0
-                                                                              r_box1Mt))
-
- ((<attribute CVBox> <Exp CVBox3>)
-  (<relation qPred-size> <Exp qPred-size2>)
-  (<attribute r_box1> <Exp r_box11>))
- ((<attribute r_box1> <Exp r_box11>) (<attribute r_box1> <Exp r_box11>))
- <SME 124> score: 0.009000001 normalized score: 1.0
-Found concepts ((isa ob796 r_box1))
-127.0.0.1 - - [Thu, 03 Feb 2022 17:19:26 GMT] "POST /ConceptLearner HTTP/1.1" 200 392
-Describing {"facts": [["size", "ob803", "0.01"], ["isa", "ob803", "CVYellow"], ["isa", "ob803", "CVBox"]]}
-
-------------------------
-3 examples for r_box1Mt
-    Checking (qPred-size ob803)
-    Checking dist: probe is 0.01, quants are (0.0256 0.0036 0.0081)
-lower is -0.006546187
-upper is 0.03141285
-    In dist, adding (qPred-size ob803)
-
-------------------------
-3 examples for r_box1Mt
-    Checking (qPred-size ob803)
-    Checking dist: probe is 0.01, quants are (0.0256 0.0036 0.0081)
-lower is -0.006546187
-upper is 0.03141285
-    In dist, adding (qPred-size ob803)
-Matching Context describescratch, Pattern (isa
-                                           ob803
-                                           r_box1) Against Gpool r_box1Mt
-
- (d::sageRequireInMapping ob803)CI Found for describescratch in r_box1Mt is ((SageGenFn
-                                                                              0
-                                                                              r_box1Mt))
-
- ((<attribute CVBox> <Exp CVBox3>)
-  (<relation qPred-size> <Exp qPred-size2>)
-  (<attribute r_box1> <Exp r_box11>))
- ((<attribute r_box1> <Exp r_box11>) (<attribute r_box1> <Exp r_box11>))
- <SME 127> score: 0.009000001 normalized score: 1.0
-Found concepts ((isa ob803 r_box1))
-127.0.0.1 - - [Thu, 03 Feb 2022 17:19:36 GMT] "POST /ConceptLearner HTTP/1.1" 200 392
-Describing {"facts": [["size", "ob810", "0.01"], ["isa", "ob810", "CVGreen"], ["isa", "ob810", "CVBox"]]}
-
-------------------------
-3 examples for r_box1Mt
-    Checking (qPred-size ob810)
-    Checking dist: probe is 0.01, quants are (0.0256 0.0036 0.0081)
-lower is -0.006546187
-upper is 0.03141285
-    In dist, adding (qPred-size ob810)
-
-------------------------
-3 examples for r_box1Mt
-    Checking (qPred-size ob810)
-    Checking dist: probe is 0.01, quants are (0.0256 0.0036 0.0081)
-lower is -0.006546187
-upper is 0.03141285
-    In dist, adding (qPred-size ob810)
-Matching Context describescratch, Pattern (isa
-                                           ob810
-                                           r_box1) Against Gpool r_box1Mt
-
- (d::sageRequireInMapping ob810)CI Found for describescratch in r_box1Mt is ((SageGenFn
-                                                                              0
-                                                                              r_box1Mt))
-
- ((<attribute CVBox> <Exp CVBox3>)
-  (<relation qPred-size> <Exp qPred-size2>)
-  (<attribute r_box1> <Exp r_box11>))
- ((<attribute r_box1> <Exp r_box11>) (<attribute r_box1> <Exp r_box11>))
- <SME 130> score: 0.009000001 normalized score: 1.0
-Found concepts ((isa ob810 r_box1))
-127.0.0.1 - - [Thu, 03 Feb 2022 17:20:02 GMT] "POST /ConceptLearner HTTP/1.1" 200 392
+ <SME 33> score: 0.009000001 normalized score: 1.0
+Found concepts ((isa ob915 r_box1))
+127.0.0.1 - - [Thu, 03 Feb 2022 17:55:49 GMT] "POST /ConceptLearner HTTP/1.1" 200 392

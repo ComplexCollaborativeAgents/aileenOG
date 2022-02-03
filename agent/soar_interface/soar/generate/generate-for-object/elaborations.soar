@@ -45,7 +45,7 @@ sp {generate-for-object*elaborate-with-concept*status*failure*concept-memory
     (state <s>    ^name generate-for-object
                   ^operator <op>
                   ^io.input-link.concept-memory.result <cm>
-                  ^object <obj>)
+                  ^objects.object <obj>)
     (<cm>    ^status success
              -^matches.match)
 -->

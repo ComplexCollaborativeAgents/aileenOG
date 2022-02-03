@@ -8,7 +8,8 @@ sp {generate*propose*generate-for-object
     (state <s>    ^name generate
                   ^world.objects <objs>
                   ^for-concept object
-                  -^completed-for-concept object)
+                  -^completed-for-concept object
+                   -^failed-for-concept object)
 -->
     (<s>    ^operator <op> + =)
     (<op>    ^name generate-for-object
@@ -19,7 +20,8 @@ sp {generate*propose*generate-for-relation
     (state <s>    ^name generate
                   ^world <w>
                   ^for-concept relation
-                  -^completed-for-concept relation)
+                  -^completed-for-concept relation
+                   -^failed-for-concept object)
 -->
     (<s>    ^operator <op> +)
     (<op>    ^name generate-for-relation
