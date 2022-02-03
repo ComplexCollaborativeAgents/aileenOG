@@ -6,13 +6,39 @@
 sp {generate-for-object*apply*complete-generate-for-object
     (state <s>    ^name generate-for-object
                   ^operator <op>
-                  ^object <obj>
-                  ^superstate <ss>
-                  ^segment.purpose <p>)
-    (<op>    ^name complete-generate-for-object
-             ^content <info>)
+                  ^objects.object <obj>
+                  ^superstate <ss>)
+    (<op>    ^name complete-generate-for-object)
+    (<ss>    ^information.objects <oinfo>)
+    (<obj>    ^id_string <id>)
 -->
-    (<ss>    ^generated-for <gen>)
-    (<gen>    ^object <obj>
-              ^content <info>)
+    (<oinfo>    ^for <for>)
+    (<for>    ^id <id>
+              ^object <obj>)
+}
+
+sp {generate-for-object*apply*complete-generate-for-object*tokens
+    (state <s>    ^name generate-for-object
+                  ^operator <op>
+                  ^objects.object <obj>
+                  ^superstate <ss>
+                  ^pair <p>)
+    (<p>    ^concept <con>
+            ^token <token>)
+    (<op>    ^name complete-generate-for-object)
+    (<ss>    ^information.objects.for <for>)
+    (<for>    ^object <obj>)
+    (<obj>    ^isa <con>)
+-->
+    (<for>    ^token <token>)
+}
+
+sp {generate-for-object*apply*complete-generate-for-object*completed
+    (state <s>    ^name generate-for-object
+                  ^operator.name complete-generate-for-object
+                  ^superstate <ss>)
+    (<ss>    ^information.objects.for.token <any>
+             ^for-concept object)
+-->
+    (<ss>    ^completed-for-concept object)
     }

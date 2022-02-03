@@ -23,6 +23,13 @@ sp {translate-to-facts*elaborate*facts
     (<s>    ^facts <facts>)
     }
 
+sp {translate-to-facts*elaborate*attribute
+    (state <s>    ^name translate-to-facts
+                  ^superstate.operator.result <attr>)
+-->
+    (<s>    ^result <attr>)
+    }
+
 ##### Objects
 
 sp {translate-to-facts*elaborate*object*color*shape

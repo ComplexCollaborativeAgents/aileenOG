@@ -10,3 +10,7 @@ source "proposals.soar"
 source "generate-for-object/load.soar"
 
 source "generate-for-relation/load.soar"
+
+source "generate-content.soar"
+
+source "preferences.soar"

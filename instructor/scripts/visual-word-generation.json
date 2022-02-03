@@ -1,10 +1,19 @@
 [
   {
     "signal": "generate",
+    "lesson-type": "spatial-word",
+    "description": {
+      "objects": [{"color": "green", "shape": "box"},  {"color": "yellow", "shape": "box"}],
+      "relation": "left-of"},
+    "content": "two boxes",
+    "concept": "object"
+  },
+  {
+    "signal": "generate",
     "lesson-type": "visual-word",
     "is_positive": "True",
     "description": {"color": "green", "shape":  "box", "size": "medium"},
-    "content": "box",
+    "content": "a box",
     "concept": "object"
   },
   {

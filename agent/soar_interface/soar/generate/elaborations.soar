@@ -19,3 +19,9 @@ sp {generate*elaborate*for-concept
 -->
     (<s>   ^for-concept <con>)
     }
+
+sp {generate*elaborate*content-info
+    (state <s>    ^name generate)
+-->
+    (<s>    ^information <ci>)
+    }
