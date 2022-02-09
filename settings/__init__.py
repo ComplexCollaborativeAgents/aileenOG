@@ -14,6 +14,7 @@ SOAR_SLEEP_TIME = 0.001
 SOAR_DEBUG = True
 SOAR_SVS = False
 SIMULATE_CV = True
+REC_SEG = False
 CURRENT_IMAGE_PATH = path.join(ROOT_PATH, 'world', 'controllers', 'images', 'current_image.png')
 CURRENT_REC_SEG_IMAGE_PATH = path.join(ROOT_PATH, 'world', 'controllers', 'images', 'current_rec_seg_image.png')
 CURRENT_REC_IMAGE_PATH = path.join(ROOT_PATH, 'world', 'controllers', 'images', 'current_rec_image.png')
