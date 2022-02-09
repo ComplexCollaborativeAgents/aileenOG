@@ -367,10 +367,10 @@ class AileenSupervisor(Supervisor):
             self.num_rec = cnt_obj
         else:
             self.save = False
-        # print('object num = ', self.num_rec)
-        # print('object gt num = ', cnt_obj)
+
         objects = self._camera.getRecognitionObjects()
-        mask_img = self._camera.getRecognitionSegmentationImage()
+        if settings.REC_SEG:
+            mask_img = self._camera.getRecognitionSegmentationImage()
         for object in objects:
             # webots camera recognized object is linked with the gt object by the id
             # webots camera recognized object is linked with the gt object by the id
@@ -585,8 +585,8 @@ class AileenSupervisor(Supervisor):
         acknowledgement = self._action_executor.process_action_command(action)
         return acknowledgement
 
-    def get_image(self):
-        output_dict = self.get_all()
+        def get_image(self):
+        # output_dict = self.get_all()
         logging.debug("[aileen_supervisor] :: processing get_image from client")
         _ = self._camera.getImage()
         logging.debug("[aileen_supervisor] :: got current image")
@@ -595,17 +595,22 @@ class AileenSupervisor(Supervisor):
             os.mkdir(dir_name)
         self._camera.saveImage(settings.CURRENT_IMAGE_PATH, 100)
         logging.debug("[aileen_supervisor] :: saved current image at {}".format(settings.CURRENT_IMAGE_PATH))
-        if self._camera.hasRecognitionSegmentation():
-            self._camera.saveRecognitionSegmentationImage(settings.CURRENT_REC_SEG_IMAGE_PATH, 100)
-            logging.debug("[aileen_supervisor] :: saved current recognition and segmentation image at {}".format(settings.CURRENT_REC_SEG_IMAGE_PATH))
-
+        if settings.REC_SEG:
+            if self._camera.hasRecognitionSegmentation():
+                self._camera.saveRecognitionSegmentationImage(settings.CURRENT_REC_SEG_IMAGE_PATH, 100)
+                logging.debug("[aileen_supervisor] :: saved current recognition and segmentation image at {}".format(settings.CURRENT_REC_SEG_IMAGE_PATH))
+            else:
+                assert self._camera.hasRecognitionSegmentation()
+                logging.debug("[aileen_supervisor] :: the camera has no recognition and segmentation function")
+        output_dict = self.get_all()
         if settings.GET_IMAGE_RETURNS_IMAGE_BINARY:
             with open(settings.CURRENT_IMAGE_PATH, "rb") as handle:
                 binary_image = xmlrpclib.Binary(handle.read())
                 output_dict['image'] = binary_image
-            with open(settings.CURRENT_REC_SEG_IMAGE_PATH, "rb") as handle:
-                binary_image = xmlrpclib.Binary(handle.read())
-                output_dict['rec_seg_image'] = binary_image
+            if settings.REC_SEG:
+                with open(settings.CURRENT_REC_SEG_IMAGE_PATH, "rb") as handle:
+                    binary_image = xmlrpclib.Binary(handle.read())
+                    output_dict['rec_seg_image'] = binary_image
 
         return output_dict
 
