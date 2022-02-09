@@ -14,6 +14,9 @@ from ikpy.chain import Chain
 from ikpy.link import OriginLink, URDFLink
 from ikpy.utils.geometry import *
 import numpy as np
+import imutils
+from instructor.shape_detector import ShapeDetector
+
 
 class AileenSupervisor(Supervisor):
 
@@ -36,7 +39,7 @@ class AileenSupervisor(Supervisor):
         self._motorSensorNodes = list()
         # self._connectorNode = self.getConnector('connector')
         self._connectorNode = self.getDevice('connector')
-        #self._camera = self.getCamera('camera')
+        # self._camera = self.getCamera('camera')
         self._camera = self.getDevice('camera')
         self._camera.enable(settings.TIME_STEP)
         self._camera.recognitionEnable(settings.TIME_STEP)
@@ -229,18 +232,17 @@ class AileenSupervisor(Supervisor):
             position: list [X, Y, Z] of object to pick in world frame
         """
         logging.info('[aileen supervisor] :: Picking Object')
-        position = [position[0], position[1]+.03, position[2]]
+        position = [position[0], position[1]+.051, position[2]]
         self.go_to_point(self.transform_point_to_robot_frame(position))
         logging.info('[aileen supervisor] :: Locking')
         self._connectorNode.lock()
-        is_locked = self._connectorNode.isLocked()
         currJnts = self.get_current_position()
         newJnts = currJnts
         newJnts[2] -= 3.14/4
         self.command_pose(newJnts)
         logging.debug('[aileen supervisor] :: Returning Home')
         self.return_home()
-        return is_locked
+        return None
 
     def place_object(self, target):
         logging.info('[aileen supervisor] :: Placing Object')
@@ -254,7 +256,6 @@ class AileenSupervisor(Supervisor):
         newJnts[2] -= 3.14/4
         self.command_pose(newJnts)
         self.return_home()
-        logging.info('[aileen supervisor] :: Finished Placing Object')
         return None
 
     def create_trajectory(self, waypoints):
@@ -352,51 +353,122 @@ class AileenSupervisor(Supervisor):
 
     def get_all(self):
         logging.debug("[aileen_supervisor] :: processing get_all from client")
-        obj_dicts = []
-        num_children = self._children.getCount()
-        cnt_obj = 0
-        for i in range(0, num_children):
-            object_node = self._children.getMFNode(i)
-            object_name = object_node.getTypeName()
-            if 'Solid' in object_name:
-                cnt_obj += 1
-
-        # Test if the camera can see all the generated objects
-        if self._camera.getRecognitionNumberOfObjects() == cnt_obj and cnt_obj > 0:
-            self.save = True
-            self.num_rec = cnt_obj
+        if settings.SIMULATE_CV:
+            obj_dicts = []
+            num_children = self._children.getCount()
+            for i in range(0, num_children):
+                object_node = self._children.getMFNode(i)
+                object_name = object_node.getTypeName()
+                if 'Solid' in object_name:
+                    id = object_node.getId()
+                    wcentroid = object_node.getPosition()
+                    worientation = object_node.getOrientation()
+                    wbbox_node = object_node.getField("boundingObject")
+                    wbbox_size = wbbox_node.getSFNode().getField('size').getSFVec3f()
+                    size_type = object_node.getField('description').getSFString()
+                    object_dict = {'id_string': "ob{}".format(str(id)),
+                                   'id': id,
+                                   'bbposition': wcentroid,
+                                   'bbsize': wbbox_size,
+                                   'world_centroid': wcentroid,
+                                   'world_orientation': worientation,
+                                   'world_bbox_size': wbbox_size,
+                                   'resolution': [self.resX, self.resY],
+                                   'shape': self.get_object_shape(object_node),
+                                   'color': self.get_object_color(object_node),
+                                   'texture': self.get_object_texture(object_node),
+                                   'hasCurveContour': self.get_object_hasCurveContour(object_node),
+                                   'hasEdgeContour': self.get_object_hasEdgeContour(object_node),
+                                   'hasPlane': self.get_object_hasPlane(object_node),
+                                   'hasRectPlane': self.get_object_hasRectPlane(object_node),
+                                   'hasRoundPlane': self.get_object_hasRoundPlane(object_node),
+                                   'id_name': self.get_object_name(object_node),
+                                   'size_type': size_type,
+                                   'held': 'false'
+                                   }
+                    obj_dicts.append(object_dict)
         else:
-            self.save = False
+            obj_dicts = []
+            num_children = self._children.getCount()
+            cnt_obj = 0
+            for i in range(0, num_children):
+                object_node = self._children.getMFNode(i)
+                object_name = object_node.getTypeName()
+                if 'Solid' in object_name:
+                    cnt_obj += 1
 
-        objects = self._camera.getRecognitionObjects()
-        if settings.REC_SEG:
-            mask_img = self._camera.getRecognitionSegmentationImage()
-        for object in objects:
-            # webots camera recognized object is linked with the gt object by the id
-            # webots camera recognized object is linked with the gt object by the id
-            id = object.get_id()
-            child = self.getFromId(id) # gt child
-            wcentroid = child.getPosition()
-            worientation = child.getOrientation()
-            wbbox_node = child.getField("boundingObject")
-            wbbox_size = wbbox_node.getSFNode().getField('size').getSFVec3f()
-            # size = bounding_obj.getField('size').getSFVec3f()
+            # Test if the camera can see all the generated objects
+            if self._camera.getRecognitionNumberOfObjects() == cnt_obj and cnt_obj > 0:
+                self.save = True
+                self.num_rec = cnt_obj
+            else:
+                self.save = False
 
-            # self.get_object_size_type(child)
-            obj_position = object.get_position()
-            obj_orientation = object.get_orientation()
-            position = object.get_position_on_image()
-            bbsize = object.get_size_on_image()
-            cx = int(position[0])
-            cy = int(position[1])
-            w = int(bbsize[0])
-            h = int(bbsize[1])
-            tx = int(cx - w / 2)
-            ty = int(cy - h / 2)
-            bx = int(cx + w / 2)
-            by = int(cy + h / 2)
+            objects = self._camera.getRecognitionObjects()
+            # mask_img = self._camera.getRecognitionSegmentationImage()
+            if settings.REC_SEG:
+                mask_img = cv2.imread(settings.CURRENT_REC_SEG_IMAGE_PATH)
+            img = cv2.imread(settings.CURRENT_IMAGE_PATH)
+            for object in objects:
+                # webots camera recognized object is linked with the gt object by the id
+                id = object.get_id()
+                child = self.getFromId(id) # gt child
+                wcentroid = child.getPosition()
+                worientation = child.getOrientation()
+                wbbox_node = child.getField("boundingObject")
+                wbbox_size = wbbox_node.getSFNode().getField('size').getSFVec3f()
+                size_type = child.getField('description').getSFString()
+                # print('size type = ', size_type)
+                # size = bounding_obj.getField('size').getSFVec3f()
 
-            object_dict = {'id_string': "ob{}".format(str(id)),
+                # self.get_object_vision_concept()
+                # self.get_object_size_type(child)
+                obj_position = object.get_position()
+                obj_orientation = object.get_orientation()
+                position = object.get_position_on_image()
+                bbsize = object.get_size_on_image()
+                cx = int(position[0])
+                cy = int(position[1])
+                w = int(bbsize[0])
+                h = int(bbsize[1])
+                tx = int(cx - w / 2)
+                ty = int(cy - h / 2)
+                bx = int(cx + w / 2)
+                by = int(cy + h / 2)
+
+            # gray = cv2.cvtColor(mask_img.copy(), cv2.COLOR_BGR2GRAY)
+            # mask = np.zeros(gray.shape[:2], dtype="uint8")
+            # contour_mask = mask.copy()
+            # cv2.rectangle(mask, (int(tx), int(ty)), (int(bx), int(by)), 255, -1)
+            # tmp = cv2.bitwise_and(gray, gray, mask=mask)
+            # non_zero_tmp = tmp[np.nonzero(tmp)]
+            # if mode(non_zero_tmp)[0]:
+            #     value = mode(non_zero_tmp)[0]
+            #     # print target
+            #     up = value + 5
+            #     low = value - 5
+            #     if low < 0:
+            #         low = 0
+            #     loc = np.where(np.logical_and(tmp > low, tmp <= up))
+            #     tmp[loc] = value
+            #     tmp[np.where(tmp != value)] = 0
+            #     tmp[tmp > 0] = 100
+            #     blurred = cv2.GaussianBlur(tmp, (5, 5), 0)
+            #     img_canny = cv2.Canny(blurred, 50, 190)
+
+                # cv2.imshow('contour', img_canny)
+                # cv2.waitKey(0)
+                # if size_type == "Small":
+                #
+                # elif size_type == "Medium":
+                #
+                # else:
+                # contours, hierarchy = cv2.findContours(blurred.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+
+                # self.get_object_vision_concept(tmp)
+
+                object_dict = {'id_string': "ob{}".format(str(id)),
                                'id': id,
                                'bbposition': position,
                                'bbsize': bbsize,
@@ -416,29 +488,11 @@ class AileenSupervisor(Supervisor):
                                'hasRectPlane': self.get_object_hasRectPlane(child),
                                'hasRoundPlane': self.get_object_hasRoundPlane(child),
                                'id_name': self.get_object_name(child),
+                               'size_type': size_type,
                                # 'focal_length': self.flen,
                                'held': 'false'
                            }
-            obj_dicts.append(object_dict)
-
-        if self._held_node:
-            object_dict = {'id_string': "ob{}".format(str(self._held_node.getId())),
-                            'id': self._held_node.getId(),
-                            'shape': self.get_object_shape(self._held_node),
-                            'color': self.get_object_color(self._held_node),
-                            'texture': self.get_object_texture(self._held_node),
-                            'id_name': self.get_object_name(self._held_node),
-                            'held': 'true',
-                            'hasPlane': self.get_object_hasPlane(self._held_node),
-                            'hasRectPlane': self.get_object_hasRectPlane(self._held_node),
-                            'hasRoundPlane': self.get_object_hasRoundPlane(self._held_node),
-                            'hasCurveContour': self.get_object_hasCurveContour(self._held_node),
-                            'hasEdgeContour': self.get_object_hasEdgeContour(self._held_node)
-
-            }
-            obj_dicts.append(object_dict)
-            logging.debug("[aileen_supervisor]: added held object to the object list {}".format(self._held_node))
-
+                obj_dicts.append(object_dict)
         output_dict = {'objects': obj_dicts, 'image': '', 'save': self.save, 'obj_num': self.num_rec}
         return output_dict
 
@@ -455,7 +509,6 @@ class AileenSupervisor(Supervisor):
             if shape_node.getTypeName() == "Shape":
                 geometry_node = shape_node.getField('geometry').getSFNode()
                 geometry_string = geometry_node.getTypeName()
-                # print geometry_string.title()
                 label_string = "CV{}".format(geometry_string.title())
                 return label_string
 
@@ -464,6 +517,15 @@ class AileenSupervisor(Supervisor):
         #     print('shape_node', size_type)
         #     return size_type
 
+    def get_object_vision_concept(self, image):
+        resized = imutils.resize(image, width=300)
+        ratio = image.shape[0] / float(resized.shape[0])
+        blurred = cv2.GaussianBlur(image, (5, 5), 0)
+        cnts = cv2.findContours(blurred.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        cv2.imshow('contour', cnts)
+        cv2.waitKey(0)
+        cnts = imutils.grab_contours(cnts)
+        sd = ShapeDetector()
 
     def get_object_hasCurveContour(self, object_node):
         children = object_node.getField('children')
@@ -585,7 +647,7 @@ class AileenSupervisor(Supervisor):
         acknowledgement = self._action_executor.process_action_command(action)
         return acknowledgement
 
-        def get_image(self):
+    def get_image(self):
         # output_dict = self.get_all()
         logging.debug("[aileen_supervisor] :: processing get_image from client")
         _ = self._camera.getImage()
