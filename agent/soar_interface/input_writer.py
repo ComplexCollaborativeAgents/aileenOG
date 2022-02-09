@@ -164,7 +164,6 @@ class InputWriter(object):
             # objects_list = data['objects']
             # objects_list = self.use_gt_world(objects_list)
             objects_list = self.request_server_for_objects_info()
-            print("objects_list = ", objects_list)
             logging.debug("Groundtruth world: {}".format(objects_list))
 
         if objects_list is not None:
