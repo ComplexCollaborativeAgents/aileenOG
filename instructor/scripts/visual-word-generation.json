@@ -1,4 +1,14 @@
 [
+    {
+    "signal": "generate",
+    "lesson-type": "spatial-word",
+    "description": {
+      "objects": [{"color": "green", "shape": "box"},  {"color": "yellow", "shape": "box"}],
+      "relation": "left-of"},
+    "content": "boxes",
+    "concept": "object"
+  },
+
   {
     "signal": "generate",
     "lesson-type": "visual-word",
@@ -7,6 +17,7 @@
     "content": "a box",
     "concept": "object"
   },
+
   {
     "signal": "inform",
     "lesson-type": "visual-word",
