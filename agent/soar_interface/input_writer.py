@@ -164,6 +164,15 @@ class InputWriter(object):
             # objects_list = data['objects']
             # objects_list = self.use_gt_world(objects_list)
             objects_list = self.request_server_for_objects_info()
+            # logging.debug("Objects are: {}".format(objects_list))
+            # objects_list = self.use_gt_world(objects_list)
+
+            for object in objects_list:
+                object['position'] = object['world_centroid']
+                object['orientation'] = object['world_orientation']
+                object['wbbox_size'] = object['world_bbox_size']
+                object['wbbox_position'] = object['world_centroid']
+
             logging.debug("Groundtruth world: {}".format(objects_list))
 
         if objects_list is not None:
