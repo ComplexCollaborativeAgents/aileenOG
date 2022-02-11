@@ -517,15 +517,15 @@ class AileenSupervisor(Supervisor):
         #     print('shape_node', size_type)
         #     return size_type
 
-    def get_object_vision_concept(self, image):
-        resized = imutils.resize(image, width=300)
-        ratio = image.shape[0] / float(resized.shape[0])
-        blurred = cv2.GaussianBlur(image, (5, 5), 0)
-        cnts = cv2.findContours(blurred.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-        cv2.imshow('contour', cnts)
-        cv2.waitKey(0)
-        cnts = imutils.grab_contours(cnts)
-        sd = ShapeDetector()
+    # def get_object_vision_concept(self, image):
+    #     resized = imutils.resize(image, width=300)
+    #     ratio = image.shape[0] / float(resized.shape[0])
+    #     blurred = cv2.GaussianBlur(image, (5, 5), 0)
+    #     cnts = cv2.findContours(blurred.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    #     cv2.imshow('contour', cnts)
+    #     cv2.waitKey(0)
+    #     cnts = imutils.grab_contours(cnts)
+    #     sd = ShapeDetector()
 
     def get_object_hasCurveContour(self, object_node):
         children = object_node.getField('children')
