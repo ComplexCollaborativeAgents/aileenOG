@@ -23,6 +23,7 @@ class Curriculum(object):
         distractors = lesson_configuration.get('distractors', 0)
         is_positive = True if (lesson_configuration.get('is_positive', "True") == "True" or lesson_configuration.get('is_positive', "true")) else False
         content = lesson_configuration.get('content', None)
+        concept = lesson_configuration.get('concept', None)
 
         lesson = {}
         if lesson_type == 'visual-word':
@@ -30,7 +31,8 @@ class Curriculum(object):
                                              signal=signal,
                                              description=description,
                                              distractors=distractors,
-                                             content=content)
+                                             content=content,
+                                             concept=concept)
             #lesson = lesson_object.generate_lesson()
 
         elif lesson_type == 'spatial-word':
@@ -38,7 +40,8 @@ class Curriculum(object):
                                               signal=signal,
                                               description=description,
                                               distractors=distractors,
-                                              content=content)
+                                              content=content,
+                                              concept=concept)
             #lesson = lesson_object.generate_lesson()
 
         elif lesson_type == 'action-word':
@@ -46,7 +49,8 @@ class Curriculum(object):
                                              signal=signal,
                                              description=description,
                                              distractors=distractors,
-                                             content=content)
+                                             content=content,
+                                             concept=concept)
 
         else:
             return None

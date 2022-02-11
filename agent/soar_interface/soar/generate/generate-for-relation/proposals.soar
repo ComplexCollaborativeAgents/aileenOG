@@ -1,0 +1,26 @@
+##!
+# @file
+#
+# @created smohan 20220202
+
+sp {generate-for-relation*propose*translate-to-facts
+    (state <s>    ^name generate-for-relation
+                  ^scene <scene>
+                  -facts <f>)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name translate-to-facts
+             ^scene <scene>)
+    }
+
+sp {generate-for-relation*propose*describe-subscene
+    (state <s>     ^name generate-for-relation
+                   ^scene <scene>
+                   ^facts <f>
+                   -^memory-lookup-status failed)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name describe-subscene
+             ^facts <f>)
+    }
+             

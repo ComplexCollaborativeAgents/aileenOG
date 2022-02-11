@@ -1,0 +1,12 @@
+##!
+# @file
+#
+# @created smohan 20220202
+
+sp {generate-for-relation*elaborate*state
+    (state <s>    ^name generate-for-relation
+                  ^superstate.operator <sop>)
+    (<sop> ^world <w>)
+-->
+    (<s>    ^scene <w>)
+    }

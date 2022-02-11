@@ -14,7 +14,7 @@ from collections import OrderedDict
 
 class SpatialWordLesson:
 
-    def __init__(self, is_positive, signal, description, distractors, content):
+    def __init__(self, is_positive, signal, description, distractors, content, concept):
         self._spatial_configurations_set = SpatialWordLesson.get_spatial_configurations_set()
 
         self._description = description
@@ -23,6 +23,7 @@ class SpatialWordLesson:
         self._is_positive = is_positive
         self._spatial_configuration_def = None
         self._language_def = None
+
 
         if self._description:
             configuration = description.get("relation", None)
@@ -63,6 +64,7 @@ class SpatialWordLesson:
         self._signal = signal
         self._distractors = distractors
         self._content = content
+        self._concept = concept
 
     def generate_lesson(self):
         objects = None
@@ -78,11 +80,22 @@ class SpatialWordLesson:
             positions = []
 
         self.generate_scene(positions)
+
+        lesson_scene = self._scene.generate_scene_world_config()
+
+        if self._signal == 'generate':
+            lesson_content = ""
+            lesson_concept = self._concept
+        else:
+            lesson_content = self._content if self._content is not None else self._language
+            lesson_concept = ""
+
         lesson = {
-            'scene': self._scene.generate_scene_world_config(),
+            'scene': lesson_scene,
             'interaction': {
                 'signal': self._signal,
-                'content': self._content if self._content is not None else self._language
+                'content': lesson_content,
+                'concept': lesson_concept
             }
         }
         return lesson
@@ -151,13 +164,19 @@ class SpatialWordLesson:
         return spatial_configurations
 
     def evaluate_agent_response(self, agent_response):
-        if self._is_positive:
-            if agent_response['status'] == 'success':
-                return {'signal': 'correct', 'score': 1}
+        if 'status' in agent_response:
+            if self._is_positive:
+                if agent_response['status'] == 'success':
+                    return {'signal': 'correct', 'score': 1}
+                else:
+                    return {'signal': 'incorrect', 'score': 0}
             else:
-                return {'signal': 'incorrect', 'score': 0}
-        else:
-            if agent_response['status'] == 'failure':
+                if agent_response['status'] == 'failure':
+                    return {'signal': 'correct', 'score': 1}
+                else:
+                    return {'signal': 'incorrect', 'score': 0}
+        if 'language' in agent_response:
+            if self._content == agent_response['language']:
                 return {'signal': 'correct', 'score': 1}
             else:
                 return {'signal': 'incorrect', 'score': 0}

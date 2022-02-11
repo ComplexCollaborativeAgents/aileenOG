@@ -12,10 +12,21 @@ sp {translate-to-facts*propose*write-to-superstate
     (<op>    ^name write-to-superstate)
     }
 
-sp {translate-to-facts*apply*write-to-superstate
+sp {translate-to-facts*apply*write-to-superstate*attribute
     (state <s>    ^name translate-to-facts
                   ^operator.name write-to-superstate
                   ^facts <facts>
+                  ^result <attr>
+                  ^superstate <ss>)
+-->
+    (<ss>    ^<attr> <facts>)
+    }
+
+sp {translate-to-facts*apply*write-to-superstate*no-attribute
+    (state <s>    ^name translate-to-facts
+                  ^operator.name write-to-superstate
+                  ^facts <facts>
+                  -^result <attr>
                   ^superstate <ss>)
 -->
     (<ss>    ^facts <facts>)
