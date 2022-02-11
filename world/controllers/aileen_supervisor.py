@@ -15,7 +15,7 @@ from ikpy.link import OriginLink, URDFLink
 from ikpy.utils.geometry import *
 import numpy as np
 import imutils
-from instructor.shape_detector import ShapeDetector
+# from instructor.shape_detector import ShapeDetector
 
 
 class AileenSupervisor(Supervisor):
