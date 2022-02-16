@@ -164,15 +164,6 @@ class InputWriter(object):
             # objects_list = data['objects']
             # objects_list = self.use_gt_world(objects_list)
             objects_list = self.request_server_for_objects_info()
-            # logging.debug("Objects are: {}".format(objects_list))
-            # objects_list = self.use_gt_world(objects_list)
-
-            for object in objects_list:
-                object['position'] = object['world_centroid']
-                object['orientation'] = object['world_orientation']
-                object['wbbox_size'] = object['world_bbox_size']
-                object['wbbox_position'] = object['world_centroid']
-
             logging.debug("Groundtruth world: {}".format(objects_list))
 
         if objects_list is not None:
@@ -222,11 +213,11 @@ class InputWriter(object):
                     detections[i]['id_string'] = w['id_string']
                     detections[i]['held'] = w['held']
                     #  The simulator groundtruth
-                    detections[i]['position_simulator'] = w['bbposition']
+                    detections[i]['position_simulator'] = w['position']
                     detections[i]['bounding_box_simulator'] = w['bounding_box_camera']
                     detections[i]['bbox_size_simulator'] = w['bbsize']
                     detections[i]['orientation'] = w['world_orientation']
-                    detections[i]['wbbox_size'] = w['world_bbox_size']
+                    detections[i]['wbbox_size'] = w['wbbox_size']
                     detections[i]['wbbox_position'] = w['world_centroid']
                     #  The detector output
                     #detections[i]['position'] = detections[i]['camera_mrcnn_position']
@@ -376,16 +367,11 @@ class InputWriter(object):
 
     def write_language_to_input_link(self):
         new_language_link = self._language_link.CreateIdWME("language")
-        if 'parses' in self._language:
-            ## write all parses
-            logging.debug("[input_writer] :: writing generated parse to input link")
-            parses = self._language['parses']
-            parses_link = new_language_link.CreateIdWME("parses")
-            language_helper.translate_to_soar_structure(parses, parses_link)
-        if 'sentence' in self._language:
-            logging.debug("[input_writer] :: writing generated content to input link: {}".format(self._language['sentence']))
-            sentence = self._language['sentence']
-            new_language_link.CreateStringWME("sentence", str(sentence))
+        logging.debug("[input_writer] :: writing generated parse to input link")
+        ## write all parses
+        parses = self._language['parses']
+        parses_link = new_language_link.CreateIdWME("parses")
+        language_helper.translate_to_soar_structure(parses, parses_link)
         self._language = None
         self._clean_language_link_flag = True
 
@@ -405,14 +391,11 @@ class InputWriter(object):
         if 'marker' in self._interaction:
             marker = str(self._interaction['marker'])
             new_interaction_link.CreateStringWME('marker', marker)
-        if 'concept' in self._interaction:
-            concept = str(self._interaction['concept'])
-            new_interaction_link.CreateStringWME('concept', concept)
         self._interaction = None
         self._clean_interaction_link_flag = True
 
     def process_interaction(self, interaction_dict):
-        logging.debug("[input_writer] :: received intent: {}".format(interaction_dict))
+        logging.debug("[input_writer] :: received training string: {}".format(interaction_dict))
         self._interaction = interaction_dict
 
     def add_objects_to_working_memory(self, objects_list):
@@ -442,12 +425,13 @@ class InputWriter(object):
             object_id.CreateIntWME('hasRoundPlane', w_object['hasRoundPlane'])
             object_id.CreateIntWME('hasEdgeContour', w_object['hasEdgeContour'])
             object_id.CreateIntWME('hasCurveContour', w_object['hasCurveContour'])
-            object_id.CreateStringWME('id_string', w_object['id_string'])
+            object_id.CreateIntWME('id_string', w_object['id'])
             object_id.CreateStringWME('id_uuid', w_object['id_name'])
 
     def request_server_for_objects_info(self):
         try:
             objects_dict = self._world_server.get_all()
+            print('objects dict = ', objects_dict)
         except xmlrpclib.ProtocolError as err:
             logging.error("[input_writer] :: protocol error {}".format(err.errmsg))
             return
@@ -479,7 +463,6 @@ class InputWriter(object):
         with open(settings.CURRENT_IMAGE_PATH, "wb") as handle:
             handle.write(binary_image.data)
 
-
     def create_qsrs(self, objects):
         '''
 - Ignore y position as everything is on the table (use z instead)
@@ -493,12 +476,11 @@ objects = [{'orientation': [1.0, -5.75539615965681e-17, 3.38996313371214e-17, 5.
         world = World_Trace()
 
         for obj in objects:
-            # print('object = ', obj)
+            print('object = ', obj)
             if obj['held'] == 'false':
                 world.add_object_state_series(
                     [Object_State(name=str(obj['id']),timestamp=0,
                                   x=obj['position'][0],
-                                  #z=obj['position'][1],
                                   y=obj['position'][2],
                                   z=obj['position'][1],
                                   xsize=obj['wbbox_size'][0],
