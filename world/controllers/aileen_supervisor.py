@@ -15,7 +15,7 @@ from ikpy.link import OriginLink, URDFLink
 from ikpy.utils.geometry import *
 import numpy as np
 import imutils
-# from instructor.shape_detector import ShapeDetector
+from instructor.shape_detector import ShapeDetector
 
 
 class AileenSupervisor(Supervisor):
@@ -368,11 +368,11 @@ class AileenSupervisor(Supervisor):
                     size_type = object_node.getField('description').getSFString()
                     object_dict = {'id_string': "ob{}".format(str(id)),
                                    'id': id,
-                                   'bbposition': wcentroid,
+                                   'position': wcentroid,
                                    'bbsize': wbbox_size,
                                    'world_centroid': wcentroid,
                                    'world_orientation': worientation,
-                                   'world_bbox_size': wbbox_size,
+                                   'wbbox_size': wbbox_size,
                                    'resolution': [self.resX, self.resY],
                                    'shape': self.get_object_shape(object_node),
                                    'color': self.get_object_color(object_node),
@@ -470,12 +470,12 @@ class AileenSupervisor(Supervisor):
 
                 object_dict = {'id_string': "ob{}".format(str(id)),
                                'id': id,
-                               'bbposition': position,
+                               'position': position,
                                'bbsize': bbsize,
                                'bounding_box_camera': [tx, ty, bx, by],
                                'world_centroid': wcentroid,
                                'world_orientation': worientation,
-                               'world_bbox_size': wbbox_size,
+                               'wbbox_size': wbbox_size,
                                # 'obj_relative_position':obj_position,
                                # 'obj_relative_orientation': obj_orientation,
                                'resolution': [self.resX, self.resY],
@@ -517,15 +517,15 @@ class AileenSupervisor(Supervisor):
         #     print('shape_node', size_type)
         #     return size_type
 
-    # def get_object_vision_concept(self, image):
-    #     resized = imutils.resize(image, width=300)
-    #     ratio = image.shape[0] / float(resized.shape[0])
-    #     blurred = cv2.GaussianBlur(image, (5, 5), 0)
-    #     cnts = cv2.findContours(blurred.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-    #     cv2.imshow('contour', cnts)
-    #     cv2.waitKey(0)
-    #     cnts = imutils.grab_contours(cnts)
-    #     sd = ShapeDetector()
+    def get_object_vision_concept(self, image):
+        resized = imutils.resize(image, width=300)
+        ratio = image.shape[0] / float(resized.shape[0])
+        blurred = cv2.GaussianBlur(image, (5, 5), 0)
+        cnts = cv2.findContours(blurred.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        cv2.imshow('contour', cnts)
+        cv2.waitKey(0)
+        cnts = imutils.grab_contours(cnts)
+        sd = ShapeDetector()
 
     def get_object_hasCurveContour(self, object_node):
         children = object_node.getField('children')
