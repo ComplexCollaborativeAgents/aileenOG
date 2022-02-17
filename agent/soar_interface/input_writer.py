@@ -403,20 +403,20 @@ class InputWriter(object):
         for w_object in objects_list:
             object_id = self._objects_link.CreateIdWME("object")
             object_id.CreateIntWME('id', w_object['id'])
-            if 'position' in w_object:
+            if 'bbposition' in w_object:
                 position_id = object_id.CreateIdWME('position')
-                position_id.CreateFloatWME('x', w_object['position'][0])
-                position_id.CreateFloatWME('y', w_object['position'][1])
-                position_id.CreateFloatWME('z', w_object['position'][2])
-            if 'bounding_box' in w_object:
+                position_id.CreateFloatWME('x', w_object['world_centroid'][0])
+                position_id.CreateFloatWME('y', w_object['world_centroid'][1])
+                position_id.CreateFloatWME('z', w_object['world_centroid'][2])
+            if 'bbposition' in w_object:
                 size_id = object_id.CreateIdWME('size_bb')
                 # size_id.CreateFloatWME('xsize', w_object['bounding_box'][2]-w_object['bounding_box'][0])
                 # size_id.CreateFloatWME('zsize', w_object['bounding_box'][5]-w_object['bounding_box'][2])
                 # size_id.CreateFloatWME('ysize', w_object['bounding_box'][3]-w_object['bounding_box'][1])
-                size_id.CreateFloatWME('xsize', w_object['wbbox_size'][0])
-                size_id.CreateFloatWME('zsize', w_object['wbbox_size'][2])
-                size_id.CreateFloatWME('ysize', w_object['wbbox_size'][1])
-                object_id.CreateStringWME('size', self.size_from_bounding_box(w_object['bounding_box']))
+                size_id.CreateFloatWME('xsize', w_object['world_bbox_size'][0])
+                size_id.CreateFloatWME('zsize', w_object['world_bbox_size'][2])
+                size_id.CreateFloatWME('ysize', w_object['world_bbox_size'][1])
+                object_id.CreateStringWME('size', w_object['size_type'])
             object_id.CreateStringWME('held', w_object['held'])
             object_id.CreateStringWME('color', str(w_object['color']))
             object_id.CreateStringWME('shape', w_object['shape'])
@@ -480,12 +480,12 @@ objects = [{'orientation': [1.0, -5.75539615965681e-17, 3.38996313371214e-17, 5.
             if obj['held'] == 'false':
                 world.add_object_state_series(
                     [Object_State(name=str(obj['id']),timestamp=0,
-                                  x=obj['position'][0],
-                                  y=obj['position'][2],
-                                  z=obj['position'][1],
-                                  xsize=obj['wbbox_size'][0],
-                                  zsize=obj['wbbox_size'][1],
-                                  ysize=obj['wbbox_size'][2]
+                                  x=obj['bbposition'][0],
+                                  y=obj['bbposition'][2],
+                                  z=obj['bbposition'][1],
+                                  xsize=obj['world_bbox_size'][0],
+                                  zsize=obj['world_bbox_size'][1],
+                                  ysize=obj['world_bbox_size'][2]
                                   # xsize=obj['bounding_box'][3]-obj['bounding_box'][0],
                                   # ysize=obj['bounding_box'][5]-obj['bounding_box'][2],
                                   # zsize=obj['bounding_box'][4]-obj['bounding_box'][1]
