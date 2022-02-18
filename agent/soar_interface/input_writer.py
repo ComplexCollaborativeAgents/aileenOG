@@ -2,6 +2,7 @@ import time
 import os
 from agent.log_config import logging
 import xmlrpclib
+from itertools import combinations
 from svs_helper import SVSHelper
 from agent.vision.Detector import Detector
 import cv2
@@ -34,6 +35,7 @@ class InputWriter(object):
             self._world_link = self._input_link.CreateIdWME("world")
             self._objects_link = self._world_link.CreateIdWME("objects")
             self._qsrs_link = self._world_link.CreateIdWME("qsrs")
+            self._csrs_link = self._world_link.CreateIdWME("csrs")
 
             self._interaction_link = self._input_link.CreateIdWME("interaction-link")
             self._clean_interaction_link_flag = False
@@ -44,7 +46,7 @@ class InputWriter(object):
             self._concept_memory = self._input_link.CreateIdWME("concept-memory")
             self._clean_concept_memory_flag = False
 
-        # if settings.SIMULATE_CV:
+            # if settings.SIMULATE_CV:
             self.detector = Detector()
 
     def set_concept_memory_status(self, concept_memory_status_dictionary):
@@ -127,7 +129,7 @@ class InputWriter(object):
                     ty = y
                     bx = x + w
                     by = y + h
-                    position = [x + w/2.0, y + h/2.0]
+                    position = [x + w / 2.0, y + h / 2.0]
                     bbsize = [bx - tx, by - ty]
                     objects_list[i]['bounding_box_camera'] = [tx, ty, bx, by]
                     objects_list[i]['bbposition'] = position
@@ -164,22 +166,14 @@ class InputWriter(object):
             # objects_list = data['objects']
             # objects_list = self.use_gt_world(objects_list)
             objects_list = self.request_server_for_objects_info()
-
-
-            for object in objects_list:
-                object['position'] = object['world_centroid']
-                object['orientation'] = object['world_orientation']
-                object['wbbox_size'] = object['wbbox_size']
-                object['bbposition'] = object['world_centroid']
-                object['world_bbox_size'] = object['wbbox_size']
-
-
             logging.debug("Groundtruth world: {}".format(objects_list))
 
         if objects_list is not None:
             self.add_objects_to_working_memory(objects_list)
         qsrs = self.create_qsrs(objects_list)
         self.write_qsrs_to_input_link(qsrs)
+        csrs = self.create_aux_info(objects_list)
+        self.write_csrs_to_input_link(csrs)
         self._soar_agent.commit()
 
     @staticmethod
@@ -215,7 +209,7 @@ class InputWriter(object):
                 # print Detector.bb_iou(bbox1, bbox2)
                 # print dst
                 if Detector.bb_iou(bbox1, bbox2) > .7 or dst < 4.0:
-                # if dst < 4.0:
+                    # if dst < 4.0:
                     mapped[w_index] = 1
                     detections[i]['held'] = w['held']
                     detections[i]['id'] = w['id']
@@ -230,7 +224,7 @@ class InputWriter(object):
                     detections[i]['wbbox_size'] = w['wbbox_size']
                     detections[i]['wbbox_position'] = w['world_centroid']
                     #  The detector output
-                    #detections[i]['position'] = detections[i]['camera_mrcnn_position']
+                    # detections[i]['position'] = detections[i]['camera_mrcnn_position']
                     detections[i]['bounding_box'] = detections[i]['camera_bounding_box_mrcnn']
                     detections[i]['position'] = detections[i]['wbbox_position']
 
@@ -308,13 +302,23 @@ class InputWriter(object):
                     qsr_id.CreateIntWME("target", int(target_obj_id))
                     qsr_id.CreateStringWME(qsr_type, qsr_value)
 
+    def write_csrs_to_input_link(self, csrs):
+        # logging.debug("[input_writer] :: writing csrs to input link {}".format(csrs))
+        self._soar_agent.delete_all_children(self._csrs_link)
+        for csr in csrs:
+            csr_id = self._csrs_link.CreateIdWME('csr')
+            csr_id.CreateIntWME("root", csr[0])
+            csr_id.CreateIntWME("target", csr[1])
+            csr_id.CreateFloatWME("distance", csr[2])
+
     def clean_concept_memory(self):
         self._soar_agent.delete_all_children(self._concept_memory)
         self._clean_concept_memory_flag = False
 
     def write_concept_memory_status_to_input_link(self):
         new_status_link = self._concept_memory.CreateIdWME("result")
-        logging.debug("[input_writer] :: writing concept memory status to input link for keys {}".format(self._concept_memory_status.keys()))
+        logging.debug("[input_writer] :: writing concept memory status to input link for keys {}".format(
+            self._concept_memory_status.keys()))
 
         if 'status' in self._concept_memory_status:
             new_status_link.CreateStringWME("status", self._concept_memory_status['status'])
@@ -328,7 +332,8 @@ class InputWriter(object):
             matches_id = new_status_link.CreateIdWME('matches')
             logging.debug("[input-writer] :: {}".format(self._concept_memory_status))
             if 'matches' in self._concept_memory_status:
-                if self._concept_memory_status['matches'] is not None and len(self._concept_memory_status['matches']) > 0:
+                if self._concept_memory_status['matches'] is not None and len(
+                        self._concept_memory_status['matches']) > 0:
                     for match in self._concept_memory_status['matches']:
                         if match is not None:
                             logging.debug("[input_writer] :: match {}".format(match))
@@ -337,7 +342,7 @@ class InputWriter(object):
                             match_id.CreateStringWME("second", str(match[1]))
                             match_id.CreateStringWME("third", str(match[2]))
                             logging.debug(
-                                        "[input-writer] :: wrote matches {}".format(self._concept_memory_status['status']))
+                                "[input-writer] :: wrote matches {}".format(self._concept_memory_status['status']))
         if 'projections' in self._concept_memory_status.keys():
             projects_id = new_status_link.CreateIdWME('projections')
             filtered = self.filter_cis_for_next_state(self._concept_memory_status['projections'])
@@ -365,11 +370,10 @@ class InputWriter(object):
         for ci in candidate_inferences:
             if ci[1] == episode_identifier:
                 if ci[0] == 'aileenTerminalTransition':
-                    filtered.append(['type','terminal_state'])
+                    filtered.append(['type', 'terminal_state'])
                 else:
                     filtered.append(ci[2])
         return filtered
-
 
     def clean_language_link(self):
         self._soar_agent.delete_all_children(self._language_link)
@@ -415,9 +419,9 @@ class InputWriter(object):
             object_id.CreateIntWME('id', w_object['id'])
             if 'position' in w_object:
                 position_id = object_id.CreateIdWME('position')
-                position_id.CreateFloatWME('x', w_object['world_centroid'][0])
-                position_id.CreateFloatWME('y', w_object['world_centroid'][1])
-                position_id.CreateFloatWME('z', w_object['world_centroid'][2])
+                position_id.CreateFloatWME('x', w_object['position'][0])
+                position_id.CreateFloatWME('y', w_object['position'][1])
+                position_id.CreateFloatWME('z', w_object['position'][2])
             if 'wbbox_size' in w_object:
                 size_id = object_id.CreateIdWME('size_bb')
                 # size_id.CreateFloatWME('xsize', w_object['bounding_box'][2]-w_object['bounding_box'][0])
@@ -426,7 +430,9 @@ class InputWriter(object):
                 size_id.CreateFloatWME('xsize', w_object['wbbox_size'][0])
                 size_id.CreateFloatWME('zsize', w_object['wbbox_size'][2])
                 size_id.CreateFloatWME('ysize', w_object['wbbox_size'][1])
-                object_id.CreateFloatWME('size', w_object['wbbox_size'][0] * w_object['wbbox_size'][1] * w_object['wbbox_size'][2])
+                object_id.CreateFloatWME('size', w_object['wbbox_size'][0] * w_object['wbbox_size'][2])
+
+
             object_id.CreateStringWME('held', w_object['held'])
             object_id.CreateStringWME('color', str(w_object['color']))
             object_id.CreateStringWME('shape', w_object['shape'])
@@ -473,35 +479,59 @@ class InputWriter(object):
         with open(settings.CURRENT_IMAGE_PATH, "wb") as handle:
             handle.write(binary_image.data)
 
+    '''
+        Added by Will. For now, using this to handle nearness relations. Can eventually extend
+        to estimating any continuous quantities. This should probably live somewhere else.
+        '''
+
+    def create_aux_info(self, objects):
+        rels = []
+
+        if len(objects) > 0:
+
+            # logging.debug("[input_writer] :: cai objects are: {}".format(objects))
+            non_held_objs = [o for o in objects if not o['held'] == 'true']
+            # logging.debug("[input_writer] :: non held objects are: {}".format(non_held_objs))
+
+            # add distance information between pairs of objects
+            for items in combinations(non_held_objs, 2):
+                # logging.debug("[input_writer] :: vec 1 is: {}".format(np.array(items[0]['position'])))
+                # logging.debug("[input_writer] :: vec 2 is: {}".format(np.array(items[1]['position'])))
+
+                distance = np.linalg.norm(np.array(items[0]['position']) - np.array(items[1]['position']))
+                rels.append((items[0]['id'], items[1]['id'], distance))
+
+        return rels
+
     def create_qsrs(self, objects):
         '''
-- Ignore y position as everything is on the table (use z instead)
-- While qsrlib allows includes a parameter for orientation/rotation, it is not clear it is used. It is being ignored for now.
+    - Ignore y position as everything is on the table (use z instead)
+    - While qsrlib allows includes a parameter for orientation/rotation, it is not clear it is used. It is being ignored for now.
 
-Saving sample input from aileen world for later testing.
+    Saving sample input from aileen world for later testing.
 
-objects = [{'orientation': [1.0, -5.75539615965681e-17, 3.38996313371214e-17, 5.75539615965681e-17, 1.0, 2.98427949019241e-17, -3.38996313371214e-17, -2.98427949019241e-17, 1.0], 'bounding_object': 'Box', 'held': 'false', 'bounding_box': [0.721, 0.3998037998119487, -0.249, 0.8210000000000001, 0.49980379981194867, -0.14900000000000002], 'position': [0.771, 0.4498037998119487, -0.199], 'id': 397}, {'orientation': [1.0, 4.8853319907279786e-17, -4.193655877514327e-17, -4.8853319907279786e-17, 1.0, -1.80524117148876e-16, 4.193655877514327e-17, 1.80524117148876e-16, 1.0], 'bounding_object': 'Cylinder', 'held': 'false', 'bounding_box': [0.369851, 0.39992295234206066, 0.067742, 0.46985099999999996, 0.49992295234206063, 0.167742], 'position': [0.419851, 0.44992295234206064, 0.117742], 'id': 403}]
+    objects = [{'orientation': [1.0, -5.75539615965681e-17, 3.38996313371214e-17, 5.75539615965681e-17, 1.0, 2.98427949019241e-17, -3.38996313371214e-17, -2.98427949019241e-17, 1.0], 'bounding_object': 'Box', 'held': 'false', 'bounding_box': [0.721, 0.3998037998119487, -0.249, 0.8210000000000001, 0.49980379981194867, -0.14900000000000002], 'position': [0.771, 0.4498037998119487, -0.199], 'id': 397}, {'orientation': [1.0, 4.8853319907279786e-17, -4.193655877514327e-17, -4.8853319907279786e-17, 1.0, -1.80524117148876e-16, 4.193655877514327e-17, 1.80524117148876e-16, 1.0], 'bounding_object': 'Cylinder', 'held': 'false', 'bounding_box': [0.369851, 0.39992295234206066, 0.067742, 0.46985099999999996, 0.49992295234206063, 0.167742], 'position': [0.419851, 0.44992295234206064, 0.117742], 'id': 403}]
         '''
-        qsrlib = QSRlib() # We don't need a new object each time
+        qsrlib = QSRlib()  # We don't need a new object each time
         world = World_Trace()
 
         for obj in objects:
             print('object = ', obj)
             if obj['held'] == 'false':
                 world.add_object_state_series(
-                    [Object_State(name=str(obj['id']),timestamp=0,
-                                  x=obj['bbposition'][0],
-                                  y=obj['bbposition'][2],
-                                  z=obj['bbposition'][1],
-                                  xsize=obj['world_bbox_size'][0],
-                                  zsize=obj['world_bbox_size'][1],
-                                  ysize=obj['world_bbox_size'][2]
+                    [Object_State(name=str(obj['id']), timestamp=0,
+                                  x=obj['position'][0],
+                                  y=obj['position'][2],
+                                  z=obj['position'][1],
+                                  xsize=obj['wbbox_size'][0],
+                                  zsize=obj['wbbox_size'][1],
+                                  ysize=obj['wbbox_size'][2]
                                   # xsize=obj['bounding_box'][3]-obj['bounding_box'][0],
                                   # ysize=obj['bounding_box'][5]-obj['bounding_box'][2],
                                   # zsize=obj['bounding_box'][4]-obj['bounding_box'][1]
-                    )])
+                                  )])
 
-        qsrlib_request_message = QSRlib_Request_Message(["rcc8","cardir","ra", "3dcd"], world)
+        qsrlib_request_message = QSRlib_Request_Message(["rcc8", "cardir", "ra", "3dcd"], world)
         qsrlib_response_message = qsrlib.request_qsrs(req_msg=qsrlib_request_message)
         ret = {}
         for t in qsrlib_response_message.qsrs.get_sorted_timestamps():
@@ -514,6 +544,10 @@ objects = [{'orientation': [1.0, -5.75539615965681e-17, 3.38996313371214e-17, 5.
                     v.qsr['ra'] = self.get_rcc8_symbols_for_allen_intervals(v.qsr['ra'])
                 if '3dcd' in v.qsr.keys():
                     v.qsr['depth'] = v.qsr['3dcd'][-1].lower()
+                print(v.qsr)
+                if v.qsr['depth'] == 'o' and v.qsr['rcc8'] == 'po':
+                    v.qsr['rcc8'] = 'dc'
+
                 ret[args[0]][args[1]] = v.qsr
         logging.debug("[input_writer] :: qsrs computed {}".format(ret))
         return ret
@@ -525,12 +559,14 @@ objects = [{'orientation': [1.0, -5.75539615965681e-17, 3.38996313371214e-17, 5.
         """
         # area = abs((bbox[3] - bbox[0]) * (bbox[5] - bbox[2]))
         area = abs((bbox[2] - bbox[0]) * (bbox[3] - bbox[1]))
-        if area < settings.SIZE_SM:
-            return 'CVSmall'
-        elif area < settings.SIZE_ML:
-            return 'CVMedium'
-        else:
-            return 'CVLarge'
+        return area
+
+        # if area < settings.SIZE_SM:
+        #     return 'CVSmall'
+        # elif area < settings.SIZE_ML:
+        #     return 'CVMedium'
+        # else:
+        #     return 'CVLarge'
 
     def get_rcc8_symbols_for_allen_intervals(self, symbols):
         """
@@ -568,7 +604,7 @@ objects = [{'orientation': [1.0, -5.75539615965681e-17, 3.38996313371214e-17, 5.
                 new_symbols += 'ntpp'
             if symbol == 'di':
                 new_symbols += 'ntppi'
-            if symbol in ['s','f']:
+            if symbol in ['s', 'f']:
                 new_symbols += 'tpp'
             if symbol in ['si', 'fi']:
                 new_symbols += 'tppi'
