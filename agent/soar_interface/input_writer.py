@@ -426,7 +426,7 @@ class InputWriter(object):
                 size_id.CreateFloatWME('xsize', w_object['wbbox_size'][0])
                 size_id.CreateFloatWME('zsize', w_object['wbbox_size'][2])
                 size_id.CreateFloatWME('ysize', w_object['wbbox_size'][1])
-                object_id.CreateStringWME('size', w_object['size_type'])
+                object_id.CreateFloatWME('size', w_object['wbbox_size'][0] * w_object['wbbox_size'][1] * w_object['wbbox_size'][2])
             object_id.CreateStringWME('held', w_object['held'])
             object_id.CreateStringWME('color', str(w_object['color']))
             object_id.CreateStringWME('shape', w_object['shape'])
