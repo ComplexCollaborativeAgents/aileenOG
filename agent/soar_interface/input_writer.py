@@ -441,7 +441,7 @@ class InputWriter(object):
             object_id.CreateIntWME('hasRoundPlane', w_object['hasRoundPlane'])
             object_id.CreateIntWME('hasEdgeContour', w_object['hasEdgeContour'])
             object_id.CreateIntWME('hasCurveContour', w_object['hasCurveContour'])
-            object_id.CreateIntWME('id_string', w_object['id'])
+            object_id.CreateIntWME('id_string', w_object['id_string'])
             object_id.CreateStringWME('id_uuid', w_object['id_name'])
 
     def request_server_for_objects_info(self):
