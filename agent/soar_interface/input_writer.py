@@ -132,7 +132,7 @@ class InputWriter(object):
                     position = [x + w / 2.0, y + h / 2.0]
                     bbsize = [bx - tx, by - ty]
                     objects_list[i]['bounding_box_camera'] = [tx, ty, bx, by]
-                    objects_list[i]['bbposition'] = position
+                    objects_list[i]['position'] = position
                     objects_list[i]['bbsize'] = bbsize
 
             # if len(cv_detections) > 0:
