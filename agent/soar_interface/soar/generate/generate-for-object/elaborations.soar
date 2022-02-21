@@ -7,9 +7,16 @@ sp {generate-for-object*elaborate*state
     (state <s>    ^name generate-for-object
                   ^superstate.operator <op>)
     (<op>    ^name generate-for-object
-             ^object <obj>)
+             ^objects <obj>)
 -->
-    (<s>    ^object <obj>)
+    (<s>    ^objects <obj>)
+    }
+
+sp {generate-for-object*elaborate*superstate*information
+    (state <s>    ^name generate-for-object
+                  ^superstate.information <info>)
+-->
+    (<info>    ^objects <objs>)
     }
 
 sp {generate-for-object*elaborate*segment
@@ -23,7 +30,7 @@ sp {generate-for-object*elaborate-with-concept*object*matches
     (state <s>    ^name generate-for-object
                   ^operator <op>
                   ^io.input-link.concept-memory.result <cm>
-                  ^object <obj>)
+                  ^objects.object <obj>)
     (<obj>    ^id_string <id-name>)
     (<cm>    ^matches.match <m>)
     (<m>    ^first isa
@@ -38,7 +45,7 @@ sp {generate-for-object*elaborate-with-concept*status*failure*concept-memory
     (state <s>    ^name generate-for-object
                   ^operator <op>
                   ^io.input-link.concept-memory.result <cm>
-                  ^object <obj>)
+                  ^objects.object <obj>)
     (<cm>    ^status success
              -^matches.match)
 -->

@@ -1,0 +1,34 @@
+##!
+# @file
+#
+# @created smohan 20220203
+
+sp {generate-for-object*propose*generate-content
+    (state <s>    ^name generate
+                  ^operator.name generate-content
+                  ^io.output-link <ol>)
+-->
+    (<ol>    ^language <l>)
+    (<l>    ^generate-content <gen>)
+    }
+
+sp {generate*apply*generate-content*object
+    (state <s>    ^name generate
+                  ^operator <op>
+                  ^information.objects.for <for>
+                  ^io.output-link.language.generate-content <gen>)
+    (<op>    ^name generate-content)
+-->
+    (<gen>    ^object <for>)
+    
+    }
+
+sp {generate*apply*generate-content*write
+    (state <s>    ^name generate
+                  ^segment <seg>
+                  ^operator <op>
+                  ^operator.name generate-content
+                  ^io.input-link.language-link.language.sentence <sen>)
+-->
+    (<s>    ^content <sen>)
+ }

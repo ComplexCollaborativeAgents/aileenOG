@@ -155,15 +155,14 @@ class AileenObject:
 
     @staticmethod
     def get_colors():
-        # print('COLOR_PATH = ', settings.COLOR_PATH)
-        # with open(settings.COLOR_PATH) as f:
-        with open("./instructor/resources/colors.json") as f:
+        with open(settings.COLOR_PATH) as f:
             colors = json.load(f)
         return colors
 
     @staticmethod
     def get_sizes():
-        with open("./instructor/resources/sizes.json") as f: # settings.SIZE_PATH
+        # with open("./instructor/resources/sizes.json") as f: # settings.SIZE_PATH
+        with open(settings.SIZE_PATH) as f:
             sizes = json.load(f)
         return sizes
 

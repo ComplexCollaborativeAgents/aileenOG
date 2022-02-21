@@ -6,10 +6,8 @@
 sp {generate-for-object*apply*mark-no-known-concept
     (state <s>    ^name generate-for-object
                   ^operator <op>
-                  ^segment.purpose <p>
-                  ^topstate <ts>)
+                  ^superstate <ss>)
     (<op>    ^name mark-no-known-concept)
 -->
-    (<p> ^completed true 
-         ^status failure)
+    (<ss>    ^failed-for-concept object)
  }

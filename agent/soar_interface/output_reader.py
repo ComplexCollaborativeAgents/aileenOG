@@ -95,7 +95,7 @@ class OutputReader(object):
                             item = subchild_id.GetChild(k)
                             if item.GetAttribute() == 'id':
                                 identifier = item.GetValueAsString()
-                            if item.GetAttribute() == 'word':
+                            if item.GetAttribute() == 'token':
                                 words.append(item.GetValueAsString())
                         if identifier and len(words) > 0:
                             object_dict = {'id': identifier, 'type': 'object', 'tokens': words}

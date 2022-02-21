@@ -12,3 +12,16 @@ sp {generate*elaborate*segment
 -->
     (<s>    ^segment <seg>)
     }
+
+sp {generate*elaborate*for-concept
+    (state <s>    ^name generate
+                  ^segment.purpose.for-concept <con>)
+-->
+    (<s>   ^for-concept <con>)
+    }
+
+sp {generate*elaborate*content-info
+    (state <s>    ^name generate)
+-->
+    (<s>    ^information <ci>)
+    }
