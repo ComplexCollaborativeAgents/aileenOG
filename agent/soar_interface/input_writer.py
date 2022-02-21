@@ -101,15 +101,20 @@ class InputWriter(object):
                 w = objects_list[i]
                 position = w['position']
                 bbsize = w['bbsize']
-                tx = w['bounding_box_camera'][0]
-                ty = w['bounding_box_camera'][1]
-                bx = w['bounding_box_camera'][2]
-                by = w['bounding_box_camera'][3]
+                wd = bbsize[0]
+                hd = bbsize[1]
+                x = position[0] - wd / 2.0
+                y = position[0] - hd / 2.0
+                tx = x
+                ty = y
+                bx = x + wd
+                by = y + hd
                 gray = cv2.cvtColor(mask_img, cv2.COLOR_BGR2GRAY)
                 mask = np.zeros(gray.shape[:2], dtype="uint8")
-                cv2.rectangle(mask, (int(tx), int(ty)), (int(bx), int(by)), 255, -1)
+                # cv2.rectangle(mask, (int(tx), int(ty)), (int(bx), int(by)), 255, -1)
                 tmp = cv2.bitwise_and(gray, gray, mask=mask)
                 non_zero_tmp = tmp[np.nonzero(tmp)]
+                objects_list[i]['bounding_box_camera'] = [tx, ty, bx, by]
                 if mode(non_zero_tmp)[0]:
                     value = mode(non_zero_tmp)[0]
                     # print target
