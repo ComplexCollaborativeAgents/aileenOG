@@ -99,7 +99,7 @@ class InputWriter(object):
 
             for i in range(len(objects_list)):
                 w = objects_list[i]
-                position = w['bbposition']
+                position = w['position']
                 bbsize = w['bbsize']
                 tx = w['bounding_box_camera'][0]
                 ty = w['bounding_box_camera'][1]
