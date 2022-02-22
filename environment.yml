@@ -1,8 +1,8 @@
 name: aileen
-channels:
-  - conda-forge
-  - marufr
-  - menpo
+# channels:
+#   - conda-forge
+#   - marufr
+#   - menpo
 dependencies:
   - python=2.7
   - seaborn
@@ -11,14 +11,14 @@ dependencies:
   - torchvision
   - matplotlib
   - coloredlogs
-  - enum
+  # - enum
   - typing
   - numpy
   - pyyaml
   - yaml
   - shapely
   - pytest
-  - python-igraph
+  # - python-igraph
   - opencv
   - psutil
   - pip
@@ -26,4 +26,4 @@ dependencies:
       - -e strands_qsr_lib/qsr_lib/
       - agent/vision/
       - -e .
-      - ikpy
+      - ikpy==3.0
