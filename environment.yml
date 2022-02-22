@@ -23,6 +23,7 @@ dependencies:
   - psutil
   - pip
   - pip:
+      - imutils
       - -e strands_qsr_lib/qsr_lib/
       - agent/vision/
       - -e .
