@@ -18,12 +18,14 @@ dependencies:
   - yaml
   - shapely
   - pytest
-  # - python-igraph
+  - marufr::python-igraph
   - opencv
   - psutil
   - pip
   - pip:
       - imutils
+      - enum
+      - inflect
       - -e strands_qsr_lib/qsr_lib/
       - agent/vision/
       - -e .
