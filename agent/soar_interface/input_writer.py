@@ -13,11 +13,11 @@ from scipy.stats import mode
 from scipy.spatial import distance
 import language_helper
 
-try:
-    from qsrlib.qsrlib import QSRlib, QSRlib_Request_Message
-    from qsrlib_io.world_trace import Object_State, World_Trace
-except:
-    logging.fatal("[input_writer] :: cannot find spatial reasoning library")
+#try:
+from qsrlib.qsrlib import QSRlib, QSRlib_Request_Message
+from qsrlib_io.world_trace import Object_State, World_Trace
+#except:
+#    logging.fatal("[input_writer] :: cannot find spatial reasoning library in input writer")
 
 
 class InputWriter(object):
@@ -197,10 +197,15 @@ class InputWriter(object):
                     continue
 
                 d = detections[i]
+
+                logging.debug("[input_writer] :: d is {}".format(d))
+                logging.debug("[input_writer] :: w is {}".format(w))
+
+
                 bbox1 = d['camera_bounding_box_mrcnn']
                 bbox2 = w['bounding_box_camera']
                 center1 = d['camera_mrcnn_position']
-                center2 = w['bbposition']
+                center2 = w['position']
 
                 dst = distance.euclidean(center1, center2)
 
