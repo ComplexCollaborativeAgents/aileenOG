@@ -13,7 +13,11 @@
    ```bash
    git clone --recurse-submodules git@gitlab-external.parc.com:aileen/aileen-agent.git
    ```
-4. Run the `bootstrap.sh` script to set up the Conda environment and build the Python dependencies, such as
+4. Check out this branch
+   ```bash
+   git checkout december2021demo
+   ```
+5. Run the `bootstrap.sh` script to set up the Conda environment and build the Python dependencies, such as
    [Pynini](http://www.openfst.org/twiki/bin/view/GRM/Pynini) and [Darknet](https://pjreddie.com/darknet/):
    ```bash
    cd aileen-agent
@@ -59,10 +63,10 @@ Activate aileen env
    python agent
    ```
    > Note: To suppress the GTK3 warnings: `export SWT_GTK3=0`.
-4. Run the instructor in another shell instance:
+4. Run an instructor script in another shell instance:
    ```bash
    conda activate aileen
-   (aileen) python instructor
+   python instructor --json "./instructor/scripts/...somescript.json"
    ```
 
 ### Run test suite
@@ -88,7 +92,7 @@ When the REPL is started, we can input individual lessons that together form a c
 >>> { 'lesson': 'spatial', 'language': [ { 'color': 'red', 'shape': 'cube', 'position': [0, 0.5, 0] },
                                          'left-of',
                                          { 'color': 'red', 'shape': 'cone', 'position': [0, 1, 0] } ],
-      'distractors': 2 }
+      'distractorswwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwyyyyy,s': 2 }
 >>> { 'lesson': 'action', 'language': [ 'move',
                                         { 'color': 'red', 'shape': 'cube', 'position': [0, 0.5, 0] },
                                         'left-of',
