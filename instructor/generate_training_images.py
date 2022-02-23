@@ -41,6 +41,13 @@ class TrainingImage:
         lesson['interaction'] = self._language
         return lesson
 
+    def generate_test_lesson(self, object):
+        lesson = {}
+        self._scene.add_object(object)
+        lesson['scene'] = self._scene.generate_scene_world_config()
+        lesson['interaction'] = ""
+        return lesson
+        
     def generate_scene(self, num_objects=1):
         logging.debug("[aileen_visual_word_lesson] :: generating a new scene for visual word learning")
         for i in range(0, num_objects):
@@ -50,6 +57,16 @@ class TrainingImage:
             scene_object.set_rotation(AileenScene.randomizer.get_random_rotation(scene_object.get_shape()))
             self._scene.add_object(scene_object)
             self._language = LanguageGenerator.generate_language_for_object(scene_object)
+    
+    @staticmethod
+    def generate_test_scene(world_server, object):
+        object.set_translation(AileenScene.randomizer.get_random_position_on_table())
+        object.set_rotation(AileenScene.randomizer.get_random_rotation(object.get_shape()))
+        lesson = TrainingImage().generate_test_lesson(object)
+        scene_acknowledgement = world_server.set_scene(
+                {'configuration': lesson['scene'], 'label': lesson['interaction']})
+        time.sleep(0.5)
+        logging.info("[aileen_instructor] :: received from world {}".format(scene_acknowledgement))
 
     @staticmethod
     def generate_scenes(world_server, agent_server):
