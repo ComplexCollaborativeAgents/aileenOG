@@ -31,7 +31,7 @@ if __name__ == "__main__":
     if arguments.name:
         experiment_name = arguments.name
     if arguments.batch_size:
-        EXP_BATCH_SIZE = arguments.batch_size
+        EXP_BATCH_SIZE = int(arguments.batch_size)
 
     if arguments.concept:
         EXP_CONCEPT = arguments.concept
