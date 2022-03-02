@@ -31,7 +31,7 @@ if __name__ == "__main__":
     if arguments.name:
         experiment_name = arguments.name
     if arguments.batch_size:
-        EXP_BATCH_SIZE = arguments.BATCH_SIZE
+        EXP_BATCH_SIZE = arguments.batch_size
 
     if arguments.concept:
         EXP_CONCEPT = arguments.concept
@@ -55,7 +55,7 @@ if __name__ == "__main__":
 
     agent_port = 40002
 
-    for run in range(settings.BATCH_SIZE):
+    for run in range(EXP_BATCH_SIZE):
         agent_port += 1
         AGENT_CMD = "python agent --port {}".format(agent_port)
         #Redefine Runner CMD
