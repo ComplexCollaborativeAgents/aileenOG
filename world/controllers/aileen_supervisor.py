@@ -418,23 +418,31 @@ class AileenSupervisor(Supervisor):
                 wbbox_node = child.getField("boundingObject")
                 wbbox_size = wbbox_node.getSFNode().getField('size').getSFVec3f()
                 size_type = child.getField('description').getSFString()
+                gray = cv2.cvtColor(mask_img.copy(), cv2.COLOR_BGR2GRAY)
+                x, y, w, h = cv2.boundingRect(gray)
+                tx = x
+                ty = y
+                bx = x + w
+                by = y + h
+                position = [x + w / 2.0, y + h / 2.0]
+                bbsize = [bx - tx, by - ty]
                 # print('size type = ', size_type)
                 # size = bounding_obj.getField('size').getSFVec3f()
 
                 # self.get_object_vision_concept()
                 # self.get_object_size_type(child)
-                obj_position = object.get_position()
-                obj_orientation = object.get_orientation()
-                position = object.get_position_on_image()
-                bbsize = object.get_size_on_image()
-                cx = int(position[0])
-                cy = int(position[1])
-                w = int(bbsize[0])
-                h = int(bbsize[1])
-                tx = int(cx - w / 2)
-                ty = int(cy - h / 2)
-                bx = int(cx + w / 2)
-                by = int(cy + h / 2)
+                # obj_position = object.get_position()
+                # obj_orientation = object.get_orientation()
+                # position = object.get_position_on_image()
+                # bbsize = object.get_size_on_image()
+                # cx = int(position[0])
+                # cy = int(position[1])
+                # w = int(bbsize[0])
+                # h = int(bbsize[1])
+                # tx = int(cx - w / 2)
+                # ty = int(cy - h / 2)
+                # bx = int(cx + w / 2)
+                # by = int(cy + h / 2)
 
             # gray = cv2.cvtColor(mask_img.copy(), cv2.COLOR_BGR2GRAY)
             # mask = np.zeros(gray.shape[:2], dtype="uint8")

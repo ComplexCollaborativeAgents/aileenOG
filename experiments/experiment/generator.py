@@ -136,7 +136,7 @@ class Generator:
                         new_lesson['content'] = "{} {} {}".format(self._experiment_concept, size_choice, shape_choice)
                         lessons += [new_lesson]
 
-            print('SHAPES ARE', shapes)
+            # print('SHAPES ARE', shapes)
 
             # wwh adding size
             if self._experiment_concept in sizes:
@@ -164,7 +164,7 @@ class Generator:
 
         else:
 
-            print('WE ARE HERE num samples', number_of_samples)
+            # print('WE ARE HERE num samples', number_of_samples)
 
             if number_of_samples > 1 and not self._experiment_concept:
                 logging.warning("[generator] :: generating multiple samples for unique combination of objects")
@@ -191,18 +191,18 @@ class Generator:
         with open(settings.COLOR_PATH, 'r') as f:
             colors = json.load(f).keys()
 
-        # force size for now, kinematics can't handle sizes other than medium
-        object_set = [{"color": c, "shape": s, "size": "medium"} for s in shapes for c in colors]
+        with open(settings.SIZE_PATH, 'r') as f:
+            sizes = json.load(f).keys()
 
-        # wwh: adding content field; grammar can't currently parse shape and size so we're forcing the
-        # removal of size; also since everything is medium...
+        object_set = [{"color": c, "shape": s, "size": size} for s in shapes for c in colors for size in sizes]
+
         lessons = []
         for key in relation_configs.keys():
             for i in range(0, number_of_samples):
                 random.shuffle(object_set)
                 lesson = {'lesson-type': 'spatial-word',
                           'is_positive': str(is_positive),
-                          'content': "{} {} near {} {}".format(object_set[0]['color'], object_set[0]['shape'], object_set[1]['color'], object_set[1]['shape']),
+                          'content': "{} {} {} {} {}".format(object_set[0]['color'], object_set[0]['shape'], key, object_set[1]['color'], object_set[1]['shape']),
                           'description': {
                               "objects": [object_set[0], object_set[1]],
                               "relation": key
