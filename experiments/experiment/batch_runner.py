@@ -14,6 +14,14 @@ WORLD_CMD = 'python world'
 def parse():
     parser = argparse.ArgumentParser(description='run a named experiment set for empirics')
     parser.add_argument('--name', help='run a named experiment')
+    parser.add_argument('--batch_size', help='number of epochs')
+    parser.add_argument('--type', help='run this type of experiment')
+    parser.add_argument('--concept', help='only generate examples of this concept')
+    parser.add_argument('--episodes', help='number of tranining instances per concept')
+    parser.add_argument('--exam_length', help='number of samples in exams')
+    parser.add_argument('--distractors', help='number of distractors in exams')
+
+
     return parser.parse_args()
 
 
@@ -22,6 +30,19 @@ if __name__ == "__main__":
     arguments = parse()
     if arguments.name:
         experiment_name = arguments.name
+    if arguments.batch_size:
+        EXP_BATCH_SIZE = arguments.BATCH_SIZE
+
+    if arguments.concept:
+        EXP_CONCEPT = arguments.concept
+    if arguments.distractors:
+        EXP_DISTRACTORS = arguments.distractors
+    if arguments.episodes:
+        EXP_EPISODES = arguments.episodes
+    if arguments.exam_length:
+        EXP_EXAM_LENGTH = arguments.exam_length
+    if arguments.type:
+        EXP_TYPE = arguments.type
 
     if not os.path.exists("experiments/results/{}".format(experiment_name)):
         os.mkdir("experiments/results/{}".format(experiment_name))
@@ -40,14 +61,14 @@ if __name__ == "__main__":
         #Redefine Runner CMD
         RUNNER_CMD = 'python experiments/experiment/runner.py --file experiments/results/{}/{}-run-{}.csv --type {} ' \
                      '--concept {} --distractors {} --episodes {} --exam_length {} --agent_port {}'.format(experiment_name,
-                                                                          settings.BATCH_TYPE, run,
-                                                                          settings.BATCH_TYPE,
-                                                                          settings.BATCH_CONCEPT,
-                                                                          settings.BATCH_DISTRACTORS,
-                                                                          settings.BATCH_EPISODE,
-                                                                          settings.BATCH_EXAM_LENGTH,
+                                                                          EXP_BATCH_SIZE, run,
+                                                                          EXP_TYPE,
+                                                                          EXP_CONCEPT,
+                                                                          EXP_DISTRACTORS,
+                                                                          EXP_EPISODES,
+                                                                          EXP_EXAM_LENGTH,
                                                                           agent_port)
-        logging.info('[batch_runner] :: Starting run {} of {} of type {}'.format(run+1, settings.BATCH_SIZE, settings.BATCH_TYPE))
+        logging.info('[batch_runner] :: Starting run {} of {} of type {}'.format(run+1, EXP_BATCH_SIZE, EXP_TYPE))
         #Run Webots
         logging.info('[batch_runner] :: Starting Webots')
         webots_proc = subprocess.Popen(WEBOTS_CMD, stdout = open("experiments/results/{}/system_logs/webots-run-{}.out".format(experiment_name, run),'w'), stderr = subprocess.STDOUT, shell = True)
