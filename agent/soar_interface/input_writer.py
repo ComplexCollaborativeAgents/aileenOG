@@ -228,14 +228,15 @@ class InputWriter(object):
                     detections[i]['held'] = w['held']
                     #  The simulator groundtruth
                     detections[i]['position_simulator'] = w['position']
+                    detections[i]['wposition'] = w['wposition']
                     detections[i]['bounding_box_simulator'] = w['bounding_box_camera']
                     detections[i]['bbox_size_simulator'] = w['bbsize']
                     detections[i]['orientation'] = w['world_orientation']
                     detections[i]['wbbox_size'] = w['wbbox_size']
-                    detections[i]['wbbox_position'] = w['world_centroid']
+                    # detections[i]['wbbox_position'] = w['world_centroid']
                     #  The detector output
                     # detections[i]['position'] = detections[i]['camera_mrcnn_position']
-                    detections[i]['bounding_box'] = detections[i]['camera_bounding_box_mrcnn']
+                    detections[i]['bounding_box_camera'] = detections[i]['camera_bounding_box_mrcnn']
                     detections[i]['position'] = detections[i]['wbbox_position']
 
                     #  Extra attributes
@@ -255,47 +256,6 @@ class InputWriter(object):
 
                     updated_detections.append(detections[i])
                     break
-
-        return updated_detections
-
-    @staticmethod
-    def use_gt_world(objects_list):
-        world = objects_list
-        detections = objects_list
-        updated_detections = []
-        for i in range(len(world)):
-            detections[i]['id'] = world[i]['id']
-            detections[i]['id_name'] = world[i]['id_name']
-            detections[i]['id_string'] = world[i]['id_string']
-            detections[i]['held'] = world[i]['held']
-            #  The simulator groundtruth
-            # detections[i]['position'] = world[i]['bbposition']
-            detections[i]['position'] = world[i]['world_centroid']
-            detections[i]['bounding_box'] = world[i]['bounding_box_camera']
-
-            detections[i]['orientation'] = world[i]['world_orientation']
-            detections[i]['wbbox_size'] = world[i]['world_bbox_size']
-            detections[i]['wbbox_position'] = world[i]['world_centroid']
-            # #  The detector output
-            # detections[i]['position'] = world[i]['bbposition']
-            # detections[i]['bounding_box'] = world[i]['bounding_box_camera']
-
-            #  Extra attributes
-            detections[i]['hasPlane'] = world[i]['hasPlane']
-            detections[i]['hasRectPlane'] = world[i]['hasRectPlane']
-            detections[i]['hasRoundPlane'] = world[i]['hasRoundPlane']
-            detections[i]['hasCurveContour'] = world[i]['hasCurveContour']
-            detections[i]['hasEdgeContour'] = world[i]['hasEdgeContour']
-
-            if settings.DETECTOR_MODE == 2:
-                detections[i]['cluster_id'] = world[i]['cluster_id']
-
-            ##  SM: if settings have preload visual concepts on, just use information from the world to ensure 100% detection
-            if settings.AGENT_VISUAL_CONCEPTS_PARAM == 'soar' and settings.AGENT_PRELOAD_VISUAL_CONCEPTS_PARAM == 'true':
-                detections[i]['color'] = world[i]['color']
-                detections[i]['shape'] = world[i]['shape']
-
-            updated_detections.append(detections[i])
 
         return updated_detections
 
@@ -427,11 +387,11 @@ class InputWriter(object):
         for w_object in objects_list:
             object_id = self._objects_link.CreateIdWME("object")
             object_id.CreateIntWME('id', w_object['id'])
-            if 'position' in w_object:
-                position_id = object_id.CreateIdWME('position')
-                position_id.CreateFloatWME('x', w_object['position'][0])
-                position_id.CreateFloatWME('y', w_object['position'][1])
-                position_id.CreateFloatWME('z', w_object['position'][2])
+            if 'wposition' in w_object:
+                position_id = object_id.CreateIdWME('wposition')
+                position_id.CreateFloatWME('x', w_object['wposition'][0])
+                position_id.CreateFloatWME('y', w_object['wposition'][1])
+                position_id.CreateFloatWME('z', w_object['wposition'][2])
             if 'wbbox_size' in w_object:
                 size_id = object_id.CreateIdWME('size_bb')
                 # size_id.CreateFloatWME('xsize', w_object['bounding_box'][2]-w_object['bounding_box'][0])
@@ -530,9 +490,9 @@ class InputWriter(object):
             if obj['held'] == 'false':
                 world.add_object_state_series(
                     [Object_State(name=str(obj['id']), timestamp=0,
-                                  x=obj['position'][0],
-                                  y=obj['position'][2],
-                                  z=obj['position'][1],
+                                  x=obj['wposition'][0],
+                                  y=obj['wposition'][2],
+                                  z=obj['wposition'][1],
                                   xsize=obj['wbbox_size'][0],
                                   zsize=obj['wbbox_size'][1],
                                   ysize=obj['wbbox_size'][2]
