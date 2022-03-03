@@ -237,7 +237,7 @@ class InputWriter(object):
                     #  The detector output
                     # detections[i]['position'] = detections[i]['camera_mrcnn_position']
                     detections[i]['bounding_box_camera'] = detections[i]['camera_bounding_box_mrcnn']
-                    detections[i]['position'] = detections[i]['wbbox_position']
+                    detections[i]['position'] = detections[i]['wposition']
 
                     #  Extra attributes
                     detections[i]['hasPlane'] = w['hasPlane']
