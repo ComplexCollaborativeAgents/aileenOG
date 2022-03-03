@@ -350,7 +350,8 @@ class AileenSupervisor(Supervisor):
     def get_number_object(self):
         self._numObj = self._camera.getRecognitionNumberOfObjects()
         return self._numObj
-        def refine_bbox(self, mask, obj):
+        
+    def refine_bbox(self, mask, obj):
         gray = cv2.cvtColor(mask.copy(), cv2.COLOR_BGR2GRAY)
         x, y, w, h = cv2.boundingRect(gray)
         tx = x
