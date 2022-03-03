@@ -31,7 +31,6 @@ def check_interface(dict, key):
     if key in dict.keys():
         return True
     else:
-        print key
         return False
 
 
