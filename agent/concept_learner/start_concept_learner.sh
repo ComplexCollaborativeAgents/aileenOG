@@ -1,3 +1,4 @@
+pkill lisp
 # Currently there is one argument for the port number
 # and one optional argument for kbdir (in analogystack/planb/kbs).
 cd "${0%/*}"
@@ -20,4 +21,4 @@ else
 fi
 echo "concept learner initialized from $kbdir"
 # Run Lisp.
-/usr/local/acl10.1.64/mlisp8 -q -L server.lsp -e "(progn (aileen::start-server :port $1 :kbdir \"nextkb\") (do ()(nil nil)(sleep 10)))" > concept.log
+screen /usr/local/acl10.1.64/mlisp8 -q -L server.lsp -e "(progn (aileen::start-server :port $1 :kbdir \"nextkb\") (do ()(nil nil)(sleep 10)))" > concept.log
