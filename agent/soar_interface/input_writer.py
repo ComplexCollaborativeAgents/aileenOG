@@ -164,7 +164,7 @@ class InputWriter(object):
 
             objects_list = self.align_cv_detections_to_world(cv_detections, objects_list)
             # print('updated is:', objects_list)
-            logging.debug("Aligned Detections: {}".format(objects_list))
+            # logging.debug("Aligned Detections: {}".format(objects_list))
 
         else:
             # data = self.request_server_for_current_state_image()
@@ -439,7 +439,7 @@ class InputWriter(object):
             logging.error("[input_writer] :: fault code {}; fault string{}".format(fault.faultCode, fault.faultString))
             return
 
-        logging.debug("[input_writer] :: received binary image from server")
+        # logging.debug("[input_writer] :: received binary image from server")
         return data
 
     def write_binary_image_to_file(self, binary_image):
@@ -519,7 +519,7 @@ class InputWriter(object):
                     v.qsr['rcc8'] = 'dc'
 
                 ret[args[0]][args[1]] = v.qsr
-        logging.debug("[input_writer] :: qsrs computed {}".format(ret))
+        # logging.debug("[input_writer] :: qsrs computed {}".format(ret))
         return ret
 
     def size_from_bounding_box(self, bbox):
