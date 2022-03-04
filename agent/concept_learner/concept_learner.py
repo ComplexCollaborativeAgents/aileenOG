@@ -11,7 +11,7 @@ class ConceptLearner(object):
         self._server = xmlrpclib.ServerProxy('http://{}:{}/ConceptLearner'.format(settings.CONCEPT_LEARNER_HOST, settings.CONCEPT_LEARNER_PORT))
 
     def start_concept_learner_server(self):
-        cmd = 'ssh {} {}/start_concept_learner.sh {}'.format(settings.CONCEPT_LEARNER_HOST,
+        cmd = 'ssh {} screen {}/start_concept_learner.sh {}'.format(settings.CONCEPT_LEARNER_HOST,
                                                              settings.CONCEPT_LEARNER_PATH,
                                                              settings.CONCEPT_LEARNER_PORT)
         out = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True)
