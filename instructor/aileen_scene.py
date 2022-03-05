@@ -190,9 +190,12 @@ class AileenScene:
     class Randomizer:
 
         def get_random_position_on_table(self):
-            position = [uniform(settings.OBJECT_POSITION_MIN_X, settings.OBJECT_POSITION_MAX_X),
-                        uniform(settings.OBJECT_POSITION_MIN_Y, settings.OBJECT_POSITION_MAX_Y),
-                        uniform(settings.OBJECT_POSITION_MIN_Z, settings.OBJECT_POSITION_MAX_Z)]
+            # position = [uniform(settings.OBJECT_POSITION_MIN_X, settings.OBJECT_POSITION_MAX_X),
+            #             uniform(settings.OBJECT_POSITION_MIN_Y, settings.OBJECT_POSITION_MAX_Y),
+            #             uniform(settings.OBJECT_POSITION_MIN_Z, settings.OBJECT_POSITION_MAX_Z)]
+            position = [uniform(settings.OBJECT_POSITION_MAX_X / 4.0, settings.OBJECT_POSITION_MAX_X),
+                        uniform(settings.OBJECT_POSITION_MAX_Y / 4.0, settings.OBJECT_POSITION_MAX_Y),
+                        uniform(settings.OBJECT_POSITION_MAX_Z / 4.0, settings.OBJECT_POSITION_MAX_Z)]
             return position
 
         def sample_position_from_region(self, region):
