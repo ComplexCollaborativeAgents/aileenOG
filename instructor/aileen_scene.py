@@ -203,7 +203,7 @@ class AileenScene:
                     settings.OBJECT_POSITION_MAX_X,
                     settings.OBJECT_POSITION_MAX_Z)
 
-            point = self.sample_position_from_region(table.buffer(-.1))
+            point = self.sample_position_from_region(table.buffer(-.2))
             position = [point.x, uniform(settings.OBJECT_POSITION_MIN_Y, settings.OBJECT_POSITION_MAX_Y), point.y]
 
             logging.debug("[aileen_scene] :: position is {}".format(position))
