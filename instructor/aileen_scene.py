@@ -193,10 +193,23 @@ class AileenScene:
             # position = [uniform(settings.OBJECT_POSITION_MIN_X, settings.OBJECT_POSITION_MAX_X),
             #             uniform(settings.OBJECT_POSITION_MIN_Y, settings.OBJECT_POSITION_MAX_Y),
             #             uniform(settings.OBJECT_POSITION_MIN_Z, settings.OBJECT_POSITION_MAX_Z)]
-            position = [uniform(settings.OBJECT_POSITION_MAX_X / 4.0, settings.OBJECT_POSITION_MAX_X),
-                        uniform(settings.OBJECT_POSITION_MAX_Y / 4.0, settings.OBJECT_POSITION_MAX_Y),
-                        uniform(settings.OBJECT_POSITION_MAX_Z / 4.0, settings.OBJECT_POSITION_MAX_Z)]
+            # position = [uniform(settings.OBJECT_POSITION_MAX_X / 4.0, settings.OBJECT_POSITION_MAX_X),
+            #             uniform(settings.OBJECT_POSITION_MAX_Y / 4.0, settings.OBJECT_POSITION_MAX_Y),
+            #             uniform(settings.OBJECT_POSITION_MAX_Z / 4.0, settings.OBJECT_POSITION_MAX_Z)]
+
+
+            table = box(settings.OBJECT_POSITION_MIN_X,
+                    settings.OBJECT_POSITION_MIN_Z,
+                    settings.OBJECT_POSITION_MAX_X,
+                    settings.OBJECT_POSITION_MAX_Z)
+
+            point = self.sample_position_from_region(table.buffer(-.1))
+            position = [point.x, uniform(settings.OBJECT_POSITION_MIN_Y, settings.OBJECT_POSITION_MAX_Y), point.y]
+
+            logging.debug("[aileen_scene] :: position is {}".format(position))
+
             return position
+
 
         def sample_position_from_region(self, region):
             return qsr_realization.sample_position_from_region(region)
