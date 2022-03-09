@@ -394,6 +394,11 @@ class AileenSupervisor(Supervisor):
             # webots camera recognized object is linked with the gt object by the id
             id = object.get_id()
             child = self.getFromId(id)  # gt child
+            if child is None:
+                print("Current child is None !!!")
+                print("id = ", id)
+                print("object = ", object)
+                continue
             wcentroid = child.getPosition()
             worientation = child.getOrientation()
             wbbox_node = child.getField("boundingObject")
