@@ -213,6 +213,8 @@ class InputWriter(object):
                         detections[i]['shape'] = w['shape']
 
                     updated_detections.append(detections[i])
+                else:
+                    continue
                 break
               
         return updated_detections
