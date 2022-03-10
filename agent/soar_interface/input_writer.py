@@ -198,11 +198,11 @@ class InputWriter(object):
                     detections[i]['position'] = detections[i]['camera_mrcnn_position']
                     detections[i]['bbsize'] = detections[i]['bbsize']
                     # #  Extra attributes
-                    detections[i]['hasPlane'] = detections[i]['pred_plane']
-                    detections[i]['hasRectPlane'] = detections[i]['pred_rect_plane']
-                    detections[i]['hasRoundPlane'] = detections[i]['pred_round_plane']
-                    detections[i]['hasCurveContour'] = detections[i]['pred_curve_contour']
-                    detections[i]['hasEdgeContour'] = detections[i]['pred_edge_contour']
+                    # detections[i]['hasPlane'] = detections[i]['pred_plane']
+                    # detections[i]['hasRectPlane'] = detections[i]['pred_rect_plane']
+                    # detections[i]['hasRoundPlane'] = detections[i]['pred_round_plane']
+                    # detections[i]['hasCurveContour'] = detections[i]['pred_curve_contour']
+                    # detections[i]['hasEdgeContour'] = detections[i]['pred_edge_contour']
 
                     if settings.DETECTOR_MODE == 2:
                         detections[i]['cluster_id'] = detections[i]['cluster_id']
@@ -366,18 +366,17 @@ class InputWriter(object):
             object_id.CreateStringWME('held', w_object['held'])
             object_id.CreateStringWME('color', str(w_object['color']))
             object_id.CreateStringWME('shape', w_object['shape'])
-            object_id.CreateIntWME('hasPlane', int(w_object['hasPlane']))
-            object_id.CreateIntWME('hasRectPlane', int(w_object['hasRectPlane']))
-            object_id.CreateIntWME('hasRoundPlane', int(w_object['hasRoundPlane']))
-            object_id.CreateIntWME('hasEdgeContour', int(w_object['hasEdgeContour']))
-            object_id.CreateIntWME('hasCurveContour', int(w_object['hasCurveContour']))
+            # object_id.CreateIntWME('hasPlane', int(w_object['hasPlane']))
+            # object_id.CreateIntWME('hasRectPlane', int(w_object['hasRectPlane']))
+            # object_id.CreateIntWME('hasRoundPlane', int(w_object['hasRoundPlane']))
+            # object_id.CreateIntWME('hasEdgeContour', int(w_object['hasEdgeContour']))
+            # object_id.CreateIntWME('hasCurveContour', int(w_object['hasCurveContour']))
             object_id.CreateStringWME('id_string', w_object['id_string'])
             object_id.CreateStringWME('id_uuid', w_object['id_name'])
 
     def request_server_for_objects_info(self):
         try:
             objects_dict = self._world_server.get_all()
-            print('objects dict = ', objects_dict)
         except xmlrpclib.ProtocolError as err:
             logging.error("[input_writer] :: protocol error {}".format(err.errmsg))
             return
