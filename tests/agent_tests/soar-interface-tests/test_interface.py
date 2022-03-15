@@ -10,10 +10,11 @@ from instructor.generate_training_images import TrainingImage
 from instructor.aileen_object import Color, Size, AileenObject
 import pytest
 
+# interfaces = {'id', 'id_string', 'id_name', 'position', 'wposition', 'bounding_box_camera', 'bbsize', 'wbbox_size',
+#               'color', 'shape', 'size_type', 'hasRectPlane', 'hasRoundPlane', 'hasPlane', 'hasEdgeContour',
+#               'hasCurveContour'}
 interfaces = {'id', 'id_string', 'id_name', 'position', 'wposition', 'bounding_box_camera', 'bbsize', 'wbbox_size',
-              'color', 'shape', 'size_type', 'hasRectPlane', 'hasRoundPlane', 'hasPlane', 'hasEdgeContour',
-              'hasCurveContour'}
-
+              'color', 'shape', 'size_type'}
 
 def create_connection_with_aileen_world():
     url = 'http://{}:{}'.format(settings.WORLD_HOST, settings.WORLD_PORT)
