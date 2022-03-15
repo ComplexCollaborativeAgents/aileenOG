@@ -100,31 +100,32 @@ if __name__ == '__main__':
     print('GENERATING S')
     s_exams = rails.generate_verify_testing_gamut_specificity()
 
-    logging.debug("[runner] :: lessons {}".format(lessons))
-    logging.error("[runner] :: g exams {}".format(g_exams))
-    logging.debug("[runner] :: s exams {}".format(s_exams))
+    logging.debug("[runner] :: lessons \n{}\n\n".format(lessons))
+    logging.debug("[runner] :: g exams \n{}\n\n".format(g_exams))
+    logging.debug("[runner] :: s exams \n{}".format(s_exams))
 
 
     for lesson in Curriculum(lessons):
         ResultsHelper.write_lesson_number_to_results_file(lesson_number)
         lesson_object = lesson['object']
+        logging.debug('\n\n\n\nRunning Inform lesson')
         score, lesson_content = lesson_object.administer_lesson(world, agent)
         ResultsHelper.record_content(lesson_content)
         lesson_number = lesson_number + 1
-        # logging.error("[runner] :: generality test {}".format(g_exams))
         if g_exams is not None:
             score = 0
             for exam in Curriculum(g_exams):
+                logging.debug('\n\n\n\nRunning generality exam')
                 exam_object = exam['object']
                 e_score, content = exam_object.administer_lesson(world, agent)
                 logging.debug("[runner] :: g score is {}".format(e_score))
                 score = score + e_score
             logging.debug("[runner] :: total g score is {}".format(score))
             ResultsHelper.record_performance_score(score)
-        logging.error("[runner] :: specificity test {}".format(s_exams))
         if s_exams is not None:
             score = 0
             for exam in Curriculum(s_exams):
+                logging.debug('\n\n\n\nRunning specificity exam')
                 exam_object = exam['object']
                 e_score, content = exam_object.administer_lesson(world, agent)
                 logging.debug("[runner] :: s score is {}".format(e_score))

@@ -28,7 +28,7 @@ class AileenObject:
         self._name = "object{}".format(AileenObject.randomizer.uuid4())
         self._language = None
         self._connector_dim = None
-        logging.debug("[aileen_object] :: created a new object")
+        # logging.debug("[aileen_object] :: created a new object")
 
     def __eq__(self, other):
         return self._shape == other._shape and self._color.name == other._color.name and self._size.name == other._size.name
@@ -87,7 +87,7 @@ class AileenObject:
         description += "   description \"{}\"\n".format(self._size_name.title())
         description += "}"
 
-        logging.debug("[aileen_object] :: added string {}".format(description))
+        # logging.debug("[aileen_object] :: added string {}".format(description))
 
         return description
 
@@ -139,7 +139,7 @@ class AileenObject:
             return description
 
     def set_translation(self, position_vector):
-        logging.debug("[aileen_object] :: setting translation of object to {}".format(position_vector))
+        # logging.debug("[aileen_object] :: setting translation of object to {}".format(position_vector))
         self._translation = position_vector
 
     def set_rotation(self, position_vector):

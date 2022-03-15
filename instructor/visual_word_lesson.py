@@ -55,7 +55,7 @@ class VisualWordLesson:
         :param is_positive: should language describe the object or no
         :param distractors: Number of distractors to be generated.
         """
-        logging.debug("[aileen_visual_word_lesson] :: generating a new scene for visual word learning")
+        # logging.debug("[aileen_visual_word_lesson] :: generating a new scene for visual word learning")
 
         if self._description:
             target = AileenObject.generate_object(self._description)
@@ -81,6 +81,10 @@ class VisualWordLesson:
 
 
     def evaluate_agent_response(self, agent_response):
+
+        logging.debug('agent response is {}'.format(agent_response))
+        logging.debug('this is a {} lesson'.format(self._is_positive))
+
         if 'status' in agent_response:
             if self._is_positive:
                 if agent_response['status'] == 'success':
@@ -100,6 +104,9 @@ class VisualWordLesson:
 
     def administer_lesson(self, world, agent):
         lesson = self.generate_lesson()
+
+        logging.debug("Administering {}".format(lesson['content']))
+
         content = lesson['interaction']['content']
         scene_acknowledgement = world.set_scene(
              {'configuration': lesson['scene'], 'label': lesson['interaction']['content']})
