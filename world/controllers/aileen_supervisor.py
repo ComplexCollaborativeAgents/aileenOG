@@ -351,19 +351,24 @@ class AileenSupervisor(Supervisor):
         self._numObj = self._camera.getRecognitionNumberOfObjects()
         return self._numObj
         
-    def refine_bbox(self, mask, obj):
+    @staticmethod
+    def refine_bbox(mask, obj):
         gray = cv2.cvtColor(mask.copy(), cv2.COLOR_BGR2GRAY)
-        x, y, w, h = cv2.boundingRect(gray)
-        tx = x
-        ty = y
-        bx = x + w
-        by = y + h
-        position = [x + w / 2.0, y + h / 2.0]
-        bbsize = [bx - tx, by - ty]
-        obj['position'] = position
-        obj['bbsize'] = bbsize
-        obj['bounding_box_camera'] = [tx, ty, bx, by]
-        
+        position = obj['position']
+        bbsize = obj['bbsize']
+        [tx, ty, bx, by] = obj['bounding_box_camera']
+        tmp = np.zeros_like(gray)
+        roi = gray[ty:ty+bbsize[1], tx:tx+bbsize[0]]
+        tmp[ty:by, tx:bx] = roi
+        roi = roi[np.nonzero(roi)]
+        if mode(roi)[0] > 0:
+            value = mode(roi)[0]
+            tmp[np.where(tmp != value)] = 0
+            # tmp[tmp > 0] = 100
+            tx, ty, tw, th = cv2.boundingRect(tmp)
+            obj['position'] = position
+            obj['bbsize'] = bbsize
+            obj['bounding_box_camera'] = [tx, ty, bx, by]
         return obj
 
     def get_all(self):
@@ -394,11 +399,13 @@ class AileenSupervisor(Supervisor):
             # webots camera recognized object is linked with the gt object by the id
             id = object.get_id()
             child = self.getFromId(id)  # gt child
-            if child is None:
-                print("Current child is None !!!")
-                print("id = ", id)
-                print("object = ", object)
-                continue
+            position_on_camera = object.get_position_on_image()
+            size_on_camera = object.get_size_on_image()
+            tx = int(position_on_camera[0] - size_on_camera[0] / 2.0)
+            ty = int(position_on_camera[1] - size_on_camera[1] / 2.0)
+            bx = int(position_on_camera[0] + size_on_camera[0] / 2.0)
+            by = int(position_on_camera[1] + size_on_camera[1] / 2.0)
+
             wcentroid = child.getPosition()
             worientation = child.getOrientation()
             wbbox_node = child.getField("boundingObject")
@@ -406,9 +413,9 @@ class AileenSupervisor(Supervisor):
             size_type = child.getField('description').getSFString()
             object_dict = {'id_string': "ob{}".format(str(id)),
                            'id': id,
-                           'position': [],
-                           'bbsize': [],
-                           'bounding_box_camera': [],
+                           'position': position_on_camera,
+                           'bbsize': size_on_camera,
+                           'bounding_box_camera': [tx, ty, bx, by],
                            'wposition': wcentroid,
                            'world_orientation': worientation,
                            'wbbox_size': wbbox_size,
