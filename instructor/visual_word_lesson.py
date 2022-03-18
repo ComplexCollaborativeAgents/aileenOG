@@ -105,7 +105,7 @@ class VisualWordLesson:
     def administer_lesson(self, world, agent):
         lesson = self.generate_lesson()
 
-        logging.debug("Administering {}".format(lesson['content']))
+        # logging.debug("Administering {}".format(lesson['content']))
 
         content = lesson['interaction']['content']
         scene_acknowledgement = world.set_scene(

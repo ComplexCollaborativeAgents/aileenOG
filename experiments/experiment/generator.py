@@ -116,7 +116,7 @@ class Generator:
                         lessons += [new_lesson]
                     else:
                         new_lesson = generate_lesson_description(color_choice, self._experiment_concept, size_choice, distractors, signal, is_positive)
-                        new_lesson['content'] = "{} {} {}".format(color_choice, size_choice, self._experiment_concept)
+                        new_lesson['content'] = "{} {}".format(size_choice, self._experiment_concept)
                         lessons += [new_lesson]
 
             if self._experiment_concept in colors:
@@ -133,7 +133,7 @@ class Generator:
                     else:
                         new_lesson = generate_lesson_description(self._experiment_concept, shape_choice, size_choice,
                                                                  distractors, signal, is_positive)
-                        new_lesson['content'] = "{} {} {}".format(self._experiment_concept, size_choice, shape_choice)
+                        new_lesson['content'] = "{} {}".format(self._experiment_concept, shape_choice)
                         lessons += [new_lesson]
 
             # print('SHAPES ARE', shapes)
