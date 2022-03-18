@@ -197,6 +197,9 @@ class InputWriter(object):
                 det['bounding_box_camera'] = world[ind]['bounding_box_camera']
                 det['position'] = world[ind]['position']
                 det['bbsize'] = world[ind]['bbsize']
+
+                det['color'] = world[ind]['color']
+                det['shape'] = world[ind]['shape']
                 # #  Extra attributes
                 # det['hasPlane'] = world[ind]['hasPlane']
                 # det['hasRectPlane'] = world[ind]['hasRectPlane']
@@ -206,11 +209,6 @@ class InputWriter(object):
 
                 if settings.DETECTOR_MODE == 2:
                     det['cluster_id'] = world[ind]['cluster_id']
-
-                ##  SM: if settings have preload visual concepts on, just use information from the world to ensure 100% detection
-                if settings.AGENT_VISUAL_CONCEPTS_PARAM == 'soar' and settings.AGENT_PRELOAD_VISUAL_CONCEPTS_PARAM == 'true':
-                    det['color'] = world[ind]['color']
-                    det['shape'] = world[ind]['shape']
 
                 updated_detections.append(det)
 
