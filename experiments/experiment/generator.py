@@ -152,8 +152,8 @@ class Generator:
                         lessons += [new_lesson]
                     else:
                         shape_choice = random.choice(shapes)
-                        # color_choice = random.choice(colors)
-                        color_choice = None # grammar can't handle color and size right now
+                        color_choice = random.choice(colors)
+                        # color_choice = None # grammar can't handle color and size right now
                         new_lesson = generate_lesson_description(color_choice, shape_choice, self._experiment_concept,
                                                                  distractors, signal, is_positive)
                         new_lesson['content'] = "{} {}".format(self._experiment_concept, shape_choice)

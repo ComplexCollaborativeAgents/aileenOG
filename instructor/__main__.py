@@ -35,6 +35,7 @@ def parse():
     parser.add_argument('--json', help='Use curriculum from JSON file')
     parser.add_argument('--test-action', help='Test available actions', action='store_true')
     parser.add_argument('--test-sizes', help='Test different sizes', action='store_true')
+    parser.add_argument('--replay', help="Debugging exact scne")
     return parser.parse_args()
 
 
@@ -76,6 +77,40 @@ def run_curriculum(json_path):
             logging.info("[aileen_instructor] :: provided feedback to agent")
 
 
+
+def run_test_curriculum(json_path):
+
+    with open(json_path, 'r') as f:
+        lesson = json.load(f)
+
+
+    scene_acknowledgement = world_server.set_scene(
+        {'configuration': lesson['scene'], 
+         'label': lesson['interaction']['content']})
+
+
+    # logging.info("[aileen_instructor] :: received from world {}".format(scene_acknowledgement))
+
+    gui.log('[instructor] {}: {}'.format(lesson['interaction']['signal'], lesson['interaction']['content']))
+    agent_response = agent_server.process_interaction(lesson['interaction'])
+
+    # logging.info("[aileen_instructor] :: received from agent {}".format(agent_response))
+    # evaluation = lesson_object.evaluate_agent_response(agent_response)
+    # if 'status' in agent_response:
+    #     response = agent_response['status']
+    # if 'language' in agent_response:
+    #     response = agent_response['language']
+    # gui.log('Agent: ' + response + '. ' + str(
+    #     agent_response['create_concept_count']) + ' new concept(s) created' + ' and ' + str(
+    #     agent_response['store_instance_count']) + ' example(s) stored.')
+
+    # agent_response = agent_server.process_interaction(evaluation)
+    logging.info("[aileen_instructor] :: Finished debugging lesson.")
+
+
+
+
+
 if __name__ == '__main__':
     arguments = parse()
     world_server = create_connection_with_aileen_world()
@@ -87,6 +122,13 @@ if __name__ == '__main__':
         from generate_training_images import TrainingImage
 
         TrainingImage.generate_scenes(world_server, agent_server)
+
+    elif arguments.replay:
+
+        curriculum_thread = Thread(target=run_test_curriculum, args=(arguments.replay,))
+        curriculum_thread.daemon = True
+        curriculum_thread.start()
+        gui.run()
 
     elif arguments.clean:
         print('Cleaning table.')

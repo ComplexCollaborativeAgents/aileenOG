@@ -2,6 +2,8 @@ from aileen_object import AileenObject
 from aileen_scene import AileenScene
 from language_generator import LanguageGenerator
 from log_config import logging
+import json
+import os
 
 
 class VisualWordLesson:
@@ -105,9 +107,14 @@ class VisualWordLesson:
     def administer_lesson(self, world, agent):
         lesson = self.generate_lesson()
 
-        # logging.debug("Administering {}".format(lesson['content']))
+        # logging.debug("\n\n\nAdministering {}\n\n\n".format(lesson))
+
+        dir_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'current_scene.json')
+        with open(dir_path, 'wb') as f:
+            json.dump(lesson, f, ensure_ascii=False, indent=4)
 
         content = lesson['interaction']['content']
+
         scene_acknowledgement = world.set_scene(
              {'configuration': lesson['scene'], 'label': lesson['interaction']['content']})
         agent_response = agent.process_interaction(lesson['interaction'])
@@ -115,6 +122,19 @@ class VisualWordLesson:
         score = evaluation['score']
         agent_response = agent.process_interaction(evaluation)
         return score, content
+
+    def adminster_lesson_nonstochastic(self, lesson, world, agent):
+        content = lesson['interaction']['content']
+
+        scene_acknowledgement = world.set_scene(
+             {'configuration': lesson['scene'], 'label': lesson['interaction']['content']})
+        agent_response = agent.process_interaction(lesson['interaction'])
+        evaluation = self.evaluate_agent_response(agent_response)
+        score = evaluation['score']
+        agent_response = agent.process_interaction(evaluation)
+        return score, content
+
+
 
     @staticmethod
     def administer_curriculum(world_server, agent_server):
