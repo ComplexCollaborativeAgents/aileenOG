@@ -1,0 +1,100 @@
+import settings
+from instructor.curriculum import Curriculum
+import xmlrpclib
+from instructor.log_config import logging
+from agent.soar_interface.soar_agent import SoarAgent
+from instructor.aileen_object import AileenObject
+from instructor.aileen_scene import AileenScene
+from instructor.language_generator import LanguageGenerator
+from instructor.action_word_lesson import ActionWordLesson
+from instructor.spatial_word_lesson import SpatialWordLesson
+from instructor.visual_word_lesson import VisualWordLesson
+
+
+def create_connection_with_aileen_world():
+    url = 'http://{}:{}'.format(settings.WORLD_HOST, settings.WORLD_PORT)
+    server = xmlrpclib.ServerProxy(url)
+    logging.info("[aileen_instructor] :: created a connection with the world server at: {}".format(url))
+    return server
+
+def create_connection_with_aileen_agent():
+    url = 'http://{}:{}'.format(settings.AGENT_HOST, settings.AGENT_PORT)
+    server = xmlrpclib.ServerProxy(url)
+    logging.info("[aileen_instructor] :: created a connection with the agent: {}".format(url))
+    return server
+
+def check_visibility(agent):
+    iwriter = agent._input_writer
+    data = iwriter.request_server_for_current_state_image()
+    return data['save']
+
+class ObjectRandomizer:
+    colors = ['blue']
+    color_index = -1
+
+    shapes = ['cylinder', 'box']
+    shape_index = -1
+
+    sizes = ['small']
+    sizes_index = -1
+
+    uuid = 0
+
+    def get_random_color(self):
+        self.color_index += 1
+        return self.colors[self.color_index % len(self.colors)]
+
+    def get_color_vector_sample(self, color_symbol):
+        return AileenObject.get_colors()[color_symbol][0]
+
+    def get_size_vector_sample(self, size_name):
+        return AileenObject.get_sizes()[size_name][0]
+
+    def get_random_size(self):
+        # sizes = AileenObject.get_sizes().keys()
+        self.sizes_index += 1
+        return self.sizes[self.sizes_index % len(self.sizes)]
+
+    def get_random_shape(self):
+        self.shape_index += 13
+        return self.shapes[self.shape_index % len(self.shapes)]
+
+    def uuid4(self):
+        self.uuid += 1
+        return self.uuid
+
+
+class SceneRandomizer:
+    positions = [[0.368244551249, 0.45, -0.223016775012]]
+    position_index = -1
+
+    def get_random_position_on_table(self):
+        self.position_index += 1
+        position = self.positions[0]
+        return position
+
+
+def test_visibility():
+#if __name__ == '__main__':
+    logging.debug("[test_lesson_generator] :: test_visual_word_segment")
+    AileenObject.randomizer = ObjectRandomizer()
+    AileenScene.randomizer = SceneRandomizer()
+    world_server = create_connection_with_aileen_world()
+    lesson1 = VisualWordLesson(is_positive=True,
+                               signal='verify',
+                               description=None,
+                               distractors=None,
+                               content=None,
+                               concept=None)
+    lesson1.generate_lesson()
+    agent = SoarAgent(world_server)
+    assert ~check_visibility(agent)
+    qualify = check_visibility(agent)
+    count = 2
+    while ~qualify and count < 10:
+        logging.info(
+            "[aileen_instructor] :: Previous scene contains invisible objects, retry to place objects:{}".format(count))
+        lesson1.generate_lesson()
+        qualify = check_visibility(agent)
+        count += 1
+    assert count == 10
