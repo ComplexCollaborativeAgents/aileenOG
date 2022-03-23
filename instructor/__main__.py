@@ -38,6 +38,10 @@ def parse():
     parser.add_argument('--replay', help="Debugging exact scne")
     return parser.parse_args()
 
+def check_visibility(agent):
+    iwriter = agent._input_writer
+    data = iwriter.request_server_for_current_state_image()
+    return data['save']
 
 def run_curriculum(json_path):
     with open(json_path, 'r') as f:
@@ -58,6 +62,14 @@ def run_curriculum(json_path):
             lesson_object = lesson_config['object']
             raw_input("Press any key to generate the next lesson...")
             lesson = lesson_object.generate_lesson()
+            qualify = check_visibility(agent_server)
+            count = 2
+            while ~qualify:
+                logging.info("[aileen_instructor] :: Previous scene contains invisible objects, retry to place objects:{}". format(count))
+                lesson = lesson_object.generate_lesson()
+                qualify = check_visibility(agent_server)
+                count += 1
+
             scene_acknowledgement = world_server.set_scene(
                 {'configuration': lesson['scene'], 'label': lesson['interaction']['content']})
             logging.info("[aileen_instructor] :: received from world {}".format(scene_acknowledgement))
