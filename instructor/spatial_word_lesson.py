@@ -119,6 +119,24 @@ class SpatialWordLesson:
         # else:
         #     self._language = LanguageGenerator.generate_language_from_template(self._scene_objects,
         #                                                                        self._spatial_configuration_def_negative[settings.SPATIAL_DEF_LANGUAGE_TEMPLATE])
+    
+    def check_scene(self, lesson, world, agent):
+        qualify = self.check_visibility(agent)
+        while ~qualify:
+            logging.info(
+                "[aileen_instructor] :: Previous scene contains invisible objects, retry to place objects")
+            self.clean_scenes(lesson, world)
+            lesson = self.generate_lesson()
+            scene_acknowledgement = world.set_scene(
+                {'configuration': lesson['scene'], 'label': lesson['interaction']['content']})
+            qualify = self.check_visibility(agent)
+        return lesson
+
+    def clean_scenes(self, lesson, world_server):
+        logging.debug("[aileen_visual_word_lesson] :: cleaning table")
+        lesson['scene'] = []
+        scene_acknowledgement = world_server.set_scene(
+            {'configuration': lesson['scene'], 'label': lesson['interaction']})
 
     def generate_scene(self, positions):
         logging.debug("[aileen_spatial_word_lesson] :: generating a new scene for spatial word learning")
@@ -186,6 +204,7 @@ class SpatialWordLesson:
         content = self._language
         scene_acknowledgement = world.set_scene(
             {'configuration': lesson['scene'], 'label': lesson['interaction']['content']})
+        lesson = self.check_scene(lesson, world, agent)
         agent_response = agent.process_interaction(lesson['interaction'])
         evaluation = self.evaluate_agent_response(agent_response)
         score = evaluation['score']
