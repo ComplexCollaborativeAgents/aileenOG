@@ -50,7 +50,13 @@ class VisualWordLesson:
             }
         }
         return lesson
-
+    
+    def clean_scenes(self, lesson, world_server):
+        logging.debug("[aileen_visual_word_lesson] :: cleaning table")
+        lesson['scene'] = []
+        scene_acknowledgement = world_server.set_scene(
+            {'configuration': lesson['scene'], 'label': lesson['interaction']})
+    
     def generate_scene(self):
         """
         :param description: language set externally
@@ -104,6 +110,23 @@ class VisualWordLesson:
             else:
                 return {'signal': 'incorrect', 'score': 0}
 
+    def check_visibility(self, agent):
+        iwriter = agent._input_writer
+        data = iwriter.request_server_for_current_state_image()
+        return data['save']
+
+    def check_scene(self, lesson, world, agent):
+        qualify = self.check_visibility(agent)
+        while ~qualify:
+            logging.info(
+                "[aileen_instructor] :: Previous scene contains invisible objects, retry to place objects")
+            self.clean_scenes(lesson, world)
+            lesson = self.generate_lesson()
+            scene_acknowledgement = world.set_scene(
+                {'configuration': lesson['scene'], 'label': lesson['interaction']['content']})
+            qualify = self.check_visibility(agent)
+        return lesson
+
     def administer_lesson(self, world, agent):
         lesson = self.generate_lesson()
 
@@ -117,6 +140,9 @@ class VisualWordLesson:
 
         scene_acknowledgement = world.set_scene(
              {'configuration': lesson['scene'], 'label': lesson['interaction']['content']})
+        
+        lesson = self.check_scene(lesson, world, agent)
+        
         agent_response = agent.process_interaction(lesson['interaction'])
         evaluation = self.evaluate_agent_response(agent_response)
         score = evaluation['score']
