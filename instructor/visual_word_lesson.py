@@ -115,7 +115,7 @@ class VisualWordLesson:
         qualify = meta['save']
         print("number of objects = ", meta['obj_num'])
         print("save = ", meta['save'])
-        while ~qualify and meta['obj_num'] > 0:
+        while qualify is False:
             logging.info(
                 "[aileen_instructor] :: Previous scene contains invisible objects, retry to place objects")
             # self.clean_scenes(lesson, world)
