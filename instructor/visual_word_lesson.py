@@ -110,13 +110,9 @@ class VisualWordLesson:
             else:
                 return {'signal': 'incorrect', 'score': 0}
 
-    def check_visibility(self, agent):
-        iwriter = agent._input_writer
-        data = iwriter.request_server_for_current_state_image()
-        return data['save']
-
     def check_scene(self, lesson, world, agent):
-        qualify = self.check_visibility(agent)
+        meta = world.get_all()
+        qualify = meta['save']
         while ~qualify:
             logging.info(
                 "[aileen_instructor] :: Previous scene contains invisible objects, retry to place objects")
@@ -124,7 +120,8 @@ class VisualWordLesson:
             lesson = self.generate_lesson()
             scene_acknowledgement = world.set_scene(
                 {'configuration': lesson['scene'], 'label': lesson['interaction']['content']})
-            qualify = self.check_visibility(agent)
+            meta = world.get_all()
+            qualify = meta['save']
         return lesson
 
     def administer_lesson(self, world, agent):
