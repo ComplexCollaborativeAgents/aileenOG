@@ -113,6 +113,8 @@ class VisualWordLesson:
     def check_scene(self, lesson, world, agent):
         meta = world.get_all()
         qualify = meta['save']
+        print("number of objects = ", meta['obj_num'])
+        print("save = ", meta['save'])
         while ~qualify and meta['obj_num'] > 0:
             logging.info(
                 "[aileen_instructor] :: Previous scene contains invisible objects, retry to place objects")
