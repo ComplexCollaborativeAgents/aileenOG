@@ -113,10 +113,10 @@ class VisualWordLesson:
     def check_scene(self, lesson, world, agent):
         meta = world.get_all()
         qualify = meta['save']
-        while ~qualify:
+        while ~qualify and meta['obj_num'] > 0:
             logging.info(
                 "[aileen_instructor] :: Previous scene contains invisible objects, retry to place objects")
-            self.clean_scenes(lesson, world)
+            # self.clean_scenes(lesson, world)
             lesson = self.generate_lesson()
             scene_acknowledgement = world.set_scene(
                 {'configuration': lesson['scene'], 'label': lesson['interaction']['content']})
