@@ -119,17 +119,18 @@ class SpatialWordLesson:
         # else:
         #     self._language = LanguageGenerator.generate_language_from_template(self._scene_objects,
         #                                                                        self._spatial_configuration_def_negative[settings.SPATIAL_DEF_LANGUAGE_TEMPLATE])
-    
     def check_scene(self, lesson, world, agent):
-        qualify = self.check_visibility(agent)
-        while ~qualify:
+        meta = world.get_all()
+        qualify = meta['save']
+        while qualify is False:
             logging.info(
                 "[aileen_instructor] :: Previous scene contains invisible objects, retry to place objects")
-            self.clean_scenes(lesson, world)
+            # self.clean_scenes(lesson, world)
             lesson = self.generate_lesson()
             scene_acknowledgement = world.set_scene(
                 {'configuration': lesson['scene'], 'label': lesson['interaction']['content']})
-            qualify = self.check_visibility(agent)
+            meta = world.get_all()
+            qualify = meta['save']
         return lesson
 
     def clean_scenes(self, lesson, world_server):
