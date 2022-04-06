@@ -126,21 +126,33 @@ class VisualWordLesson:
         return lesson
 
     def administer_lesson(self, world, agent):
-        lesson = self.generate_lesson()
+        # lesson = self.generate_lesson()
 
-        # logging.debug("\n\n\nAdministering {}\n\n\n".format(lesson))
+        # # logging.debug("\n\n\nAdministering {}\n\n\n".format(lesson))
 
-        dir_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'current_scene.json')
-        with open(dir_path, 'wb') as f:
-            json.dump(lesson, f, ensure_ascii=False, indent=4)
+        # dir_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'current_scene.json')
+        # with open(dir_path, 'wb') as f:
+        #     json.dump(lesson, f, ensure_ascii=False, indent=4)
 
-        content = lesson['interaction']['content']
+        # content = lesson['interaction']['content']
 
-        scene_acknowledgement = world.set_scene(
-             {'configuration': lesson['scene'], 'label': lesson['interaction']['content']})
+        # scene_acknowledgement = world.set_scene(
+        #      {'configuration': lesson['scene'], 'label': lesson['interaction']['content']})
         
-        lesson = self.check_scene(lesson, world, agent)
-        
+        # lesson = self.check_scene(lesson, world, agent)
+        identify = False
+        cnt = 1
+        while identify is False:
+            print("Generate scene: %d time", cnt)
+            cnt += 1
+            lesson = self.generate_lesson()
+            scene_acknowledgement = world.set_scene(
+                {'configuration': lesson['scene'], 'label': lesson['interaction']})
+            content = lesson['interaction']['content']
+            logging.info("[aileen_instructor] :: received from world {}".format(scene_acknowledgement))
+            meta = world.get_all()
+            identify = meta['save']
+
         agent_response = agent.process_interaction(lesson['interaction'])
         evaluation = self.evaluate_agent_response(agent_response)
         score = evaluation['score']
