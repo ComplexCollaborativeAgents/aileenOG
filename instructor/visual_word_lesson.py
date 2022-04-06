@@ -143,9 +143,11 @@ class VisualWordLesson:
         identify = False
         cnt = 1
         while identify is False:
-            print("Generate scene: %d time", cnt)
-            cnt += 1
+            print("Generate scene: %d time" % (cnt))
+            if cnt > 1:
+                self.clean_scenes(lesson, world)
             lesson = self.generate_lesson()
+            cnt += 1
             scene_acknowledgement = world.set_scene(
                 {'configuration': lesson['scene'], 'label': lesson['interaction']})
             content = lesson['interaction']['content']
