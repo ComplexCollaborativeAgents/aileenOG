@@ -114,6 +114,7 @@ class VisualWordLesson:
         meta = world.get_all()
         qualify = meta['save']
         while qualify is False:
+            print("Invisible is detected!")
             logging.info(
                 "[aileen_instructor] :: Previous scene contains invisible objects, retry to place objects")
             # self.clean_scenes(lesson, world)
@@ -138,17 +139,7 @@ class VisualWordLesson:
         scene_acknowledgement = world.set_scene(
              {'configuration': lesson['scene'], 'label': lesson['interaction']['content']})
         
-        try:
-            meta = world.get_all()
-            qualify = meta['save']
-            assert qualify == True
-            print("Invisible detected!")
-        except:
-            lesson = self.generate_lesson()
-            content = lesson['interaction']['content']
-            scene_acknowledgement = world.set_scene(
-                {'configuration': lesson['scene'], 'label': lesson['interaction']['content']})
-        # lesson = self.check_scene(lesson, world, agent)
+        lesson = self.check_scene(lesson, world, agent)
         
         agent_response = agent.process_interaction(lesson['interaction'])
         evaluation = self.evaluate_agent_response(agent_response)
