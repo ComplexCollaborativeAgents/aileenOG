@@ -138,7 +138,17 @@ class VisualWordLesson:
         scene_acknowledgement = world.set_scene(
              {'configuration': lesson['scene'], 'label': lesson['interaction']['content']})
         
-        lesson = self.check_scene(lesson, world, agent)
+        try:
+            meta = world.get_all()
+            qualify = meta['save']
+            assert qualify == True
+            print("Invisible detected!")
+        except:
+            lesson = self.generate_lesson()
+            content = lesson['interaction']['content']
+            scene_acknowledgement = world.set_scene(
+                {'configuration': lesson['scene'], 'label': lesson['interaction']['content']})
+        # lesson = self.check_scene(lesson, world, agent)
         
         agent_response = agent.process_interaction(lesson['interaction'])
         evaluation = self.evaluate_agent_response(agent_response)
