@@ -140,10 +140,11 @@ class VisualWordLesson:
         #      {'configuration': lesson['scene'], 'label': lesson['interaction']['content']})
         
         # lesson = self.check_scene(lesson, world, agent)
-        identify = False
+        # identify = False
         cnt = 1
         while identify is False:
             print("Generate scene: %d time" % (cnt))
+            del lesson
             lesson = self.generate_lesson()
             cnt += 1
             scene_acknowledgement = world.set_scene(
@@ -153,7 +154,6 @@ class VisualWordLesson:
             meta = world.get_all()
             identify = meta['save']
             del meta
-            del lesson
         
         meta = world.get_all()
         assert meta['save']==True
