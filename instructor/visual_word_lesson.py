@@ -125,34 +125,23 @@ class VisualWordLesson:
         return lesson
 
     def administer_lesson(self, world, agent):
-        # lesson = self.generate_lesson()
-        # meta = world.get_all()
-        # identify = meta['save']
-        # # logging.debug("\n\n\nAdministering {}\n\n\n".format(lesson))
-
-        # dir_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'current_scene.json')
-        # with open(dir_path, 'wb') as f:
-        #     json.dump(lesson, f, ensure_ascii=False, indent=4)
-
-        # content = lesson['interaction']['content']
-
-        # scene_acknowledgement = world.set_scene(
-        #      {'configuration': lesson['scene'], 'label': lesson['interaction']['content']})
-        
-        # lesson = self.check_scene(lesson, world, agent)
         identify = 0
         cnt = 1
         while identify == 0:
             print("Generate scene: %d time" % (cnt))
+            self.clean_scenes(world)
             lesson = self.generate_lesson()
             cnt += 1
             scene_acknowledgement = world.set_scene(
                 {'configuration': lesson['scene'], 'label': lesson['interaction']})
             content = lesson['interaction']['content']
-            logging.info("[aileen_instructor] :: received from world {}".format(scene_acknowledgement))
+            logging.info("[aileen_instructor:administer_lesson] :: generated from world {}".format(scene_acknowledgement))
             meta = world.get_all()
             identify = int(meta['save'])
-            print("identify: %d" % (identify))
+            dir_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'current_scene.json')
+            with open(dir_path, 'wb') as f:
+                json.dump(lesson, f, ensure_ascii=False, indent=4)
+            print("identify = : %d" % (identify))
             del meta
         
         meta = world.get_all()
