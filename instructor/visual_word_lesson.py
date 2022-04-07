@@ -51,11 +51,10 @@ class VisualWordLesson:
         }
         return lesson
     
-    def clean_scenes(self, lesson, world_server):
+    def clean_scenes(self, world_server):
         logging.debug("[aileen_visual_word_lesson] :: cleaning table")
-        lesson['scene'] = []
         scene_acknowledgement = world_server.set_scene(
-            {'configuration': lesson['scene'], 'label': lesson['interaction']})
+            {'configuration': [], 'label': []})
     
     def generate_scene(self):
         """
@@ -144,8 +143,7 @@ class VisualWordLesson:
         cnt = 1
         while identify is False:
             print("Generate scene: %d time" % (cnt))
-            if cnt > 1:
-                self.clean_scenes(lesson, world)
+            self.clean_scenes(world)
             lesson = self.generate_lesson()
             cnt += 1
             scene_acknowledgement = world.set_scene(
@@ -154,7 +152,9 @@ class VisualWordLesson:
             logging.info("[aileen_instructor] :: received from world {}".format(scene_acknowledgement))
             meta = world.get_all()
             identify = meta['save']
-
+        
+        meta = world.get_all()
+        assert meta['save']==True
         agent_response = agent.process_interaction(lesson['interaction'])
         evaluation = self.evaluate_agent_response(agent_response)
         score = evaluation['score']
