@@ -628,7 +628,7 @@ class AileenSupervisor(Supervisor):
         self.setLabel(1, str(label), 0.02, 0.3, 0.1, 0x000000, 0, "Arial")
         return True
     
-    def set_scene_empty(self, scene_objects, label):
+    def set_scene_empty(self):
         self.clean_scene()
         return True
     
