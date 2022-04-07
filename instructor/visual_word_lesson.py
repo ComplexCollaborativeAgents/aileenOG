@@ -144,7 +144,7 @@ class VisualWordLesson:
         cnt = 1
         while identify is False:
             print("Generate scene: %d time" % (cnt))
-            world.clean_scene()
+            scene_acknowledgement = world.set_scene_empty()
             lesson = self.generate_lesson()
             cnt += 1
             scene_acknowledgement = world.set_scene(
