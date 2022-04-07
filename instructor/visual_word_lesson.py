@@ -142,7 +142,7 @@ class VisualWordLesson:
         # lesson = self.check_scene(lesson, world, agent)
         # identify = False
         cnt = 1
-        while identify is False:
+        while identify == False:
             print("Generate scene: %d time" % (cnt))
             del lesson
             lesson = self.generate_lesson()
