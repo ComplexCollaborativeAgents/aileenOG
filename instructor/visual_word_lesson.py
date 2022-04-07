@@ -125,9 +125,9 @@ class VisualWordLesson:
         return lesson
 
     def administer_lesson(self, world, agent):
-        lesson = self.generate_lesson()
-        meta = world.get_all()
-        identify = meta['save']
+        # lesson = self.generate_lesson()
+        # meta = world.get_all()
+        # identify = meta['save']
         # # logging.debug("\n\n\nAdministering {}\n\n\n".format(lesson))
 
         # dir_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'current_scene.json')
@@ -140,11 +140,10 @@ class VisualWordLesson:
         #      {'configuration': lesson['scene'], 'label': lesson['interaction']['content']})
         
         # lesson = self.check_scene(lesson, world, agent)
-        # identify = False
+        identify = 0
         cnt = 1
-        while identify == False:
+        while identify == 0:
             print("Generate scene: %d time" % (cnt))
-            del lesson
             lesson = self.generate_lesson()
             cnt += 1
             scene_acknowledgement = world.set_scene(
@@ -152,11 +151,12 @@ class VisualWordLesson:
             content = lesson['interaction']['content']
             logging.info("[aileen_instructor] :: received from world {}".format(scene_acknowledgement))
             meta = world.get_all()
-            identify = meta['save']
+            identify = int(meta['save'])
+            print("identify: %d" % (identify))
             del meta
         
         meta = world.get_all()
-        assert meta['save']==True
+        assert meta['save']
         agent_response = agent.process_interaction(lesson['interaction'])
         evaluation = self.evaluate_agent_response(agent_response)
         score = evaluation['score']
