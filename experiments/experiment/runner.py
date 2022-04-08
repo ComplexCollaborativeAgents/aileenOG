@@ -109,7 +109,11 @@ if __name__ == '__main__':
         ResultsHelper.write_lesson_number_to_results_file(lesson_number)
         lesson_object = lesson['object']
         logging.debug('\n\n\n\nRunning Inform lesson')
-        score, lesson_content = lesson_object.administer_lesson(world, agent)
+        score, lesson_content, qualify = lesson_object.administer_lesson(world, agent)
+        print("qualify = ", qualify)
+        while qualify is False:
+            logging.debug('Regenerate lesson...')
+            score, lesson_content, qualify = lesson_object.administer_lesson(world, agent)
         ResultsHelper.record_content(lesson_content)
         lesson_number = lesson_number + 1
         if g_exams is not None:
