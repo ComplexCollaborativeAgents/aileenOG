@@ -121,7 +121,7 @@ if __name__ == '__main__':
             for exam in Curriculum(g_exams):
                 logging.debug('\n\n\n\nRunning generality exam')
                 exam_object = exam['object']
-                e_score, content = exam_object.administer_lesson(world, agent)
+                e_score, content, _ = exam_object.administer_lesson(world, agent)
                 logging.debug("[runner] :: g score is {}".format(e_score))
                 score = score + e_score
             logging.debug("[runner] :: total g score is {}".format(score))
@@ -131,7 +131,7 @@ if __name__ == '__main__':
             for exam in Curriculum(s_exams):
                 logging.debug('\n\n\n\nRunning specificity exam')
                 exam_object = exam['object']
-                e_score, content = exam_object.administer_lesson(world, agent)
+                e_score, content, _ = exam_object.administer_lesson(world, agent)
                 logging.debug("[runner] :: s score is {}".format(e_score))
                 score = score + e_score
             logging.debug("[runner] :: total s score is {}".format(score))
