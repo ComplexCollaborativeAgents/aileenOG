@@ -1,3 +1,4 @@
+import numpy as np
 from world.log_config import logging
 import settings
 
@@ -8,9 +9,11 @@ class ActionExecutor:
         self._requestor = None
 
     def process_action_command(self, action):
-        logging.info("[action_executor] :: processing action {}".format(action['name']))
+        logging.info("[action_executor] :: processing action {}".format(action))
         if action['name'] == 'pick-up' and 'id' in action:
             return self.pick_up_object(action['id'])
+        elif action['name'] == 'push' and 'uuid' in action:
+            return self.push_object(action['uuid'])
         else:
             if action['name'] == 'pick-up' and 'uuid' in action:
                 return self.pick_up_object_by_uuid(action['uuid'])
@@ -31,6 +34,22 @@ class ActionExecutor:
                                 return self.stack_objects(action['ids'])
                             else:
                                 logging.error("[action_executor] :: receive a malformed action request")
+
+
+    def find_object_id(self, uuid):
+        num_children = self._supervisor._children.getCount()
+        for i in range(0, num_children):
+            child_node = self._supervisor._children.getMFNode(i)
+            child_node_uuid_field = child_node.getField('name')
+            if child_node_uuid_field is not None:
+                child_node_uuid = child_node_uuid_field.getSFString()
+                # print child_node_uuid
+                if child_node_uuid == uuid:
+                    child_node_id = child_node.getId()
+                    return child_node_id
+        return False
+
+
 
     def indicate_object_by_uuid(self, object_uuid):
         for i in range(self._supervisor._children.getCount()):
@@ -80,6 +99,60 @@ class ActionExecutor:
         if is_picked:
             self._supervisor.set_held_node(node)
         return True
+
+
+    def push_object(self, object_uuid):
+        # print('ID IS', object_id)
+
+        object_id = self.find_object_id(object_uuid)
+        print('ID IS', object_id)
+
+        node = self._supervisor.getFromId(int(object_id))
+
+        translation = node.getField('translation')
+        position = np.array(translation.getSFVec3f())
+
+        hand = self._supervisor.get_current_position()
+        print("HAND IS", hand)
+
+        # drop = hand
+        # drop[1]
+
+        drop = np.array(position)
+        drop[0] = 0.
+
+        self._supervisor.enable_physics(node)
+
+
+        delta = position - drop
+        delta_norm = delta / np.linalg.norm(delta)
+        print("DELTA IS", delta)
+
+        one = drop
+        two = drop + (delta * .25)
+        three = drop + (delta * .75)
+        four = drop + delta + (delta_norm * .1)
+
+
+        # self._supervisor.go_to_point(self._supervisor.transform_point_to_robot_frame(list(drop)))
+
+        self._supervisor.go_to_point(self._supervisor.transform_point_to_robot_frame(list(one)))
+        self._supervisor.go_to_point(self._supervisor.transform_point_to_robot_frame(list(two)))
+        self._supervisor.go_to_point(self._supervisor.transform_point_to_robot_frame(list(three)))
+        self._supervisor.go_to_point(self._supervisor.transform_point_to_robot_frame(list(four)))
+
+        # self._supervisor.go_to_point(self._supervisor.transform_point_to_robot_frame(list(position)))
+
+
+        # traj = self.create_trajectory([position, way1, settings.INSTRUCTOR_HOLD_POSITION])
+        # self.animate(node, traj)
+
+
+
+
+        return True
+        
+
 
     def place_object(self, location):
         """

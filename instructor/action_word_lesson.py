@@ -154,12 +154,23 @@ class ActionWordLesson:
         except ValueError:
             logging.error("[action_word_lesson] :: bad lesson")
 
+    def get_structure_for_push_action(self, trace_action):
+        action_dict = {'name': 'place'}
+        scene_object = self._scene_objects[trace_action['argument']]
+        action_dict['uuid'] = scene_object._name
+        action_dict['requester'] = 'instructor'
+        return action_dict
+
+
+
     def get_segment_for_lesson_action_trace(self):
         trace_action = self._trace_action_list[self._action_trace_index]
         if trace_action['name'] == 'pick-up':
             action_dict = self.get_structure_for_pick_up_action(trace_action)
         if trace_action['name'] == 'place':
             action_dict = self.get_structure_for_place_action(trace_action)
+        if trace_action['name'] == 'push':
+            action_dict = self.get_structure_for_push_action(trace_action)
         segment = {
             'action': action_dict,
             'interaction': {

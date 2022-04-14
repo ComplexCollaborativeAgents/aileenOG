@@ -1,6 +1,6 @@
 import argparse
 import xmlrpclib
-
+import time
 import settings
 from instructor.action_word_lesson import ActionWordLesson
 from log_config import logging
@@ -33,7 +33,7 @@ def parse():
     parser.add_argument('--train-vision', action='store_true', help='Run vision training scripts')
     parser.add_argument('--clean', action='store_true', help='Clean table')
     parser.add_argument('--json', help='Use curriculum from JSON file')
-    parser.add_argument('--test-action', help='Test available actions', action='store_true')
+    parser.add_argument('--testaction', help='Test available actions')
     parser.add_argument('--test-sizes', help='Test different sizes', action='store_true')
     parser.add_argument('--replay', help="Debugging exact scne")
     return parser.parse_args()
@@ -123,6 +123,44 @@ def run_test_curriculum(json_path):
 
 
 
+def test_action(json_path):
+
+    with open(json_path, 'r') as f:
+        curriculum = Curriculum(json.load(f))
+
+    for lesson_config in curriculum:
+       
+        lesson_object = lesson_config['object']
+        lesson = lesson_object.generate_lesson()
+
+        segment = lesson_object.get_next_segment()
+        
+        scene_acknowledgement = world_server.set_scene(
+            {'configuration': segment['scene'],
+             'label': "{}: {}: {}".format(segment['interaction']['signal'], segment['interaction']['content'],
+                                          segment['interaction']['marker'])})
+
+        time.sleep(0.1)
+
+        info = world_server.get_all()
+        object = info['objects'][0]
+        next = lesson_object.get_next_segment()
+        action = next['action']
+        action['name'] = 'push'
+        world_server.apply_action(action)
+        
+
+        break
+
+
+            
+
+
+
+
+
+
+
 if __name__ == '__main__':
     arguments = parse()
     world_server = create_connection_with_aileen_world()
@@ -153,7 +191,7 @@ if __name__ == '__main__':
         curriculum_thread.daemon = True
         curriculum_thread.start()
         gui.run()
-    elif arguments.test_action:
+    elif arguments.testaction:
         """
         Insert action testing here
             - find object
@@ -162,7 +200,10 @@ if __name__ == '__main__':
             - put behind
             - drop
         """
-        pass
+        
+        test_action(arguments.testaction)
+
+
     elif arguments.test_sizes:
         scene = AileenScene()
 
