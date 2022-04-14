@@ -293,7 +293,7 @@ class AileenSupervisor(Supervisor):
         return None
 
     def enable_physics(self, node):
-        node.getField('physics').importMFNode('/usr/local/webots/resources/nodes/Physics.wrl')
+        node.getField('physics').importMFNode(0, '/usr/local/webots/resources/nodes/Physics.wrl')
         return None
 
     def pick_object_instructor(self, node, position):
