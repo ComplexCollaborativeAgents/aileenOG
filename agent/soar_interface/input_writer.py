@@ -440,7 +440,6 @@ class InputWriter(object):
         world = World_Trace()
 
         for obj in objects:
-            print('object = ', obj)
             if obj['held'] == 'false':
                 world.add_object_state_series(
                     [Object_State(name=str(obj['id']), timestamp=0,

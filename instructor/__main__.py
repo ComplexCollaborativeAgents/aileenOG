@@ -64,7 +64,7 @@ def run_curriculum(json_path):
             lesson = lesson_object.generate_lesson()
             qualify = check_visibility(agent_server)
             count = 2
-            while ~qualify:
+            while qualify is False:
                 logging.info("[aileen_instructor] :: Previous scene contains invisible objects, retry to place objects:{}". format(count))
                 lesson = lesson_object.generate_lesson()
                 qualify = check_visibility(agent_server)
