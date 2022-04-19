@@ -95,76 +95,10 @@ class InputWriter(object):
 
             # print('world objects is:', objects_list)
             cv_detections = self.detector.run(img)
-            # print('cv_detection is:', cv_detections)
-
-            for i in range(len(objects_list)):
-                w = objects_list[i]
-                position = w['position']
-                bbsize = w['bbsize']
-                wd = bbsize[0]
-                hd = bbsize[1]
-                x = position[0] - wd / 2.0
-                y = position[0] - hd / 2.0
-                tx = x
-                ty = y
-                bx = x + wd
-                by = y + hd
-                gray = cv2.cvtColor(mask_img, cv2.COLOR_BGR2GRAY)
-                mask = np.zeros(gray.shape[:2], dtype="uint8")
-                # cv2.rectangle(mask, (int(tx), int(ty)), (int(bx), int(by)), 255, -1)
-                tmp = cv2.bitwise_and(gray, gray, mask=mask)
-                non_zero_tmp = tmp[np.nonzero(tmp)]
-                objects_list[i]['bounding_box_camera'] = [tx, ty, bx, by]
-                if mode(non_zero_tmp)[0]:
-                    value = mode(non_zero_tmp)[0]
-                    # print target
-                    up = value + 5
-                    low = value - 5
-                    if low < 0:
-                        low = 0
-                    loc = np.where(np.logical_and(tmp > low, tmp <= up))
-                    tmp[loc] = value
-                    tmp[np.where(tmp != value)] = 0
-                    tmp[tmp > 0] = 100
-
-                    # print np.shape(tmp)
-                    x, y, w, h = cv2.boundingRect(tmp)
-
-                    tx = x
-                    ty = y
-                    bx = x + w
-                    by = y + h
-                    position = [x + w / 2.0, y + h / 2.0]
-                    bbsize = [bx - tx, by - ty]
-                    objects_list[i]['bounding_box_camera'] = [tx, ty, bx, by]
-                    objects_list[i]['position'] = position
-                    objects_list[i]['bbsize'] = bbsize
-
-            # if len(cv_detections) > 0:
-            #     detections = cv_detections['objects']
-            #     for i in range(len(detections)):
-            #         d = detections[i]
-            #         w = objects_list[i]
-            #         bbox1 = d['camera_bounding_box_mrcnn']
-            #         bbox2 = w['bounding_box_camera']
-            #         wtx = bbox2[0]
-            #         wty = bbox2[1]
-            #         wbx = bbox2[2]
-            #         wby = bbox2[3]
-            #
-            #         dtx = bbox1[0]
-            #         dty = bbox1[1]
-            #         dbx = bbox1[2]
-            #         dby = bbox1[3]
-            #
-            #         cv2.rectangle(img, (wtx, wty), (wbx, wby), (255, 0, 0), 2)
-            #         cv2.rectangle(img, (dtx, dty), (dbx, dby), (0, 255, 0), 2)
-            #         cv2.imshow('bbox', img)
-            #         cv2.waitKey(0)
 
             objects_list = self.align_cv_detections_to_world(cv_detections, objects_list)
             # print('updated is:', objects_list)
-            logging.debug("Aligned Detections: {}".format(objects_list))
+            # logging.debug("Aligned Detections: {}".format(objects_list))
 
         else:
             # data = self.request_server_for_current_state_image()
@@ -185,42 +119,22 @@ class InputWriter(object):
     def align_cv_detections_to_world(cv_detections, objects_list):
         detections = cv_detections['objects']
         world = objects_list
-
         updated_detections = []
-
         mapped = np.zeros(len(world))
-        for i in range(len(detections)):
-            w_index = -1
-            for w in world:
-                w_index += 1
-                if mapped[w_index]:
-                    continue
-
+        w_index = 0
+        for w in world:
+            if mapped[w_index]:
+                continue
+            for i in range(len(detections)):
                 d = detections[i]
-
-                logging.debug("[input_writer] :: d is {}".format(d))
-                logging.debug("[input_writer] :: w is {}".format(w))
-
-
                 bbox1 = d['camera_bounding_box_mrcnn']
                 bbox2 = w['bounding_box_camera']
                 center1 = d['camera_mrcnn_position']
                 center2 = w['position']
-
                 dst = distance.euclidean(center1, center2)
-
-                # detections should include the following fields, in addition to anything added below
-                # 'shape': e.g., CVCone
-                # 'camera_bounding_box_yolo': YOLO detection
-                # 'camera_bounding_box_yolo_proj_to_world': World projection of YOLO detection
-                # 'color': e.g., CVRed
-                # 'camera_yolo_position': YOLO bounding box centroid
-                # 'camera_yolo_position_proj_to_world': World projection of YOLO bounding box centroid
-                # print Detector.bb_iou(bbox1, bbox2)
-                # print dst
                 if Detector.bb_iou(bbox1, bbox2) > .7 or dst < 4.0:
-                    # if dst < 4.0:
                     mapped[w_index] = 1
+                    w_index += 1
                     detections[i]['held'] = w['held']
                     detections[i]['id'] = w['id']
                     detections[i]['id_name'] = w['id_name']
@@ -228,22 +142,24 @@ class InputWriter(object):
                     detections[i]['held'] = w['held']
                     #  The simulator groundtruth
                     detections[i]['position_simulator'] = w['position']
+                    detections[i]['wposition'] = w['wposition']
                     detections[i]['bounding_box_simulator'] = w['bounding_box_camera']
                     detections[i]['bbox_size_simulator'] = w['bbsize']
                     detections[i]['orientation'] = w['world_orientation']
                     detections[i]['wbbox_size'] = w['wbbox_size']
-                    detections[i]['wbbox_position'] = w['world_centroid']
+                    detections[i]['size_type'] = w['size_type']
+                    # detections[i]['wbbox_position'] = w['world_centroid']
                     #  The detector output
                     # detections[i]['position'] = detections[i]['camera_mrcnn_position']
-                    detections[i]['bounding_box'] = detections[i]['camera_bounding_box_mrcnn']
-                    detections[i]['position'] = detections[i]['wbbox_position']
-
-                    #  Extra attributes
-                    detections[i]['hasPlane'] = w['hasPlane']
-                    detections[i]['hasRectPlane'] = w['hasRectPlane']
-                    detections[i]['hasRoundPlane'] = w['hasRoundPlane']
-                    detections[i]['hasCurveContour'] = w['hasCurveContour']
-                    detections[i]['hasEdgeContour'] = w['hasEdgeContour']
+                    detections[i]['bounding_box_camera'] = detections[i]['camera_bounding_box_mrcnn']
+                    detections[i]['position'] = detections[i]['camera_mrcnn_position']
+                    detections[i]['bbsize'] = detections[i]['bbsize']
+                    # #  Extra attributes
+                    # detections[i]['hasPlane'] = detections[i]['pred_plane']
+                    # detections[i]['hasRectPlane'] = detections[i]['pred_rect_plane']
+                    # detections[i]['hasRoundPlane'] = detections[i]['pred_round_plane']
+                    # detections[i]['hasCurveContour'] = detections[i]['pred_curve_contour']
+                    # detections[i]['hasEdgeContour'] = detections[i]['pred_edge_contour']
 
                     if settings.DETECTOR_MODE == 2:
                         detections[i]['cluster_id'] = detections[i]['cluster_id']
@@ -254,48 +170,47 @@ class InputWriter(object):
                         detections[i]['shape'] = w['shape']
 
                     updated_detections.append(detections[i])
-                    break
+                else:
+                    continue
+                break
+                
+        if 0 in np.asarray(mapped):
+            det = {}
+            index = np.where(np.asarray(mapped) == 0)[0]
+            for j in range(len(index)):
+                ind = index[j]
+                mapped[ind] = 1
+                det['held'] = world[ind]['held']
+                det['id'] = world[ind]['id']
+                det['id_name'] = world[ind]['id_name']
+                det['id_string'] = world[ind]['id_string']
+                det['held'] = world[ind]['held']
 
-        return updated_detections
+                det['position_simulator'] = world[ind]['position']
+                det['wposition'] = world[ind]['wposition']
+                det['bounding_box_simulator'] = world[ind]['bounding_box_camera']
+                det['bbox_size_simulator'] = world[ind]['bbsize']
+                det['orientation'] = world[ind]['world_orientation']
+                det['wbbox_size'] = world[ind]['wbbox_size']
+                det['size_type'] = world[ind]['size_type']
 
-    @staticmethod
-    def use_gt_world(objects_list):
-        world = objects_list
-        detections = objects_list
-        updated_detections = []
-        for i in range(len(world)):
-            detections[i]['id'] = world[i]['id']
-            detections[i]['id_name'] = world[i]['id_name']
-            detections[i]['id_string'] = world[i]['id_string']
-            detections[i]['held'] = world[i]['held']
-            #  The simulator groundtruth
-            # detections[i]['position'] = world[i]['bbposition']
-            detections[i]['position'] = world[i]['world_centroid']
-            detections[i]['bounding_box'] = world[i]['bounding_box_camera']
+                det['bounding_box_camera'] = world[ind]['bounding_box_camera']
+                det['position'] = world[ind]['position']
+                det['bbsize'] = world[ind]['bbsize']
 
-            detections[i]['orientation'] = world[i]['world_orientation']
-            detections[i]['wbbox_size'] = world[i]['world_bbox_size']
-            detections[i]['wbbox_position'] = world[i]['world_centroid']
-            # #  The detector output
-            # detections[i]['position'] = world[i]['bbposition']
-            # detections[i]['bounding_box'] = world[i]['bounding_box_camera']
+                det['color'] = world[ind]['color']
+                det['shape'] = world[ind]['shape']
+                # #  Extra attributes
+                # det['hasPlane'] = world[ind]['hasPlane']
+                # det['hasRectPlane'] = world[ind]['hasRectPlane']
+                # det['hasRoundPlane'] = world[ind]['hasRoundPlane']
+                # det['hasCurveContour'] = world[ind]['hasCurveContour']
+                # det['hasEdgeContour'] = world[ind]['hasEdgeContour']
 
-            #  Extra attributes
-            detections[i]['hasPlane'] = world[i]['hasPlane']
-            detections[i]['hasRectPlane'] = world[i]['hasRectPlane']
-            detections[i]['hasRoundPlane'] = world[i]['hasRoundPlane']
-            detections[i]['hasCurveContour'] = world[i]['hasCurveContour']
-            detections[i]['hasEdgeContour'] = world[i]['hasEdgeContour']
+                if settings.DETECTOR_MODE == 2:
+                    det['cluster_id'] = world[ind]['cluster_id']
 
-            if settings.DETECTOR_MODE == 2:
-                detections[i]['cluster_id'] = world[i]['cluster_id']
-
-            ##  SM: if settings have preload visual concepts on, just use information from the world to ensure 100% detection
-            if settings.AGENT_VISUAL_CONCEPTS_PARAM == 'soar' and settings.AGENT_PRELOAD_VISUAL_CONCEPTS_PARAM == 'true':
-                detections[i]['color'] = world[i]['color']
-                detections[i]['shape'] = world[i]['shape']
-
-            updated_detections.append(detections[i])
+                updated_detections.append(det)
 
         return updated_detections
 
@@ -427,11 +342,11 @@ class InputWriter(object):
         for w_object in objects_list:
             object_id = self._objects_link.CreateIdWME("object")
             object_id.CreateIntWME('id', w_object['id'])
-            if 'position' in w_object:
-                position_id = object_id.CreateIdWME('position')
-                position_id.CreateFloatWME('x', w_object['position'][0])
-                position_id.CreateFloatWME('y', w_object['position'][1])
-                position_id.CreateFloatWME('z', w_object['position'][2])
+            if 'wposition' in w_object:
+                position_id = object_id.CreateIdWME('wposition')
+                position_id.CreateFloatWME('x', w_object['wposition'][0])
+                position_id.CreateFloatWME('y', w_object['wposition'][1])
+                position_id.CreateFloatWME('z', w_object['wposition'][2])
             if 'wbbox_size' in w_object:
                 size_id = object_id.CreateIdWME('size_bb')
                 # size_id.CreateFloatWME('xsize', w_object['bounding_box'][2]-w_object['bounding_box'][0])
@@ -446,18 +361,17 @@ class InputWriter(object):
             object_id.CreateStringWME('held', w_object['held'])
             object_id.CreateStringWME('color', str(w_object['color']))
             object_id.CreateStringWME('shape', w_object['shape'])
-            object_id.CreateIntWME('hasPlane', w_object['hasPlane'])
-            object_id.CreateIntWME('hasRectPlane', w_object['hasRectPlane'])
-            object_id.CreateIntWME('hasRoundPlane', w_object['hasRoundPlane'])
-            object_id.CreateIntWME('hasEdgeContour', w_object['hasEdgeContour'])
-            object_id.CreateIntWME('hasCurveContour', w_object['hasCurveContour'])
+            # object_id.CreateIntWME('hasPlane', int(w_object['hasPlane']))
+            # object_id.CreateIntWME('hasRectPlane', int(w_object['hasRectPlane']))
+            # object_id.CreateIntWME('hasRoundPlane', int(w_object['hasRoundPlane']))
+            # object_id.CreateIntWME('hasEdgeContour', int(w_object['hasEdgeContour']))
+            # object_id.CreateIntWME('hasCurveContour', int(w_object['hasCurveContour']))
             object_id.CreateStringWME('id_string', w_object['id_string'])
             object_id.CreateStringWME('id_uuid', w_object['id_name'])
 
     def request_server_for_objects_info(self):
         try:
             objects_dict = self._world_server.get_all()
-            print('objects dict = ', objects_dict)
         except xmlrpclib.ProtocolError as err:
             logging.error("[input_writer] :: protocol error {}".format(err.errmsg))
             return
@@ -479,7 +393,7 @@ class InputWriter(object):
             logging.error("[input_writer] :: fault code {}; fault string{}".format(fault.faultCode, fault.faultString))
             return
 
-        logging.debug("[input_writer] :: received binary image from server")
+        # logging.debug("[input_writer] :: received binary image from server")
         return data
 
     def write_binary_image_to_file(self, binary_image):
@@ -526,13 +440,12 @@ class InputWriter(object):
         world = World_Trace()
 
         for obj in objects:
-            print('object = ', obj)
             if obj['held'] == 'false':
                 world.add_object_state_series(
                     [Object_State(name=str(obj['id']), timestamp=0,
-                                  x=obj['position'][0],
-                                  y=obj['position'][2],
-                                  z=obj['position'][1],
+                                  x=obj['wposition'][0],
+                                  y=obj['wposition'][2],
+                                  z=obj['wposition'][1],
                                   xsize=obj['wbbox_size'][0],
                                   zsize=obj['wbbox_size'][1],
                                   ysize=obj['wbbox_size'][2]
@@ -559,7 +472,7 @@ class InputWriter(object):
                     v.qsr['rcc8'] = 'dc'
 
                 ret[args[0]][args[1]] = v.qsr
-        logging.debug("[input_writer] :: qsrs computed {}".format(ret))
+        # logging.debug("[input_writer] :: qsrs computed {}".format(ret))
         return ret
 
     def size_from_bounding_box(self, bbox):

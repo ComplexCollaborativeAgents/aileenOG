@@ -1,0 +1,20 @@
+[
+  {
+    "comment": "Test pushing",
+    "lesson-type": "action-word",
+    "content": "push red sphere",
+    "description": {
+      "objects": ["<obj1>"],
+      "relations": [],
+      "action": "push",
+      "initial_configuration": [],
+      "trace-actions": [
+        {"name": "push", "argument": "<obj1>"}
+      ],
+      "language": ["push", "<obj1>"],
+      "<obj1>": {"color": "red", "shape": "sphere", "size": "medium"}
+    },
+    "distractors": 0,
+    "signal": "inform"
+  }
+]

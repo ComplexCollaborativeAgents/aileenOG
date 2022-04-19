@@ -293,7 +293,7 @@ class AileenSupervisor(Supervisor):
         return None
 
     def enable_physics(self, node):
-        node.getField('physics').importMFNode('/usr/local/webots/resources/nodes/Physics.wrl')
+        node.getField('physics').importMFNode(0, '/usr/local/webots/resources/nodes/Physics.wrl')
         return None
 
     def pick_object_instructor(self, node, position):
@@ -350,157 +350,92 @@ class AileenSupervisor(Supervisor):
     def get_number_object(self):
         self._numObj = self._camera.getRecognitionNumberOfObjects()
         return self._numObj
+        
+    @staticmethod
+    def refine_bbox(mask, obj):
+        gray = cv2.cvtColor(mask.copy(), cv2.COLOR_BGR2GRAY)
+        position = obj['position']
+        bbsize = obj['bbsize']
+        [tx, ty, bx, by] = obj['bounding_box_camera']
+        tmp = np.zeros_like(gray)
+        roi = gray[ty:ty+bbsize[1], tx:tx+bbsize[0]]
+        tmp[ty:by, tx:bx] = roi
+        roi = roi[np.nonzero(roi)]
+        if mode(roi)[0] > 0:
+            value = mode(roi)[0]
+            tmp[np.where(tmp != value)] = 0
+            # tmp[tmp > 0] = 100
+            tx, ty, tw, th = cv2.boundingRect(tmp)
+            obj['position'] = position
+            obj['bbsize'] = bbsize
+            obj['bounding_box_camera'] = [tx, ty, bx, by]
+        return obj
 
     def get_all(self):
         logging.debug("[aileen_supervisor] :: processing get_all from client")
-        if settings.SIMULATE_CV:
-            obj_dicts = []
-            num_children = self._children.getCount()
-            for i in range(0, num_children):
-                object_node = self._children.getMFNode(i)
-                object_name = object_node.getTypeName()
-                if 'Solid' in object_name:
-                    id = object_node.getId()
-                    wcentroid = object_node.getPosition()
-                    worientation = object_node.getOrientation()
-                    wbbox_node = object_node.getField("boundingObject")
-                    wbbox_size = wbbox_node.getSFNode().getField('size').getSFVec3f()
-                    size_type = object_node.getField('description').getSFString()
-                    object_dict = {'id_string': "ob{}".format(str(id)),
-                                   'id': id,
-                                   'position': wcentroid,
-                                   'bbsize': wbbox_size,
-                                   'world_centroid': wcentroid,
-                                   'world_orientation': worientation,
-                                   'wbbox_size': wbbox_size,
-                                   'resolution': [self.resX, self.resY],
-                                   'shape': self.get_object_shape(object_node),
-                                   'color': self.get_object_color(object_node),
-                                   'texture': self.get_object_texture(object_node),
-                                   'hasCurveContour': self.get_object_hasCurveContour(object_node),
-                                   'hasEdgeContour': self.get_object_hasEdgeContour(object_node),
-                                   'hasPlane': self.get_object_hasPlane(object_node),
-                                   'hasRectPlane': self.get_object_hasRectPlane(object_node),
-                                   'hasRoundPlane': self.get_object_hasRoundPlane(object_node),
-                                   'id_name': self.get_object_name(object_node),
-                                   'size_type': size_type,
-                                   'held': 'false'
-                                   }
-                    obj_dicts.append(object_dict)
+
+        obj_dicts = []
+        num_children = self._children.getCount()
+        cnt_obj = 0
+        for i in range(0, num_children):
+            object_node = self._children.getMFNode(i)
+            object_name = object_node.getTypeName()
+            if 'Solid' in object_name:
+                cnt_obj += 1
+
+        # Test if the camera can see all the generated objects
+        if self._camera.getRecognitionNumberOfObjects() == cnt_obj and cnt_obj > 0:
+            self.save = True
+            self.num_rec = cnt_obj
         else:
-            obj_dicts = []
-            num_children = self._children.getCount()
-            cnt_obj = 0
-            for i in range(0, num_children):
-                object_node = self._children.getMFNode(i)
-                object_name = object_node.getTypeName()
-                if 'Solid' in object_name:
-                    cnt_obj += 1
+            self.save = False
 
-            # Test if the camera can see all the generated objects
-            if self._camera.getRecognitionNumberOfObjects() == cnt_obj and cnt_obj > 0:
-                self.save = True
-                self.num_rec = cnt_obj
-            else:
-                self.save = False
+        objects = self._camera.getRecognitionObjects()
+        # mask_img = self._camera.getRecognitionSegmentationImage()
+        if settings.REC_SEG:
+            mask_img = cv2.imread(settings.CURRENT_REC_SEG_IMAGE_PATH)
+        # img = cv2.imread(settings.CURRENT_IMAGE_PATH)
+        for object in objects:
+            # webots camera recognized object is linked with the gt object by the id
+            id = object.get_id()
+            child = self.getFromId(id)  # gt child
+            position_on_camera = object.get_position_on_image()
+            size_on_camera = object.get_size_on_image()
+            tx = int(position_on_camera[0] - size_on_camera[0] / 2.0)
+            ty = int(position_on_camera[1] - size_on_camera[1] / 2.0)
+            bx = int(position_on_camera[0] + size_on_camera[0] / 2.0)
+            by = int(position_on_camera[1] + size_on_camera[1] / 2.0)
 
-            objects = self._camera.getRecognitionObjects()
-            # mask_img = self._camera.getRecognitionSegmentationImage()
-            if settings.REC_SEG:
-                mask_img = cv2.imread(settings.CURRENT_REC_SEG_IMAGE_PATH)
-            img = cv2.imread(settings.CURRENT_IMAGE_PATH)
-            for object in objects:
-                # webots camera recognized object is linked with the gt object by the id
-                id = object.get_id()
-                child = self.getFromId(id) # gt child
-                wcentroid = child.getPosition()
-                worientation = child.getOrientation()
-                wbbox_node = child.getField("boundingObject")
-                wbbox_size = wbbox_node.getSFNode().getField('size').getSFVec3f()
-                size_type = child.getField('description').getSFString()
-                gray = cv2.cvtColor(mask_img.copy(), cv2.COLOR_BGR2GRAY)
-                x, y, w, h = cv2.boundingRect(gray)
-                tx = x
-                ty = y
-                bx = x + w
-                by = y + h
-                position = [x + w / 2.0, y + h / 2.0]
-                bbsize = [bx - tx, by - ty]
-                # print('size type = ', size_type)
-                # size = bounding_obj.getField('size').getSFVec3f()
-
-                # self.get_object_vision_concept()
-                # self.get_object_size_type(child)
-                # obj_position = object.get_position()
-                # obj_orientation = object.get_orientation()
-                # position = object.get_position_on_image()
-                # bbsize = object.get_size_on_image()
-                # cx = int(position[0])
-                # cy = int(position[1])
-                # w = int(bbsize[0])
-                # h = int(bbsize[1])
-                # tx = int(cx - w / 2)
-                # ty = int(cy - h / 2)
-                # bx = int(cx + w / 2)
-                # by = int(cy + h / 2)
-
-            # gray = cv2.cvtColor(mask_img.copy(), cv2.COLOR_BGR2GRAY)
-            # mask = np.zeros(gray.shape[:2], dtype="uint8")
-            # contour_mask = mask.copy()
-            # cv2.rectangle(mask, (int(tx), int(ty)), (int(bx), int(by)), 255, -1)
-            # tmp = cv2.bitwise_and(gray, gray, mask=mask)
-            # non_zero_tmp = tmp[np.nonzero(tmp)]
-            # if mode(non_zero_tmp)[0]:
-            #     value = mode(non_zero_tmp)[0]
-            #     # print target
-            #     up = value + 5
-            #     low = value - 5
-            #     if low < 0:
-            #         low = 0
-            #     loc = np.where(np.logical_and(tmp > low, tmp <= up))
-            #     tmp[loc] = value
-            #     tmp[np.where(tmp != value)] = 0
-            #     tmp[tmp > 0] = 100
-            #     blurred = cv2.GaussianBlur(tmp, (5, 5), 0)
-            #     img_canny = cv2.Canny(blurred, 50, 190)
-
-                # cv2.imshow('contour', img_canny)
-                # cv2.waitKey(0)
-                # if size_type == "Small":
-                #
-                # elif size_type == "Medium":
-                #
-                # else:
-                # contours, hierarchy = cv2.findContours(blurred.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-
-
-                # self.get_object_vision_concept(tmp)
-
-                object_dict = {'id_string': "ob{}".format(str(id)),
-                               'id': id,
-                               'position': position,
-                               'bbsize': bbsize,
-                               'bounding_box_camera': [tx, ty, bx, by],
-                               'world_centroid': wcentroid,
-                               'world_orientation': worientation,
-                               'wbbox_size': wbbox_size,
-                               # 'obj_relative_position':obj_position,
-                               # 'obj_relative_orientation': obj_orientation,
-                               'resolution': [self.resX, self.resY],
-                               'shape': self.get_object_shape(child),
-                               'color': self.get_object_color(child),
-                               'texture': self.get_object_texture(child),
-                               'hasCurveContour': self.get_object_hasCurveContour(child),
-                               'hasEdgeContour': self.get_object_hasEdgeContour(child),
-                               'hasPlane': self.get_object_hasPlane(child),
-                               'hasRectPlane': self.get_object_hasRectPlane(child),
-                               'hasRoundPlane': self.get_object_hasRoundPlane(child),
-                               'id_name': self.get_object_name(child),
-                               'size_type': size_type,
-                               # 'focal_length': self.flen,
-                               'held': 'false'
+            wcentroid = child.getPosition()
+            worientation = child.getOrientation()
+            wbbox_node = child.getField("boundingObject")
+            wbbox_size = wbbox_node.getSFNode().getField('size').getSFVec3f()
+            size_type = child.getField('description').getSFString()
+            object_dict = {'id_string': "ob{}".format(str(id)),
+                           'id': id,
+                           'position': position_on_camera,
+                           'bbsize': size_on_camera,
+                           'bounding_box_camera': [tx, ty, bx, by],
+                           'wposition': wcentroid,
+                           'world_orientation': worientation,
+                           'wbbox_size': wbbox_size,
+                           'resolution': [self.resX, self.resY],
+                           'shape': self.get_object_shape(child),
+                           'color': self.get_object_color(child),
+                           'texture': self.get_object_texture(child),
+                           'hasCurveContour': self.get_object_hasCurveContour(child),
+                           'hasEdgeContour': self.get_object_hasEdgeContour(child),
+                           'hasPlane': self.get_object_hasPlane(child),
+                           'hasRectPlane': self.get_object_hasRectPlane(child),
+                           'hasRoundPlane': self.get_object_hasRoundPlane(child),
+                           'id_name': self.get_object_name(child),
+                           'size_type': size_type,
+                           'held': 'false'
                            }
-                obj_dicts.append(object_dict)
+            object_dict = self.refine_bbox(mask_img, object_dict)
+
+            obj_dicts.append(object_dict)
+
         output_dict = {'objects': obj_dicts, 'image': '', 'save': self.save, 'obj_num': self.num_rec}
         return output_dict
 
@@ -692,7 +627,11 @@ class AileenSupervisor(Supervisor):
 
         self.setLabel(1, str(label), 0.02, 0.3, 0.1, 0x000000, 0, "Arial")
         return True
-
+    
+    def set_scene_empty(self):
+        self.clean_scene()
+        return True
+    
     def clean_scene(self):
         logging.debug("[aileen_supervisor] :: cleaning objects from the scene")
         num_children = self._children.getCount()

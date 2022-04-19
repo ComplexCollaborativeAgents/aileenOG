@@ -2,6 +2,8 @@ from aileen_object import AileenObject
 from aileen_scene import AileenScene
 from language_generator import LanguageGenerator
 from log_config import logging
+import json
+import os
 
 
 class VisualWordLesson:
@@ -48,14 +50,19 @@ class VisualWordLesson:
             }
         }
         return lesson
-
+    
+    def clean_scenes(self, world_server):
+        logging.debug("[aileen_visual_word_lesson] :: cleaning table")
+        scene_acknowledgement = world_server.set_scene(
+            {'configuration': [], 'label': []})
+    
     def generate_scene(self):
         """
         :param description: language set externally
         :param is_positive: should language describe the object or no
         :param distractors: Number of distractors to be generated.
         """
-        logging.debug("[aileen_visual_word_lesson] :: generating a new scene for visual word learning")
+        # logging.debug("[aileen_visual_word_lesson] :: generating a new scene for visual word learning")
 
         if self._description:
             target = AileenObject.generate_object(self._description)
@@ -81,6 +88,10 @@ class VisualWordLesson:
 
 
     def evaluate_agent_response(self, agent_response):
+
+        logging.debug('agent response is {}'.format(agent_response))
+        logging.debug('this is a {} lesson'.format(self._is_positive))
+
         if 'status' in agent_response:
             if self._is_positive:
                 if agent_response['status'] == 'success':
@@ -98,9 +109,52 @@ class VisualWordLesson:
             else:
                 return {'signal': 'incorrect', 'score': 0}
 
+    def check_scene(self, lesson, world, agent):
+        meta = world.get_all()
+        qualify = meta['save']
+        while qualify is False:
+            print("Invisible is detected!")
+            logging.info(
+                "[aileen_instructor] :: Previous scene contains invisible objects, retry to place objects")
+            # self.clean_scenes(lesson, world)
+            lesson = self.generate_lesson()
+            scene_acknowledgement = world.set_scene(
+                {'configuration': lesson['scene'], 'label': lesson['interaction']['content']})
+            meta = world.get_all()
+            qualify = meta['save']
+        return lesson
+
     def administer_lesson(self, world, agent):
+        # identify = 0
+        # cnt = 1
+        # while identify == 0:
+            # print("Generate scene: %d time" % (cnt))
+            # self.clean_scenes(world)
         lesson = self.generate_lesson()
+            # cnt += 1
+        scene_acknowledgement = world.set_scene(
+            {'configuration': lesson['scene'], 'label': lesson['interaction']})
         content = lesson['interaction']['content']
+        logging.info("[aileen_instructor:administer_lesson] :: generated from world {}".format(scene_acknowledgement))
+            # meta = world.get_all()
+            # identify = int(meta['save'])
+        dir_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'current_scene.json')
+        with open(dir_path, 'wb') as f:
+            json.dump(lesson, f, ensure_ascii=False, indent=4)
+            # print("identify = : %d" % (identify))
+            # del meta
+        
+        meta = world.get_all()
+        qualify = meta['save']
+        agent_response = agent.process_interaction(lesson['interaction'])
+        evaluation = self.evaluate_agent_response(agent_response)
+        score = evaluation['score']
+        agent_response = agent.process_interaction(evaluation)
+        return score, content, qualify
+
+    def adminster_lesson_nonstochastic(self, lesson, world, agent):
+        content = lesson['interaction']['content']
+
         scene_acknowledgement = world.set_scene(
              {'configuration': lesson['scene'], 'label': lesson['interaction']['content']})
         agent_response = agent.process_interaction(lesson['interaction'])
@@ -108,6 +162,8 @@ class VisualWordLesson:
         score = evaluation['score']
         agent_response = agent.process_interaction(evaluation)
         return score, content
+
+
 
     @staticmethod
     def administer_curriculum(world_server, agent_server):

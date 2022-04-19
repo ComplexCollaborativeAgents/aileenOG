@@ -11,11 +11,11 @@ class ConceptLearner(object):
         self._server = xmlrpclib.ServerProxy('http://{}:{}/ConceptLearner'.format(settings.CONCEPT_LEARNER_HOST, settings.CONCEPT_LEARNER_PORT))
 
     def start_concept_learner_server(self):
-        cmd = 'ssh {} {}/start_concept_learner.sh {}'.format(settings.CONCEPT_LEARNER_HOST,
-                                                             settings.CONCEPT_LEARNER_PATH,
-                                                             settings.CONCEPT_LEARNER_PORT)
-        out = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True)
-        time.sleep(5)
+        # cmd = 'ssh {} {}/start_concept_learner.sh {}'.format(settings.CONCEPT_LEARNER_HOST,
+        #                                                      settings.CONCEPT_LEARNER_PATH,
+        #                                                      settings.CONCEPT_LEARNER_PORT)
+        # out = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True)
+        # time.sleep(5)
         logging.info("[concept_learner] :: started concept_learner server on {}".format(settings.CONCEPT_LEARNER_HOST))
 
     def create_new_concept(self, request):
