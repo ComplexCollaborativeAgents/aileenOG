@@ -206,11 +206,14 @@ class SpatialWordLesson:
         scene_acknowledgement = world.set_scene(
             {'configuration': lesson['scene'], 'label': lesson['interaction']['content']})
         lesson = self.check_scene(lesson, world, agent)
+        
+        meta = world.get_all()
+        qualify = meta['save']
         agent_response = agent.process_interaction(lesson['interaction'])
         evaluation = self.evaluate_agent_response(agent_response)
         score = evaluation['score']
         agent_response = agent.process_interaction(evaluation)
-        return score, content
+        return score, content, qualify
 
     @staticmethod
     def administer_curriculum(world_server, agent_server):
