@@ -9,7 +9,8 @@ shape_table = {
     's_box': 'box',
     's_cone': 'cone',
     's_sphere': 'ball',
-    's_cylinder': 'cylinder'
+    's_cylinder': 'cylinder',
+    's_capsule': 'capsule'
 }
 
 texture_table = {
