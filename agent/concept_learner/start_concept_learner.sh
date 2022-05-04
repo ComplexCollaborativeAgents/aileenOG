@@ -21,4 +21,4 @@ else
 fi
 echo "concept learner initialized from $kbdir"
 # Run Lisp.
-screen /usr/local/acl10.1.64/mlisp8 -q -L server.lsp -e "(progn (aileen::start-server :port $1 :kbdir \"nextkb\") (do ()(nil nil)(sleep 10)))" > concept.log
+/usr/local/acl10.1.64/mlisp8 -q -L server.lsp -e "(progn (aileen::start-server :port $1 :kbdir \"nextkb\") (do ()(nil nil)(sleep 10)))" > concept.log

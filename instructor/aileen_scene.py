@@ -189,8 +189,9 @@ class AileenScene:
 
     class Randomizer:
 
+        # wwh: I changed this to .5 because of occlusion issues. Might need to be tweaked for spatial lessons
         def get_random_position_on_table(self):
-            position = [uniform(settings.OBJECT_POSITION_MIN_X, settings.OBJECT_POSITION_MAX_X),
+            position = [uniform(.5, settings.OBJECT_POSITION_MAX_X),
                         uniform(settings.OBJECT_POSITION_MIN_Y, settings.OBJECT_POSITION_MAX_Y),
                         uniform(settings.OBJECT_POSITION_MIN_Z, settings.OBJECT_POSITION_MAX_Z)]
             # position = [uniform(settings.OBJECT_POSITION_MAX_X / 4.0, settings.OBJECT_POSITION_MAX_X),

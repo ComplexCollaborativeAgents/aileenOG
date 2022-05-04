@@ -467,7 +467,7 @@ class InputWriter(object):
                     v.qsr['ra'] = self.get_rcc8_symbols_for_allen_intervals(v.qsr['ra'])
                 if '3dcd' in v.qsr.keys():
                     v.qsr['depth'] = v.qsr['3dcd'][-1].lower()
-                print(v.qsr)
+                # print(v.qsr)
                 if v.qsr['depth'] == 'o' and v.qsr['rcc8'] == 'po':
                     v.qsr['rcc8'] = 'dc'
 

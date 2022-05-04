@@ -206,11 +206,18 @@ class SpatialWordLesson:
         scene_acknowledgement = world.set_scene(
             {'configuration': lesson['scene'], 'label': lesson['interaction']['content']})
         lesson = self.check_scene(lesson, world, agent)
+
+        dir_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'spatial-scene-latest.json')
+        with open(dir_path, 'wb') as f:
+            json.dump(lesson, f, ensure_ascii=False, indent=4)
+        
+        meta = world.get_all()
+        qualify = meta['save']
         agent_response = agent.process_interaction(lesson['interaction'])
         evaluation = self.evaluate_agent_response(agent_response)
         score = evaluation['score']
         agent_response = agent.process_interaction(evaluation)
-        return score, content
+        return score, content, qualify
 
     @staticmethod
     def administer_curriculum(world_server, agent_server):
