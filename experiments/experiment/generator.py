@@ -57,6 +57,7 @@ class Generator:
         return lesson_config
 
     def generate_verify_testing_gamut_specificity(self):
+        lessons_config = None
         if self._lesson_type == "visual-word":
             lessons_config = self._generate_visual_word_lesson_descriptions(signal='verify',
                                                                             distractors=(0, self._max_distractors),
@@ -72,6 +73,9 @@ class Generator:
             lessons_config = self._generate_action_word_lesson_descriptions(signal='verify',
                                                                            distractors=(0,3),
                                                                            is_positive=False)
+
+        if lessons_config is None:
+            break("No lesson type specified")
 
         return lessons_config
 
