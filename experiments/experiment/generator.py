@@ -75,7 +75,7 @@ class Generator:
                                                                            is_positive=False)
 
         if lessons_config is None:
-            break("No lesson type specified")
+            break
 
         return lessons_config
 
