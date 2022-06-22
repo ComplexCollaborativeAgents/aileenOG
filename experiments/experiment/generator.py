@@ -75,7 +75,7 @@ class Generator:
                                                                            is_positive=False)
 
         if lessons_config is None:
-            break
+            raise Exception("Lesson type undefined")
 
         return lessons_config
 
