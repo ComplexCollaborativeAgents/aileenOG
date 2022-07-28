@@ -1,4 +1,4 @@
-pkill lisp
+pkill mlisp
 # Currently there is one argument for the port number
 # and one optional argument for kbdir (in analogystack/planb/kbs).
 cd "${0%/*}"

@@ -59,8 +59,8 @@ if __name__ == "__main__":
         agent_port += 1
         AGENT_CMD = "python agent --port {}".format(agent_port)
         #Redefine Runner CMD
-        RUNNER_CMD = 'python experiments/experiment/runner.py --file experiments/results/{}/{}-run-{}.csv --type {} ' \
-                     '--concept {} --distractors {} --episodes {} --exam_length {} --agent_port {}'.format(experiment_name,
+        RUNNER_CMD = 'python experiments/experiment/runner.py --file experiments/results/{}/{}-run-{}.csv --type "{}" ' \
+                     '--concept "{}" --distractors {} --episodes {} --exam_length {} --agent_port {}'.format(experiment_name,
                                                                           EXP_BATCH_SIZE, run,
                                                                           EXP_TYPE,
                                                                           EXP_CONCEPT,
