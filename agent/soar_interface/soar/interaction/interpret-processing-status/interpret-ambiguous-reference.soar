@@ -1,0 +1,21 @@
+##!
+# @file
+#
+# @created smohan 20220615
+
+sp {interpret-processing-status*apply*interpret-ambiguous-reference
+    (state <s>    ^name interpret-processing-status
+                  ^operator <op>
+                  ^superstate <ss>
+                  ^topstate <ts>)
+    (<op>    ^name interpret-ambiguous-reference
+             ^information <info>)
+    (<ss>    ^interaction.stack.segment <seg>)
+-->
+    (<ts>    ^response <res>)
+    (<res>    ^status failure)
+    (<seg>    ^communicated <res>)
+    (<ss>    ^terminate-segment <seg>)
+    }
+             
+    

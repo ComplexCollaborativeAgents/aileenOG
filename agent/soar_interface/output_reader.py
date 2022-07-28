@@ -85,7 +85,7 @@ class OutputReader(object):
                 child_id = child.ConvertToIdentifier()
                 content_list = []
                 for j in range(0, child_id.GetNumberChildren()):
-                    subchild = child_id.GetChild(j)
+               2   1       subchild = child_id.GetChild(j)
                     subchild_attribute = subchild.GetAttribute()
                     if subchild_attribute == 'object':
                         subchild_id = subchild.ConvertToIdentifier()

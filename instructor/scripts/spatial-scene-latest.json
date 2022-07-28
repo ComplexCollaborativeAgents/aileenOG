@@ -1,0 +1,11 @@
+{
+    "interaction": {
+        "content": "red cone near red box", 
+        "signal": "verify", 
+        "concept": ""
+    }, 
+    "scene": [
+        "Solid {\n   recognitionColors 0.9 0.1 0.1\n   translation 0.400682871357 0.45 0.190468015065\n   rotation 0.0 1.0 0.0 0.0\n   children [\n       Shape {\n          appearance PBRAppearance {\n          baseColor 0.9 0.1 0.1\n          transparency 0\n          metalness 0\n          emissiveColor 0.9 0.1 0.1\n        }\n        geometry Cone {\n          bottomRadius 0.075\n          height 0.15\n        }\n        castShadows FALSE\n        }\n        Connector {\n          type \"passive\"\n          distanceTolerance .1\n          axisTolerance .5\n          rotationTolerance 0\n          numberOfRotations 0\n          rotation 1 0 0 -1.57\n          translation 0 0.075 0\n        }\n    ]\n    name \"object155343361007947\"\n   boundingObject Box {\n     size 0.15 0.15 0.15\n   }\n   physics Physics {\n}\n   description \"Large\"\n}", 
+        "Solid {\n   recognitionColors 1 0.1 0.1\n   translation 0.544060218512 0.45 0.169347656659\n   rotation 0.0 1.0 0.0 0.0\n   children [\n       Shape {\n          appearance PBRAppearance {\n          baseColor 1 0.1 0.1\n          transparency 0\n          metalness 0\n          emissiveColor 1 0.1 0.1\n        }\n        geometry Box {\n          size 0.11 0.11 0.11\n        }\n        castShadows FALSE\n        }\n        Connector {\n          type \"passive\"\n          distanceTolerance .1\n          axisTolerance .5\n          rotationTolerance 0\n          numberOfRotations 0\n          rotation 1 0 0 -1.57\n          translation 0 0.055 0\n        }\n    ]\n    name \"object251915365187815\"\n   boundingObject Box {\n     size 0.11 0.11 0.11\n   }\n   physics Physics {\n}\n   description \"Medium\"\n}"
+    ]
+}

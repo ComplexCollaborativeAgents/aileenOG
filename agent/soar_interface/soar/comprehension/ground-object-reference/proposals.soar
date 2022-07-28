@@ -43,6 +43,17 @@ sp {ground-object-reference*propose*resolve-grounding
              ^objects <objs>)
     }
 
+sp {ground-object-reference*propose*mark-ambiguous-reference
+    (state <s>    ^name ground-object-reference
+                  ^grounding <g>)
+    (<g>    ^object <obj1>
+            ^object <obj2> <> <obj1>)
+-->
+    (<s>    ^operator <op> + =)
+    (<op>    ^name mark-ambiguous-reference
+             ^grounding <g>)
+    }
+
 sp {ground-object-reference*propose*complete-index-entity
     (state <s>    ^name ground-object-reference)
 -->

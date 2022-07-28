@@ -1,0 +1,19 @@
+##!
+# @file
+#
+# @created smohan 20220615
+
+sp {ground-object-reference*apply*mark-ambiguous-reference
+    (state <s>    ^name ground-object-reference
+                  ^operator <op>
+                  ^topstate <ts>)
+    (<op>    ^name mark-ambiguous-reference
+             ^grounding <g>)
+-->
+    (<ts>    ^processing-status <ps>)
+    (<ps>    ^type ambiguous-reference
+             ^information <info>
+             ^source comprehension)
+    (<info>    ^grounding <g>)
+    (<g>    ^complete true)
+    }

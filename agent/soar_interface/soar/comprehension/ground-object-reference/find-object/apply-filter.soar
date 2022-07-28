@@ -15,3 +15,13 @@ sp {find-object*apply*filter-scene
 -->
     (<fo>    ^object <object>)
     }
+
+sp {find-object*apply*filter-scene*status
+    (state <s>    ^name find-object
+                  ^operator.name apply-filter
+                  ^filter <filter>
+                  ^found.objects <fo>)
+    (<filter>    ^percept <val>)
+-->
+     (<s>    ^filtered-with <filter>)
+     }

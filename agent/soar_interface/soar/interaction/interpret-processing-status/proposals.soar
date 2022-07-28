@@ -32,6 +32,7 @@ sp {interpret-processing-status*propose*interpret-overspecific-concept
              ^concept <con>)
     }
 
+
 sp {interpret-processing-status*propose*interpret-no-accessible-trace
     (state <s>    ^name interpret-processing-status
                   ^superstate.operator <sop>)
@@ -44,3 +45,16 @@ sp {interpret-processing-status*propose*interpret-no-accessible-trace
     (<op>    ^name interpret-no-accessible-trace
              ^information <info>)
 }
+
+sp {interpret-processing-status*propose*interpret-ambiguous-reference
+    (state <s>    ^name interpret-processing-status
+                  ^superstate.operator <sop>)
+    (<sop>    ^name interpret-processing-status
+              ^processing-status <ps>)
+    (<ps>    ^type ambiguous-reference
+             ^information <info>)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name interpret-ambiguous-reference
+             ^information <info>)
+    }

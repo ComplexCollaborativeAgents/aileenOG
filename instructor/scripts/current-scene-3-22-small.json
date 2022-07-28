@@ -1,0 +1,10 @@
+{
+    "interaction": {
+        "content": "cylinder",
+        "signal": "inform", 
+        "concept": ""
+    }, 
+    "scene": [
+        "Solid {\n   recognitionColors 1 1 0\n   translation 0.368244551249 0.45 -0.223016775012\n   rotation 0.0 1.0 0.0 0.0\n   children [\n       Shape {\n          appearance PBRAppearance {\n          baseColor 1 1 0\n          transparency 0\n          metalness 0\n          emissiveColor 1 1 0\n        }\n        geometry Cylinder {\n          radius 0.02\n          height 0.04\n        }\n        castShadows FALSE\n        }\n        Connector {\n          type \"passive\"\n          distanceTolerance .1\n          axisTolerance .5\n          rotationTolerance 0\n          numberOfRotations 0\n          rotation 1 0 0 -1.57\n          translation 0 0.02 0\n        }\n    ]\n    name \"object145641526595534\"\n   boundingObject Box {\n     size 0.04 0.04 0.04\n   }\n   physics Physics {\n}\n   description \"Small\"\n}"
+    ]
+}

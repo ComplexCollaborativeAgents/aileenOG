@@ -118,6 +118,7 @@ class InputWriter(object):
     @staticmethod
     def align_cv_detections_to_world(cv_detections, objects_list):
         detections = cv_detections['objects']
+        print(detections)
         world = objects_list
         updated_detections = []
         mapped = np.zeros(len(world))

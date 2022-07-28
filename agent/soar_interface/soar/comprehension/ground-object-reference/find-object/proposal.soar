@@ -18,11 +18,25 @@ sp {find-objects*propose*apply-filter
     (state <s>    ^name find-object
                   ^filter <filt>
                   ^object-set <obj-set>
-                  ^found.objects <fobjs>)
+                  ^found.objects <fobjs>
+                  -^filtered-with <filter>)
     (<fobjs>    -^object <any>)
 -->
     (<s>    ^operator <op> +)
     (<op>    ^name apply-filter
+             ^filter <filt>
+             ^object-set <obj-set>)
+    }
+
+sp {find-objects*propose*mark-ungrounded-reference
+    (state <s>    ^name find-object
+                  ^filter <filt>
+                  ^filtered-with <filter>
+                  ^found.objects <fobjs>)
+    (<fobjs>    -^object <any>)
+-->
+    (<s>    ^operator <op> +)
+    (<op>    ^name mark-ungrounded-reference
              ^filter <filt>
              ^object-set <obj-set>)
     }

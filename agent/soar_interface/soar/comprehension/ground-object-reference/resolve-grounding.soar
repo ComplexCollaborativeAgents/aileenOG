@@ -7,7 +7,7 @@ sp {ground-object-reference*apply*resolve-grounding
     (state <s>    ^name ground-object-reference
                   ^operator.name resolve-grounding
                   ^grounding <g>
-                  ^found.objects.object <obj>)
+                  ^found.objects <objs>)
 -->
     (<g>    ^object <obj>)
     }

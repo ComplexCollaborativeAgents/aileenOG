@@ -13,3 +13,5 @@ source "create-candidate-set.soar"
 source "filter-scene/load.soar"
 
 source "complete-find-object-with-concept-learner.soar"
+
+source "mark-ambiguous-reference.soar"
