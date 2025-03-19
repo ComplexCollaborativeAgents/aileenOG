@@ -1,5 +1,9 @@
-# Aileen
+# aileenOG
 ![](https://img.shields.io/badge/python-2.7-blue)
+
+AileenOG is an embodied, robotic agent integrated with a Webots tabletop domain. It can learn from natural, human instruction. It implements a hybrid AI architecture comprising algorithms for computer vision, cognitive architectures, analogical reasoning and generalization, AI planning, inverse kinematics, and abductive learning.
+
+[arxiv](https://arxiv.org/abs/2210.11731) | [ACS 2020](https://arxiv.org/abs/2006.01962) |
 
 ## Contributing
 
